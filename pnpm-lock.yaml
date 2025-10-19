@@ -40,6 +40,9 @@ catalogs:
     prettier:
       specifier: ^3.6.2
       version: 3.6.2
+    simple-git-hooks:
+      specifier: ^2.1.0
+      version: 2.13.1
     vue-eslint-parser:
       specifier: ^10.2.0
       version: 10.2.0
@@ -81,6 +84,9 @@ importers:
       prettier:
         specifier: catalog:infra
         version: 3.6.2
+      simple-git-hooks:
+        specifier: catalog:infra
+        version: 2.13.1
       vue-eslint-parser:
         specifier: catalog:infra
         version: 10.2.0(eslint@9.38.0(jiti@2.6.1))
@@ -1658,6 +1664,10 @@ packages:
   side-channel@1.1.0:
     resolution: {integrity: sha512-ZX99e6tRweoUXqR+VBrslhda51Nh5MTQwou5tnUDgbtyM0dBgmhEDtWGP/xbKn6hqfPRHujUNwz5fy/wbbhnpw==}
     engines: {node: '>= 0.4'}
+
+  simple-git-hooks@2.13.1:
+    resolution: {integrity: sha512-WszCLXwT4h2k1ufIXAgsbiTOazqqevFCIncOuUBZJ91DdvWcC5+OFkluWRQPrcuSYd8fjq+o2y1QfWqYMoAToQ==}
+    hasBin: true
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -3520,6 +3530,8 @@ snapshots:
       side-channel-list: 1.0.0
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
+
+  simple-git-hooks@2.13.1: {}
 
   sisteransi@1.0.5: {}
 
