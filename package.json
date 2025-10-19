@@ -1,0 +1,8 @@
+{
+  "name": "walk-next",
+  "version": "0.0.0",
+  "description": "毅行前端 monorepo, 包含用户端，扫码端，大盘",
+  "private": true,
+  "author": "zjutjh",
+  "packageManager": "pnpm@10.18.2"
+}
