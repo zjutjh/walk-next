@@ -6,8 +6,11 @@
   "packageManager": "pnpm@10.18.2",
   "author": "zjutjh",
   "scripts": {
+    "dev:admin": "pnpm -C apps/admin dev",
+    "build:admin": "pnpm -C apps/admin build",
     "lint": "eslint",
-    "postinstall": "simple-git-hooks"
+    "postinstall": "simple-git-hooks",
+    "typecheck": "pnpm -r typecheck"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpx lint-staged"
