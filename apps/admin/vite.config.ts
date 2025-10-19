@@ -10,10 +10,12 @@ export default defineConfig({
   plugins: [
     vue(),
     AutoImport({
-      resolvers: [VantResolver()]
+      resolvers: [VantResolver()],
+      dts: "types/auto-imports.d.ts"
     }),
     Components({
-      resolvers: [VantResolver()]
+      resolvers: [VantResolver()],
+      dts: "types/components.d.ts"
     })
   ],
   resolve: {
