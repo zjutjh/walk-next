@@ -4,5 +4,21 @@
   "description": "毅行前端 monorepo, 包含用户端，扫码端，大盘",
   "private": true,
   "author": "zjutjh",
-  "packageManager": "pnpm@10.18.2"
+  "scripts": {
+    "lint": "eslint"
+  },
+  "packageManager": "pnpm@10.18.2",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "catalog:infra",
+    "@typescript-eslint/parser": "catalog:infra",
+    "@zjutjh/eslint-config": "catalog:infra",
+    "eslint": "catalog:infra",
+    "eslint-config-prettier": "catalog:infra",
+    "eslint-plugin-format": "catalog:infra",
+    "eslint-plugin-prettier": "catalog:infra",
+    "eslint-plugin-vue": "catalog:infra",
+    "jiti": "catalog:infra",
+    "prettier": "catalog:infra",
+    "vue-eslint-parser": "catalog:infra"
+  }
 }
