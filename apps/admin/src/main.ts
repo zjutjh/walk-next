@@ -1,4 +1,4 @@
-import "./style.css";
+import "./global.scss";
 
 import { createApp } from "vue";
 
