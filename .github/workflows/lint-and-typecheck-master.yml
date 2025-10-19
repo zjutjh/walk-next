@@ -28,3 +28,9 @@ jobs:
   
       - name: Typecheck
         run: pnpm -r run typecheck
+
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: streetsidesoftware/cspell-action@v7
