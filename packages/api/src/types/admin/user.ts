@@ -25,3 +25,6 @@ export type UserCampusExample = "ZH" | "PF" | "MGS";
 
 /** 用户性别（示例） */
 export type UserGenderExample = "female" | "male" | "unknown";
+
+/** 用户类型 */
+export type UserTypeExample = "admin" | "sudo";
