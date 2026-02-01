@@ -4,7 +4,9 @@ packages:
 catalogs:
   frontend:
     "@csstools/normalize.css": "^12.1.1"
+    "@tanstack/vue-query": "^5.92.9"
     "@vueuse/core": "^13.9.0"
+    "axios": "^1.13.4"
     "lodash-es": "^4.17.21"
     "vue": "^3.5.22"
     "vue-router": "^4.6.3"

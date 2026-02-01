@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@csstools/normalize.css": "catalog:frontend",
+    "@tanstack/vue-query": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
+    "axios": "catalog:frontend",
     "lodash-es": "catalog:frontend",
     "vant": "^4.9.21",
     "vue": "catalog:frontend",
