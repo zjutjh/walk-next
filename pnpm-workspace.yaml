@@ -9,6 +9,7 @@ catalogs:
     "@vueuse/core": "^13.9.0"
     "axios": "^1.13.4"
     "lodash-es": "^4.17.21"
+    "pinia": "^3.0.4"
     "vue": "^3.5.22"
     "vue-router": "^4.6.3"
 
@@ -19,6 +20,7 @@ catalogs:
   infra:
     "@typescript-eslint/eslint-plugin": "^8.46.1"
     "@typescript-eslint/parser": "^8.46.1"
+    "@vue/tsconfig": "^0.8.1"
     "@zjutjh/eslint-config": "^0.8.0"
     "eslint": "^9.38.0"
     "eslint-config-prettier": "^10.1.8"
