@@ -4,7 +4,7 @@
   <van-button @click="handleLoginClick">登录</van-button>
 
   <van-field v-model="userId" label="要查询的用户的ID"></van-field>
-  <van-button @click="handleRefreshClick">刷新</van-button>
+  <van-button :loading="isFetching" @click="handleRefreshClick">刷新</van-button>
   姓名：{{ error ? "请求失败" : profileData?.name }}
 </template>
 
@@ -57,7 +57,8 @@ const handleLoginClick = mutateLogin;
 
 // query类请求，如获取列表、查询信息等
 // https://tanstack.com.cn/query/latest/docs/framework/react/guides/query-functions
-// useQuery返回值里的data是从后端返回的响应体中的data，拿到返回之前默认是undefined; error是失败时的错误，同上
+// useQuery返回值里的data是从后端返回的响应体中的data，拿到返回之前默认是undefined; error是失败时的错误，同上;
+// isFetching可以得知请求是否正在进行中，可以用来设置加载态等
 // 这类请求自动发起。queryKey数组中任意响应式变量变化时，都会自动重发请求，更新数据; 返回值里的refetch也可以手动重发请求
 /** 要获取的用户的ID */
 const userId = ref("");
@@ -65,6 +66,7 @@ const userId = ref("");
 const {
   data: profileData,
   error,
+  isFetching,
   refetch
 } = useQuery({
   // queryKey相当于依赖项列表。第一个元素在ADMIN_QUERY_KEY中进行定义
