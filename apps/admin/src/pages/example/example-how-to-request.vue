@@ -10,11 +10,11 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery } from "@tanstack/vue-query";
-import { ADMIN_QUERY_KEY } from "api/query-key/admin";
 import { RequestError } from "shared";
 import { showNotify } from "vant";
 import { ref } from "vue";
 
+import { ADMIN_QUERY_KEY } from "@/configs";
 import { walkAdminService } from "@/utils";
 
 // mutate类请求，如登录登出、修改数据等

@@ -1,9 +1,10 @@
-import { RESP_CODE } from "api/response-code/admin";
-import { WalkAdminService } from "api/services";
-import { type CommonRespWrap, type ServiceOptions } from "api/utils";
+import WalkAdminService from "api/services/admin";
 import { SERVICE_TIMEOUT } from "api/utils";
+import { type CommonRespWrap, type ServiceOptions } from "api/utils";
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import { RequestError } from "shared";
+
+import { RESP_CODE } from "@/configs";
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 

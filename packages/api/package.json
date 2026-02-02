@@ -4,20 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
-    "./services": {
-      "import": "./src/services/index.ts"
+    "./*/admin": {
+      "import": "./src/*/admin/index.ts"
     },
     "./utils": {
       "import": "./src/utils/index.ts"
-    },
-    "./types/admin": {
-      "import": "./src/types/admin/index.ts"
-    },
-    "./query-key/admin": {
-      "import": "./src/query-key/admin.ts"
-    },
-    "./response-code/admin": {
-      "import": "./src/response-code/admin.ts"
     }
   },
   "scripts": {

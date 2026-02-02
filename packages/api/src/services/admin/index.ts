@@ -1,5 +1,5 @@
-import { AdminAPI } from "../types/admin";
-import { BaseService } from "../utils";
+import { AdminAPI } from "../../types/admin";
+import { BaseService } from "../../utils";
 
 export default class WalkAdminService<T> extends BaseService<T> {
   /** 管理员登录（示例） */
