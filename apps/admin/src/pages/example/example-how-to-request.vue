@@ -36,7 +36,7 @@ const { mutate: mutateLogin } = useMutation({
   onSuccess: (data) => {
     // data就是后端返回的响应体中的data（注意，响应体中的code和msg这里是访问不到的）
     showNotify({ type: "success", message: "登录成功" });
-    if (data.userType === "sudo") {
+    if (data.user_type === "sudo") {
       // ......
     }
   },
@@ -76,7 +76,7 @@ const {
     walkAdminService.QueryProfileExample({
       // 这里是请求参数，同上
       // 如果某个请求参数的响应式变量在queryKey里出现过，直接使用queryKey[n]来指定该参数，以确保发给后端的值与触发更新的值是一致的
-      userId: queryKey[1]
+      user_id: queryKey[1] /* eslint-disable-line camelcase*/
     })
 });
 /** 手动刷新用户信息（示例） */

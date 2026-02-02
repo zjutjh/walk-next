@@ -3,7 +3,7 @@ import { WalkAdminService } from "api/services";
 import { type CommonRespWrap, type ServiceOptions } from "api/utils";
 import { SERVICE_TIMEOUT } from "api/utils";
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
-import { RequestError, toCamelCase, toSnakeCase } from "shared";
+import { RequestError } from "shared";
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 
@@ -27,15 +27,15 @@ axiosInstance.interceptors.response.use(
 export const request: ServiceOptions<AxiosRequestConfig>["request"] = async (req, options) => {
   const { data: body } = await axiosInstance({
     url: req.url,
-    method: toSnakeCase(req.method),
-    params: toSnakeCase(req.params),
+    method: req.method,
+    params: req.params,
     data: req.data,
     // headers: {}
     ...options
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return toCamelCase((body as CommonRespWrap<any>).data);
+  return (body as CommonRespWrap<any>).data;
 };
 
 export const walkAdminService = new WalkAdminService({ request, baseURL: "/api" });
