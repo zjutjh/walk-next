@@ -12,7 +12,6 @@
     "test": "vitest",
     "typecheck": "vue-tsc --noEmit"
   },
-  "packageManager": "pnpm@10.18.2",
   "peerDependencies": {
     "@vueuse/core": "catalog:frontend",
     "axios": "catalog:frontend",
