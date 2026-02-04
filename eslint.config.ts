@@ -5,7 +5,7 @@ export default zjutjh({
   prettier: true,
   ts: {
     parserOptions: {
-      project: ["./tsconfig.json", "**/apps/*/tsconfig.json"]
+      projectService: true
     }
   }
 });
