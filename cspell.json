@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
   "language": "en",
   "dictionaries": ["typescript", "node", "html", "css", "bash", "npm"],
-  "words": ["zjutjh", "vueuse", "unplugin"],
+  "words": ["zjutjh", "vueuse", "unplugin", "Apifox", "ntvs", "njsproj"],
   "ignorePaths": [
     "node_modules/**",
     "pnpm-lock.yaml",

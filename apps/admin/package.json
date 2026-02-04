@@ -12,8 +12,13 @@
   },
   "dependencies": {
     "@csstools/normalize.css": "catalog:frontend",
+    "@tanstack/vue-query": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
+    "api": "workspace:*",
+    "axios": "catalog:frontend",
     "lodash-es": "catalog:frontend",
+    "pinia": "catalog:frontend",
+    "shared": "workspace:*",
     "vant": "^4.9.21",
     "vue": "catalog:frontend",
     "vue-router": "catalog:frontend"
@@ -23,7 +28,7 @@
     "@types/node": "catalog:types",
     "@vant/auto-import-resolver": "^1.3.0",
     "@vitejs/plugin-vue": "^6.0.1",
-    "@vue/tsconfig": "^0.8.1",
+    "@vue/tsconfig": "catalog:infra",
     "sass-embedded": "^1.93.2",
     "typescript": "~5.9.3",
     "unplugin-auto-import": "^20.2.0",

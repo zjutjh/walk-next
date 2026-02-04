@@ -1,0 +1,32 @@
+{
+  "name": "shared",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "packageManager": "pnpm@10.18.2",
+  "peerDependencies": {
+    "@vueuse/core": "catalog:frontend",
+    "axios": "catalog:frontend",
+    "vue": "catalog:frontend"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "catalog:types",
+    "@vue/tsconfig": "catalog:infra",
+    "@vueuse/core": "catalog:frontend",
+    "axios": "catalog:frontend",
+    "lodash-es": "catalog:frontend",
+    "pinia": "catalog:frontend",
+    "typescript": "catalog:infra",
+    "vue": "catalog:frontend",
+    "vue-tsc": "catalog:infra"
+  }
+}
