@@ -8,38 +8,7 @@
   --palette-success: #49df17;
   --palette-waiting: #addf17;
   --palette-info: #3a87fa;
-
-  /* 语义色：浅浅粉作为主背景 */
-  --color-bg: var(--palette-rose);
-  /* 语义色：白色作为卡片/导航 */
-  --color-surface: var(--palette-white);
-  /* 语义色：黑色作为常规文字 */
-  --color-text: var(--palette-black);
-  /* 语义色：浅粉作为主按钮 */
-  --color-primary: var(--palette-pink);
-  /* 语义色：深粉作为特殊按钮/危险操作 */
-  --color-danger: var(--palette-coral);
-  /* 语义色：成功 */
-  --color-success: var(--palette-success);
-  /* 语义色：等待中 */
-  --color-waiting: var(--palette-waiting);
-  /* 语义色：信息 */
-  --color-info: var(--palette-info);
-  /* 语义色：浅粉作为交互背景/轻量强调 */
-  --color-accent: var(--palette-rose);
-
-  /* Vant 主题变量 */
-  --van-primary-color: var(--color-primary);
-  --van-success-color: var(--color-success);
-  --van-warning-color: var(--color-waiting);
-  --van-danger-color: var(--color-danger);
-  --van-info-color: var(--color-info);
-
-  --van-text-color: var(--color-text);
-  --van-text-color-2: rgba(17, 17, 17, 0.65);
-  --van-text-color-3: rgba(17, 17, 17, 0.45);
-  --van-background: var(--color-bg);
-  --van-background-2: var(--color-surface);
-  --van-active-color: var(--color-accent);
-  --van-border-color: rgba(17, 17, 17, 0.06);
+  --palette-text-secondary: rgba(17, 17, 17, 0.65);
+  --palette-text-tertiary: rgba(17, 17, 17, 0.45);
+  --palette-border: rgba(17, 17, 17, 0.06);
 }
