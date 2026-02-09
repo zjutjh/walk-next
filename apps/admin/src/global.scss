@@ -1,4 +1,5 @@
-@import "@csstools/normalize.css";
+@use "@csstools/normalize.css";
+@use "./styles/theme.scss";
 
 :root {
   font-weight: 400;
