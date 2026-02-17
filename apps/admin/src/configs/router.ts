@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
-import index from "@/pages/index/index.vue";
+import indexPage from "@/pages/index/index.vue";
 import RebuildTeam from "@/pages/team-rebuild/index.vue";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
     name: "index",
-    component: index
+    component: indexPage
   },
   {
     path: "/team-rebuild",
