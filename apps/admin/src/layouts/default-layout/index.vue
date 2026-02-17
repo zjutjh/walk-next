@@ -1,14 +1,14 @@
 <template>
-  <!-- 此处layout-container设置了min-height:100vh, 避免内容过少时背景色无法完全覆盖 -->
-  <div :class="styles['layout-container']">
+  <!-- 此处layoutContainer设置了min-height:100vh, 避免内容过少时背景色无法完全覆盖 -->
+  <div :class="styles.layoutContainer">
     <van-nav-bar
       v-if="title"
       :title="title"
       left-arrow
-      :class="styles['nav-bar']"
+      :class="styles.navBar"
       @click-left="handleBackClick"
     />
-    <main :class="styles['layout-main']">
+    <main :class="styles.layoutMain">
       <slot />
     </main>
   </div>
