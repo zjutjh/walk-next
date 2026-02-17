@@ -1,12 +1,22 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
 import DataPanel from "@/pages/data-panel/index.vue";
+import index from "@/pages/index/index.vue";
 import ScanPanel from "@/pages/scan-panel/index.vue";
-
+import RebuildTeam from "@/pages/team-rebuild/index.vue";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    redirect: "/scan-panel"
+    name: "index",
+    component: index
+  },
+  {
+    path: "/team-rebuild",
+    name: "team-rebuild",
+    component: RebuildTeam,
+    meta: {
+      title: "重组队伍"
+    }
   },
   {
     path: "/scan-panel",

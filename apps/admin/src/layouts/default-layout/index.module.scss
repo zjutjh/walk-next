@@ -1,0 +1,9 @@
+.nav-bar {
+  :global(.van-icon-arrow-left:before) {
+    color: black;
+  }
+}
+
+.layout-main {
+  background-color: var(--van-background);
+}

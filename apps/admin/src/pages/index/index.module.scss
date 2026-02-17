@@ -1,0 +1,53 @@
+.admin-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  .admin-info-font {
+    display: flex;
+    font-size: 20px;
+    font-weight: 600;
+    width: 100%;
+    justify-content: center;
+    overflow: auto;
+    gap: 0.5rem;
+    color: var(--van-primary-color);
+    .key {
+      width: 45%;
+      text-align: right;
+    }
+    .value {
+      width: 55%;
+    }
+  }
+}
+
+.main {
+  .function-button-container {
+    padding: 0 8px;
+  }
+  .function-button {
+    text-align: center;
+    margin-top: 8px;
+  }
+}
+
+.admin-name {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  font-size: 18px;
+  position: sticky;
+
+  color: var(--van-primary-color);
+  padding: 10px 0;
+  .key {
+    width: 50%;
+    text-align: right;
+  }
+  .value {
+    width: calc(50% - 0.5rem);
+    padding-left: 0.5rem;
+  }
+}
