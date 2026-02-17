@@ -1,5 +1,5 @@
 <template>
-  <default-layout title="重组队伍"> </default-layout>
+  <default-layout> </default-layout>
 </template>
 
 <script setup lang="ts">
