@@ -13,6 +13,6 @@
 
 .navBar {
   :global(.van-icon-arrow-left:before) {
-    color: black;
+    color: var(--van-text-color-2);
   }
 }
