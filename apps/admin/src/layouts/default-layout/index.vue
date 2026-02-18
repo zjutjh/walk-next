@@ -30,8 +30,8 @@ const router = useRouter();
 const route = useRoute();
 
 const handleBackClick = () => {
-  // If there is no meaningful browser history, fall back to a safe default route
-  if (window.history.length > 1) {
+  // 若无历史记录，则返回首页 (如直接访问了一个非首页的链接, 然后点NavBar的返回按钮)
+  if (router.options.history.state.back) {
     router.back();
   } else {
     router.replace("/");
