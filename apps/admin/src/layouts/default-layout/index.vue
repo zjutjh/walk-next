@@ -30,7 +30,12 @@ const router = useRouter();
 const route = useRoute();
 
 const handleBackClick = () => {
-  router.back();
+  // If there is no meaningful browser history, fall back to a safe default route
+  if (window.history.length > 1) {
+    router.back();
+  } else {
+    router.replace("/");
+  }
 };
 
 useTitleMeta();
