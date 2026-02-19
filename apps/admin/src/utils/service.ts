@@ -4,7 +4,7 @@ import { type CommonRespWrap, type ServiceOptions } from "api/utils";
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import { RequestError } from "shared";
 
-import { RESP_CODE } from "@/configs";
+import { RESP_CODE } from "@/constants";
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 
