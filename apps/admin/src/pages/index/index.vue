@@ -21,8 +21,13 @@
       </van-cell-group>
 
       <van-cell-group title="数据大盘">
-        <van-cell title="屏峰地图可视化" is-link />
-        <van-cell title="莫干山地图可视化" is-link />
+        <van-cell
+          v-for="(campus, campusId) in WALK_ROUTE"
+          :key="campusId"
+          :title="`${campus.name}地图可视化`"
+          is-link
+          :to="`/map-dashboard/${campusId}`"
+        />
         <van-cell title="表格数据查看" is-link />
       </van-cell-group>
     </section>
@@ -30,6 +35,7 @@
 </template>
 
 <script setup lang="ts">
+import { WALK_ROUTE } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 
 import AdminInfo from "./components/adminInfo/index.vue";

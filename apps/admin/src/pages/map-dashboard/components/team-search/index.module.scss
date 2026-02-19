@@ -1,0 +1,34 @@
+// 队伍搜索栏 与 搜索结果面板
+.searchBar {
+  :global(.van-search__action) {
+    padding: 0;
+    margin-left: 5px;
+    border-radius: var(--van-radius-max);
+
+    .searchBtn {
+      padding: {
+        left: 14px;
+        right: 14px;
+      }
+    }
+  }
+}
+
+.searchResultPanel {
+  background: var(--van-background);
+  padding-top: calc(
+    var(--van-popup-close-icon-margin) + var(--van-popup-close-icon-size) + 10px
+  );
+
+  .searchResultList {
+    max-height: calc(100vh - 158px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: scroll;
+
+    .collapseWrapper:last-child {
+      min-height: 460px;
+    }
+  }
+}
