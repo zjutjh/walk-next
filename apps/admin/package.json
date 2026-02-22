@@ -15,6 +15,7 @@
     "@vueuse/core": "catalog:frontend",
     "api": "workspace:*",
     "axios": "catalog:frontend",
+    "dayjs": "catalog:frontend",
     "lodash-es": "catalog:frontend",
     "modern-normalize": "^3.0.1",
     "pinia": "catalog:frontend",
