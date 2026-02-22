@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "module": "ESNext",
+    "strict": true,
+    "baseUrl": "./",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": true,
+    "rootDir": "src",
+    "declarationDir": "dist/types",
+    "moduleResolution": "bundler"
+  },
+  "include": ["src"],
+  "exclude": ["**/node_modules"]
+}

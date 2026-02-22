@@ -1,0 +1,20 @@
+{
+  "name": "api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./*/admin": {
+      "import": "./src/*/admin/index.ts"
+    },
+    "./utils": {
+      "import": "./src/utils/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "catalog:infra"
+  }
+}

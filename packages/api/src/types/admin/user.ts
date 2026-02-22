@@ -1,0 +1,16 @@
+/** 用户联系方式（示例） */
+export interface UserContactExample {
+  /** 电话 */
+  tel: string;
+  /** qq号 */
+  qq: string;
+}
+
+/** 用户校区（示例） */
+export type UserCampusExample = "ZH" | "PF" | "MGS";
+
+/** 用户性别（示例） */
+export type UserGenderExample = "female" | "male" | "unknown";
+
+/** 用户类型 */
+export type UserTypeExample = "admin" | "sudo";
