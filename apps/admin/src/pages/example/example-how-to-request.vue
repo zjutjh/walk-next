@@ -14,7 +14,7 @@ import { RequestError } from "shared";
 import { showNotify } from "vant";
 import { ref } from "vue";
 
-import { ADMIN_QUERY_KEY } from "@/configs";
+import { ADMIN_QUERY_KEY } from "@/constants";
 import { walkAdminService } from "@/utils";
 
 // mutate类请求，如登录登出、修改数据等
