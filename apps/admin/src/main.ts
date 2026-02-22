@@ -1,6 +1,7 @@
 import "./global.scss";
 
 import { VueQueryPlugin } from "@tanstack/vue-query";
+import { createPinia } from "pinia";
 import { createApp } from "vue";
 
 import App from "./app.vue";
@@ -13,4 +14,5 @@ initializeRootFontSize();
 createApp(App)
   .use(routerConfig)
   .use(VueQueryPlugin, { queryClient: globalQueryClient })
+  .use(createPinia())
   .mount("#app");
