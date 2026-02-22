@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
 import IndexPage from "@/pages/index/index.vue";
-import RebuildTeam from "@/pages/team-rebuild/index.vue";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
@@ -11,7 +10,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/team-rebuild",
     name: "team-rebuild",
-    component: RebuildTeam,
+    component: () => import("@/pages/team-rebuild/index.vue"),
     meta: {
       title: "重组队伍"
     }
