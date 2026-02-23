@@ -11,10 +11,10 @@
 <script setup lang="ts">
 import { useMutation, useQuery } from "@tanstack/vue-query";
 import { RequestError } from "shared";
-import { showNotify } from "vant";
+import { showFailToast, showSuccessToast } from "vant";
 import { ref } from "vue";
 
-import { ADMIN_QUERY_KEY } from "@/configs";
+import { ADMIN_QUERY_KEY } from "@/constants";
 import { walkAdminService } from "@/utils";
 
 // mutate类请求，如登录登出、修改数据等
@@ -35,7 +35,7 @@ const { mutate: mutateLogin } = useMutation({
     }),
   onSuccess: (data) => {
     // data就是后端返回的响应体中的data（注意，响应体中的code和msg这里是访问不到的）
-    showNotify({ type: "success", message: "登录成功" });
+    showSuccessToast("登录成功");
     if (data.user_type === "sudo") {
       // ......
     }
@@ -44,7 +44,7 @@ const { mutate: mutateLogin } = useMutation({
     // 这是请求失败的情况
     // 如果HTTP失败，err.code就是HTTP状态码，如404
     // 如果HTTP成功，但响应体中的code不是200，也属于失败。此时err.message就是响应体中的msg，err.code就是响应体中的code
-    showNotify({ type: "danger", message: err.message || "登录失败" });
+    showFailToast(err.message || "登录失败");
     console.error(err.message);
     if (err instanceof RequestError) {
       // 使用err.code需要先判断err instanceof RequestError，否则TS会认为err不一定有code这个成员

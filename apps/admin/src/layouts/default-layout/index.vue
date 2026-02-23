@@ -1,5 +1,4 @@
 <template>
-  <!-- 此处layoutContainer设置了min-height:100vh, 避免内容过少时背景色无法完全覆盖 -->
   <div :class="styles.layoutContainer">
     <van-nav-bar
       v-if="title"
@@ -8,7 +7,13 @@
       :class="styles.navBar"
       @click-left="handleBackClick"
     />
-    <main :class="styles.layoutMain">
+    <slot name="header" />
+    <main
+      :class="styles.layoutMain"
+      :style="{
+        overflowY: scroll ? 'auto' : 'hidden'
+      }"
+    >
       <slot />
     </main>
   </div>
@@ -23,9 +28,13 @@ import styles from "./index.module.scss";
 
 interface Props {
   title?: string;
+  scroll?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  title: undefined,
+  scroll: true
+});
 const router = useRouter();
 const route = useRoute();
 
