@@ -1,18 +1,23 @@
+import type { SetRequired } from "type-fest";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
 import IndexPage from "@/pages/index/index.vue";
-const routes: RouteRecordRaw[] = [
+
+const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
     path: "/",
     name: "index",
-    component: IndexPage
+    component: IndexPage,
+    meta: {
+      pageName: "功能总览"
+    }
   },
   {
     path: "/team-rebuild",
     name: "team-rebuild",
     component: () => import("@/pages/team-rebuild/index.vue"),
     meta: {
-      title: "重组队伍"
+      pageName: "重组队伍"
     }
   }
 ];

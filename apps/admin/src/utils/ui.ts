@@ -1,10 +1,13 @@
-import { BASE_ROOT_FONT_SIZE, DESIGN_WIDTH, getViewWidth } from "@/configs/px-to-rem";
+import { round } from "lodash-es";
+
+import { getViewWidth } from "@/configs/px-to-rem";
+import { BASE_ROOT_FONT_SIZE, DESIGN_WIDTH, MAX_REM_UNIT_PRECISION } from "@/constants/ui";
 
 /**
  * 手动将 px 转换为 rem，需要动态计算元素尺寸才用，一般不用
  */
 export function pxToRem(px: number): `${number}rem` {
-  return `${px / BASE_ROOT_FONT_SIZE}rem`;
+  return `${round(px / BASE_ROOT_FONT_SIZE, MAX_REM_UNIT_PRECISION)}rem`;
 }
 
 /**
