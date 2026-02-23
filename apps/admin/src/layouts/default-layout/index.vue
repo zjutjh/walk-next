@@ -1,60 +1,70 @@
 <template>
-  <div :class="styles.layoutContainer">
+  <div class="default-layout">
     <van-nav-bar
-      v-if="title"
-      :title="title"
+      v-if="!isNil(navbarTitle)"
+      :title="navbarTitle"
       left-arrow
-      :class="styles.navBar"
+      class="default-layout__navbar"
       @click-left="handleBackClick"
     />
     <slot name="header" />
-    <main
-      :class="styles.layoutMain"
-      :style="{
-        overflowY: scroll ? 'auto' : 'hidden'
-      }"
-    >
+    <main class="default-layout__main">
       <slot />
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
+import "./index.scss";
+
+import { isNil, last } from "lodash-es";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { useTitleMeta } from "./composables/use-title-meta";
-import styles from "./index.module.scss";
+import { useTitleMeta } from "@/composables/use-title-meta";
 
-interface Props {
+interface DefaultLayoutProps {
+  /**
+   * 自定义顶栏标题文案
+   *
+   * @default pageName
+   */
   title?: string;
-  scroll?: boolean;
+  /**
+   * 是否展示顶栏，需要结合 `title` 一起使用
+   *
+   * @default true
+   */
+  showNavbar?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<DefaultLayoutProps>(), {
   title: undefined,
-  scroll: true
+  showNavbar: true
 });
+
+useTitleMeta();
+
 const router = useRouter();
 const route = useRoute();
 
+const navbarTitle = computed(() => {
+  const currentRouteMeta = last(route.matched)?.meta;
+
+  if (!props.showNavbar || !currentRouteMeta) {
+    return undefined;
+  }
+
+  // 允许页面设置空字符串, 顶栏展示空白
+  return props.title ?? currentRouteMeta.pageName;
+});
+
 const handleBackClick = () => {
-  // 若无历史记录，则返回首页 (如直接访问了一个非首页的链接, 然后点NavBar的返回按钮)
+  // 直接打开页面可能没有历史记录，兜底返回首页
   if (router.options.history.state.back) {
     router.back();
   } else {
     router.replace("/");
   }
 };
-
-useTitleMeta();
-
-const title = computed(() => {
-  if (props.title) {
-    return props.title;
-  }
-  // 获取当前路由的 meta 中的 title (如果没有 则不展示nav-bar, 如首页就不展示)
-  const currentRoute = route.matched[route.matched.length - 1];
-  return currentRoute?.meta.title as string | undefined;
-});
 </script>

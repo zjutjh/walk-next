@@ -1,5 +1,5 @@
 <template>
-  <default-layout>
+  <default-layout :show-navbar="false">
     <admin-info />
     <section :class="styles.main">
       <van-cell-group title="签到">

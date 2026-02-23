@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "description": "扫码端、大盘",
+  "description": "毅行管理端",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -32,6 +32,7 @@
     "@vue/tsconfig": "catalog:infra",
     "postcss-pxtorem": "^6.1.0",
     "sass-embedded": "^1.97.3",
+    "type-fest": "catalog:types",
     "typescript": "~5.9.3",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-vue-components": "^31.0.0",
