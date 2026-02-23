@@ -14,6 +14,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["eslint.config.ts", "lint-staged.config.mjs"],
+  "include": ["eslint.config.ts", "lint-staged.config.mts"],
   "exclude": ["**/dist/**", "**/node_modules/**"]
 }
