@@ -83,7 +83,6 @@ export const WALK_CAMPUS_CONFIG = {
 } as const satisfies Record<WalkCampusId, WalkCampusConfig>;
 
 /** 路线配置
- *
  * @property {string} name 路线名
  */
 export const WALK_ROUTE_CONFIG = {
@@ -99,7 +98,6 @@ export const WALK_ROUTE_CONFIG = {
 } as const satisfies Record<WalkRouteId, WalkRouteConfig>;
 
 /** 点位配置
- *
  * @property {string} name 点位名
  * @property {Component} hotSpot 点击热区
  */
