@@ -1,9 +1,9 @@
-import type { RequireAtLeastOne } from "type-fest";
+import type { SetRequired } from "type-fest";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
 import IndexPage from "@/pages/index/index.vue";
 
-const routes: RequireAtLeastOne<RouteRecordRaw, "meta">[] = [
+const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
     path: "/",
     name: "index",
