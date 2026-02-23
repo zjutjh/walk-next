@@ -9,6 +9,7 @@
 
       <van-cell-group title="起终点人员管理">
         <van-cell title="单人登记" is-link />
+        <van-cell title="团队信息页" is-link to="/team-list" />
         <van-cell title="重组队伍" is-link to="/team-rebuild" />
         <div :class="styles.functionButtonContainer">
           <van-button type="primary" plain :class="styles.functionButton" block>
