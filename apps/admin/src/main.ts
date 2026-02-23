@@ -7,9 +7,7 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 
 import App from "./app.vue";
-import { initializeRootFontSize } from "./configs/px-to-rem";
-import { routerConfig } from "./configs/router";
-import { globalQueryClient } from "./configs/vue-query";
+import { globalQueryClient, initializeRootFontSize, routerConfig } from "./configs";
 
 initializeRootFontSize();
 

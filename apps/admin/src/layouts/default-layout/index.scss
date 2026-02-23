@@ -1,0 +1,17 @@
+.default-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  overflow: hidden;
+  background-color: #fff2ef;
+
+  &__main {
+    flex: 1;
+    position: relative;
+    overflow-y: var(--layout-scroll-type, auto);
+  }
+
+  &__navbar {
+    --van-nav-bar-icon-color: var(--van-text-color-2);
+  }
+}
