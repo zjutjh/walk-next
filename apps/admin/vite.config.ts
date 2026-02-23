@@ -32,6 +32,9 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true
         }
       }
+    },
+    build: {
+      target: "es2015"
     }
   };
 });
