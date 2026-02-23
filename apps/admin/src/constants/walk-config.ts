@@ -197,7 +197,7 @@ export const WALK_SEGMENT_KEY_MAP = (() => {
       const currentPointId = WALK_PATH_POINT_ID_MAP[routeId][i] as WalkPointId;
       keyArray.push(
         // 连接 上一点位ID 分隔符 当前点位ID 得到路段key
-        `${previousPointId}→${currentPointId}`
+        `${previousPointId}${SEGMENT_KEY_DELIMITER}${currentPointId}`
       );
     }
     // 将 路段ID 映射到 路段key列表
@@ -221,7 +221,7 @@ export const WALK_SEGMENT_INFO = (() => {
       /** 当前点位ID */
       const currentPointId = WALK_PATH_POINT_ID_MAP[routeId][i] as WalkPointId;
       /** 连接 上一点位ID 分隔符 当前点位ID 得到的路段key */
-      const segmentKey = `${previousPointId}→${currentPointId}` as WalkSegmentKey;
+      const segmentKey = `${previousPointId}${SEGMENT_KEY_DELIMITER}${currentPointId}` as WalkSegmentKey;
       // 将 路段key 映射到 路段信息
       result[segmentKey] = {
         from: previousPointId,
