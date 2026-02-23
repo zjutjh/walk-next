@@ -2,7 +2,6 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 
 import IndexPage from "@/pages/index/index.vue";
 import TeamList from "@/pages/team-list/index.vue";
-import RebuildTeam from "@/pages/team-rebuild/index.vue";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
@@ -12,7 +11,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/team-rebuild",
     name: "team-rebuild",
-    component: RebuildTeam,
+    component: () => import("@/pages/team-rebuild/index.vue"),
     meta: {
       title: "重组队伍"
     }
@@ -22,7 +21,7 @@ const routes: RouteRecordRaw[] = [
     name: "team-list",
     component: TeamList,
     meta: {
-      title: "团队信息页" // 这里就是 default-layout 会抓取的标题！
+      title: "团队信息页"
     }
   }
 ];

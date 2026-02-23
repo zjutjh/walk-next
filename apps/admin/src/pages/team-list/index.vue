@@ -1,7 +1,7 @@
 <template>
   <default-layout>
     <div style="padding: 16px; text-align: center; margin-top: 50px">
-      <p>这里是团队信息页 (team-list)</p>
+      <p>这里是团队信息页</p>
     </div>
   </default-layout>
 </template>
