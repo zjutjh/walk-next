@@ -32,6 +32,6 @@
 <script setup lang="ts">
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 
-import AdminInfo from "./components/adminInfo/index.vue";
+import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
 </script>
