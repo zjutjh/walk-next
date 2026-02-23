@@ -1,9 +1,6 @@
-/** 设计稿宽度 */
-export const DESIGN_WIDTH = 414;
-/** 屏幕宽度为设计稿宽度时，根节点的 fontSize */
-export const BASE_ROOT_FONT_SIZE = 100;
-/** 最大视口宽度 */
-const MAX_VIEW_WIDTH = 750;
+import { round } from "lodash-es";
+
+import { BASE_ROOT_FONT_SIZE, DESIGN_WIDTH, MAX_VIEW_WIDTH } from "@/constants/ui";
 
 /**
  * 获取视口宽度，限制了最大视口宽度，防止在超大屏幕上字体过大
@@ -13,7 +10,7 @@ export function getViewWidth() {
 }
 
 export function setRootFontSize() {
-  const size = (getViewWidth() / DESIGN_WIDTH) * BASE_ROOT_FONT_SIZE;
+  const size = round((getViewWidth() / DESIGN_WIDTH) * BASE_ROOT_FONT_SIZE, 3);
   document.documentElement.style.fontSize = `${size}px`;
 }
 

@@ -17,6 +17,7 @@ catalogs:
   types:
     "@types/lodash-es": "^4.17.12"
     "@types/node": "^24.10.10"
+    "@types/postcss-pxtorem": "^6.1.0"
     "type-fest": "^5.4.4"
 
   infra:
