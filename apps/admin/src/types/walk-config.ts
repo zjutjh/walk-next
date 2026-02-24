@@ -116,7 +116,7 @@ export interface WalkSegmentConstant {
  * @see {SEGMENT_KEY_DELIMITER} 关于key的格式 */
 export type WalkSegmentKey = ValueOf<WalkSegmentKeyMap>[number];
 
-/** 行程段key-行程段信息 映射表 常量（自动生成）
+/** 行程段key-行程段不可配置常量 映射表 （自动生成）
  *
  * @see {WALK_POINT_CONFIG} 数据源 @see {SEGMENT_TEXT_DELIMITER} 关于key的格式
  */

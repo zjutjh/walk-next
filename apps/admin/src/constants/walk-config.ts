@@ -218,7 +218,7 @@ export const WALK_SEGMENT_KEY_MAP = (() => {
 /** 行程段key列表 */
 export const WALK_SEGMENT_KEY = uniq(Object.values(WALK_SEGMENT_KEY_MAP).flat());
 
-/** 行程段的不可配置信息（自动生成）
+/** 行程段的不可配置常量（自动生成）
  *
  * @see {WALK_PATH_POINT_ID_MAP} 数据源 @see {WALK_POINT_CONFIG} 数据源 @see {SEGMENT_TEXT_DELIMITER} 关于行程段的显示文本的格式 */
 export const WALK_SEGMENT_CONSTANTS = (() => {
@@ -234,7 +234,7 @@ export const WALK_SEGMENT_CONSTANTS = (() => {
       /** 连接 上一点位ID 分隔符 当前点位ID 得到的行程段key */
       const segmentKey =
         `${previousPointId}${SEGMENT_KEY_DELIMITER}${currentPointId}` as WalkSegmentKey;
-      // 将 行程段key 映射到 行程段信息
+      // 将 行程段key 映射到 行程段不可配置常量
       result[segmentKey] = {
         from: previousPointId,
         to: currentPointId,
