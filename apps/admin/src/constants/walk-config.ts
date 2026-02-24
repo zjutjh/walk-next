@@ -21,9 +21,9 @@ import type {
   WalkPointId,
   WalkRouteConfig,
   WalkRouteId,
-  WalkSegment,
   WalkSegmentConfig,
-  WalkSegmentInfoMap,
+  WalkSegmentConstant,
+  WalkSegmentConstantMap,
   WalkSegmentKey,
   WalkSegmentKeyMap
 } from "@/types";
@@ -54,11 +54,13 @@ export const WALK_PATH_POINT_ID_MAP = {
 } as const satisfies Record<WalkRouteId, string[]>;
 
 /** 路线ID列表
- * @see {WALK_ROUTE_ID_MAP} */
+ *
+ * @see {WALK_ROUTE_ID_MAP} 数据源 */
 export const WALK_ROUTE_ID = Object.values(WALK_ROUTE_ID_MAP).flat();
 
 /** 点位ID列表
- * @see {WALK_PATH_POINT_ID_MAP} */
+ *
+ * @see {WALK_PATH_POINT_ID_MAP} 数据源 */
 export const WALK_POINT_ID = uniq(Object.values(WALK_PATH_POINT_ID_MAP).flat());
 
 /**
@@ -143,9 +145,18 @@ export const WALK_POINT_CONFIG = {
   }
 } as const satisfies Record<WalkPointId, WalkPointConfig>;
 
-/** 路段配置
+/**
+ *
+ *
+ * 以下是行程段相关配置
+ * @name 行程段(segment) 是前端独有的抽象实体，API中只消费始末点ID
+ * 别名@alias 路段 适合用于文本展示，但与@name 路线(route) 易混淆 不在代码中使用
+ */
+
+/** 行程段配置
  * @property {Component} hotSpot 点击热区
- * @see {WALK_SEGMENT_INFO} 路段的不可配置信息，会根据点位配置自动生成
+ *
+ * @see {WALK_SEGMENT_CONSTANTS} 则是行程段的不可配置信息，会根据点位配置自动生成
  */
 export const WALK_SEGMENT_CONFIG = {
   "blt-cmq": {},
@@ -164,30 +175,28 @@ export const WALK_SEGMENT_CONFIG = {
   "zfGy-hbGy": {}
 } as const satisfies Record<WalkSegmentKey, WalkSegmentConfig>;
 
-/** 路段配置 */
+/** 行程段key分隔符
+ * @example 行程段key = `${始点ID}${分隔符}${终点ID}` 如"pointA-pointB" */
+export const SEGMENT_KEY_DELIMITER = "-";
+
+/** 行程段文本分隔符
+ * @example 行程段文本 = `${始点点位名}${分隔符}${终点点位名}` 如"图书馆→动物园" */
+export const SEGMENT_TEXT_DELIMITER = "→";
 
 /**
  *
  *
- * 以下无需修改，是根据 @see {WALK_PATH_POINT_ID_MAP} @see {WALK_POINT_CONFIG} 自动生成的 路段 相关常量
- * 路段 是前端独有的抽象实体，API消费时 需要提取出 始点ID 与 末点ID 使用
+ * 以下无需修改，是根据 @see {WALK_PATH_POINT_ID_MAP} @see {WALK_POINT_CONFIG} 自动生成的行程段相关常量
  */
 
-/** 路段key分隔符
- * @example 路段key = `${始点ID}${分隔符}${终点ID}` 如"pointA-pointB" */
-export const SEGMENT_KEY_DELIMITER = "-";
-
-/** 路段文本分隔符
- * @example 路段文本 = `${始点点位名}${分隔符}${终点点位名}` 如"图书馆→动物园" */
-export const SEGMENT_TEXT_DELIMITER = "→";
-
-/** 路线ID-路段key列表 映射表
- * @see {WALK_PATH_POINT_ID_MAP} @see {SEGMENT_KEY_DELIMITER} */
+/** 路线ID-行程段key列表 映射表（自动生成）
+ *
+ * @see {WALK_PATH_POINT_ID_MAP} 数据源 @see {SEGMENT_KEY_DELIMITER} 关于key的格式 */
 export const WALK_SEGMENT_KEY_MAP = (() => {
   const result: Partial<Record<WalkRouteId, string[]>> = {};
-  // 遍历所有路段ID
+  // 遍历所有行程段ID
   for (const routeId of WALK_ROUTE_ID) {
-    /** 当前路段ID对应的路段key列表 */
+    /** 当前行程段ID对应的行程段key列表 */
     const keyArray: Array<string> = [];
     // 从第二个开始遍历点位ID
     for (let i = 1; i < WALK_PATH_POINT_ID_MAP[routeId].length; ++i) {
@@ -196,23 +205,25 @@ export const WALK_SEGMENT_KEY_MAP = (() => {
       /** 当前点位ID */
       const currentPointId = WALK_PATH_POINT_ID_MAP[routeId][i] as WalkPointId;
       keyArray.push(
-        // 连接 上一点位ID 分隔符 当前点位ID 得到路段key
+        // 连接 上一点位ID 分隔符 当前点位ID 得到行程段key
         `${previousPointId}${SEGMENT_KEY_DELIMITER}${currentPointId}`
       );
     }
-    // 将 路段ID 映射到 路段key列表
+    // 将 行程段ID 映射到 行程段key列表
     result[routeId] = keyArray;
   }
   return result;
 })() as WalkSegmentKeyMap;
 
-/** 路段key列表 */
+/** 行程段key列表 */
 export const WALK_SEGMENT_KEY = uniq(Object.values(WALK_SEGMENT_KEY_MAP).flat());
 
-/** 路段信息 */
-export const WALK_SEGMENT_INFO = (() => {
-  const result: Partial<Record<WalkSegmentKey, WalkSegment>> = {};
-  // 遍历所有路段ID
+/** 行程段的不可配置信息（自动生成）
+ *
+ * @see {WALK_PATH_POINT_ID_MAP} 数据源 @see {WALK_POINT_CONFIG} 数据源 @see {SEGMENT_TEXT_DELIMITER} 关于行程段的显示文本的格式 */
+export const WALK_SEGMENT_CONSTANTS = (() => {
+  const result: Partial<Record<WalkSegmentKey, WalkSegmentConstant>> = {};
+  // 遍历所有行程段ID
   for (const routeId of WALK_ROUTE_ID) {
     // 从第二个开始遍历点位ID
     for (let i = 1; i < WALK_PATH_POINT_ID_MAP[routeId].length; ++i) {
@@ -220,17 +231,17 @@ export const WALK_SEGMENT_INFO = (() => {
       const previousPointId = WALK_PATH_POINT_ID_MAP[routeId][i - 1] as WalkPointId;
       /** 当前点位ID */
       const currentPointId = WALK_PATH_POINT_ID_MAP[routeId][i] as WalkPointId;
-      /** 连接 上一点位ID 分隔符 当前点位ID 得到的路段key */
+      /** 连接 上一点位ID 分隔符 当前点位ID 得到的行程段key */
       const segmentKey =
         `${previousPointId}${SEGMENT_KEY_DELIMITER}${currentPointId}` as WalkSegmentKey;
-      // 将 路段key 映射到 路段信息
+      // 将 行程段key 映射到 行程段信息
       result[segmentKey] = {
         from: previousPointId,
         to: currentPointId,
-        // 将 上一点位ID 分隔符 当前点位ID 拼接得到路段的文本
+        // 将 上一点位ID 分隔符 当前点位ID 拼接得到行程段的文本
         text: `${WALK_POINT_CONFIG[previousPointId].name}${SEGMENT_TEXT_DELIMITER}${WALK_POINT_CONFIG[currentPointId].name}`
       };
     }
   }
   return result;
-})() as WalkSegmentInfoMap;
+})() as WalkSegmentConstantMap;
