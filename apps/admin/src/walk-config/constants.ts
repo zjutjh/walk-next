@@ -36,21 +36,27 @@ import type {
 
 /** 校区ID列表
  * @property {string} 校区ID */
+// cspell:disable
 export const WALK_CAMPUS_ID = ["pf", "mgs"] as const;
+// cspell:enable
 
 /** 校区ID-路线ID列表 映射表
  * @property {string[]} 路线ID列表 */
 export const WALK_ROUTE_ID_MAP = {
+  // cspell:disable
   pf: ["pf-full", "pf-half"],
   mgs: ["mgs"]
+  // cspell:enable
 } as const satisfies Record<WalkCampusId, string[]>;
 
 /** 路线ID-路径点ID列表 映射表
  * @property {string[]} 点位ID列表（从起点到终点 按行走顺序排列，点位可重复出现） */
 export const WALK_PATH_POINT_ID_MAP = {
+  // cspell:disable
   "pf-full": ["pfxq", "jls", "blt", "cmq", "gzsgy", "pfs", "pfsy", "pfxq"],
   "pf-half": ["pfxq", "jls", "ljs", "pfs", "pfsy", "pfxq"],
   mgs: ["mgsxq", "zfgy", "hbgy", "tayg", "dtx", "mgsxq"]
+  // cspell:enable
 } as const satisfies Record<WalkRouteId, string[]>;
 
 /** 路线ID列表
@@ -104,6 +110,7 @@ export const WALK_ROUTE_CONFIG = {
  * @property {Component} hotSpot 点击热区
  */
 export const WALK_POINT_CONFIG = {
+  // cspell:disable
   pfxq: {
     name: "屏峰校区"
   },
@@ -143,6 +150,7 @@ export const WALK_POINT_CONFIG = {
   dtx: {
     name: "东苕溪"
   }
+  // cspell:enable
 } as const satisfies Record<WalkPointId, WalkPointConfig>;
 
 /**
@@ -159,6 +167,7 @@ export const WALK_POINT_CONFIG = {
  * @see {WALK_SEGMENT_CONSTANTS} 则是行程段的不可配置信息，会根据点位配置自动生成
  */
 export const WALK_SEGMENT_CONFIG = {
+  // cspell:disable
   "blt-cmq": {},
   "cmq-gzsgy": {},
   "dtx-mgsxq": {},
@@ -173,6 +182,7 @@ export const WALK_SEGMENT_CONFIG = {
   "pfs-pfsy": {},
   "tayg-dtx": {},
   "zfgy-hbgy": {}
+  // cspell:enable
 } as const satisfies Record<WalkSegmentKey, WalkSegmentConfig>;
 
 /** 行程段key分隔符
