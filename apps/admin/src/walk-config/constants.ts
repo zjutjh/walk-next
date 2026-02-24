@@ -26,7 +26,7 @@ import type {
   WalkSegmentConstantMap,
   WalkSegmentKey,
   WalkSegmentKeyMap
-} from "@/types";
+} from "@/walk-config";
 
 /**
  *
@@ -48,9 +48,9 @@ export const WALK_ROUTE_ID_MAP = {
 /** 路线ID-路径点ID列表 映射表
  * @property {string[]} 点位ID列表（从起点到终点 按行走顺序排列，点位可重复出现） */
 export const WALK_PATH_POINT_ID_MAP = {
-  "pf-full": ["pfCampus", "jls", "blt", "cmq", "gzsGy", "pfs", "pfSy", "pfCampus"],
-  "pf-half": ["pfCampus", "jls", "ljs", "pfs", "pfSy", "pfCampus"],
-  mgs: ["mgsCampus", "zfGy", "hbGy", "taYg", "dtx", "mgsCampus"]
+  "pf-full": ["pfxq", "jls", "blt", "cmq", "gzsgy", "pfs", "pfsy", "pfxq"],
+  "pf-half": ["pfxq", "jls", "ljs", "pfs", "pfsy", "pfxq"],
+  mgs: ["mgsxq", "zfgy", "hbgy", "tayg", "dtx", "mgsxq"]
 } as const satisfies Record<WalkRouteId, string[]>;
 
 /** 路线ID列表
@@ -104,7 +104,7 @@ export const WALK_ROUTE_CONFIG = {
  * @property {Component} hotSpot 点击热区
  */
 export const WALK_POINT_CONFIG = {
-  pfCampus: {
+  pfxq: {
     name: "屏峰校区"
   },
   jls: {
@@ -116,7 +116,7 @@ export const WALK_POINT_CONFIG = {
   cmq: {
     name: "慈母桥"
   },
-  gzsGy: {
+  gzsgy: {
     name: "古樟树公园"
   },
   ljs: {
@@ -125,19 +125,19 @@ export const WALK_POINT_CONFIG = {
   pfs: {
     name: "屏峰山"
   },
-  pfSy: {
+  pfsy: {
     name: "屏峰善院"
   },
-  mgsCampus: {
+  mgsxq: {
     name: "莫干山校区"
   },
-  zfGy: {
+  zfgy: {
     name: "兆丰公园"
   },
-  hbGy: {
+  hbgy: {
     name: "滑板公园"
   },
-  taYg: {
+  tayg: {
     name: "天安云谷"
   },
   dtx: {
@@ -160,19 +160,19 @@ export const WALK_POINT_CONFIG = {
  */
 export const WALK_SEGMENT_CONFIG = {
   "blt-cmq": {},
-  "cmq-gzsGy": {},
-  "dtx-mgsCampus": {},
-  "gzsGy-pfs": {},
-  "hbGy-taYg": {},
+  "cmq-gzsgy": {},
+  "dtx-mgsxq": {},
+  "gzsgy-pfs": {},
+  "hbgy-tayg": {},
   "jls-blt": {},
   "jls-ljs": {},
   "ljs-pfs": {},
-  "mgsCampus-zfGy": {},
-  "pfCampus-jls": {},
-  "pfSy-pfCampus": {},
-  "pfs-pfSy": {},
-  "taYg-dtx": {},
-  "zfGy-hbGy": {}
+  "mgsxq-zfgy": {},
+  "pfxq-jls": {},
+  "pfsy-pfxq": {},
+  "pfs-pfsy": {},
+  "tayg-dtx": {},
+  "zfgy-hbgy": {}
 } as const satisfies Record<WalkSegmentKey, WalkSegmentConfig>;
 
 /** 行程段key分隔符

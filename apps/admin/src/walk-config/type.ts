@@ -18,7 +18,7 @@ import {
   type WALK_PATH_POINT_ID_MAP,
   type WALK_POINT_CONFIG,
   type WALK_ROUTE_ID_MAP
-} from "@/constants";
+} from "@/walk-config";
 
 /** 校区ID
  *
