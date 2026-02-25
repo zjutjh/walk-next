@@ -1,5 +1,15 @@
 @import "modern-normalize/modern-normalize.css";
 
+@font-face {
+  font-family: DingTalk JinBuTi;
+  src: url("@/assets/fonts/DingTalk JinBuTi.ttf");
+}
+
+@font-face {
+  font-family: DingTalk Sans;
+  src: url("@/assets/fonts/DingTalk Sans.ttf");
+}
+
 :root {
   font-weight: 400;
 
