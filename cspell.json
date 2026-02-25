@@ -11,7 +11,8 @@
     "njsproj",
     "dbaeumer",
     "pxtorem",
-    "oxlint"
+    "oxlint",
+    "dingtalk"
   ],
   "ignorePaths": [
     "node_modules/**",
