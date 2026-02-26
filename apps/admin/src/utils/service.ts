@@ -16,7 +16,7 @@ axiosInstance.interceptors.response.use(
         // TODO:请求错误全局处理
         default:
       }
-      throw new RequestError(body.msg, body.code);
+      throw new RequestError(body.msg || body.message, body.code);
     }
     return response;
   },

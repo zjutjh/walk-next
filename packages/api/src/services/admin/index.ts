@@ -43,4 +43,40 @@ export default class WalkAdminService<T> extends BaseService<T> {
 
     return this.request({ url, method, params }, options);
   }
+
+  /** 获取团队状态 */
+  QueryTeamStatus(
+    req: AdminAPI.QueryTeamStatusRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryTeamStatusResponse> {
+    const url = this.genBaseURL("/admin/team/status");
+    const method = "GET";
+    const params = req; // GET请求使用 params
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 更改人员状态 */
+  UpdateUserStatus(
+    req: AdminAPI.UpdateUserStatusRequest,
+    options?: T
+  ): Promise<AdminAPI.UpdateUserStatusResponse> {
+    const url = this.genBaseURL("/admin/user/update");
+    const method = "POST";
+    const data = req; // POST请求使用 data
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 绑定签到码 */
+  BindTeamCode(
+    req: AdminAPI.BindTeamCodeRequest,
+    options?: T
+  ): Promise<AdminAPI.BindTeamCodeResponse> {
+    const url = this.genBaseURL("/admin/team/bind");
+    const method = "POST";
+    const data = req; // POST请求使用 data
+
+    return this.request({ url, method, data }, options);
+  }
 }

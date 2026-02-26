@@ -40,14 +40,16 @@
 
 <script setup lang="ts">
 import { showSuccessToast } from "vant";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import DefaultLayout from "@/layouts/default-layout/index.vue";
+import { walkAdminService } from "@/utils/service";
 
-const teamRoute = ref("屏峰全程");
-const prevPoint = ref("慈母桥");
+const teamRoute = ref("");
+const prevPoint = ref("");
+// 这里写死 team_id 为 1 用来做开发测试，后续扫码页面做好了，这里换成从路由获取
+const currentTeamId = 1;
 
-// 定义成员状态类型
 type MemberStatus = "未开始" | "待出发" | "已放弃" | "进行中";
 
 interface Member {
@@ -56,24 +58,55 @@ interface Member {
   status: MemberStatus;
 }
 
-const memberList = ref<Member[]>([
-  { id: 1, name: "白糖洒一地", status: "待出发" },
-  { id: 2, name: "SugarMGP", status: "未开始" },
-  { id: 3, name: "mgg", status: "待出发" },
-  { id: 4, name: "猫家军", status: "待出发" },
-  { id: 5, name: "折乙", status: "待出发" }
-]);
+const memberList = ref<Member[]>([]);
 
-// 1. 自动计算剩余人数 (总人数扣除已放弃的)
 const remainingCount = computed(() => {
   return memberList.value.filter((m) => m.status !== "已放弃").length;
+});
+
+// --- 状态中英翻译器 ---
+const statusMapToZh: Record<string, MemberStatus> = {
+  notStart: "未开始",
+  pending: "待出发",
+  abandoned: "已放弃",
+  inProgress: "进行中"
+};
+const statusMapToEn: Record<MemberStatus, string> = {
+  未开始: "notStart",
+  待出发: "pending",
+  已放弃: "abandoned",
+  进行中: "inProgress"
+};
+
+// 1. 初始化获取数据
+const fetchTeamData = async () => {
+  try {
+    const res = await walkAdminService.QueryTeamStatus({ team_id: currentTeamId });
+    // 删掉原来的 if (res) {
+    if (res.team) {
+      teamRoute.value = res.team.route_name;
+      prevPoint.value = res.team.prev_point_name;
+    }
+    if (res.member) {
+      memberList.value = res.member.map((m) => ({
+        id: m.user_id,
+        name: m.name,
+        status: statusMapToZh[m.walk_status] || "未开始"
+      }));
+    }
+    // 删掉原来的 }
+  } catch (error) {
+    console.error("获取团队状态失败", error);
+  }
+};
+
+onMounted(() => {
+  fetchTeamData();
 });
 
 // 2. 状态选择弹窗逻辑
 const showPicker = ref(false);
 const currentEditId = ref<number | null>(null);
-
-// 起点修改状态选项（根据要求只有这两种）
 const statusOptions = [{ name: "待出发" }, { name: "已放弃" }];
 
 const openStatusPicker = (id: number) => {
@@ -81,29 +114,44 @@ const openStatusPicker = (id: number) => {
   showPicker.value = true;
 };
 
-const onSelectStatus = (action: { name: string }) => {
-  const targetMember = memberList.value.find((m) => m.id === currentEditId.value);
-  if (targetMember) {
-    targetMember.status = action.name as MemberStatus;
+const onSelectStatus = async (action: { name: string }) => {
+  const newStatusZh = action.name as MemberStatus;
+  const targetId = currentEditId.value;
+  if (!targetId) return;
+
+  try {
+    // 调用接口更新状态
+    await walkAdminService.UpdateUserStatus({
+      user_id: targetId,
+      walk_status: statusMapToEn[newStatusZh]
+    });
+
+    // 如果没有报错走进 catch，说明成功了
+    showSuccessToast("状态更新成功");
+    const targetMember = memberList.value.find((m) => m.id === targetId);
+    if (targetMember) targetMember.status = newStatusZh;
+  } catch (error) {
+    console.error("更新人员状态失败", error);
   }
 };
 
 // 3. 团队码绑定逻辑
-const handleBindTeam = () => {
-  showSuccessToast("绑定成功");
-  // 绑定后，把“待出发”的改成“进行中”
-  memberList.value.forEach((member) => {
-    if (member.status === "待出发") {
-      member.status = "进行中";
-    }
-  });
+const handleBindTeam = async () => {
+  try {
+    await walkAdminService.BindTeamCode({
+      team_id: currentTeamId,
+      content: "TEST_CODE_123" // 测试签到码
+    });
+
+    showSuccessToast("绑定成功");
+    fetchTeamData(); // 重新拉取数据刷新状态
+  } catch (error) {
+    console.error("团队码绑定失败", error);
+  }
 };
 
-// --- 辅助工具函数：控制不同状态的颜色 ---
 const getStatusColor = (status: MemberStatus) => {
-  if (status === "待出发" || status === "进行中") {
-    return "color-yellow-green";
-  }
+  if (status === "待出发" || status === "进行中") return "color-yellow-green";
   return "color-gray";
 };
 </script>
