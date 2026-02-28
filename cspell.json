@@ -12,7 +12,10 @@
     "dbaeumer",
     "pxtorem",
     "oxlint",
-    "dingtalk"
+    "dingtalk",
+    "nums",
+    "hotspot",
+    "hotspots"
   ],
   "ignorePaths": [
     "node_modules/**",
