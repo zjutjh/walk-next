@@ -12,7 +12,7 @@ import { uniq } from "lodash-es";
 import { UnionToIntersection, ValueOf } from "type-fest";
 import { Component } from "vue";
 
-import { WALK_PATH_POINT_ID_MAP, WALK_ROUTE_ID, WalkPointId, WalkRouteId } from "./entity-id";
+import { WALK_PATH_POINT_ID_MAP, WALK_ROUTE_ID_LIST, WalkPointId, WalkRouteId } from "./entity-id";
 import { WALK_POINT_CONFIG } from "./entity-info";
 
 /**
@@ -65,7 +65,7 @@ export const WALK_SEGMENT_CONFIG = {
 export const WALK_SEGMENT_KEY_MAP = (() => {
   const result: Partial<Record<WalkRouteId, string[]>> = {};
   // 遍历所有行程段ID
-  for (const routeId of WALK_ROUTE_ID) {
+  for (const routeId of WALK_ROUTE_ID_LIST) {
     /** 当前行程段ID对应的行程段key列表 */
     const keyArray: Array<string> = [];
     // 从第二个开始遍历点位ID
@@ -86,7 +86,7 @@ export const WALK_SEGMENT_KEY_MAP = (() => {
 })() as WalkSegmentKeyMap;
 
 /** 行程段key列表 */
-export const WALK_SEGMENT_KEY = uniq(Object.values(WALK_SEGMENT_KEY_MAP).flat());
+export const WALK_SEGMENT_KEY_LIST = uniq(Object.values(WALK_SEGMENT_KEY_MAP).flat());
 
 /** 行程段的导出量
  *
@@ -94,7 +94,7 @@ export const WALK_SEGMENT_KEY = uniq(Object.values(WALK_SEGMENT_KEY_MAP).flat())
 export const WALK_SEGMENT_DERIVATIVE = (() => {
   const result: Partial<Record<WalkSegmentKey, WalkSegmentDerivative>> = {};
   // 遍历所有行程段ID
-  for (const routeId of WALK_ROUTE_ID) {
+  for (const routeId of WALK_ROUTE_ID_LIST) {
     // 从第二个开始遍历点位ID
     for (let i = 1; i < WALK_PATH_POINT_ID_MAP[routeId].length; ++i) {
       /** 上一点位ID */

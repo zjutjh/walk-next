@@ -50,12 +50,12 @@ export const WALK_PATH_POINT_ID_MAP = {
 /** 路线ID列表
  *
  * @see {WALK_ROUTE_ID_MAP} 数据源 */
-export const WALK_ROUTE_ID = Object.values(WALK_ROUTE_ID_MAP).flat();
+export const WALK_ROUTE_ID_LIST = Object.values(WALK_ROUTE_ID_MAP).flat();
 
 /** 点位ID列表
  *
  * @see {WALK_PATH_POINT_ID_MAP} 数据源 */
-export const WALK_POINT_ID = uniq(Object.values(WALK_PATH_POINT_ID_MAP).flat());
+export const WALK_POINT_ID_LIST = uniq(Object.values(WALK_PATH_POINT_ID_MAP).flat());
 
 /**
  *
