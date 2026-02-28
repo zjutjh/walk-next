@@ -26,12 +26,6 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      fs: {
-        allow: [
-          path.resolve(__dirname, "./"),
-          path.resolve(__dirname, "../../packages/walk-config")
-        ]
-      },
       proxy: {
         "/api": {
           target: env.VITE_HOST,
