@@ -1,19 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "module": "ESNext",
-    "types": ["vite/client"],
-    "strict": true,
-    "baseUrl": "./",
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "isolatedModules": true,
-    "rootDir": ".",
-    "declarationDir": "dist/types",
-    "moduleResolution": "bundler",
-    "noImplicitOverride": true
-  },
-  "include": ["src"],
-  "exclude": ["**/node_modules"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.config.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }
