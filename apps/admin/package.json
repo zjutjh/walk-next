@@ -37,7 +37,7 @@
     "typescript": "catalog:infra",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-vue-components": "^31.0.0",
-    "vite": "catalog:infra",
+    "vite": "^7.3.1",
     "vue-tsc": "catalog:infra"
   }
 }
