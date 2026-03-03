@@ -22,8 +22,7 @@
     "shared": "workspace:*",
     "vant": "^4.9.22",
     "vue": "catalog:frontend",
-    "vue-router": "catalog:frontend",
-    "walk-config": "workspace:*"
+    "vue-router": "catalog:frontend"
   },
   "devDependencies": {
     "@types/lodash-es": "catalog:types",

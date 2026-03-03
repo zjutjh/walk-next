@@ -178,9 +178,6 @@ importers:
       vue-router:
         specifier: catalog:frontend
         version: 5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
-      walk-config:
-        specifier: workspace:*
-        version: link:../../packages/walk-config
     devDependencies:
       '@types/lodash-es':
         specifier: catalog:types
@@ -260,28 +257,6 @@ importers:
       vue-tsc:
         specifier: catalog:infra
         version: 3.2.5(typescript@5.9.3)
-
-  packages/walk-config:
-    dependencies:
-      vite:
-        specifier: catalog:infra
-        version: 7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(yaml@2.8.2)
-      vue:
-        specifier: catalog:frontend
-        version: 3.5.28(typescript@5.9.3)
-    devDependencies:
-      '@types/lodash-es':
-        specifier: catalog:types
-        version: 4.17.12
-      lodash-es:
-        specifier: catalog:frontend
-        version: 4.17.23
-      type-fest:
-        specifier: catalog:types
-        version: 5.4.4
-      typescript:
-        specifier: catalog:infra
-        version: 5.9.3
 
 packages:
 

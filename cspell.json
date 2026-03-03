@@ -13,9 +13,7 @@
     "pxtorem",
     "oxlint",
     "dingtalk",
-    "nums",
-    "hotspot",
-    "hotspots"
+    "nums"
   ],
   "ignorePaths": [
     "node_modules/**",
