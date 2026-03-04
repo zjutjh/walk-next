@@ -4,9 +4,6 @@
     :show-back="false"
     @click-navbar-right="handleSearchClick"
   >
-    <template #right>
-      <van-icon name="search" size="22" />
-    </template>
     <admin-info />
     <section :class="styles.main">
       <van-cell-group title="签到">
