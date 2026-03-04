@@ -3,7 +3,7 @@
     <van-nav-bar
       v-if="!isNil(navbarTitle)"
       :title="navbarTitle"
-      left-arrow
+      :left-arrow="props.showBack"
       class="default-layout__navbar"
       @click-left="handleBackClick"
     />
@@ -36,11 +36,18 @@ interface DefaultLayoutProps {
    * @default true
    */
   showNavbar?: boolean;
+  /**
+   * 是否显示返回上一页的按钮
+   *
+   * @default true
+   */
+  showBack?: boolean;
 }
 
 const props = withDefaults(defineProps<DefaultLayoutProps>(), {
   title: undefined,
-  showNavbar: true
+  showNavbar: true,
+  showBack: true
 });
 
 useTitleMeta();
