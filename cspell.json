@@ -12,7 +12,8 @@
     "dbaeumer",
     "pxtorem",
     "oxlint",
-    "dingtalk"
+    "dingtalk",
+    "iconify"
   ],
   "ignorePaths": [
     "node_modules/**",
