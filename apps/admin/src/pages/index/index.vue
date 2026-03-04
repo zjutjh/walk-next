@@ -1,5 +1,9 @@
 <template>
-  <default-layout title="精弘毅行管理后台" :show-back="false" @click-right="handleSearchClick">
+  <default-layout
+    title="精弘毅行管理后台"
+    :show-back="false"
+    @click-navbar-right="handleSearchClick"
+  >
     <template #right>
       <van-icon name="search" size="22" />
     </template>

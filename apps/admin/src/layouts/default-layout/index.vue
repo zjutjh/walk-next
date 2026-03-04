@@ -6,7 +6,7 @@
       :left-arrow="props.showBack"
       class="default-layout__navbar"
       @click-left="handleBackClick"
-      @click-right="emit('clickRight')"
+      @click-right="emit('clickNavbarRight')"
     >
       <template #right>
         <slot name="right" />
@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<DefaultLayoutProps>(), {
 
 const emit = defineEmits<{
   /** 点击导航栏右侧插槽 */
-  clickRight: [];
+  clickNavbarRight: [];
 }>();
 
 useTitleMeta();
