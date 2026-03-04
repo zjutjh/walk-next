@@ -6,7 +6,11 @@
       :left-arrow="props.showBack"
       class="default-layout__navbar"
       @click-left="handleBackClick"
-    />
+    >
+      <template #right>
+        <slot name="right" />
+      </template>
+    </van-nav-bar>
     <slot name="header" />
     <main class="default-layout__main">
       <slot />
