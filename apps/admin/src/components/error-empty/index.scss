@@ -1,0 +1,19 @@
+// 错误态
+.error-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__empty {
+    --van-empty-padding: 0;
+    --van-empty-description-padding: 0;
+  }
+
+  &__retry {
+    height: 35px;
+    width: 100px;
+  }
+}
