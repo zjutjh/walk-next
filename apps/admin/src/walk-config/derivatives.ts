@@ -57,9 +57,9 @@ const STRICT_CAMPUS_POINT_LIST_MAP = (() => {
 /** 路线ID-行程段key列表 映射表 */
 const STRICT_ROUTE_SEGMENT_LIST_MAP = (() => {
   const result: Partial<Record<RouteId, string[]>> = {};
-  // 遍历所有行程段ID
+  // 遍历所有路线ID
   for (const routeId of ROUTE_LIST) {
-    /** 当前行程段ID对应的行程段key列表 */
+    /** 当前路线ID对应的行程段key列表 */
     const keyArray: Array<string> = [];
     // 从第二个开始遍历点位ID
     for (let i = 1; i < STRICT_ROUTE_POINT_LIST_MAP[routeId].length; ++i) {
