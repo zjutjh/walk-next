@@ -7,7 +7,7 @@
  */
 
 import type { Simplify, UnionToIntersection, ValueOf } from "type-fest";
-import type { StyleValue } from "vue";
+import type { CSSProperties } from "vue";
 
 import type {
   CAMPUS_LIST,
@@ -73,7 +73,7 @@ export interface PointConfig {
   /** 点位的中文全名 */
   text: string;
   /** 点位的地图点击热区矩形列表 */
-  hotRectList: Array<StyleValue>;
+  hotRectList: Array<CSSProperties>;
 }
 
 // 行程段 相关类型
@@ -81,7 +81,7 @@ export interface PointConfig {
 /** 行程段配置 */
 export interface SegmentConfig {
   /** 行程段的点击热区矩形列表 */
-  hotRectList: Array<StyleValue>;
+  hotRectList: Array<CSSProperties>;
 }
 
 /** 工具类型 将 点位ID列表 转为 行程段key列表 */
