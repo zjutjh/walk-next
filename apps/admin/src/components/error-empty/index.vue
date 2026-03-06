@@ -40,12 +40,13 @@ const props = withDefaults(defineProps<ErrorEmptyProps>(), {
 });
 
 const emit = defineEmits<{
+  /** 要求父组件刷新重试 */
   retry: [];
 }>();
 
 /** 点击重试按钮 */
 const handleRetry = () => {
-  // 向父组件发出事件，父组件使用v-on监听后绑定刷新函数
+  // 向父组件发出事件，父组件使用v-on监听并绑定刷新函数
   emit("retry");
 };
 </script>
