@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import { THEME_VAR_RECORD } from "@/configs/theme-vars";
+import { THEME_VAR_RECORD } from "@/constants";
 </script>
