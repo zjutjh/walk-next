@@ -25,15 +25,16 @@
 <script setup lang="ts">
 import "./index.scss";
 
+import { refDebounced } from "@vueuse/core";
 import type { LoadingProps } from "vant";
-import { ref, watch } from "vue";
+import { computed, toRef } from "vue";
 
 export interface LoadingContainerProps extends Partial<LoadingProps> {
   /** 加载图标下方的文本 */
   text?: string;
   /** 是否正在加载 */
   loading: boolean;
-  /** 加载已经持续多少毫秒时，视觉上显示遮罩，设为0时立即显示。
+  /** 加载状态从false变为true持续多少毫秒后，视觉上才显示遮罩。为0则立即显示
    * @default 0
    */
   delay?: number;
@@ -52,33 +53,8 @@ const props = withDefaults(defineProps<LoadingContainerProps>(), {
 });
 
 /** 遮罩是否视觉上可见 */
-const isOverlayVisible = ref(false);
-/** 使遮罩可见的计时器 */
-let loadingDelayTimer: number | undefined;
-watch(
-  () => props.loading,
-  (newValue) => {
-    // 重置使遮罩可见的计时器
-    if (loadingDelayTimer !== undefined) {
-      clearTimeout(loadingDelayTimer);
-      loadingDelayTimer = undefined;
-    }
-    // 已退出加载状态，立刻将遮罩重置为不可见
-    if (newValue === false) {
-      isOverlayVisible.value = false;
-      return;
-    }
-    // 已进入加载状态
-    if (props.delay === 0) {
-      // 无延时，立刻使遮罩可见
-      isOverlayVisible.value = true;
-      return;
-    }
-    // 延时后使遮罩可见
-    loadingDelayTimer = setTimeout(() => {
-      isOverlayVisible.value = true;
-    }, props.delay);
-  },
-  { immediate: true }
+const isOverlayVisible = refDebounced(
+  toRef(() => props.loading),
+  computed(() => (props.loading ? props.delay : 0))
 );
 </script>
