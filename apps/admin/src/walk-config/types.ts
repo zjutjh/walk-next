@@ -41,7 +41,7 @@ export type PointId = ValueOf<typeof STRICT_ROUTE_POINT_LIST_MAP>[number];
 export type CampusIdListMap = {
   // 遍历所有 校区ID
   [Camp in CampusId]: {
-    // 遍历 校区ID 对应的 路段ID列表，进而取得 路段ID 对应的 点位ID
+    // 遍历 校区ID 对应的 路段ID列表，进而取得 路段ID 对应的 点位ID的Union
     [Rt in (typeof STRICT_CAMPUS_ROUTE_LIST_MAP)[Camp][number]]: (typeof STRICT_ROUTE_POINT_LIST_MAP)[Rt][number];
   }[(typeof STRICT_CAMPUS_ROUTE_LIST_MAP)[Camp][number]][];
 };
@@ -86,7 +86,7 @@ export interface SegmentConfig {
 
 /** 工具类型 将 点位ID列表 转为 行程段key列表 */
 type SegmentKeyArrayBuilder<PointIdArray extends PointId[]> = PointIdArray extends [
-  // 递归遍历每一个数组元素 Elem:当前遍历的点位ID
+  // 递归遍历每一个数组元素 First:当前遍历的点位ID
   infer First extends PointId,
   // Rest:剩余待遍历点位ID组成的数组
   ...infer Rest extends PointId[]
@@ -116,7 +116,7 @@ export type RouteSegmentListMap = {
 export type CampusSegmentListMap = {
   // 遍历所有 校区ID
   [Camp in CampusId]: {
-    // 遍历 校区ID 对应的 路段ID列表，进而取得 路段ID 对应的 点位ID
+    // 遍历 校区ID 对应的 路段ID列表，进而取得 路段ID 对应的 行程段key的Union
     [Rt in (typeof STRICT_CAMPUS_ROUTE_LIST_MAP)[Camp][number]]: (typeof ROUTE_SEGMENT_LIST_MAP)[Rt][number];
   }[(typeof STRICT_CAMPUS_ROUTE_LIST_MAP)[Camp][number]][];
 };
@@ -127,10 +127,7 @@ export interface SegmentDerivative {
   from: PointId;
   /** 行程段的末点ID */
   to: PointId;
-  /** 行程段的显示文本
-   * @see SEGMENT_TEXT_DELIMITER
-   * @example `${始点点位名}${分隔符}${终点点位名}`
-   */
+  /** 行程段的显示文本 */
   text: string;
 }
 
@@ -145,12 +142,12 @@ export type SegmentDerivativeMap = UnionToIntersection<
         ? {
             from: From;
             to: To;
-            // 将 始点名 分隔符 终点名 拼接得到行程段的文本
+            // 拼接 始点名+分隔符+终点名 得到行程段的文本
             text: `${(typeof STRICT_POINT_CONFIG)[From]["text"]}${typeof SEGMENT_TEXT_DELIMITER}${(typeof STRICT_POINT_CONFIG)[To]["text"]}`;
           } extends infer SegDeriv extends // 确保类型是行程段的导出属性
             SegmentDerivative
           ? SegDeriv
-          : // 如果推导出这个 说明属性类型填得有问题
+          : // 如果推导出这个 说明导出属性的类型填得有问题
             never
         : // 如果推导出这个 说明行程段key格式类型有问题
           never;
