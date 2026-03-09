@@ -14,7 +14,8 @@
     "oxlint",
     "dingtalk",
     "iconify",
-    "nums"
+    "nums",
+    "autorenew"
   ],
   "ignorePaths": [
     "node_modules/**",
