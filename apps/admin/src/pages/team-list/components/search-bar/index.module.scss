@@ -1,0 +1,24 @@
+// 队伍搜索栏
+.component {
+  .typeDropdownMenu {
+    :global(.van-dropdown-menu__bar) {
+      min-width: 55px;
+      margin-right: 10px;
+      --van-dropdown-menu-shadow: none;
+      --van-dropdown-menu-title-font-size: var(--van-search-action-font-size);
+    }
+  }
+
+  :global(.van-search__action) {
+    border-radius: var(--van-radius-max);
+    margin-left: 5px;
+    --van-search-action-padding: 0;
+
+    .searchBtn {
+      padding: {
+        left: 14px;
+        right: 14px;
+      }
+    }
+  }
+}
