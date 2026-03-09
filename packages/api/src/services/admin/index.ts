@@ -43,4 +43,40 @@ export default class WalkAdminService<T> extends BaseService<T> {
 
     return this.request({ url, method, params }, options);
   }
+
+  /** 筛选搜索队伍列表 */
+  QueryTeamList(
+    req: AdminAPI.QueryTeamListRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryTeamListResponse> {
+    const url = this.genBaseURL("/dashboard/teams/filter");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取队伍详情 */
+  QueryTeamDetails(
+    req: AdminAPI.QueryTeamDetailsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryTeamDetailsResponse> {
+    const url = this.genBaseURL(`/dashboard/teams`);
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 设置队伍失联状态 */
+  SetTeamLost(
+    req: AdminAPI.SetTeamLostRequest,
+    options?: T
+  ): Promise<AdminAPI.SetTeamLostResponse> {
+    const url = this.genBaseURL(`/dashboard/teams/lost`);
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
 }

@@ -1,0 +1,50 @@
+// 队伍详情浮窗
+.component {
+  height: calc(100vh - var(--van-nav-bar-height));
+  display: flex;
+  flex-direction: column;
+  background-color: var(--van-background);
+  --van-popup-close-icon-size: 16px;
+
+  .title {
+    flex-shrink: 0;
+    line-height: calc(
+      2 * var(--van-popup-close-icon-margin) + var(--van-popup-close-icon-size)
+    );
+    font-size: var(--van-popup-close-icon-size);
+    margin: {
+      left: auto;
+      right: auto;
+    }
+
+    .errorIcon {
+      vertical-align: middle;
+      margin-right: 3px;
+    }
+
+    .errorTip {
+      color: var(--van-danger-color);
+    }
+  }
+
+  .loadingContainer {
+    height: 0;
+    flex-grow: 1;
+
+    :global(.van-pull-refresh) {
+      height: 100%;
+      overflow-y: auto;
+
+      .details {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: 30px;
+
+        .cellGroup {
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+}
