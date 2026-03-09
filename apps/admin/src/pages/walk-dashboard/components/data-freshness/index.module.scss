@@ -1,0 +1,34 @@
+// 数据新鲜度 支持手动刷新数据
+.component {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #979797;
+
+  .icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .freshnessText {
+    display: flex;
+    font-size: 12px;
+    user-select: none;
+
+    .updateTime,
+    .errorTip {
+      min-width: 174px;
+    }
+
+    .errorTip {
+      text-align: right;
+      color: var(--van-danger-color);
+    }
+  }
+
+  .refreshBtn,
+  .refreshLoading {
+    width: 14px;
+    height: 14px;
+  }
+}

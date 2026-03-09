@@ -19,6 +19,15 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     meta: {
       pageName: "重组队伍"
     }
+  },
+  {
+    path: "/dashboard/:campusId",
+    props: true,
+    name: "dashboard",
+    component: () => import("@/pages/walk-dashboard/index.vue"),
+    meta: {
+      pageName: "数据大盘"
+    }
   }
 ];
 

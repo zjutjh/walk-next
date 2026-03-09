@@ -13,7 +13,8 @@
     "pxtorem",
     "oxlint",
     "dingtalk",
-    "iconify"
+    "iconify",
+    "nums"
   ],
   "ignorePaths": [
     "node_modules/**",
