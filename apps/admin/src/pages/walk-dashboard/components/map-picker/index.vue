@@ -77,7 +77,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  /** 大小变化 */
+  /** 通知父组件大小变化 */
   resize: [];
 }>();
 

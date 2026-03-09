@@ -49,6 +49,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
+  /** 要求父组件刷新数据 */
   refresh: [];
 }>();
 
