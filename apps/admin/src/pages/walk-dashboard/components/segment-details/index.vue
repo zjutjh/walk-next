@@ -82,9 +82,12 @@ const segmentBelongsTo = computed(() => {
   const belongingList = CAMPUS_ROUTE_LIST_MAP[props.campusId].filter((routeId) =>
     includes(ROUTE_SEGMENT_LIST_MAP[routeId], chosenSegmentKey.value)
   );
-  // 所有路线都包含时 简洁返回
-  if (belongingList.length === CAMPUS_ROUTE_LIST_MAP[props.campusId].length) {
-    return "所有路线";
+  // 存在多条路线且所有路线都包含时 简洁返回
+  if (
+    belongingList.length > 1 &&
+    belongingList.length === CAMPUS_ROUTE_LIST_MAP[props.campusId].length
+  ) {
+    return "全部路线";
   }
   // 拼接所有路线名
   return belongingList.map((routeId) => ROUTE_CONFIG[routeId].text).join("&");
