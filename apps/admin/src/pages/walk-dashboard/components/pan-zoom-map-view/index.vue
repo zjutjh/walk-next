@@ -51,7 +51,7 @@ const props = defineProps<{
 
 /** 视口元素 */
 const viewportRef = useTemplateRef("viewport");
-/** 视口元素的宽度 */
+/** 视口元素的尺寸 */
 const viewSize = useElementSize(viewportRef, undefined, { box: "border-box" });
 
 /** 地图组件 */
