@@ -43,4 +43,40 @@ export default class WalkAdminService<T> extends BaseService<T> {
 
     return this.request({ url, method, params }, options);
   }
+
+  /** 获取数据仪表盘校区总览 */
+  QueryDashboardCampusOverview(
+    req: AdminAPI.QueryDashboardCampusRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryDashboardCampusResponse> {
+    const url = this.genBaseURL("/dashboard/overview");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取数据仪表盘点位详情 */
+  QueryDashboardPointDetails(
+    req: AdminAPI.QueryDashboardPointDetailsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryDashboardPointDetailsResponse> {
+    const url = this.genBaseURL("/dashboard/checkpoint");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取数据仪表盘行程段详情 */
+  QueryDashboardSegmentDetails(
+    req: AdminAPI.QueryDashboardSegmentDetailsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryDashboardSegmentDetailsResponse> {
+    const url = this.genBaseURL("/dashboard/segment");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
 }

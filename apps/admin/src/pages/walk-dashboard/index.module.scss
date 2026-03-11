@@ -1,0 +1,29 @@
+// 数据仪表盘页
+.layout :global(.default-layout__main) {
+  display: flex;
+  flex-direction: column;
+
+  .topArea {
+    position: relative;
+    min-height: 240px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+  }
+
+  .dataPanel {
+    height: 240px;
+    flex-shrink: 0;
+  }
+
+  .floatingPanel {
+    background-color: #ffffff;
+    border-radius: 0;
+    box-shadow: #979797 0 0 10px;
+    --van-floating-panel-header-height: 9px;
+
+    :global(.van-floating-panel__content) {
+      scrollbar-width: none;
+    }
+  }
+}
