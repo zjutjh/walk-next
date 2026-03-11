@@ -20,11 +20,11 @@
           <!-- 点位数据 -->
           <div :class="styles.dataList">
             <div :class="styles.data">
-              <div :class="styles.dataValue">{{ detailsData?.passed_count || "-" }}</div>
+              <div :class="styles.dataValue">{{ detailsData?.passed_count ?? "-" }}</div>
               <div :class="styles.dataKey">经过人数</div>
             </div>
             <div :class="styles.data">
-              <div :class="styles.dataValue">{{ detailsData?.not_arrived_count || "-" }}</div>
+              <div :class="styles.dataValue">{{ detailsData?.not_arrived_count ?? "-" }}</div>
               <div :class="styles.dataKey">未到人数</div>
             </div>
           </div>

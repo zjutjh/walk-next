@@ -19,7 +19,7 @@
           <!-- 行程段数据 -->
           <div :class="styles.dataList">
             <div :class="styles.data">
-              <div :class="styles.dataValue">{{ detailsData?.number || "-" }}</div>
+              <div :class="styles.dataValue">{{ detailsData?.number ?? "-" }}</div>
               <div :class="styles.dataKey">路段人数</div>
             </div>
             <div :class="styles.data">
