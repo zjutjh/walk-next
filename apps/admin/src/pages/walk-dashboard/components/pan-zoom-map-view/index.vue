@@ -9,7 +9,6 @@
     @mousedown="(e) => handlePanStart(e.clientX, e.clientY)"
     @mousemove.prevent="(e) => handlePan(e.clientX, e.clientY)"
     @mouseup="handleTouchEnd"
-    @mouseleave="handleTouchEnd"
     @touchstart="handleTouchStart"
     @touchmove.prevent="handleTouchMove"
     @touchend="handleTouchEnd"
@@ -31,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { useElementSize, useThrottleFn } from "@vueuse/core";
+import { useElementSize, useEventListener, useThrottleFn } from "@vueuse/core";
 import { clamp, defaultTo, round } from "lodash-es";
 import { computed, ref, type StyleValue, toRef, useTemplateRef } from "vue";
 
@@ -227,6 +226,10 @@ const handleTouchEnd = () => {
   isPanning.value = false;
   isScaling.value = false;
 };
+
+// 松开鼠标或浏览器失焦时停止触摸
+useEventListener(window, "mouseup", handleTouchEnd);
+useEventListener(window, "blur", handleTouchEnd);
 
 /** 鼠标滚轮缩放 */
 const handleMouseWheelZoom = (e: WheelEvent) => {
