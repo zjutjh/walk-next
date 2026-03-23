@@ -1,6 +1,6 @@
 <template>
   <van-nav-bar left-arrow title="精弘毅行表格展示" @click-left="onClickLeft" />
-  <van-tabs v-model:active="active" sticky animated swipeable @change="onTabChange">
+  <van-tabs v-model:active="active" sticky animated sizeable @change="onTabChange">
     <!-- 总览 Tab -->
     <van-tab title="总览">
       <van-cell-group
@@ -81,6 +81,7 @@ const router = useRouter();
 const onClickLeft = () => {
   router.back();
 };
+
 // 类型定义
 interface RouteConfig {
   name: string;
@@ -97,10 +98,56 @@ interface RouteStats {
   quit: number;
 }
 
+// API 返回的路线数据类型
+interface ApiRouteData {
+  route_name?: string;
+  route_code?: string;
+  name?: string;
+  started?: number;
+  total?: number;
+  finished?: number;
+  wrong_route?: number;
+  quit?: number;
+}
+
+// API 返回的点位数据类型
+interface ApiPointData {
+  name?: string;
+  point_name?: string;
+  count?: number;
+  value?: number;
+  passed_count?: number;
+}
+
+// API 返回的路线详情类型
+interface ApiRouteDetail {
+  checkpoints?: ApiPointData[];
+  points?: ApiPointData[];
+  total?: number;
+  total_count?: number;
+  wrong_route?: number;
+  wrong_route_count?: number;
+  quit?: number;
+  quit_count?: number;
+  // 删除这行或注释掉：[key: string]: ApiPointData | number | undefined;
+}
+
+// API 响应数据类型
+interface ApiAllRoutesResponse {
+  data?:
+    | {
+        routes?: ApiRouteData[];
+      }
+    | ApiRouteData[];
+}
+
+interface ApiRouteDetailResponse {
+  data?: ApiRouteDetail;
+}
+
 interface RouteData extends RouteStats {
   route_name: string;
   route_code?: string;
-  [key: string]: any;
 }
 
 interface PointData {
@@ -184,32 +231,43 @@ const fetchAllRoutesData = async () => {
       method: "GET",
       headers: { "Content-Type": "application/json" }
     });
-
     if (!response.ok) throw new Error("获取总览数据失败");
-    const result = await response.json();
-    const routes = result.data?.routes || result.data || [];
+    const result: ApiAllRoutesResponse = await response.json();
+    // 处理 routes 可能是 result.data.routes 或 result.data
+    const routesData = result.data;
+    let routes: ApiRouteData[] = [];
+    if (routesData && "routes" in routesData && Array.isArray(routesData.routes)) {
+      routes = routesData.routes;
+    } else if (Array.isArray(routesData)) {
+      routes = routesData;
+    }
 
     allRoutesList.value = routeConfigs.map((config: RouteConfig) => {
       const matched = routes.find(
-        (r: any) =>
+        (r: ApiRouteData) =>
           r.route_name === config.name || r.route_code === config.code || r.name === config.name
       );
 
       const started = matched?.started ?? 0;
       const total = matched?.total ?? 0;
       const finished = matched?.finished ?? 0;
+      // eslint-disable-next-line camelcase
       const wrong_route = matched?.wrong_route ?? 0;
       const quit = matched?.quit ?? 0;
 
       // 未出发人数 = 总报名 - 已出发
+      // eslint-disable-next-line camelcase
       const not_started = total - started;
 
       return {
+        // eslint-disable-next-line camelcase
         route_name: config.name,
         started,
+        // eslint-disable-next-line camelcase
         not_started,
         total,
         finished,
+        // eslint-disable-next-line camelcase
         wrong_route,
         quit
       };
@@ -217,11 +275,14 @@ const fetchAllRoutesData = async () => {
   } catch (error) {
     console.error("获取总览数据失败:", error);
     allRoutesList.value = routeConfigs.map((config: RouteConfig) => ({
+      // eslint-disable-next-line camelcase
       route_name: config.name,
       started: 0,
+      // eslint-disable-next-line camelcase
       not_started: 0,
       total: 0,
       finished: 0,
+      // eslint-disable-next-line camelcase
       wrong_route: 0,
       quit: 0
     }));
@@ -241,28 +302,34 @@ const fetchRouteDetailData = async (routeConfig: RouteConfig) => {
     );
 
     if (!response.ok) throw new Error("获取路线详情失败");
-    const result = await response.json();
-    const data = result.data || result;
+    const result: ApiRouteDetailResponse = await response.json();
+    const data: ApiRouteDetail = result.data || ({} as ApiRouteDetail);
 
     // 解析点位数据
     if (data.checkpoints || data.points) {
-      const points = data.checkpoints || data.points;
-      checkpointData.value = points.map((p: any) => ({
-        name: p.name || p.point_name,
+      const points: ApiPointData[] = data.checkpoints || data.points || [];
+      checkpointData.value = points.map((p: ApiPointData) => ({
+        name: p.name || p.point_name || "",
         value: p.count ?? p.value ?? p.passed_count ?? 0
       }));
     } else {
-      checkpointData.value = routeConfig.points.map((pointName: string) => ({
-        name: pointName,
-        value: data[pointName]?.count ?? data[pointName] ?? 0
-      }));
+      checkpointData.value = routeConfig.points.map((pointName: string) => {
+        const pointData = (data as Record<string, ApiPointData | undefined>)[pointName];
+        return {
+          name: pointName,
+          value: pointData?.count ?? (data as Record<string, number>)[pointName] ?? 0
+        };
+      });
     }
+
     // 状态数据
     routeStats.value = {
       total: data.total ?? data.total_count ?? 0,
+      // eslint-disable-next-line camelcase
       wrong_route: data.wrong_route ?? data.wrong_route_count ?? 0,
       quit: data.quit ?? data.quit_count ?? 0
     };
+
     // 计算点位间人数
     calculateSegments(routeConfig);
   } catch (error) {
@@ -278,6 +345,7 @@ const calculateSegments = (routeConfig: RouteConfig) => {
   for (let i = 0; i < routeConfig.points.length - 1; i++) {
     const fromPoint = routeConfig.points[i];
     const toPoint = routeConfig.points[i + 1];
+    if (!fromPoint || !toPoint) continue;
     const fromData = checkpointData.value.find((p: PointData) => p.name === fromPoint);
     const toData = checkpointData.value.find((p: PointData) => p.name === toPoint);
 
