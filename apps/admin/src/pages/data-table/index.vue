@@ -1,5 +1,5 @@
 <template>
-  <van-nav-bar left-arrow title="精弘毅行表格展示" />
+  <van-nav-bar left-arrow title="精弘毅行表格展示" @click-left="onClickLeft" />
   <van-tabs v-model:active="active" sticky animated swipeable @change="onTabChange">
     <!-- 总览 Tab -->
     <van-tab title="总览">
@@ -75,7 +75,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+const onClickLeft = () => {
+  router.back();
+};
 // 类型定义
 interface RouteConfig {
   name: string;
