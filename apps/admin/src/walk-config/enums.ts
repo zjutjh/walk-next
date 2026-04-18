@@ -7,7 +7,7 @@
  */
 
 /** 校区 */
-export enum CampusEnum {
+export const enum CampusEnum {
   // cspell:disable
   PingFeng = "pf",
   MoGanShan = "mgs"
@@ -15,7 +15,7 @@ export enum CampusEnum {
 }
 
 /** 路线 */
-export enum RouteEnum {
+export const enum RouteEnum {
   // cspell:disable
   PingFengQuanCheng = "pf-full",
   PingFengBanCheng = "pf-half",
@@ -24,7 +24,7 @@ export enum RouteEnum {
 }
 
 /** 点位 */
-export enum PointEnum {
+export const enum PointEnum {
   // cspell:disable
   PingFengXiaoQu = "pfxq",
   JinLianSi = "jls",
