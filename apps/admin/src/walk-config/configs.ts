@@ -7,7 +7,6 @@
  */
 
 import { WALK_SRC } from "./assets";
-import { CampusEnum, PointEnum, RouteEnum } from "./enums";
 import type {
   AllowAnyStringKey,
   CampusConfig,
@@ -19,6 +18,44 @@ import type {
   SegmentConfig,
   SegmentKey
 } from "./types";
+
+// 辅助性的枚举 不导出消费，仅用于配置填写
+
+/** 校区 */
+const enum CampusEnum {
+  // cspell:disable
+  PingFeng = "pf",
+  MoGanShan = "mgs"
+  // cspell:enable
+}
+
+/** 路线 */
+const enum RouteEnum {
+  // cspell:disable
+  PingFengQuanCheng = "pf-full",
+  PingFengBanCheng = "pf-half",
+  MoGanShan = "mgs"
+  // cspell:enable
+}
+
+/** 点位 */
+const enum PointEnum {
+  // cspell:disable
+  PingFengXiaoQu = "pfxq",
+  JinLianSi = "jls",
+  BaiLongTan = "blt",
+  CiMuQiao = "cmq",
+  GuZhangShuGongYuan = "gzsgy",
+  PingFengShan = "pfs",
+  PingFengShanYuan = "pfsy",
+  LaoJiaoShan = "ljs",
+  MoGanShanXiaoQu = "mgsxq",
+  ZhaoFengGongYuan = "zfgy",
+  HuaBanGongYuan = "hbgy",
+  TianAnYunGu = "tayg",
+  DongTiaoXi = "dtx"
+  // cspell:enable
+}
 
 // API中使用的实体的唯一标识符 包括校区ID、路线ID、点位ID 必须与服务端保持一致
 
