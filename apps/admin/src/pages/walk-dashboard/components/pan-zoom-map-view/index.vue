@@ -7,7 +7,6 @@
       '--jh-walk-pan-zoom-view-background': `url('${props.mapUrl}')`
     }"
     @mousedown="(e) => handlePanStart(e.clientX, e.clientY)"
-    @mousemove.prevent="(e) => handlePan(e.clientX, e.clientY)"
     @mouseup="handleTouchEnd"
     @touchstart="handleTouchStart"
     @touchmove.prevent="handleTouchMove"
@@ -226,6 +225,18 @@ const handleTouchEnd = () => {
   isPanning.value = false;
   isScaling.value = false;
 };
+
+// 处理鼠标平移事件
+useEventListener(
+  window,
+  "mousemove",
+  (e) => {
+    if (!isPanning.value) return;
+    e.preventDefault();
+    handlePan(e.clientX, e.clientY);
+  },
+  { passive: false }
+);
 
 // 松开鼠标或浏览器失焦时停止触摸
 useEventListener(window, "mouseup", handleTouchEnd);
