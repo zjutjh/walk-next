@@ -16,4 +16,9 @@
     height: 35px;
     width: 100px;
   }
+
+  .van-empty__image img {
+    user-select: none;
+    pointer-events: none;
+  }
 }
