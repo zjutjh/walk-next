@@ -4,7 +4,7 @@
     ref="componentRef"
     :class="styles.component"
     :style="{
-      '--jh-walk-hot-rect-border-color': hotRectBorderColor
+      '--jh-walk-hot-rect-border-color': debugHotRectBorderColor
     }"
   >
     <!-- 地图 -->
@@ -41,16 +41,6 @@
 </template>
 
 <script setup lang="ts">
-/**
- *
- * 是否显示热区边界（调试预览用，仅在vite development模式生效，生产环境不会显示）
- *
- */
-const DEBUG_SHOW_HOT_RECT_BORDER = false;
-
-const hotRectBorderColor =
-  import.meta.env.MODE === "development" && DEBUG_SHOW_HOT_RECT_BORDER ? "#000000" : undefined; // eslint-disable-line @typescript-eslint/no-unnecessary-condition
-
 import { useDebounceFn, useResizeObserver } from "@vueuse/core";
 import { isEmpty, isNull } from "lodash-es";
 import { type StyleValue, toRef, useTemplateRef } from "vue";
@@ -86,6 +76,13 @@ const componentRef = useTemplateRef("componentRef");
 
 /** URL Query */
 const urlQuery = defineModel<DashboardUrlQuery>("urlQuery", { required: true });
+
+/** 调试模式热区边界颜色 */
+const debugHotRectBorderColor =
+  import.meta.env.MODE === "development" &&
+  import.meta.env.VITE_DEBUG_SHOW_HOT_RECT_BORDER === "true"
+    ? "#000000"
+    : "transparent";
 
 /** 为空的热区矩形样式对象提供的默认样式 */
 const hotRectDefaultStyle: StyleValue = {
