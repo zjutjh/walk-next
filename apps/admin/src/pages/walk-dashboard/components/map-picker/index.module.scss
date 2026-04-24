@@ -25,6 +25,7 @@
     transform-origin: 0 0;
     z-index: 1;
     cursor: pointer;
+    user-select: none;
 
     &.chosen {
       z-index: 0;
