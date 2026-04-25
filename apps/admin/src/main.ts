@@ -1,4 +1,6 @@
 import "./global.scss";
+import "vant/es/toast/style";
+import "vant/es/dialog/style";
 
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import dayjs from "dayjs";

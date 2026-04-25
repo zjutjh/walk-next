@@ -1,5 +1,5 @@
 export interface CommonRespWrap<R> {
   code: number;
-  msg: string;
+  message: string;
   data?: R;
 }

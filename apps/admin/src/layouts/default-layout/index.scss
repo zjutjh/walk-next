@@ -3,7 +3,7 @@
   flex-direction: column;
   height: 100svh;
   overflow: hidden;
-  background-color: #fff2ef;
+  background-color: var(--van-background);
 
   &__main {
     flex: 1;

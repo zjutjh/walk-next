@@ -1,5 +1,28 @@
 @import "modern-normalize/modern-normalize.css";
 
+@font-face {
+  font-family: "DingTalk JinBuTi";
+  src: url("@/assets/fonts/dingtalk-jin-bu-ti.ttf");
+}
+
+@font-face {
+  font-family: "DingTalk Sans";
+  src: url("@/assets/fonts/dingtalk-sans.ttf");
+}
+
+@font-face {
+  font-family: "Barlow";
+  src: url("@/assets/fonts/barlow-medium.ttf");
+  font-weight: "medium";
+}
+
+@font-face {
+  font-family: "Barlow";
+  src: url("@/assets/fonts/barlow-medium-italic.ttf");
+  font-weight: "medium";
+  font-style: italic;
+}
+
 :root {
   font-weight: 400;
 

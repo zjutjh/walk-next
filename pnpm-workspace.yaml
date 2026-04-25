@@ -5,6 +5,8 @@ packages:
 catalogs:
   frontend:
     "@csstools/normalize.css": "^12.1.1"
+    "@iconify-json/ic": "^1.2.4"
+    "@iconify-json/mdi": "^1.2.3"
     "@tanstack/vue-query": "^5.92.9"
     "@vueuse/core": "^14.2.1"
     "axios": "^1.13.5"
@@ -35,5 +37,6 @@ catalogs:
     "prettier": "^3.8.1"
     "simple-git-hooks": "^2.13.1"
     "typescript": "~5.9.3"
+    "unplugin-icons": "^23.0.1"
     "vue-eslint-parser": "^10.4.0"
     "vue-tsc": "^3.2.5"

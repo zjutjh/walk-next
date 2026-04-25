@@ -1,7 +1,7 @@
 <template>
   <van-field v-model="account" label="账号"></van-field>
   <van-field v-model="password" label="密码"></van-field>
-  <van-button @click="handleLoginClick">登录</van-button>
+  <van-button :loading="isPending" @click="handleLoginClick">登录</van-button>
 
   <van-field v-model="userId" label="要查询的用户的ID"></van-field>
   <van-button :loading="isFetching" @click="handleRefreshClick">刷新</van-button>
@@ -26,7 +26,7 @@ const account = ref("");
 /** 密码 */
 const password = ref("");
 // 登录（示例）（这里不用写jsdoc /** */，没效果）
-const { mutate: mutateLogin } = useMutation({
+const { mutate: mutateLogin, isPending } = useMutation({
   mutationFn: () =>
     walkAdminService.LoginExample({
       // 这个大括号就是请求参数。是body json还是query params取决于接口的定义（LoginExample）里面是data还是params
