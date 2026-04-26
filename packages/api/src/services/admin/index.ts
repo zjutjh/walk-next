@@ -51,7 +51,7 @@ export default class WalkAdminService<T> extends BaseService<T> {
   ): Promise<AdminAPI.QueryTeamStatusResponse> {
     const url = this.genBaseURL("/admin/team/status");
     const method = "GET";
-    const params = req; // GET请求使用 params
+    const params = req;
 
     return this.request({ url, method, params }, options);
   }
@@ -63,7 +63,7 @@ export default class WalkAdminService<T> extends BaseService<T> {
   ): Promise<AdminAPI.UpdateUserStatusResponse> {
     const url = this.genBaseURL("/admin/user/update");
     const method = "POST";
-    const data = req; // POST请求使用 data
+    const data = req;
 
     return this.request({ url, method, data }, options);
   }
@@ -75,7 +75,7 @@ export default class WalkAdminService<T> extends BaseService<T> {
   ): Promise<AdminAPI.BindTeamCodeResponse> {
     const url = this.genBaseURL("/admin/team/bind");
     const method = "POST";
-    const data = req; // POST请求使用 data
+    const data = req;
 
     return this.request({ url, method, data }, options);
   }

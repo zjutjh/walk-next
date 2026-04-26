@@ -89,4 +89,4 @@ export interface BindTeamCodeRequest {
 }
 
 /** 绑定签到码 返回 */
-export type BindTeamCodeResponse = null; // 返回的data为空
+export type BindTeamCodeResponse = null;
