@@ -45,3 +45,37 @@ export interface QueryProfileExampleResponse {
   /** 联系方式 */
   contact: UserContactExample;
 }
+
+/**
+ * 重组队伍请求参数
+ */
+export interface RegroupTeamRequest {
+  /** 用户编号，长度3-6人 */
+  members: number[];
+  /** 路线名称 */
+  route_name: string;
+}
+
+/**
+ * 重组队伍响应数据
+ */
+export interface RegroupTeamResponse {
+  /** 新重组的队伍编号 */
+  team_id: number;
+}
+
+/**
+ * 获取人员信息请求参数
+ */
+export interface QueryUserInfoRequest {
+  /** 用户编号 */
+  user_id: number;
+}
+
+/**
+ * 获取人员信息响应数据
+ */
+export interface QueryUserInfoResponse {
+  /** 姓名 */
+  name: string;
+}
