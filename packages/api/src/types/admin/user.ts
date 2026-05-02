@@ -14,3 +14,13 @@ export type UserGenderExample = "female" | "male" | "unknown";
 
 /** 用户类型 */
 export type UserTypeExample = "admin" | "sudo";
+
+/** 人员徒步状态枚举 */
+export type MemberStatus =
+  | "notStart"
+  | "pending"
+  | "abandoned"
+  | "inProgress"
+  | "withdrawn"
+  | "violated"
+  | "completed";

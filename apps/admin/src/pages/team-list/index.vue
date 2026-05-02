@@ -18,7 +18,6 @@
           @click="openStatusPicker(member.id)"
         >
           <template #value>
-            <!-- 仅在渲染时，将底层的 status 枚举转换为中文显示 -->
             <span :class="getStatusColor(member.status)">
               {{ TEAM_STATUS_MAP[member.status] }}
             </span>
@@ -42,38 +41,34 @@
 </template>
 
 <script setup lang="ts">
+import type { MemberStatus } from "api/types/admin";
 import { showSuccessToast } from "vant";
 import { computed, onMounted, ref } from "vue";
 
-import { DEV_TEAM_ID, type MemberStatus, STATUS_OPTIONS, TEAM_STATUS_MAP } from "@/constants/team";
+import { DEV_TEAM_ID, STATUS_OPTIONS, TEAM_STATUS_MAP } from "@/constants/team";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { walkAdminService } from "@/utils/service";
 
-/** 队伍路线 */
 const teamRoute = ref("");
-
-/** 上一点位 */
 const prevPoint = ref("");
-
-/** 当前团队 ID */
 const currentTeamId = DEV_TEAM_ID;
 
-/** 团队成员数据结构 */
+/** 成员数据结构 */
 interface Member {
   id: number;
   name: string;
   status: MemberStatus;
 }
 
-/** 成员列表数据 (严格存储为 MemberStatus 枚举) */
 const memberList = ref<Member[]>([]);
 
-/** 动态计算剩余人数（直接使用枚举值判断） */
+/** 计算剩余人数 */
 const remainingCount = computed(() => {
-  return memberList.value.filter((m) => m.status !== "abandoned").length;
+  return memberList.value.filter((m) => m.status !== "abandoned" && m.status !== "withdrawn")
+    .length;
 });
 
-/** 获取团队基础信息与成员状态 */
+/** 拉取团队信息 */
 const fetchTeamData = async () => {
   try {
     const res = await walkAdminService.QueryTeamStatus({ team_id: currentTeamId });
@@ -85,7 +80,6 @@ const fetchTeamData = async () => {
       memberList.value = res.member.map((m) => ({
         id: m.user_id,
         name: m.name,
-        // 假设后端返回的数据字段也是对应的枚举字符串，如果为空则默认 notStart
         status: (m.walk_status || "notStart") as MemberStatus
       }));
     }
@@ -98,32 +92,27 @@ onMounted(() => {
   fetchTeamData();
 });
 
-/** 状态选择弹窗显示控制 */
 const showPicker = ref(false);
-
-/** 当前正在编辑的成员 ID */
 const currentEditId = ref<number | null>(null);
 
-/** 打开指定成员的状态选择弹窗 */
+/** 打开状态选择弹窗 */
 const openStatusPicker = (id: number) => {
   currentEditId.value = id;
   showPicker.value = true;
 };
 
-/** 处理弹窗状态选择与接口更新 */
+/** 更新用户状态 */
 const onSelectStatus = async (action: { name: string; value: MemberStatus }) => {
-  // 直接提取我们预先绑定在 options 里的 value 枚举
   const newStatusEnum = action.value;
   const targetId = currentEditId.value;
   if (!targetId) return;
 
   try {
-    // 接口传参也变得极其干净，直接传枚举
     await walkAdminService.UpdateUserStatus({
+      // eslint-disable-next-line camelcase
       user_id: targetId,
       walk_status: newStatusEnum
     });
-
     showSuccessToast("状态更新成功");
     const targetMember = memberList.value.find((m) => m.id === targetId);
     if (targetMember) targetMember.status = newStatusEnum;
@@ -132,14 +121,13 @@ const onSelectStatus = async (action: { name: string; value: MemberStatus }) => 
   }
 };
 
-/** 绑定团队签到码 */
+/** 绑定团队码 */
 const handleBindTeam = async () => {
   try {
     await walkAdminService.BindTeamCode({
       team_id: currentTeamId,
       content: "TEST_CODE_123"
     });
-
     showSuccessToast("绑定成功");
     fetchTeamData();
   } catch (error) {
@@ -147,11 +135,9 @@ const handleBindTeam = async () => {
   }
 };
 
-/** 获取状态对应的 CSS 颜色类名 (直接判断枚举) */
+/** 匹配状态对应颜色 */
 const getStatusColor = (status: MemberStatus) => {
-  if (status === "pending" || status === "inProgress") {
-    return "color-yellow-green";
-  }
+  if (status === "pending" || status === "inProgress") return "color-yellow-green";
   return "color-gray";
 };
 </script>
