@@ -1,0 +1,63 @@
+.team-list {
+  min-height: calc(100vh - var(--van-nav-bar-height, 46px));
+  padding: 16px 0;
+  background-color: #fdf5f4;
+
+  &__top-card {
+    margin-bottom: 24px;
+  }
+
+  &__section-title {
+    padding: 0 32px 8px;
+    font-size: 14px;
+    color: var(--van-text-color-2, #999);
+  }
+
+  &__member {
+    margin-bottom: 40px;
+  }
+
+  &__btn-wrap {
+    padding: 0 16px;
+  }
+
+  :deep(.highlight-value) {
+    color: #f0747b !important;
+    font-weight: 500;
+  }
+
+  :deep(.bind-btn) {
+    background-color: #f0747b;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+  }
+
+  :deep(.van-cell) {
+    padding: 16px;
+  }
+
+  .color-yellow-green {
+    color: #9ecb3c;
+  }
+
+  .color-gray {
+    color: var(--van-text-color-2, #666);
+  }
+}
+
+/* 全屏加载遮罩层样式 */
+.loading-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+
+  .loading-wrapper {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 24px 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
