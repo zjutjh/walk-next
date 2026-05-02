@@ -14,7 +14,7 @@
       <van-cell-group title="数据大盘">
         <van-cell title="屏峰可视化地图" is-link />
         <van-cell title="莫干山可视化地图" is-link />
-        <van-cell title="数据表格" is-link />
+        <van-cell title="数据表格" is-link to="/data-table" />
       </van-cell-group>
 
       <van-cell-group title="人员管理">
