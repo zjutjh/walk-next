@@ -46,7 +46,7 @@
     </div>
     <div :class="styles.footer">
       <data-freshness
-        :refresh-interval="REFRESH_INTERVAL"
+        :refresh-interval="ADMIN_REFRESH_INTERVAL.DASHBOARD.OVERVIEW"
         :data-updated-at="dataUpdatedAt"
         :is-fetching="isFetching"
         :is-error="isError"
@@ -62,6 +62,7 @@ import { isNil } from "lodash-es";
 
 import errorEmpty from "@/components/error-empty/index.vue";
 import { ADMIN_QUERY_KEY } from "@/constants";
+import { ADMIN_REFRESH_INTERVAL } from "@/constants/refresh-interval";
 import { walkAdminService } from "@/utils";
 import { type CampusId, ROUTE_CONFIG, type RouteId } from "@/walk-config";
 
@@ -76,9 +77,6 @@ const props = defineProps<{
   campusId: CampusId;
 }>();
 
-/** 数据自动刷新间隔（秒） */
-const REFRESH_INTERVAL = 30;
-
 // 获取校区总览数据
 const {
   data: overviewData,
@@ -90,8 +88,8 @@ const {
   refetch
 } = useQuery({
   enabled: () => props.urlQuery.point === "" && props.urlQuery.segment === "",
-  staleTime: REFRESH_INTERVAL * 1000,
-  refetchInterval: REFRESH_INTERVAL * 1000,
+  staleTime: ADMIN_REFRESH_INTERVAL.DASHBOARD.OVERVIEW,
+  refetchInterval: ADMIN_REFRESH_INTERVAL.DASHBOARD.OVERVIEW,
   queryKey: [ADMIN_QUERY_KEY.DASHBOARD.OVERVIEW, props.campusId] as const,
   queryFn: ({ queryKey }) =>
     walkAdminService.QueryDashboardCampusOverview({
