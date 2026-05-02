@@ -1,4 +1,4 @@
-import type { DashboardRoutesRes } from "./dashboard";
+import type { DashboardRoutesOverviewData } from "./dashboard";
 import type {
   UserCampusExample,
   UserContactExample,
@@ -56,7 +56,7 @@ export interface QueryDashboardCampusRequest {
 /** 获取数据仪表盘校区总览 响应 */
 export interface QueryDashboardCampusResponse {
   /** 各路线数据总览 */
-  routes: DashboardRoutesRes[];
+  routes: DashboardRoutesOverviewData[];
 }
 
 /** 获取数据仪表盘点位详情 请求 */
