@@ -84,7 +84,7 @@ export interface QueryTeamDetailsRequest {
 /** 获取队伍详情 响应 */
 export interface QueryTeamDetailsResponse {
   /** 队伍ID */
-  team_id: number;
+  team_id: string;
   /** 是否被标记为失联 */
   is_lost: boolean;
   /** 路线ID */
