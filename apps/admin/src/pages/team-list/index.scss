@@ -1,0 +1,52 @@
+.team-list {
+  min-height: calc(100vh - var(--van-nav-bar-height, 46px));
+  padding: 16px 0;
+  background-color: #fdf5f4;
+
+  &__top-card {
+    margin-bottom: 24px;
+  }
+
+  &__section-title {
+    padding: 0 32px 8px;
+    font-size: 14px;
+    color: var(--van-text-color-2, #999);
+  }
+
+  &__member {
+    margin-bottom: 40px;
+  }
+
+  &__btn-wrap {
+    padding: 0 16px;
+  }
+
+  // Vant 右侧 value 的文字颜色
+  :deep(.highlight-value) {
+    color: #f0747b !important;
+    font-weight: 500;
+  }
+
+  // 自定义按钮样式
+  :deep(.bind-btn) {
+    background-color: #f0747b;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+  }
+
+  // 增大单元格高度
+  :deep(.van-cell) {
+    padding: 16px;
+  }
+
+  // 状态颜色 (由于是动态绑定的通用 class，可以放在外层或抽离)
+  .color-yellow-green {
+    color: #9ecb3c;
+  }
+
+  .color-gray {
+    color: var(--van-text-color-2, #666);
+  }
+}

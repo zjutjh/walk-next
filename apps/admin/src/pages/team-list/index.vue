@@ -1,15 +1,15 @@
 <template>
   <default-layout>
-    <div class="page-container">
-      <van-cell-group inset class="custom-card top-card">
+    <div class="team-list">
+      <van-cell-group inset class="custom-card team-list__top-card">
         <van-cell title="队伍路线" :value="teamRoute" value-class="highlight-value" />
         <van-cell title="队伍剩余人数" :value="remainingCount" value-class="highlight-value" />
         <van-cell title="上一点位" :value="prevPoint" value-class="highlight-value" />
       </van-cell-group>
 
-      <div class="section-title">成员状态</div>
+      <div class="team-list__section-title">成员状态</div>
 
-      <van-cell-group inset class="custom-card member-list">
+      <van-cell-group inset class="custom-card team-list__member">
         <van-cell
           v-for="member in memberList"
           :key="member.id"
@@ -25,7 +25,7 @@
         </van-cell>
       </van-cell-group>
 
-      <div class="btn-wrap">
+      <div class="team-list__btn-wrap">
         <van-button class="bind-btn" block @click="handleBindTeam"> 团队码绑定 </van-button>
       </div>
     </div>
@@ -142,53 +142,4 @@ const getStatusColor = (status: MemberStatus) => {
 };
 </script>
 
-<style scoped>
-.page-container {
-  min-height: calc(100vh - 46px);
-  background-color: #fdf5f4;
-  padding: 16px 0;
-}
-
-.top-card {
-  margin-bottom: 24px;
-}
-
-:deep(.highlight-value) {
-  color: #f0747b !important;
-  font-weight: 500;
-}
-
-.section-title {
-  padding: 0 32px 8px;
-  font-size: 14px;
-  color: #999;
-}
-
-.member-list {
-  margin-bottom: 40px;
-}
-
-.color-yellow-green {
-  color: #9ecb3c;
-}
-
-.color-gray {
-  color: #666;
-}
-
-.btn-wrap {
-  padding: 0 16px;
-}
-
-:deep(.bind-btn) {
-  background-color: #f0747b;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-}
-
-:deep(.van-cell) {
-  padding: 16px;
-}
-</style>
+<style scoped lang="scss" src="./index.scss"></style>
