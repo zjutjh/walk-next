@@ -9,14 +9,12 @@
         ，上次更新于&nbsp;{{ dayjs(props.dataUpdatedAt).format("YYYY/M/D HH:mm:ss") }}
       </div>
       <!-- 失败提示 -->
-      <div
-        v-if="props.isError && !props.isFetching"
-        class="van-haptics-feedback"
-        :class="styles.errorTip"
-        @click="handleRefresh"
-      >
-        数据获取失败，请点击重试
-      </div>
+      <template v-if="props.isError">
+        <div v-if="props.isFetching" :class="styles.retryingTip">正在重新连接服务器</div>
+        <div v-else class="van-haptics-feedback" :class="styles.errorTip" @click="handleRefresh">
+          数据获取失败，请点击重试
+        </div>
+      </template>
     </div>
     <!-- 刷新按钮/加载态 -->
     <van-loading v-if="props.isFetching" :class="styles.refreshLoading" />

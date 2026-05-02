@@ -16,12 +16,17 @@
     user-select: none;
 
     .updateTime,
+    .retryingTip,
     .errorTip {
       min-width: 174px;
     }
 
+    .retryingTip,
     .errorTip {
       text-align: right;
+    }
+
+    .errorTip {
       color: var(--van-danger-color);
     }
   }
