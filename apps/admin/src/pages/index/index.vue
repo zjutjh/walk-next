@@ -1,9 +1,5 @@
 <template>
-  <default-layout
-    title="精弘毅行管理后台"
-    :show-back="false"
-    @click-navbar-right="handleSearchClick"
-  >
+  <default-layout title="精弘毅行管理后台" :show-back="false">
     <admin-info />
     <section :class="styles.main">
       <van-cell-group title="签到">
@@ -12,8 +8,13 @@
       </van-cell-group>
 
       <van-cell-group title="数据大盘">
-        <van-cell title="屏峰可视化地图" is-link />
-        <van-cell title="莫干山可视化地图" is-link />
+        <van-cell
+          v-for="campusId in CAMPUS_LIST"
+          :key="campusId"
+          :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
+          is-link
+          :to="`/dashboard/${campusId}`"
+        />
         <van-cell title="数据表格" is-link />
       </van-cell-group>
 
@@ -30,17 +31,9 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-
 import DefaultLayout from "@/layouts/default-layout/index.vue";
+import { CAMPUS_CONFIG, CAMPUS_LIST } from "@/walk-config";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
-
-const router = useRouter();
-
-/** 前往搜索页 */
-const handleSearchClick = () => {
-  router.push("/team-list");
-};
 </script>

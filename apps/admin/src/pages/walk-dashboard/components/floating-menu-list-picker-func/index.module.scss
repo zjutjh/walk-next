@@ -1,0 +1,20 @@
+// 列表式点位/路线选择器功能
+.popup {
+  height: 60vh;
+
+  .treeSelect {
+    height: 100%;
+    font-family: "DingTalk Sans";
+
+    :global(.van-tree-select__item) {
+      &:nth-child(odd)::before {
+        content: "◈";
+        margin-right: 5px;
+      }
+
+      &:nth-child(even) {
+        color: #6f6f6f;
+      }
+    }
+  }
+}
