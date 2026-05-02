@@ -170,9 +170,10 @@ const { mutate: mutateLost, isPending } = useMutation({
     // 提前更新缓存中的失联状态
     queryClient.setQueryData(
       [ADMIN_QUERY_KEY.TEAM.DETAILS, viewingTeamId],
-      (oldData: AdminAPI.QueryTeamDetailsResponse) => {
-        oldData.is_lost = targetValue;
-      }
+      (oldData: AdminAPI.QueryTeamDetailsResponse) => ({
+        ...oldData,
+        is_lost: targetValue
+      })
     );
   },
   onSettled: () => {
