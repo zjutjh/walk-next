@@ -32,7 +32,7 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
 ) => {
   return mapValues(urlQueryObj, (value, key: keyof UrlQuery) => {
     if (value === null) return null;
-    if (isObject(originalTypeExample[key])) return decodeURIComponent(JSON.parse(value));
+    if (isObject(originalTypeExample[key])) return JSON.parse(decodeURIComponent(value));
     switch (typeof originalTypeExample[key]) {
       case "string":
         return value;
