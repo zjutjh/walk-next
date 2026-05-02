@@ -30,6 +30,7 @@
       </div>
     </div>
 
+    <!-- 状态选择弹窗 -->
     <van-action-sheet
       v-model:show="showPicker"
       :actions="STATUS_OPTIONS"
@@ -37,12 +38,20 @@
       close-on-click-action
       @select="onSelectStatus"
     />
+
+    <!-- 全屏加载遮罩层 -->
+    <van-overlay :show="isUpdatingStatus" class="loading-overlay">
+      <div class="loading-wrapper">
+        <van-loading type="spinner" color="#f0747b" vertical> 更新状态中... </van-loading>
+      </div>
+    </van-overlay>
   </default-layout>
 </template>
 
 <script setup lang="ts">
+import { useMutation } from "@tanstack/vue-query";
 import type { MemberStatus } from "api/types/admin";
-import { showSuccessToast } from "vant";
+import { type ActionSheetAction, showSuccessToast } from "vant";
 import { computed, onMounted, ref } from "vue";
 
 import { DEV_TEAM_ID, STATUS_OPTIONS, TEAM_STATUS_MAP } from "@/constants/team";
@@ -101,30 +110,45 @@ const openStatusPicker = (id: number) => {
   showPicker.value = true;
 };
 
-/** 更新用户状态 */
-const onSelectStatus = async (action: { name: string; value: MemberStatus }) => {
-  const newStatusEnum = action.value;
-  const targetId = currentEditId.value;
-  if (!targetId) return;
-
-  try {
-    await walkAdminService.UpdateUserStatus({
+/** 更改用户状态的 mutation */
+const { mutate: mutateUpdateStatus, isPending: isUpdatingStatus } = useMutation({
+  mutationFn: (variables: { targetId: number; newStatusEnum: MemberStatus }) =>
+    walkAdminService.UpdateUserStatus({
       // eslint-disable-next-line camelcase
-      user_id: targetId,
-      walk_status: newStatusEnum
-    });
+      user_id: variables.targetId,
+      // eslint-disable-next-line camelcase
+      walk_status: variables.newStatusEnum
+    }),
+  onSuccess: (_data, variables) => {
     showSuccessToast("状态更新成功");
-    const targetMember = memberList.value.find((m) => m.id === targetId);
-    if (targetMember) targetMember.status = newStatusEnum;
-  } catch (error) {
+    const targetMember = memberList.value.find((m) => m.id === variables.targetId);
+    if (targetMember) {
+      targetMember.status = variables.newStatusEnum;
+    }
+  },
+  onError: (error) => {
     console.error("更新人员状态失败", error);
   }
+});
+
+/** 处理弹窗状态选择 */
+const onSelectStatus = (action: ActionSheetAction & { value: MemberStatus }) => {
+  const newStatusEnum = action.value;
+  const targetId = currentEditId.value;
+
+  if (!targetId) return;
+
+  mutateUpdateStatus({
+    targetId,
+    newStatusEnum
+  });
 };
 
 /** 绑定团队码 */
 const handleBindTeam = async () => {
   try {
     await walkAdminService.BindTeamCode({
+      // eslint-disable-next-line camelcase
       team_id: currentTeamId,
       content: "TEST_CODE_123"
     });

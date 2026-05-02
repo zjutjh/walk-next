@@ -21,13 +21,11 @@
     padding: 0 16px;
   }
 
-  // Vant 右侧 value 的文字颜色
   :deep(.highlight-value) {
     color: #f0747b !important;
     font-weight: 500;
   }
 
-  // 自定义按钮样式
   :deep(.bind-btn) {
     background-color: #f0747b;
     color: #fff;
@@ -36,17 +34,30 @@
     font-size: 16px;
   }
 
-  // 增大单元格高度
   :deep(.van-cell) {
     padding: 16px;
   }
 
-  // 状态颜色 (由于是动态绑定的通用 class，可以放在外层或抽离)
   .color-yellow-green {
     color: #9ecb3c;
   }
 
   .color-gray {
     color: var(--van-text-color-2, #666);
+  }
+}
+
+/* 全屏加载遮罩层样式 */
+.loading-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+
+  .loading-wrapper {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 24px 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 }
