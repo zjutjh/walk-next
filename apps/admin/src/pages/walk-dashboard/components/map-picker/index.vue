@@ -95,7 +95,7 @@ const hotRectDefaultStyle: StyleValue = {
 
 /** 使图片cover组件 */
 const coverImage = (imgDOM: HTMLImageElement) => {
-  if (isNull(componentRef.value) || isNull(componentRef.value)) return;
+  if (isNull(componentRef.value)) return;
   // 使“图片尺寸:组件尺寸”更小的边伸缩，填满组件，另一条边按比例自然变化
   if (
     imgDOM.naturalWidth / componentRef.value.clientWidth <
