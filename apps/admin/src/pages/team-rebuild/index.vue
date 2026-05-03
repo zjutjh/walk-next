@@ -106,6 +106,7 @@
 
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
+import type { TeamRebuildMember } from "api/types/admin";
 import { showFailToast, showSuccessToast, showToast } from "vant";
 import { computed, ref } from "vue";
 
@@ -115,18 +116,12 @@ import { RouteEnum, STRICT_ROUTE_CONFIG } from "@/walk-config";
 
 import styles from "./index.module.scss";
 
-interface Member {
-  id: number;
-  name: string;
-  status: string;
-}
-
-const memberList = ref<Member[]>([]);
+const memberList = ref<TeamRebuildMember[]>([]);
 const isRouteSheetVisible = ref(false);
 const isMemberSheetVisible = ref(false);
 const isRegisterPopupVisible = ref(false);
 const currentRoute = ref<RouteEnum | "">("");
-const currentMember = ref<Member | null>(null);
+const currentMember = ref<TeamRebuildMember | null>(null);
 const registerUserId = ref("");
 const routeActions = Object.entries(STRICT_ROUTE_CONFIG).map(([value, config]) => ({
   name: config.text,
@@ -146,7 +141,7 @@ const getRouteDisplayName = (route: RouteEnum | "") => {
   return STRICT_ROUTE_CONFIG[route].text;
 };
 
-const handleMemberClick = (member: Member) => {
+const handleMemberClick = (member: TeamRebuildMember) => {
   currentMember.value = member;
   isMemberSheetVisible.value = true;
 };
