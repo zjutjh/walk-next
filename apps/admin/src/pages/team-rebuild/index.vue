@@ -4,7 +4,7 @@
       <van-cell-group inset :class="styles.groupMargin">
         <van-cell title="路线" is-link @click="isRouteSheetVisible = true">
           <template #value>
-            <span>{{ getRouteDisplayName(currentRoute) }}</span>
+            <span>{{ currentRouteDisplayName }}</span>
           </template>
         </van-cell>
       </van-cell-group>
@@ -130,15 +130,14 @@ const routeActions = ROUTE_LIST.map((routeId) => ({
 const memberActions = [{ name: "删除", color: "#FA2D2D", value: "delete" }];
 
 const isSubmitDisabled = computed(() => memberList.value.length < 3 || memberList.value.length > 6);
+const currentRouteDisplayName = computed(() => {
+  if (!currentRoute.value) return "选择路线";
+  return STRICT_ROUTE_CONFIG[currentRoute.value].text;
+});
 
 const onRouteSelect = (action: { value: RouteId }) => {
   currentRoute.value = action.value;
   isRouteSheetVisible.value = false;
-};
-
-const getRouteDisplayName = (route: RouteId | "") => {
-  if (!route) return "选择路线";
-  return STRICT_ROUTE_CONFIG[route].text;
 };
 
 const handleMemberClick = (member: TeamRebuildMember) => {
