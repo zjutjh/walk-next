@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import "./index.scss";
 
-import { computed, nextTick, type Ref, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 
 import { CAMERA_FACING_MODE, type QrCodeData, useQrScanner } from "@/composables/use-qr-scanner";
 
@@ -46,16 +46,13 @@ const isVisible = computed({
   set: (value) => emit("update:show", value)
 });
 
-const videoRef = ref<HTMLVideoElement>() as Ref<HTMLVideoElement>;
+const videoRef = ref<HTMLVideoElement>();
 const isStarting = ref(false);
 
-const { isActive, errorMessage, scannedQrCodeData, start, stop, scanFromImage } = useQrScanner(
-  videoRef,
-  {
-    scanInterval: props.scanInterval,
-    facingMode: props.facingMode
-  }
-);
+const { errorMessage, scannedQrCodeData, start, stop, scanFromImage } = useQrScanner(videoRef, {
+  scanInterval: props.scanInterval,
+  facingMode: props.facingMode
+});
 
 const handleStart = async () => {
   isStarting.value = true;
@@ -95,9 +92,6 @@ watch(
     }
     await nextTick();
     await handleStart();
-    if (!isActive.value) {
-      isVisible.value = false;
-    }
   }
 );
 </script>

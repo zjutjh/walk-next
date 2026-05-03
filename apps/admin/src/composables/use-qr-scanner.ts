@@ -1,3 +1,4 @@
+import { useFileDialog, useUserMedia } from "@vueuse/core";
 import { QR_CODE_TYPE, type QrCodeType } from "api/types/admin";
 import { ready, scan } from "qr-scanner-wechat";
 import { onBeforeUnmount, type Ref, ref } from "vue";
@@ -27,10 +28,39 @@ const QR_SCAN_ERROR_MESSAGE = {
   InvalidQr: "二维码错误：内容格式不正确",
   NoQr: "二维码错误：未识别到二维码",
   ScanFailed: "二维码错误：识别失败",
-  CameraPermission: "摄像头错误：无法获取摄像头权限，可改用上传图片",
+  ScannerLoadFailed: "二维码错误：识别库加载失败",
+  CameraUnsupported: "摄像头错误：当前浏览器不支持摄像头扫码，可改用上传图片",
+  CameraInsecureContext:
+    "摄像头错误：当前地址不支持摄像头，请使用 HTTPS 或 localhost，也可上传图片",
+  CameraDenied: "摄像头错误：权限被拒绝，可在浏览器设置中允许摄像头或改用上传图片",
+  CameraNotFound: "摄像头错误：未找到可用摄像头，可改用上传图片",
+  CameraBusy: "摄像头错误：摄像头被占用，可关闭其他应用后重试或改用上传图片",
+  CameraPermission: "摄像头错误：无法获取摄像头，可改用上传图片",
   ImageLoad: "图片错误：图片加载失败",
   ImageScanFailed: "图片错误：识别失败"
 } as const;
+
+const getCameraErrorMessage = (error: unknown) => {
+  if (typeof window !== "undefined" && !window.isSecureContext) {
+    return QR_SCAN_ERROR_MESSAGE.CameraInsecureContext;
+  }
+
+  const errorName = error instanceof Error ? error.name : "";
+
+  switch (errorName) {
+    case "NotAllowedError":
+    case "PermissionDeniedError":
+      return QR_SCAN_ERROR_MESSAGE.CameraDenied;
+    case "NotFoundError":
+    case "DevicesNotFoundError":
+      return QR_SCAN_ERROR_MESSAGE.CameraNotFound;
+    case "NotReadableError":
+    case "TrackStartError":
+      return QR_SCAN_ERROR_MESSAGE.CameraBusy;
+    default:
+      return QR_SCAN_ERROR_MESSAGE.CameraPermission;
+  }
+};
 
 /** 解析二维码文本为业务数据 */
 const parseQrPayload = (rawText: string): QrParseResult => {
@@ -58,23 +88,44 @@ const parseQrPayload = (rawText: string): QrParseResult => {
     return { ok: false, error: QR_SCAN_ERROR_MESSAGE.InvalidQr };
   }
 
+  // eslint-disable-next-line camelcase
   return { ok: true, qrCodeData: { code_type: codeType, content } };
 };
 
 /** 此composable本体函数,  @see {videoRef} 传入一个绑定了<video>元素的ref，用于在前端页面里展示摄像头结果 */
 export const useQrScanner = (
-  videoRef: Ref<HTMLVideoElement>,
+  videoRef: Ref<HTMLVideoElement | undefined>,
   options: UseQrScannerWechatOptions = {}
 ) => {
   const { scanInterval = 120, facingMode = CAMERA_FACING_MODE.Environment } = options;
+  const cameraConstraints: MediaStreamConstraints = {
+    audio: false,
+    video: { facingMode: { ideal: facingMode } }
+  };
+
+  const {
+    isSupported: isCameraSupported,
+    start: startCameraStream,
+    stop: stopCameraStream
+  } = useUserMedia({
+    constraints: cameraConstraints
+  });
+
+  const {
+    open: openFileDialog,
+    onChange: onFileChange,
+    onCancel: onFileCancel,
+    reset: resetFileDialog
+  } = useFileDialog({
+    accept: "image/*",
+    multiple: false
+  });
 
   /** 表示摄像头是否已激活 */
   const isActive = ref(false);
   const errorMessage = ref("");
   const scannedQrCodeData = ref<QrCodeData | null>(null);
 
-  /** 视频流进程 */
-  let stream: MediaStream | null = null;
   let intervalId: number | null = null;
   /** 最后一帧识别到的文字 */
   let lastDetectedRawText = "";
@@ -86,10 +137,24 @@ export const useQrScanner = (
   let ctx: CanvasRenderingContext2D | null = null;
   let isScanning = false;
 
-  const stopStream = () => {
-    if (!stream) return;
-    for (const track of stream.getTracks()) track.stop();
-    stream = null;
+  const ensureScannerReady = async () => {
+    if (!readyPromise) {
+      readyPromise = ready();
+    }
+
+    try {
+      await readyPromise;
+    } catch (error) {
+      readyPromise = null;
+      throw error;
+    }
+  };
+
+  const clearVideoElement = () => {
+    const video = videoRef.value;
+    if (!video) return;
+    video.pause();
+    video.srcObject = null;
   };
 
   /** 停止扫码并释放摄像头资源 */
@@ -98,11 +163,11 @@ export const useQrScanner = (
       window.clearInterval(intervalId);
       intervalId = null;
     }
-    stopStream();
-    videoRef.value.pause();
-    videoRef.value.srcObject = null;
+    stopCameraStream();
+    clearVideoElement();
 
     isActive.value = false;
+    isScanning = false;
   };
 
   /** 统一处理识别到的元数据并写入状态 */
@@ -125,7 +190,7 @@ export const useQrScanner = (
   const scanFrame = async () => {
     if (isScanning || !isActive.value) return;
     const video = videoRef.value;
-    if (video.readyState < 2) return;
+    if (!video || video.readyState < 2) return;
 
     if (!canvas) canvas = document.createElement("canvas");
     if (!ctx) ctx = canvas.getContext("2d");
@@ -160,23 +225,37 @@ export const useQrScanner = (
     scannedQrCodeData.value = null;
     lastDetectedRawText = "";
 
-    if (!readyPromise) {
-      readyPromise = ready();
+    if (typeof window !== "undefined" && !window.isSecureContext) {
+      errorMessage.value = QR_SCAN_ERROR_MESSAGE.CameraInsecureContext;
+      return false;
     }
-    await readyPromise;
+
+    if (!isCameraSupported.value) {
+      errorMessage.value = QR_SCAN_ERROR_MESSAGE.CameraUnsupported;
+      return false;
+    }
 
     try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: { facingMode: { ideal: facingMode } }
-      });
-      videoRef.value.srcObject = stream;
-      await videoRef.value.play();
+      await ensureScannerReady();
+    } catch {
+      errorMessage.value = QR_SCAN_ERROR_MESSAGE.ScannerLoadFailed;
+      return false;
+    }
+
+    try {
+      const stream = await startCameraStream();
+      const video = videoRef.value;
+      if (!stream || !video) {
+        throw new Error("camera-stream-unavailable");
+      }
+
+      video.srcObject = stream;
+      await video.play();
       isActive.value = true;
       intervalId = window.setInterval(scanFrame, scanInterval);
       return true;
-    } catch {
-      errorMessage.value = QR_SCAN_ERROR_MESSAGE.CameraPermission;
+    } catch (error) {
+      errorMessage.value = getCameraErrorMessage(error);
       stop();
       return false;
     }
@@ -185,26 +264,33 @@ export const useQrScanner = (
   // 以下三个函数是用于支持手动上传图片来识别二维码
   const pickImageFile = () =>
     new Promise<File | null>((resolve) => {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "image/*";
-      input.onchange = () => {
-        const file = input.files?.[0] ?? null;
-        input.value = "";
+      let stopListening: () => void = () => undefined;
+      const changeHook = onFileChange((files) => {
+        stopListening();
+        const file = files?.[0] ?? null;
+        resetFileDialog();
         resolve(file);
+      });
+      const cancelHook = onFileCancel(() => {
+        stopListening();
+        resolve(null);
+      });
+
+      stopListening = () => {
+        changeHook.off();
+        cancelHook.off();
       };
-      input.click();
+
+      openFileDialog();
     });
 
   const scanImageFile = async (file: File): Promise<boolean> => {
     errorMessage.value = "";
-    if (!readyPromise) {
-      readyPromise = ready();
-    }
-    await readyPromise;
 
     const url = URL.createObjectURL(file);
     try {
+      await ensureScannerReady();
+
       const image = new Image();
       image.decoding = "async";
       image.src = url;

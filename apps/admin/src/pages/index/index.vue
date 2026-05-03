@@ -54,7 +54,7 @@ const handleScanClick = () => {
 };
 
 const handleScanSuccess = (data: { code_type: string; content: string }) => {
-  console.log("扫码结果", data);
+  console.info("扫码结果", data);
   showSuccessToast("扫码成功");
 };
 
