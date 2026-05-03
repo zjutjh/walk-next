@@ -56,7 +56,7 @@ export interface BindCheckinCodeRequest {
 }
 
 /** 绑定签到码响应数据(后端写的我看不懂 先这么写着) */
-export type BindCheckinCodeResponse = Record<string, never>;
+export type BindCheckinCodeResponse = null;
 
 /** 打卡(指团队到了某个点位后打卡表示已经过)请求参数 */
 export interface CheckinTeamRequest {
