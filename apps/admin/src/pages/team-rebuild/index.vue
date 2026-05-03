@@ -112,7 +112,7 @@ import { computed, ref } from "vue";
 
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { walkAdminService } from "@/utils/service";
-import { RouteEnum, STRICT_ROUTE_CONFIG } from "@/walk-config";
+import { ROUTE_LIST, type RouteId, STRICT_ROUTE_CONFIG } from "@/walk-config";
 
 import styles from "./index.module.scss";
 
@@ -120,23 +120,23 @@ const memberList = ref<TeamRebuildMember[]>([]);
 const isRouteSheetVisible = ref(false);
 const isMemberSheetVisible = ref(false);
 const isRegisterPopupVisible = ref(false);
-const currentRoute = ref<RouteEnum | "">("");
+const currentRoute = ref<RouteId | "">("");
 const currentMember = ref<TeamRebuildMember | null>(null);
 const registerUserId = ref("");
-const routeActions = Object.entries(STRICT_ROUTE_CONFIG).map(([value, config]) => ({
-  name: config.text,
-  value: value as RouteEnum
+const routeActions = ROUTE_LIST.map((routeId) => ({
+  name: STRICT_ROUTE_CONFIG[routeId].text,
+  value: routeId
 }));
 const memberActions = [{ name: "删除", color: "#FA2D2D", value: "delete" }];
 
 const isSubmitDisabled = computed(() => memberList.value.length < 3 || memberList.value.length > 6);
 
-const onRouteSelect = (action: { value: RouteEnum }) => {
+const onRouteSelect = (action: { value: RouteId }) => {
   currentRoute.value = action.value;
   isRouteSheetVisible.value = false;
 };
 
-const getRouteDisplayName = (route: RouteEnum | "") => {
+const getRouteDisplayName = (route: RouteId | "") => {
   if (!route) return "选择路线";
   return STRICT_ROUTE_CONFIG[route].text;
 };
