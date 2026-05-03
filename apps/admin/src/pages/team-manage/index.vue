@@ -1,15 +1,15 @@
 <template>
   <default-layout>
-    <div class="team-list">
-      <van-cell-group inset class="custom-card team-list__top-card">
+    <div class="team-manage">
+      <van-cell-group inset class="custom-card team-manage__top-card">
         <van-cell title="队伍路线" :value="teamRoute" value-class="highlight-value" />
         <van-cell title="队伍剩余人数" :value="remainingCount" value-class="highlight-value" />
         <van-cell title="上一点位" :value="prevPoint" value-class="highlight-value" />
       </van-cell-group>
 
-      <div class="team-list__section-title">成员状态</div>
+      <div class="team-manage__section-title">成员状态</div>
 
-      <van-cell-group inset class="custom-card team-list__member">
+      <van-cell-group inset class="custom-card team-manage__member">
         <van-cell
           v-for="member in memberList"
           :key="member.id"
@@ -25,7 +25,7 @@
         </van-cell>
       </van-cell-group>
 
-      <div class="team-list__btn-wrap">
+      <div class="team-manage__btn-wrap">
         <van-button class="bind-btn" block @click="handleBindTeam"> 团队码绑定 </van-button>
       </div>
     </div>
@@ -52,15 +52,16 @@
 import { useMutation } from "@tanstack/vue-query";
 import type { MemberStatus } from "api/types/admin";
 import { type ActionSheetAction, showSuccessToast } from "vant";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
-import { DEV_TEAM_ID, STATUS_OPTIONS, TEAM_STATUS_MAP } from "@/constants/team";
+import { STATUS_OPTIONS, TEAM_STATUS_MAP } from "@/constants/team";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { walkAdminService } from "@/utils/service";
 
+const route = useRoute();
 const teamRoute = ref("");
 const prevPoint = ref("");
-const currentTeamId = DEV_TEAM_ID;
 
 /** 成员数据结构 */
 interface Member {
@@ -71,16 +72,43 @@ interface Member {
 
 const memberList = ref<Member[]>([]);
 
+/** 从路由路径中获取团队 ID */
+const currentTeamId = computed(() => {
+  const rawId = route.params.id;
+  const normalizedId = Array.isArray(rawId) ? rawId[0] : rawId;
+
+  return Number(normalizedId);
+});
+
+/** 当前团队 ID 是否可用于接口请求 */
+const isCurrentTeamIdValid = computed(() => {
+  return Number.isInteger(currentTeamId.value) && currentTeamId.value > 0;
+});
+
 /** 计算剩余人数 */
 const remainingCount = computed(() => {
   return memberList.value.filter((m) => m.status !== "abandoned" && m.status !== "withdrawn")
     .length;
 });
 
+/** 重置团队信息 */
+const resetTeamData = () => {
+  teamRoute.value = "";
+  prevPoint.value = "";
+  memberList.value = [];
+};
+
 /** 拉取团队信息 */
 const fetchTeamData = async () => {
+  if (!isCurrentTeamIdValid.value) {
+    resetTeamData();
+    console.error("团队 ID 不合法");
+    return;
+  }
+
   try {
-    const res = await walkAdminService.QueryTeamStatus({ team_id: currentTeamId });
+    // eslint-disable-next-line camelcase
+    const res = await walkAdminService.QueryTeamStatus({ team_id: currentTeamId.value });
     if (res.team) {
       teamRoute.value = res.team.route_name;
       prevPoint.value = res.team.prev_point_name;
@@ -97,9 +125,7 @@ const fetchTeamData = async () => {
   }
 };
 
-onMounted(() => {
-  fetchTeamData();
-});
+watch(currentTeamId, fetchTeamData, { immediate: true });
 
 const showPicker = ref(false);
 const currentEditId = ref<number | null>(null);
@@ -146,10 +172,15 @@ const onSelectStatus = (action: ActionSheetAction & { value: MemberStatus }) => 
 
 /** 绑定团队码 */
 const handleBindTeam = async () => {
+  if (!isCurrentTeamIdValid.value) {
+    console.error("团队 ID 不合法");
+    return;
+  }
+
   try {
     await walkAdminService.BindTeamCode({
       // eslint-disable-next-line camelcase
-      team_id: currentTeamId,
+      team_id: currentTeamId.value,
       content: "TEST_CODE_123"
     });
     showSuccessToast("绑定成功");
