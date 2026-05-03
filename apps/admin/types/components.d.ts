@@ -8,6 +8,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ErrorEmpty: typeof import('./../src/components/error-empty/index.vue')['default']
+    IMdiClose: typeof import('~icons/mdi/close')['default']
+    IMdiImage: typeof import('~icons/mdi/image')['default']
+    LoadingContainer: typeof import('./../src/components/loading-container/index.vue')['default']
+    QrScanPreview: typeof import('./../src/components/qr-scan-preview/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanButton: typeof import('vant/es')['Button']

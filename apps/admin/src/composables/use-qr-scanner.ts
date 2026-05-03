@@ -1,6 +1,5 @@
-import type { QrCodeType } from "api/types/admin";
+import { QR_CODE_TYPE, type QrCodeType } from "api/types/admin";
 import { ready, scan } from "qr-scanner-wechat";
-import { showSuccessToast } from "vant";
 import { onBeforeUnmount, type Ref, ref } from "vue";
 
 export interface QrCodeData {
@@ -9,7 +8,7 @@ export interface QrCodeData {
   content: string;
 }
 
-/** 摄像头方向, environment是后置, user是前置 */
+/** 摄像头朝向, environment是后置, user是前置(无法使用双摄像头设备测试所以我也不清楚到底什么作用) */
 export const CAMERA_FACING_MODE = {
   Environment: "environment",
   User: "user"
@@ -22,7 +21,7 @@ export interface UseQrScannerWechatOptions {
   facingMode?: CameraFacingMode;
 }
 
-export type QrParseResult = { ok: true; qrCodeData: QrCodeData } | { ok: false; error: string };
+type QrParseResult = { ok: true; qrCodeData: QrCodeData } | { ok: false; error: string };
 
 const QR_SCAN_ERROR_MESSAGE = {
   InvalidQr: "二维码错误：内容格式不正确",
@@ -51,7 +50,7 @@ const parseQrPayload = (rawText: string): QrParseResult => {
   const codeType = record.code_type;
   const content = record.content;
 
-  if (codeType !== "team" && codeType !== "checkin") {
+  if (codeType !== QR_CODE_TYPE.Team && codeType !== QR_CODE_TYPE.Checkin) {
     return { ok: false, error: QR_SCAN_ERROR_MESSAGE.InvalidQr };
   }
 
@@ -62,7 +61,7 @@ const parseQrPayload = (rawText: string): QrParseResult => {
   return { ok: true, qrCodeData: { code_type: codeType, content } };
 };
 
-/** 调用扫码 @see {videoRef} 传入 一个绑定了<video>元素的ref，用于在前端页面里展示摄像头结果; 扫码结果会通过返回对象的lastText和lastQrCodeData暴露出来 */
+/** 此composable本体函数,  @see {videoRef} 传入一个绑定了<video>元素的ref，用于在前端页面里展示摄像头结果 */
 export const useQrScanner = (
   videoRef: Ref<HTMLVideoElement>,
   options: UseQrScannerWechatOptions = {}
@@ -77,9 +76,15 @@ export const useQrScanner = (
   /** 视频流进程 */
   let stream: MediaStream | null = null;
   let intervalId: number | null = null;
-  let lastDetectedText = "";
+  /** 最后一帧识别到的文字 */
+  let lastDetectedRawText = "";
 
   let readyPromise: Promise<void> | null = null;
+
+  /** @see {scanFrame} 使用的辅助变量 */
+  let canvas: HTMLCanvasElement | null = null;
+  let ctx: CanvasRenderingContext2D | null = null;
+  let isScanning = false;
 
   const stopStream = () => {
     if (!stream) return;
@@ -100,16 +105,15 @@ export const useQrScanner = (
     isActive.value = false;
   };
 
-  // 统一处理识别到的文本并写入状态
-  const handleDetectedText = (text: string) => {
-    if (!text || text === lastDetectedText) return;
-    lastDetectedText = text;
+  /** 统一处理识别到的元数据并写入状态 */
+  const handleDetectedRawText = (rawText: string) => {
+    if (!rawText || rawText === lastDetectedRawText) return;
+    lastDetectedRawText = rawText;
 
-    const parsed = parseQrPayload(text);
+    const parsed = parseQrPayload(rawText);
     if (parsed.ok) {
       errorMessage.value = "";
       scannedQrCodeData.value = parsed.qrCodeData;
-      showSuccessToast("扫码成功");
       stop();
     } else {
       errorMessage.value = parsed.error;
@@ -117,11 +121,6 @@ export const useQrScanner = (
     }
   };
 
-  /** @see {scanFrame} 使用的用来抓去帧画的canvas元素 */
-  let canvas: HTMLCanvasElement | null = null;
-  /** canvas辅助变量 */
-  let ctx: CanvasRenderingContext2D | null = null;
-  let isScanning = false;
   /** 从视频帧中识别二维码 */
   const scanFrame = async () => {
     if (isScanning || !isActive.value) return;
@@ -147,15 +146,43 @@ export const useQrScanner = (
       // 调用qr-scanner-wechat 扫码库识别canvas中的图像数据
       const result = await scan(canvas);
       if (!result.text) return;
-      handleDetectedText(result.text);
+      handleDetectedRawText(result.text);
     } catch {
       errorMessage.value = QR_SCAN_ERROR_MESSAGE.ScanFailed;
     } finally {
       isScanning = false;
     }
   };
+  /** 开始扫码进程 */
+  const start = async (): Promise<boolean> => {
+    if (isActive.value) return true;
+    errorMessage.value = "";
+    scannedQrCodeData.value = null;
+    lastDetectedRawText = "";
 
-  // 选择图片文件并返回
+    if (!readyPromise) {
+      readyPromise = ready();
+    }
+    await readyPromise;
+
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: { facingMode: { ideal: facingMode } }
+      });
+      videoRef.value.srcObject = stream;
+      await videoRef.value.play();
+      isActive.value = true;
+      intervalId = window.setInterval(scanFrame, scanInterval);
+      return true;
+    } catch {
+      errorMessage.value = QR_SCAN_ERROR_MESSAGE.CameraPermission;
+      stop();
+      return false;
+    }
+  };
+
+  // 以下三个函数是用于支持手动上传图片来识别二维码
   const pickImageFile = () =>
     new Promise<File | null>((resolve) => {
       const input = document.createElement("input");
@@ -169,7 +196,6 @@ export const useQrScanner = (
       input.click();
     });
 
-  /** 从图片文件中识别二维码（非摄像头场景兜底）*/
   const scanImageFile = async (file: File): Promise<boolean> => {
     errorMessage.value = "";
     if (!readyPromise) {
@@ -191,7 +217,7 @@ export const useQrScanner = (
         errorMessage.value = QR_SCAN_ERROR_MESSAGE.NoQr;
         return false;
       }
-      handleDetectedText(result.text);
+      handleDetectedRawText(result.text);
       return true;
     } catch (err) {
       errorMessage.value =
@@ -204,42 +230,11 @@ export const useQrScanner = (
     }
   };
 
-  const runFileFlow = async (): Promise<boolean> => {
+  const scanFromImage = async (): Promise<boolean> => {
+    stop();
     const file = await pickImageFile();
     if (!file) return false;
     return scanImageFile(file);
-  };
-
-  const start = async (): Promise<boolean> => {
-    if (isActive.value) return true;
-    errorMessage.value = "";
-    scannedQrCodeData.value = null;
-    lastDetectedText = "";
-
-    if (!readyPromise) {
-      readyPromise = ready();
-    }
-    await readyPromise;
-
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: { facingMode: { ideal: facingMode } }
-      });
-      videoRef.value.srcObject = stream;
-      await videoRef.value.play();
-      isActive.value = true;
-      intervalId = window.setInterval(scanFrame, scanInterval);
-      return true;
-    } catch {
-      errorMessage.value = QR_SCAN_ERROR_MESSAGE.CameraPermission;
-      stop();
-      const fallbackResult = await runFileFlow();
-      if (fallbackResult) {
-        errorMessage.value = "";
-      }
-      return fallbackResult;
-    }
   };
 
   onBeforeUnmount(() => {
@@ -247,11 +242,15 @@ export const useQrScanner = (
   });
 
   return {
+    /** 传入的video元素是否已激活 */
     isActive,
     errorMessage,
+    /** 扫描出的结构化数据(无论是摄像头扫码还是识别图片) */
     scannedQrCodeData,
     /** 开始扫码 */
     start,
+    /** 选择图片并识别 */
+    scanFromImage,
     /** 扫码结束 */
     stop
   };
