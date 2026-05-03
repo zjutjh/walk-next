@@ -1,0 +1,49 @@
+.pageContainer {
+  overflow: hidden;
+}
+
+.groupMargin {
+  margin-top: 16px;
+}
+
+.empty {
+  padding: 20px 0 24px;
+}
+
+.memberStatus {
+  color: var(--van-primary-color);
+}
+
+.memberCount {
+  margin: 12px 16px 0;
+  color: var(--van-text-color-2);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.buttonContainer {
+  margin: 24px 16px 0;
+
+  .btnSpacing {
+    margin-bottom: 12px;
+  }
+}
+
+.registerForm {
+  padding: 20px 16px 24px;
+}
+
+.registerTitle {
+  margin: 0 0 16px;
+  color: var(--van-text-color);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.registerActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}

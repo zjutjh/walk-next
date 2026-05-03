@@ -43,4 +43,28 @@ export default class WalkAdminService<T> extends BaseService<T> {
 
     return this.request({ url, method, params }, options);
   }
+
+  /** 重组队伍 */
+  RegroupTeam(
+    req: AdminAPI.RegroupTeamRequest,
+    options?: T
+  ): Promise<AdminAPI.RegroupTeamResponse> {
+    const url = this.genBaseURL("/admin/team/regroup"); // 重组队伍接口路径
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 获取人员信息 */
+  QueryUserInfo(
+    req: AdminAPI.QueryUserInfoRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryUserInfoResponse> {
+    const url = this.genBaseURL("/admin/user/info");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
 }
