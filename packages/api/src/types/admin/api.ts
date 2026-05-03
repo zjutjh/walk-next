@@ -1,3 +1,4 @@
+import type { QrCodeType } from "./qr-code";
 import type {
   UserCampusExample,
   UserContactExample,
@@ -44,4 +45,29 @@ export interface QueryProfileExampleResponse {
   gender: UserGenderExample;
   /** 联系方式 */
   contact: UserContactExample;
+}
+
+/** 绑定签到码请求参数 */
+export interface BindCheckinCodeRequest {
+  /** 签到码内容 */
+  content: string;
+  /** 团队编号 */
+  team_id: number;
+}
+
+/** 绑定签到码响应数据(后端写的我看不懂 先这么写着) */
+export type BindCheckinCodeResponse = Record<string, never>;
+
+/** 打卡(指团队到了某个点位后打卡表示已经过)请求参数 */
+export interface CheckinTeamRequest {
+  /** CodeType */
+  code_type: QrCodeType;
+  /** Content */
+  content: string;
+}
+
+/** 打卡(指团队到了某个点位后打卡表示已经过)响应数据 */
+export interface CheckinTeamResponse {
+  /** 队伍编号 */
+  team_id: number;
 }

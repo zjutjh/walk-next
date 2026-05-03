@@ -178,6 +178,9 @@ importers:
       pinia:
         specifier: catalog:frontend
         version: 3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3))
+      qr-scanner-wechat:
+        specifier: ^0.1.3
+        version: 0.1.3
       shared:
         specifier: workspace:*
         version: link:../../packages/shared
@@ -2107,6 +2110,9 @@ packages:
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+
+  qr-scanner-wechat@0.1.3:
+    resolution: {integrity: sha512-d2dfaXjcgNDxaSweEljvJl6cOIMbXeyW8YijZDbRFUvVpJ672zt5i64lQSBgjvKVZZSSHE2KiRf2SAuiQa286A==}
 
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
@@ -4548,6 +4554,8 @@ snapshots:
   proxy-from-env@1.1.0: {}
 
   punycode@2.3.1: {}
+
+  qr-scanner-wechat@0.1.3: {}
 
   quansync@0.2.11: {}
 

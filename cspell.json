@@ -13,7 +13,9 @@
     "pxtorem",
     "oxlint",
     "dingtalk",
-    "iconify"
+    "iconify",
+    "checkin",
+    "wechat"
   ],
   "ignorePaths": [
     "node_modules/**",
