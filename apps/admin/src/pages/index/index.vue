@@ -4,7 +4,7 @@
     :show-back="false"
     @click-navbar-right="handleSearchClick"
   >
-    <admin-info />
+    <admin-info :admin-name="authStore.adminName" :walk-point="authStore.pointText" />
     <section :class="styles.main">
       <van-cell-group title="签到">
         <van-cell title="扫码签到" is-link @click="handleScanClick" />
@@ -32,21 +32,29 @@
       @success="handleScanSuccess"
       @error="handleScanError"
     />
+
+    <login-modal v-model:show="isLoginModalVisible" @success="handleLoginSuccess" />
   </default-layout>
 </template>
 
 <script setup lang="ts">
+import type { AdminAPI } from "api/types/admin";
 import { showFailToast, showSuccessToast } from "vant";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
+import LoginModal from "@/components/login-modal/index.vue";
 import QrScanPreview from "@/components/qr-scan-preview/index.vue";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
+import { useAdminAuthStore } from "@/stores/auth";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
 
 const router = useRouter();
+const authStore = useAdminAuthStore();
+
+const isLoginModalVisible = ref(!authStore.isLoggedIn);
 
 const isScanPopupVisible = ref(false);
 const handleScanClick = () => {
@@ -60,6 +68,11 @@ const handleScanSuccess = (data: { code_type: string; content: string }) => {
 
 const handleScanError = (message: string) => {
   showFailToast(message || "扫码启动失败");
+};
+
+const handleLoginSuccess = (data: AdminAPI.AuthResponse) => {
+  authStore.saveLogin(data);
+  isLoginModalVisible.value = false;
 };
 
 /** 前往搜索页 */

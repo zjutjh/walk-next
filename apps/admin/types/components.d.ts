@@ -15,6 +15,7 @@ declare module 'vue' {
     IMdiClose: typeof import('~icons/mdi/close')['default']
     IMdiImage: typeof import('~icons/mdi/image')['default']
     LoadingContainer: typeof import('./../src/components/loading-container/index.vue')['default']
+    LoginModal: typeof import('./../src/components/login-modal/index.vue')['default']
     QrScanPreview: typeof import('./../src/components/qr-scan-preview/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -22,6 +23,7 @@ declare module 'vue' {
     VanCell: typeof import('vant/es')['Cell']
     VanCellGroup: typeof import('vant/es')['CellGroup']
     VanConfigProvider: typeof import('vant/es')['ConfigProvider']
+    VanField: typeof import('vant/es')['Field']
     VanNavBar: typeof import('vant/es')['NavBar']
     VanPopup: typeof import('vant/es')['Popup']
   }

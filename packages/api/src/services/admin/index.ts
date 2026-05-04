@@ -32,6 +32,15 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, data }, options);
   }
 
+  /** 管理员登录(Authentication) */
+  Auth(req: AdminAPI.AuthRequest, options?: T): Promise<AdminAPI.AuthResponse> {
+    const url = this.genBaseURL("/admin/auth");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
   /** 获取用户信息（示例） */
   QueryProfileExample(
     req: AdminAPI.QueryProfileExampleRequest,

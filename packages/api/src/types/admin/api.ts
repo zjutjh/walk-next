@@ -27,6 +27,22 @@ export type LogoutExampleRequest = undefined; // 若请求body json/query params
 /** 登出 返回（示例） */
 export type LogoutExampleResponse = null; // 若返回data为空: 写null，因为收到的data确实是null
 
+/** 管理员登录 请求 */
+export interface AuthRequest {
+  /** 用户名 */
+  account: string;
+  /** 密码 */
+  password: string;
+}
+
+/** 管理员登录 返回 */
+export interface AuthResponse {
+  /** 管理员姓名 */
+  name: string;
+  /** 点位名称 */
+  point_name: string;
+}
+
 /** 获取用户信息 请求（示例） */
 export interface QueryProfileExampleRequest {
   /** 要获取的用户的ID */
