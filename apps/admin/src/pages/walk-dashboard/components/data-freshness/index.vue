@@ -3,7 +3,7 @@
   <div :class="styles.component">
     <ic-outline-info :class="styles.icon" />
     <div :class="styles.freshnessText">
-      数据每 {{ props.refreshInterval }} 秒自动更新一次
+      数据每 {{ Math.floor(props.refreshInterval / 1000) }} 秒自动更新一次
       <!-- 更新时间提示 -->
       <div v-show="!props.isError && props.dataUpdatedAt > 0" :class="styles.updateTime">
         ，上次更新于&nbsp;{{ dayjs(props.dataUpdatedAt).format("YYYY/M/D HH:mm:ss") }}
@@ -36,7 +36,7 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 import styles from "./index.module.scss";
 
 const props = defineProps<{
-  /** 显示的自动刷新间隔（秒） */
+  /** 显示的自动刷新间隔（毫秒） */
   refreshInterval: number;
   /** 上次更新时间戳 */
   dataUpdatedAt: number;
