@@ -53,13 +53,16 @@ import { useMutation } from "@tanstack/vue-query";
 import type { MemberStatus } from "api/types/admin";
 import { type ActionSheetAction, showSuccessToast } from "vant";
 import { computed, ref, watch } from "vue";
-import { useRoute } from "vue-router";
 
 import { STATUS_OPTIONS, TEAM_STATUS_MAP } from "@/constants/team";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { walkAdminService } from "@/utils/service";
 
-const route = useRoute();
+const props = defineProps<{
+  /** 团队 ID */
+  id: string;
+}>();
+
 const teamRoute = ref("");
 const prevPoint = ref("");
 
@@ -72,13 +75,8 @@ interface Member {
 
 const memberList = ref<Member[]>([]);
 
-/** 从路由路径中获取团队 ID */
-const currentTeamId = computed(() => {
-  const rawId = route.params.id;
-  const normalizedId = Array.isArray(rawId) ? rawId[0] : rawId;
-
-  return Number(normalizedId);
-});
+/** 当前团队 ID */
+const currentTeamId = computed(() => Number(props.id));
 
 /** 当前团队 ID 是否可用于接口请求 */
 const isCurrentTeamIdValid = computed(() => {
