@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 
+import { DEV_TEAM_ID } from "@/constants/team";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 
 import AdminInfo from "./components/admin-info/index.vue";
@@ -39,8 +40,8 @@ import styles from "./index.module.scss";
 
 const router = useRouter();
 
-/** 前往搜索页 */
+/** 前往团队信息管理页 */
 const handleSearchClick = () => {
-  router.push("/team-list");
+  router.push({ name: "team-manage", params: { id: DEV_TEAM_ID } });
 };
 </script>
