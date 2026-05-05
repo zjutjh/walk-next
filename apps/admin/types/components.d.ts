@@ -16,6 +16,11 @@ declare module 'vue' {
     Loading: typeof import('./../src/components/loading-wrapper/loading.vue')['default']
     LoadingContainer: typeof import('./../src/components/loading-container/index.vue')['default']
     LoadingWrapper: typeof import('./../src/components/loading-wrapper/index.vue')['default']
+    ErrorEmpty: typeof import('./../src/components/error-empty/index.vue')['default']
+    IMdiClose: typeof import('~icons/mdi/close')['default']
+    IMdiImage: typeof import('~icons/mdi/image')['default']
+    LoadingContainer: typeof import('./../src/components/loading-container/index.vue')['default']
+    QrScanPreview: typeof import('./../src/components/qr-scan-preview/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanBackTop: typeof import('vant/es')['BackTop']
@@ -51,5 +56,7 @@ declare module 'vue' {
     VanTag: typeof import('vant/es')['Tag']
     VanToast: typeof import('vant/es')['Toast']
     VanTreeSelect: typeof import('vant/es')['TreeSelect']
+    VanNavBar: typeof import('vant/es')['NavBar']
+    VanPopup: typeof import('vant/es')['Popup']
   }
 }

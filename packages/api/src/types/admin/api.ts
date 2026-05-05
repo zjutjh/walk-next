@@ -1,3 +1,4 @@
+import type { QrCodeType } from "./qr-code";
 import type { SearchType, TeamsMemberInfo, TeamsTeamBriefInfo } from "./team";
 import type {
   UserCampusExample,
@@ -107,3 +108,27 @@ export interface SetTeamLostRequest {
 
 /** 设置队伍失联状态 响应 */
 export type SetTeamLostResponse = null;
+/** 绑定签到码请求参数 */
+export interface BindCheckinCodeRequest {
+  /** 签到码内容 */
+  content: string;
+  /** 团队编号 */
+  team_id: number;
+}
+
+/** 绑定签到码响应数据 */
+export type BindCheckinCodeResponse = null;
+
+/** 打卡(指团队到了某个点位后打卡表示已经过)请求参数 */
+export interface CheckinTeamRequest {
+  /** CodeType */
+  code_type: QrCodeType;
+  /** Content */
+  content: string;
+}
+
+/** 打卡(指团队到了某个点位后打卡表示已经过)响应数据 */
+export interface CheckinTeamResponse {
+  /** 队伍编号 */
+  team_id: number;
+}
