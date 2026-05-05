@@ -15,7 +15,9 @@
     "dingtalk",
     "iconify",
     "nums",
-    "autorenew"
+    "autorenew",
+    "checkin",
+    "wechat"
   ],
   "ignorePaths": [
     "node_modules/**",

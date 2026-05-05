@@ -3,7 +3,7 @@
     <admin-info />
     <section :class="styles.main">
       <van-cell-group title="签到">
-        <van-cell title="扫码签到" is-link />
+        <van-cell title="扫码签到" is-link @click="handleScanClick" />
         <van-cell title="输入签到" is-link />
       </van-cell-group>
 
@@ -27,13 +27,37 @@
         </div>
       </van-cell-group>
     </section>
+
+    <qr-scan-preview
+      v-model:show="isScanPopupVisible"
+      @success="handleScanSuccess"
+      @error="handleScanError"
+    />
   </default-layout>
 </template>
 
 <script setup lang="ts">
+import { showFailToast, showSuccessToast } from "vant";
+import { ref } from "vue";
+
+import QrScanPreview from "@/components/qr-scan-preview/index.vue";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { CAMPUS_CONFIG, CAMPUS_LIST } from "@/walk-config";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
+
+const isScanPopupVisible = ref(false);
+const handleScanClick = () => {
+  isScanPopupVisible.value = true;
+};
+
+const handleScanSuccess = (data: { code_type: string; content: string }) => {
+  console.info("扫码结果", data);
+  showSuccessToast("扫码成功");
+};
+
+const handleScanError = (message: string) => {
+  showFailToast(message || "扫码启动失败");
+};
 </script>
