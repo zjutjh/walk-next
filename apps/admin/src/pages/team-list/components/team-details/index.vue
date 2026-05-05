@@ -88,7 +88,7 @@
 
               <!-- 前往修改成员状态 -->
               <van-cell
-                :to="`/TODO:等团队信息页确定路由后填写/${detailsData.team_id}`"
+                :to="`/team-manage/${detailsData.team_id}`"
                 title="修改队伍成员状态"
                 is-link
               />
