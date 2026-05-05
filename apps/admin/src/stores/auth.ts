@@ -9,12 +9,12 @@ const ADMIN_AUTH_STORAGE_KEY = "walk-next:admin-auth";
 interface AdminAuthState {
   adminName: string;
   /** 点位名字,如jls(金莲寺), qd(起点), 注意不是中文, 要中文的话需要用 POINT_CONFIG 映射 */
-  point: string;
+  pointCode: string;
 }
 
 const EMPTY_AUTH_STATE: AdminAuthState = {
   adminName: "-",
-  point: ""
+  pointCode: ""
 };
 
 const readStoredAuth = (): AdminAuthState | undefined => {
@@ -23,13 +23,13 @@ const readStoredAuth = (): AdminAuthState | undefined => {
 
   try {
     const parsedAuth = JSON.parse(storedAuth) as Partial<AdminAuthState>;
-    if (typeof parsedAuth.adminName !== "string" || typeof parsedAuth.point !== "string") {
+    if (typeof parsedAuth.adminName !== "string" || typeof parsedAuth.pointCode !== "string") {
       return undefined;
     }
 
     return {
       adminName: parsedAuth.adminName,
-      point: parsedAuth.point
+      pointCode: parsedAuth.pointCode
     };
   } catch {
     return undefined;
@@ -39,7 +39,7 @@ const readStoredAuth = (): AdminAuthState | undefined => {
 export const useAdminAuthStore = defineStore("adminAuth", () => {
   const storedAuth = readStoredAuth();
   const adminName = ref(storedAuth?.adminName ?? EMPTY_AUTH_STATE.adminName);
-  const point = ref(storedAuth?.point ?? EMPTY_AUTH_STATE.point);
+  const point = ref(storedAuth?.pointCode ?? EMPTY_AUTH_STATE.pointCode);
 
   const isLoggedIn = computed(() => adminName.value !== "-" && point.value !== "");
   const pointText = computed(() => (POINT_CONFIG[point.value]?.text ?? point.value) || "-");
@@ -55,7 +55,7 @@ export const useAdminAuthStore = defineStore("adminAuth", () => {
 
   const clearAuth = () => {
     adminName.value = EMPTY_AUTH_STATE.adminName;
-    point.value = EMPTY_AUTH_STATE.point;
+    point.value = EMPTY_AUTH_STATE.pointCode;
     localStorage.removeItem(ADMIN_AUTH_STORAGE_KEY);
   };
 

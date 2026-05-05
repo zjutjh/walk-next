@@ -1,14 +1,10 @@
 <template>
-  <default-layout
-    title="精弘毅行管理后台"
-    :show-back="false"
-    @click-navbar-right="handleSearchClick"
-  >
+  <default-layout title="精弘毅行管理后台" :show-back="false">
     <admin-info :admin-name="authStore.adminName" :walk-point="authStore.pointText" />
     <section :class="styles.main">
       <van-cell-group title="签到">
         <van-cell title="扫码签到" is-link @click="handleScanClick" />
-        <van-cell title="输入签到" is-link />
+        <van-cell title="输入签到" is-link @click="handleManualInputClick" />
       </van-cell-group>
 
       <van-cell-group title="数据大盘">
@@ -33,23 +29,31 @@
       @error="handleScanError"
     />
 
+    <team-id-input-modal
+      v-model:show="isTeamIdModalVisible"
+      :description="teamIdModalDescription"
+      @submit="handleTeamIdSubmit"
+      @cancel="handleTeamIdCancel"
+    />
+
     <login-modal v-model:show="isLoginModalVisible" @success="handleLoginSuccess" />
   </default-layout>
 </template>
 
 <script setup lang="ts">
-import type { AdminAPI } from "api/types/admin";
-import { showFailToast, showSuccessToast } from "vant";
-import { ref } from "vue";
+import type { AdminAPI, QrCodeType } from "api/types/admin";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import LoginModal from "@/components/login-modal/index.vue";
 import QrScanPreview from "@/components/qr-scan-preview/index.vue";
+import TeamIdInputModal from "@/components/team-id-input-modal/index.vue";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { useAdminAuthStore } from "@/stores/auth";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
+import { createCheckinHandlers, isStartOrEndPoint } from "./utils";
 
 const router = useRouter();
 const authStore = useAdminAuthStore();
@@ -57,26 +61,66 @@ const authStore = useAdminAuthStore();
 const isLoginModalVisible = ref(!authStore.isLoggedIn);
 
 const isScanPopupVisible = ref(false);
-const handleScanClick = () => {
+const isTeamIdModalVisible = ref(false);
+
+const isTeamIdInputFromCheckin = ref(false);
+const pendingTeamId = ref<number | null>(null);
+const pendingCheckinCode = ref<string | null>(null);
+const pendingTeamNeedsBind = ref(false);
+const expectedScanType = ref<QrCodeType | null>(null);
+const isProcessing = ref(false);
+
+/** 判断管理员是否是起终点管理员 */
+const isStartOrEndAdmin = computed(() => isStartOrEndPoint(authStore.point));
+
+const teamIdModalDescription = computed(() =>
+  pendingCheckinCode.value ? "已扫到签到码，请输入团队ID继续绑定。" : ""
+);
+
+const requestScan = (expectedType?: QrCodeType) => {
+  expectedScanType.value = expectedType ?? null;
   isScanPopupVisible.value = true;
 };
 
-const handleScanSuccess = (data: { code_type: string; content: string }) => {
-  console.info("扫码结果", data);
-  showSuccessToast("扫码成功");
+const openTeamIdInput = (fromCheckin: boolean) => {
+  isTeamIdInputFromCheckin.value = fromCheckin;
+  isTeamIdModalVisible.value = true;
 };
 
-const handleScanError = (message: string) => {
-  showFailToast(message || "扫码启动失败");
+const clearPendingState = () => {
+  pendingTeamId.value = null;
+  pendingCheckinCode.value = null;
+  pendingTeamNeedsBind.value = false;
+  expectedScanType.value = null;
 };
+
+const handleScanClick = () => {
+  requestScan();
+};
+
+const {
+  handleScanSuccess,
+  handleScanError,
+  handleManualInputClick,
+  handleTeamIdSubmit,
+  handleTeamIdCancel
+} = createCheckinHandlers({
+  router,
+  getAuthPoint: () => authStore.point,
+  isStartOrEndAdmin: () => isStartOrEndAdmin.value,
+  pendingTeamId,
+  pendingCheckinCode,
+  pendingTeamNeedsBind,
+  expectedScanType,
+  isProcessing,
+  isTeamIdInputFromCheckin,
+  requestScan,
+  openTeamIdInput,
+  clearPendingState
+});
 
 const handleLoginSuccess = (data: AdminAPI.AuthResponse) => {
   authStore.saveLogin(data);
   isLoginModalVisible.value = false;
-};
-
-/** 前往搜索页 */
-const handleSearchClick = () => {
-  router.push("/team-list");
 };
 </script>

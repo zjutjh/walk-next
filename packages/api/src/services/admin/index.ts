@@ -53,6 +53,18 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, params }, options);
   }
 
+  /** 获取团队状态 */
+  GetTeamStatus(
+    req: AdminAPI.GetTeamStatusRequest,
+    options?: T
+  ): Promise<AdminAPI.GetTeamStatusResponse> {
+    const url = this.genBaseURL("/admin/team/status");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
   /** 绑定签到码 */
   BindCheckinCode(
     req: AdminAPI.BindCheckinCodeRequest,

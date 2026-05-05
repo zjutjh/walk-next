@@ -19,6 +19,7 @@ declare module 'vue' {
     QrScanPreview: typeof import('./../src/components/qr-scan-preview/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TeamIdInputModal: typeof import('./../src/components/team-id-input-modal/index.vue')['default']
     VanButton: typeof import('vant/es')['Button']
     VanCell: typeof import('vant/es')['Cell']
     VanCellGroup: typeof import('vant/es')['CellGroup']

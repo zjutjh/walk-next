@@ -19,6 +19,14 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     meta: {
       pageName: "重组队伍"
     }
+  },
+  {
+    path: "/team-list/:campusId",
+    name: "team-list",
+    component: () => import("@/pages/team-list/index.vue"),
+    meta: {
+      pageName: "团队信息"
+    }
   }
 ];
 
