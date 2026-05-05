@@ -1,9 +1,5 @@
 <template>
-  <default-layout
-    title="精弘毅行管理后台"
-    :show-back="false"
-    @click-navbar-right="handleSearchClick"
-  >
+  <default-layout title="精弘毅行管理后台" :show-back="false">
     <admin-info />
     <section :class="styles.main">
       <van-cell-group title="签到">
@@ -30,18 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-
-import { DEV_TEAM_ID } from "@/constants/team";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
-
-const router = useRouter();
-
-/** 前往团队信息管理页 */
-const handleSearchClick = () => {
-  router.push({ name: "team-manage", params: { id: DEV_TEAM_ID } });
-};
 </script>
