@@ -1,6 +1,7 @@
+import { useStorage } from "@vueuse/core";
 import type { AdminAPI } from "api/types/admin";
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 import { POINT_CONFIG } from "@/walk-config";
 
@@ -17,29 +18,26 @@ const EMPTY_AUTH_STATE: AdminAuthState = {
   pointCode: ""
 };
 
-const readStoredAuth = (): AdminAuthState | undefined => {
-  const storedAuth = localStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
-  if (!storedAuth) return undefined;
-
-  try {
-    const parsedAuth = JSON.parse(storedAuth) as Partial<AdminAuthState>;
-    if (typeof parsedAuth.adminName !== "string" || typeof parsedAuth.pointCode !== "string") {
-      return undefined;
-    }
-
-    return {
-      adminName: parsedAuth.adminName,
-      pointCode: parsedAuth.pointCode
-    };
-  } catch {
-    return undefined;
-  }
-};
-
 export const useAdminAuthStore = defineStore("adminAuth", () => {
-  const storedAuth = readStoredAuth();
-  const adminName = ref(storedAuth?.adminName ?? EMPTY_AUTH_STATE.adminName);
-  const point = ref(storedAuth?.pointCode ?? EMPTY_AUTH_STATE.pointCode);
+  const auth = useStorage<AdminAuthState>(
+    ADMIN_AUTH_STORAGE_KEY,
+    { ...EMPTY_AUTH_STATE },
+    localStorage
+  );
+
+  const adminName = computed({
+    get: () => auth.value.adminName,
+    set: (value: string) => {
+      auth.value.adminName = value;
+    }
+  });
+
+  const point = computed({
+    get: () => auth.value.pointCode,
+    set: (value: string) => {
+      auth.value.pointCode = value;
+    }
+  });
 
   const isLoggedIn = computed(() => adminName.value !== "-" && point.value !== "");
   const pointText = computed(() => (POINT_CONFIG[point.value]?.text ?? point.value) || "-");
@@ -47,16 +45,10 @@ export const useAdminAuthStore = defineStore("adminAuth", () => {
   const saveLogin = (payload: AdminAPI.AuthResponse) => {
     adminName.value = payload.name;
     point.value = payload.point_name;
-    localStorage.setItem(
-      ADMIN_AUTH_STORAGE_KEY,
-      JSON.stringify({ adminName: adminName.value, point: point.value })
-    );
   };
 
   const clearAuth = () => {
-    adminName.value = EMPTY_AUTH_STATE.adminName;
-    point.value = EMPTY_AUTH_STATE.pointCode;
-    localStorage.removeItem(ADMIN_AUTH_STORAGE_KEY);
+    auth.value = { ...EMPTY_AUTH_STATE };
   };
 
   return {
