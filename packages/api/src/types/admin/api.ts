@@ -1,5 +1,5 @@
 import type { QrCodeType } from "./qr-code";
-import type { TeamMemberWalkStatus } from "./team";
+import type { TeamMemberWalkStatus, TeamWalkStatus } from "./team";
 import type {
   UserCampusExample,
   UserContactExample,
@@ -43,6 +43,12 @@ export interface AuthResponse {
   /** 点位名称 */
   point_name: string;
 }
+
+/** 管理员退出登录 请求 */
+export type LogoutRequest = undefined;
+
+/** 管理员退出登录 返回 */
+export type LogoutResponse = Record<string, never>;
 
 /** 获取用户信息 请求（示例） */
 export interface QueryProfileExampleRequest {
@@ -90,6 +96,8 @@ export interface TeamStatusTeam {
   prev_point_name: string;
   /** 路线名称 */
   route_name: string;
+  /** 队伍状态 */
+  status: TeamWalkStatus;
 }
 
 /** 获取团队状态响应数据 */

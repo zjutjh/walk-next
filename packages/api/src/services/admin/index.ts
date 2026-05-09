@@ -41,6 +41,15 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, data }, options);
   }
 
+  /** 管理员退出登录 */
+  Logout(req: AdminAPI.LogoutRequest, options?: T): Promise<AdminAPI.LogoutResponse> {
+    const url = this.genBaseURL("/admin/logout");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
   /** 获取用户信息（示例） */
   QueryProfileExample(
     req: AdminAPI.QueryProfileExampleRequest,

@@ -21,6 +21,19 @@
           </van-button>
         </div>
       </van-cell-group>
+
+      <div :class="styles.logoutButtonContainer">
+        <van-button
+          type="danger"
+          plain
+          block
+          :loading="isLogoutPending"
+          :disabled="isLogoutPending"
+          @click="handleLogout"
+        >
+          退出登录
+        </van-button>
+      </div>
     </section>
 
     <qr-scan-preview
@@ -41,7 +54,9 @@
 </template>
 
 <script setup lang="ts">
+import { useMutation } from "@tanstack/vue-query";
 import type { AdminAPI, QrCodeType } from "api/types/admin";
+import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -50,6 +65,7 @@ import QrScanPreview from "@/components/qr-scan-preview/index.vue";
 import TeamIdInputModal from "@/components/team-id-input-modal/index.vue";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { useAdminAuthStore } from "@/stores/auth";
+import { walkAdminService } from "@/utils";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
@@ -118,6 +134,35 @@ const {
   openTeamIdInput,
   clearPendingState
 });
+
+const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
+  mutationFn: () => walkAdminService.Logout(undefined),
+  onSuccess: () => {
+    authStore.clearAuth();
+    clearPendingState();
+    isScanPopupVisible.value = false;
+    isTeamIdModalVisible.value = false;
+    isLoginModalVisible.value = true;
+    showSuccessToast("退出登录成功");
+  },
+  onError: (err: Error) => {
+    showFailToast(err.message || "退出登录失败");
+  }
+});
+
+const handleLogout = async () => {
+  try {
+    await showConfirmDialog({
+      title: "确认退出",
+      message: "确定要退出当前账号吗？",
+      confirmButtonText: "退出登录",
+      cancelButtonText: "取消"
+    });
+    mutateLogout();
+  } catch {
+    // 用户取消了操作，不需要做任何处理
+  }
+};
 
 const handleLoginSuccess = (data: AdminAPI.AuthResponse) => {
   authStore.saveLogin(data);

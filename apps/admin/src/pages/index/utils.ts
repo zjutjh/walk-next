@@ -1,11 +1,5 @@
 import { useMutation } from "@tanstack/vue-query";
-import {
-  AdminAPI,
-  QR_CODE,
-  type QrCodeType,
-  TEAM_MEMBER_WALK_STATUS,
-  type TeamMemberWalkStatus
-} from "api/types/admin";
+import { AdminAPI, QR_CODE, type QrCodeType, TEAM_WALK_STATUS } from "api/types/admin";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import type { Ref } from "vue";
 import type { Router } from "vue-router";
@@ -64,15 +58,9 @@ const parseTeamId = (rawText: string) => {
   return value;
 };
 
-/** 通过成员状态判断队伍绑过签到码没 */
-const UNBOUND_STATUS_SET = new Set<TeamMemberWalkStatus>([
-  TEAM_MEMBER_WALK_STATUS.Pending,
-  TEAM_MEMBER_WALK_STATUS.Abandoned,
-  TEAM_MEMBER_WALK_STATUS.Violated
-]);
-
-const isTeamBound = (status: AdminAPI.GetTeamStatusResponse) =>
-  !status.members.every((member) => UNBOUND_STATUS_SET.has(member.walk_status));
+const isTeamBound = (status: AdminAPI.GetTeamStatusResponse) => {
+  if (status.team.status !== TEAM_WALK_STATUS.NotStart) return true;
+};
 
 const getCampusIdByRoute = (routeName: string | undefined) => {
   if (!routeName) return undefined;

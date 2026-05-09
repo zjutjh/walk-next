@@ -1,3 +1,12 @@
+export const TEAM_WALK_STATUS = {
+  NotStart: "notStart",
+  InProgress: "inProgress",
+  Completed: "completed",
+  Withdrawn: "withdrawn"
+} as const;
+
+export type TeamWalkStatus = (typeof TEAM_WALK_STATUS)[keyof typeof TEAM_WALK_STATUS];
+
 export const TEAM_MEMBER_WALK_STATUS = {
   NotStart: "notStart",
   /** 等待绑定签到码 */
