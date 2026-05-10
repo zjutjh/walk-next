@@ -143,7 +143,7 @@ const handleErrorRefetch = () => {
 };
 
 /** 查看队伍详情 */
-const handleViewTeamDetails = (teamId: string) => {
+const handleViewTeamDetails = (teamId: number) => {
   urlQuery.value.viewingTeam = teamId;
 };
 </script>

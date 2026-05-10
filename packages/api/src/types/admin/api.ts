@@ -79,13 +79,13 @@ export interface QueryTeamListResponse {
 /** 获取队伍详情 请求 */
 export interface QueryTeamDetailsRequest {
   /** 队伍ID */
-  team_id: string;
+  team_id: number;
 }
 
 /** 获取队伍详情 响应 */
 export interface QueryTeamDetailsResponse {
   /** 队伍ID */
-  team_id: string;
+  team_id: number;
   /** 是否被标记为失联 */
   is_lost: boolean;
   /** 路线ID */
@@ -101,7 +101,7 @@ export interface QueryTeamDetailsResponse {
 /** 设置队伍失联状态 请求 */
 export interface SetTeamLostRequest {
   /** 队伍ID */
-  team_id: string;
+  team_id: number;
   /** 是否标记为失联 */
   is_lost: boolean;
 }

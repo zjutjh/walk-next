@@ -141,7 +141,7 @@ const {
   queryKey: [ADMIN_QUERY_KEY.TEAM.DETAILS, viewingTeamId] as const,
   queryFn: ({ queryKey }) =>
     walkAdminService.QueryTeamDetails({
-      team_id: queryKey[1]
+      team_id: Number(queryKey[1])
     })
 });
 
@@ -159,7 +159,7 @@ const normalMemberList = computed(() =>
 const { mutate: mutateLost, isPending } = useMutation({
   mutationFn: (targetValue: boolean) =>
     walkAdminService.SetTeamLost({
-      team_id: viewingTeamId.value,
+      team_id: Number(viewingTeamId.value),
       is_lost: targetValue
     }),
   onError: (err) => {
