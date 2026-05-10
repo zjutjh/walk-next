@@ -81,7 +81,7 @@ export interface TeamStatusMember {
   /** 姓名 */
   name: string;
   /** 用户身份 */
-  role: "unbind" | "member" | "captain" | string;
+  role: "unbind" | "member" | "captain" | (string & {});
   /** 用户编号 */
   user_id: number;
   /** 用户状态 */
