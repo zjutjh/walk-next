@@ -1,6 +1,6 @@
 /** 数据刷新间隔（毫秒） */
 export const ADMIN_REFRESH_INTERVAL = {
-  /** 数据仪表盘 数据总览 */
+  /** 数据仪表盘 */
   DASHBOARD: {
     /** 数据总览 */
     OVERVIEW: 30 * 1000,
