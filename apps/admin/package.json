@@ -21,6 +21,7 @@
     "lodash-es": "catalog:frontend",
     "modern-normalize": "^3.0.1",
     "pinia": "catalog:frontend",
+    "qr-scanner-wechat": "^0.1.3",
     "shared": "workspace:*",
     "vant": "^4.9.22",
     "vue": "catalog:frontend",

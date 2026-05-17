@@ -67,4 +67,28 @@ export default class WalkAdminService<T> extends BaseService<T> {
 
     return this.request({ url, method, params }, options);
   }
+
+  /** 绑定签到码 */
+  BindCheckinCode(
+    req: AdminAPI.BindCheckinCodeRequest,
+    options?: T
+  ): Promise<AdminAPI.BindCheckinCodeResponse> {
+    const url = this.genBaseURL("/admin/team/bind");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 打卡(指团队到了某个点位后打卡表示已经过) */
+  CheckinTeam(
+    req: AdminAPI.CheckinTeamRequest,
+    options?: T
+  ): Promise<AdminAPI.CheckinTeamResponse> {
+    const url = this.genBaseURL("/admin/team/update");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
 }
