@@ -1,5 +1,6 @@
 import type { QrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
+import type { TeamMemberWalkStatus, TeamWalkStatus } from "./team";
 import type {
   UserCampusExample,
   UserContactExample,
@@ -27,6 +28,28 @@ export type LogoutExampleRequest = undefined; // 若请求body json/query params
 
 /** 登出 返回（示例） */
 export type LogoutExampleResponse = null; // 若返回data为空: 写null，因为收到的data确实是null
+
+/** 管理员登录 请求 */
+export interface AuthRequest {
+  /** 用户名 */
+  account: string;
+  /** 密码 */
+  password: string;
+}
+
+/** 管理员登录 返回 */
+export interface AuthResponse {
+  /** 管理员姓名 */
+  name: string;
+  /** 点位名称 */
+  point_name: string;
+}
+
+/** 管理员退出登录 请求 */
+export type LogoutRequest = undefined;
+
+/** 管理员退出登录 返回 */
+export type LogoutResponse = Record<string, never>;
 
 /** 获取用户信息 请求（示例） */
 export interface QueryProfileExampleRequest {
@@ -71,6 +94,44 @@ export interface QueryRouteStatsResponse {
   point_stats: PointStat[];
 }
 
+/** 获取团队状态请求参数 */
+export interface GetTeamStatusRequest {
+  /** 团队编号 */
+  team_id: number;
+}
+
+/** 团队成员状态 */
+export interface TeamStatusMember {
+  /** 姓名 */
+  name: string;
+  /** 用户身份 */
+  role: "unbind" | "member" | "captain" | (string & {});
+  /** 用户编号 */
+  user_id: number;
+  /** 用户状态 */
+  walk_status: TeamMemberWalkStatus;
+}
+
+/** 团队状态 */
+export interface TeamStatusTeam {
+  /** 队名 */
+  name: string;
+  /** 点位名称 */
+  prev_point_name: string;
+  /** 路线名称 */
+  route_name: string;
+  /** 队伍状态 */
+  status: TeamWalkStatus;
+}
+
+/** 获取团队状态响应数据 */
+export interface GetTeamStatusResponse {
+  /** 团队成员 */
+  members: TeamStatusMember[];
+  /** 团队信息 */
+  team: TeamStatusTeam;
+}
+
 /** 绑定签到码请求参数 */
 export interface BindCheckinCodeRequest {
   /** 签到码内容 */
@@ -79,7 +140,7 @@ export interface BindCheckinCodeRequest {
   team_id: number;
 }
 
-/** 绑定签到码响应数据(后端写的我看不懂 先这么写着) */
+/** 绑定签到码响应数据 */
 export type BindCheckinCodeResponse = null;
 
 /** 打卡(指团队到了某个点位后打卡表示已经过)请求参数 */
