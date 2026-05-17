@@ -1,320 +1,230 @@
+<!-- 数据统计表格页 -->
 <template>
-  <van-nav-bar left-arrow title="精弘毅行表格展示" @click-left="onClickLeft" />
-  <van-tabs v-model:active="active" sticky animated sizeable @change="onTabChange">
-    <!-- 总览 Tab -->
-    <van-tab title="总览">
-      <error-empty :error="allRoutesError" @retry="refetchAllRoutes">
-        <van-cell-group
-          v-for="(route, index) in allRoutesList"
-          :key="index"
-          inset
-          :title="route.route_name"
+  <default-layout :class="styles.layout" title="数据统计表格">
+    <van-tabs v-model:active="urlQuery.tab" :class="styles.tabs" animated swipeable>
+      <!-- 总览统计数据 -->
+      <van-tab title="总览" :name="OVERVIEW_TAB_NAME">
+        <error-tip
+          v-if="overviewStatsError && !isOverviewStatsFetching"
+          :class="styles.errorTip"
+          :data-updated-at="overviewStatsUpdatedAt"
+        />
+        <loading-container
+          :class="styles.loadingContainer"
+          :loading="isOverviewStatsLoading"
+          :modal="false"
         >
-          <van-cell
-            v-for="item in statusItems"
-            :key="item.key"
-            :title="item.label"
-            title-class="titleClass"
-            value-class="valueClass"
+          <error-empty
+            :error="overviewStatsError"
+            :disabled="!isNil(overviewStatsData)"
+            @retry="refetchOverviewStats"
           >
-            <template #value>
-              <span>{{ route[item.key] || 0 }}</span>
-            </template>
-          </van-cell>
-        </van-cell-group>
-      </error-empty>
-    </van-tab>
+            <van-pull-refresh
+              v-if="overviewStatsData"
+              :model-value="isOverviewStatsPullRefreshing"
+              :disabled="isOverviewStatsFetching"
+              @refresh="handleOverviewStatsRefresh"
+            >
+              <div :class="styles.dataContainer">
+                <van-cell-group
+                  v-for="routeData in overviewStatsData?.routes"
+                  :key="routeData.route_name"
+                  :title="ROUTE_CONFIG[routeData.route_name]?.text"
+                  inset
+                >
+                  <van-cell
+                    v-for="(value, key) in routeData.stats"
+                    :key="key"
+                    :title="WALKER_STATS_METRIC_TEXT[key]"
+                    :value="value ?? '-'"
+                  />
+                </van-cell-group>
+              </div>
+            </van-pull-refresh>
+          </error-empty>
+        </loading-container>
+      </van-tab>
 
-    <!-- 具体路线 Tab -->
-    <van-tab v-for="(route, index) in routeConfigs" :key="index" :title="route.name">
-      <error-empty :error="routeDetailError" @retry="refetchRouteDetail">
-        <!-- 经过点位人数 -->
-        <van-cell-group inset title="经过点位人数">
-          <van-cell
-            v-for="(point, idx) in checkpointData"
-            :key="idx"
-            :title="point.name"
-            title-class="titleClass"
-            value-class="valueClass"
+      <!-- 具体路线统计数据 -->
+      <van-tab
+        v-for="route in ROUTE_LIST"
+        :key="route"
+        :title="ROUTE_CONFIG[route]?.text"
+        :name="route"
+      >
+        <error-tip
+          v-if="routeStatsError && !isRouteStatsFetching"
+          :class="styles.errorTip"
+          :data-updated-at="routeStatsUpdatedAt"
+        />
+        <loading-container
+          :class="styles.loadingContainer"
+          :loading="isRouteStatsLoading"
+          :modal="false"
+        >
+          <error-empty
+            :error="routeStatsError"
+            :disabled="!isNil(routeStatsData)"
+            @retry="refetchRouteStats"
           >
-            <template #value>
-              <span>{{ point.value }}</span>
-            </template>
-          </van-cell>
-        </van-cell-group>
+            <van-pull-refresh
+              v-if="routeStatsData"
+              :model-value="isRouteStatsPullRefreshing"
+              :disabled="isRouteStatsFetching"
+              @refresh="handleRouteStatsRefresh"
+            >
+              <div :class="styles.dataContainer">
+                <!-- 经过点位人数 -->
+                <van-cell-group inset title="经过点位人数">
+                  <van-cell
+                    v-for="pointData in routeStatsData?.point_stats"
+                    :key="pointData.point_name"
+                    :title="POINT_CONFIG[pointData.point_name]?.text"
+                    :value="pointData.passed_count"
+                  />
+                </van-cell-group>
 
-        <!-- 点位间人数 -->
-        <van-cell-group inset title="点位间人数">
-          <van-cell
-            v-for="(segment, idx) in segmentData"
-            :key="idx"
-            :title="segment.from + ' - ' + segment.to"
-            title-class="titleClass"
-            value-class="valueClass"
-          >
-            <template #value>
-              <span>{{ segment.value }}</span>
-            </template>
-          </van-cell>
-        </van-cell-group>
+                <!-- 点位间人数 -->
+                <van-cell-group inset title="点位间人数">
+                  <van-cell
+                    v-for="segmentData in segmentStats"
+                    :key="segmentData.segmentKey"
+                    :title="segmentData.text"
+                    :value="segmentData.countOnSegment ?? '-'"
+                  />
+                </van-cell-group>
 
-        <!-- 状态 -->
-        <van-cell-group inset title="状态" style="margin-bottom: var(--van-padding-xl)">
-          <van-cell
-            v-for="item in routeStatusItems"
-            :key="item.key"
-            :title="item.label"
-            title-class="titleClass"
-            value-class="valueClass"
-          >
-            <template #value>
-              <span>{{ routeStats[item.key] || 0 }}</span>
-            </template>
-          </van-cell>
-        </van-cell-group>
-      </error-empty>
-    </van-tab>
-  </van-tabs>
+                <!-- 路段统计指标 -->
+                <van-cell-group inset title="状态">
+                  <van-cell
+                    v-for="(value, key) in routeStatsData?.status_stats"
+                    :key="key"
+                    :title="WALKER_STATS_METRIC_TEXT[key]"
+                    :value="value ?? '-'"
+                  />
+                </van-cell-group>
+              </div>
+            </van-pull-refresh>
+          </error-empty>
+        </loading-container>
+      </van-tab>
+    </van-tabs>
+  </default-layout>
 </template>
 
 <script setup lang="ts">
-import "./data-table-module.scss";
-
 import { useQuery } from "@tanstack/vue-query";
-import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
+import { isEmpty, isNil, last } from "lodash-es";
+import { computed, ref, toRef, watch } from "vue";
 
-import ErrorEmpty from "@/components/error-empty/index.vue";
-import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_LIST, ROUTE_POINT_LIST_MAP } from "@/walk-config";
+import LoadingContainer from "@/components/loading-container/index.vue";
+import { useStoredUrlQuery } from "@/composables/stored-url-query";
+import { ADMIN_QUERY_KEY } from "@/constants";
+import { WALKER_STATS_METRIC_TEXT } from "@/constants/enum-text";
+import { ADMIN_REFRESH_INTERVAL } from "@/constants/refresh-interval";
+import DefaultLayout from "@/layouts/default-layout/index.vue";
+import { walkAdminService } from "@/utils";
+import {
+  POINT_CONFIG,
+  ROUTE_CONFIG,
+  ROUTE_LIST,
+  SEGMENT_DERIVATIVE,
+  SEGMENT_KEY_DELIMITER
+} from "@/walk-config";
 
-const router = useRouter();
-const onClickLeft = () => router.back();
+import ErrorTip from "./components/error-tip/index.vue";
+import { OVERVIEW_TAB_NAME } from "./constants";
+import styles from "./index.module.scss";
+import type { DataTableUrlQuery } from "./types";
 
-// ────────────────────────── 类型定义 ──────────────────────────
-
-interface RouteConfig {
-  name: string;
-  code: string;
-  points: string[];
-}
-
-interface RouteStats {
-  started: number;
-  not_started: number;
-  total: number;
-  finished: number;
-  wrong_route: number;
-  quit: number;
-}
-
-interface ApiRouteData {
-  route_name?: string;
-  route_code?: string;
-  name?: string;
-  started?: number;
-  total?: number;
-  finished?: number;
-  wrong_route?: number;
-  quit?: number;
-}
-
-interface ApiPointData {
-  name?: string;
-  point_name?: string;
-  count?: number;
-  value?: number;
-  passed_count?: number;
-}
-
-interface ApiRouteDetail {
-  checkpoints?: ApiPointData[];
-  points?: ApiPointData[];
-  total?: number;
-  total_count?: number;
-  wrong_route?: number;
-  wrong_route_count?: number;
-  quit?: number;
-  quit_count?: number;
-}
-
-interface RouteData extends RouteStats {
-  route_name: string;
-  route_code?: string;
-}
-
-interface PointData {
-  name: string;
-  value: number;
-}
-
-interface SegmentData {
-  from: string;
-  to: string;
-  value: number;
-}
-
-interface StatusItem {
-  key: keyof RouteStats;
-  label: string;
-}
-
-// ────────────────────────── 静态配置 ──────────────────────────
-
-const active = ref<number>(0);
-
-const routeConfigs: RouteConfig[] = ROUTE_LIST.map((routeId) => ({
-  name: (ROUTE_CONFIG[routeId] as { text: string }).text,
-  code: routeId,
-  points: (ROUTE_POINT_LIST_MAP[routeId] as string[]).map(
-    (pointId) => (POINT_CONFIG[pointId] as { text: string }).text
-  )
-}));
-
-const currentRouteConfig = computed<RouteConfig | null>(
-  () => routeConfigs[active.value - 1] ?? null
-);
-
-const statusItems: StatusItem[] = [
-  { key: "started", label: "已出发" },
-  { key: "not_started", label: "未出发" },
-  { key: "total", label: "总报名" },
-  { key: "finished", label: "已结束" },
-  { key: "wrong_route", label: "走错路线" },
-  { key: "quit", label: "下撤" }
-];
-
-const routeStatusItems: StatusItem[] = [
-  { key: "total", label: "总报名" },
-  { key: "wrong_route", label: "走错路线" },
-  { key: "quit", label: "下撤" }
-];
-
-// ────────────────────────── 总览数据 ──────────────────────────
-
-const {
-  data: allRoutesList,
-  error: allRoutesError,
-  refetch: refetchAllRoutes
-} = useQuery({
-  queryKey: ["allRoutes"],
-  queryFn: async (): Promise<RouteData[]> => {
-    const response = await fetch("/api/dashboard/stats/route/all");
-    if (!response.ok) throw new Error("获取总览数据失败");
-    const result = await response.json();
-
-    const routesData = result.data;
-    let routes: ApiRouteData[] = [];
-    if (routesData && "routes" in routesData && Array.isArray(routesData.routes)) {
-      routes = routesData.routes;
-    } else if (Array.isArray(routesData)) {
-      routes = routesData;
-    }
-
-    return routeConfigs.map((config) => {
-      const matched = routes.find(
-        (r) =>
-          r.route_name === config.name || r.route_code === config.code || r.name === config.name
-      );
-      const started = matched?.started ?? 0;
-      const total = matched?.total ?? 0;
-      return {
-        // eslint-disable-next-line camelcase
-        route_name: config.name,
-        started,
-        // eslint-disable-next-line camelcase
-        not_started: total - started,
-        total,
-        finished: matched?.finished ?? 0,
-        // eslint-disable-next-line camelcase
-        wrong_route: matched?.wrong_route ?? 0,
-        quit: matched?.quit ?? 0
-      };
-    });
-  }
-});
-
-// ────────────────────────── 路线详情数据 ──────────────────────────
-
-const {
-  data: routeDetail,
-  error: routeDetailError,
-  refetch: refetchRouteDetail
-} = useQuery({
-  queryKey: computed(() => ["routeDetail", currentRouteConfig.value?.code]),
-  queryFn: async (): Promise<ApiRouteDetail> => {
-    const config = currentRouteConfig.value;
-    if (!config) return {};
-    const response = await fetch(
-      `/api/dashboard/stats/route?name=${encodeURIComponent(config.code)}`
-    );
-    if (!response.ok) throw new Error("获取路线详情失败");
-    const result = await response.json();
-    return result.data ?? {};
+const { urlQuery } = useStoredUrlQuery<DataTableUrlQuery>({
+  initialValue: {
+    tab: OVERVIEW_TAB_NAME
   },
-  enabled: computed(() => currentRouteConfig.value !== null)
+  persist: "memory"
 });
 
-// ────────────────────────── computed 派生数据 ──────────────────────────
+// 获取总览统计数据
+const {
+  data: overviewStatsData,
+  error: overviewStatsError,
+  isLoading: isOverviewStatsLoading,
+  isFetching: isOverviewStatsFetching,
+  refetch: refetchOverviewStats,
+  dataUpdatedAt: overviewStatsUpdatedAt
+} = useQuery({
+  enabled: () => urlQuery.value.tab === OVERVIEW_TAB_NAME,
+  staleTime: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
+  refetchInterval: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
+  queryKey: [ADMIN_QUERY_KEY.STATS.OVERVIEW],
+  queryFn: () => walkAdminService.QueryOverviewStats(undefined)
+});
 
-const checkpointData = computed<PointData[]>(() => {
-  const config = currentRouteConfig.value;
-  const data = routeDetail.value;
-  if (!config) return [];
-  if (!data) return config.points.map((name) => ({ name, value: 0 }));
+/** 总览统计数据是否正在下拉刷新中 */
+const isOverviewStatsPullRefreshing = ref(false);
+// 总览统计数据refetch结束时关闭下拉刷新态
+watch(isOverviewStatsFetching, (newValue) => {
+  if (newValue === false) isOverviewStatsPullRefreshing.value = false;
+});
 
-  if (data.checkpoints || data.points) {
-    const points = data.checkpoints ?? data.points ?? [];
-    return points.map((p) => ({
-      name: p.name ?? p.point_name ?? "",
-      value: p.count ?? p.value ?? p.passed_count ?? 0
-    }));
-  }
+/** 下拉刷新总览统计数据 */
+const handleOverviewStatsRefresh = () => {
+  // 展示下拉刷新态
+  isOverviewStatsPullRefreshing.value = true;
 
-  return config.points.map((pointName) => {
-    const pointData = (data as Record<string, ApiPointData | undefined>)[pointName];
-    return {
-      name: pointName,
-      value: pointData?.count ?? (data as Record<string, number>)[pointName] ?? 0
+  refetchOverviewStats();
+};
+
+// 获取路线统计数据
+const {
+  data: routeStatsData,
+  error: routeStatsError,
+  isLoading: isRouteStatsLoading,
+  isFetching: isRouteStatsFetching,
+  refetch: refetchRouteStats,
+  dataUpdatedAt: routeStatsUpdatedAt
+} = useQuery({
+  enabled: () => urlQuery.value.tab !== OVERVIEW_TAB_NAME,
+  staleTime: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
+  refetchInterval: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
+  queryKey: ["routeStats", toRef(() => urlQuery.value.tab)] as const,
+  queryFn: ({ queryKey }) => walkAdminService.QueryRouteStats({ name: queryKey[1] })
+});
+
+/** 路线统计数据是否正在下拉刷新中 */
+const isRouteStatsPullRefreshing = ref(false);
+// 路线统计数据refetch结束时关闭下拉刷新态
+watch(isRouteStatsFetching, (newValue) => {
+  if (newValue === false) isRouteStatsPullRefreshing.value = false;
+});
+
+/** 下拉刷新路线统计数据 */
+const handleRouteStatsRefresh = () => {
+  // 展示下拉刷新态
+  isRouteStatsPullRefreshing.value = true;
+
+  refetchRouteStats();
+};
+
+/** 行程段统计数据 */
+const segmentStats = computed(() => {
+  /** 最后一个点位的数据 */
+  const lastPointData = last(routeStatsData.value?.point_stats);
+  /** 除最后一个点位外的点位数据数组 */
+  const pointDataArrExceptLast = routeStatsData.value?.point_stats.slice(0, -1);
+  if (isNil(pointDataArrExceptLast) || isEmpty(pointDataArrExceptLast) || isNil(lastPointData))
+    return [];
+  return pointDataArrExceptLast.map((pointData, index, pointArr) => {
+    /** 下一个点位的数据 */
+    const nextPointData = pointArr.at(index + 1) ?? lastPointData;
+    /** 行程段key */
+    const segmentKey = `${pointData.point_name}${SEGMENT_KEY_DELIMITER}${nextPointData.point_name}`;
+    const segmentData = {
+      segmentKey: segmentKey,
+      text: SEGMENT_DERIVATIVE[segmentKey]?.text ?? "",
+      countOnSegment: pointData.passed_count - nextPointData.passed_count
     };
+    return segmentData;
   });
 });
-
-const segmentData = computed<SegmentData[]>(() => {
-  const config = currentRouteConfig.value;
-  if (!config) return [];
-
-  const segments: SegmentData[] = [];
-  for (let i = 0; i < config.points.length - 1; i++) {
-    const fromPoint = config.points[i];
-    const toPoint = config.points[i + 1];
-    if (!fromPoint || !toPoint) continue;
-
-    const fromCount = checkpointData.value.find((p) => p.name === fromPoint)?.value ?? 0;
-    const toCount = checkpointData.value.find((p) => p.name === toPoint)?.value ?? 0;
-
-    segments.push({
-      from: fromPoint,
-      to: toPoint,
-      value: Math.max(0, fromCount - toCount)
-    });
-  }
-  return segments;
-});
-
-const routeStats = computed<Partial<RouteStats>>(() => {
-  const data = routeDetail.value;
-  if (!data) return {};
-  return {
-    total: data.total ?? data.total_count ?? 0,
-    // eslint-disable-next-line camelcase
-    wrong_route: data.wrong_route ?? data.wrong_route_count ?? 0,
-    quit: data.quit ?? data.quit_count ?? 0
-  };
-});
-
-// ────────────────────────── Tab 切换 ──────────────────────────
-
-const onTabChange = (_index: number) => {
-  // useQuery 的 enabled 和 queryKey 已自动处理数据请求
-};
 </script>

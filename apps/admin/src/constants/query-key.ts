@@ -3,5 +3,10 @@ export const ADMIN_QUERY_KEY = {
   USER: {
     /** 用户信息（示例） */
     INFO: "userInfo"
+  },
+  /** 统计数据相关 */
+  STATS: {
+    /** 总览 */
+    OVERVIEW: "overviewStats"
   }
 } as const;

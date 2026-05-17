@@ -1,0 +1,28 @@
+// 数据新鲜度 支持手动刷新数据
+.component {
+  :global(.van-notice-bar__content) {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+    color: var(--van-danger-color);
+
+    .icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    .tip,
+    .updateTime {
+      display: flex;
+      font-size: 14px;
+      line-height: 14px;
+      user-select: none;
+    }
+
+    .updateTime {
+      margin-left: auto;
+    }
+  }
+}

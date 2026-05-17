@@ -14,3 +14,16 @@ export type UserGenderExample = "female" | "male" | "unknown";
 
 /** 用户类型 */
 export type UserTypeExample = "admin" | "sudo";
+
+/** 人员统计指标 */
+export type WalkerStatsMetric =
+  | "total_reg"
+  | "not_present"
+  | "undeparted"
+  | "started"
+  | "walking"
+  | "finished"
+  | "withdrawn"
+  | "wrong_route"
+  | "withdrawn"
+  | "wrong_route";
