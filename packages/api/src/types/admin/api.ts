@@ -1,5 +1,5 @@
 import type { QrCodeType } from "./qr-code";
-import { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
+import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
 import type {
   UserCampusExample,
   UserContactExample,
