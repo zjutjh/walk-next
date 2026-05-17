@@ -1,6 +1,6 @@
 <!-- 数据统计表格页 -->
 <template>
-  <default-layout :class="styles.layout" title="数据统计表格">
+  <default-layout :class="styles.layout">
     <van-tabs v-model:active="urlQuery.tab" :class="styles.tabs" animated swipeable>
       <!-- 总览统计数据 -->
       <van-tab title="总览" :name="OVERVIEW_TAB_NAME">

@@ -25,7 +25,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "DataTable",
     component: () => import("@/pages/data-table/index.vue"),
     meta: {
-      pageName: "数据表格"
+      pageName: "数据统计表格"
     }
   }
 ];
