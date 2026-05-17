@@ -32,6 +32,24 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, data }, options);
   }
 
+  /** 管理员登录(Authentication) */
+  Auth(req: AdminAPI.AuthRequest, options?: T): Promise<AdminAPI.AuthResponse> {
+    const url = this.genBaseURL("/admin/auth");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 管理员退出登录 */
+  Logout(req: AdminAPI.LogoutRequest, options?: T): Promise<AdminAPI.LogoutResponse> {
+    const url = this.genBaseURL("/admin/logout");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
   /** 获取用户信息（示例） */
   QueryProfileExample(
     req: AdminAPI.QueryProfileExampleRequest,
@@ -45,10 +63,10 @@ export default class WalkAdminService<T> extends BaseService<T> {
   }
 
   /** 获取团队状态 */
-  QueryTeamStatus(
-    req: AdminAPI.QueryTeamStatusRequest,
+  GetTeamStatus(
+    req: AdminAPI.GetTeamStatusRequest,
     options?: T
-  ): Promise<AdminAPI.QueryTeamStatusResponse> {
+  ): Promise<AdminAPI.GetTeamStatusResponse> {
     const url = this.genBaseURL("/admin/team/status");
     const method = "GET";
     const params = req;
@@ -67,13 +85,24 @@ export default class WalkAdminService<T> extends BaseService<T> {
 
     return this.request({ url, method, data }, options);
   }
-
   /** 绑定签到码 */
-  BindTeamCode(
-    req: AdminAPI.BindTeamCodeRequest,
+  BindCheckinCode(
+    req: AdminAPI.BindCheckinCodeRequest,
     options?: T
-  ): Promise<AdminAPI.BindTeamCodeResponse> {
+  ): Promise<AdminAPI.BindCheckinCodeResponse> {
     const url = this.genBaseURL("/admin/team/bind");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 打卡(指团队到了某个点位后打卡表示已经过) */
+  CheckinTeam(
+    req: AdminAPI.CheckinTeamRequest,
+    options?: T
+  ): Promise<AdminAPI.CheckinTeamResponse> {
+    const url = this.genBaseURL("/admin/team/update");
     const method = "POST";
     const data = req;
 

@@ -12,16 +12,23 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ErrorEmpty: typeof import('./../src/components/error-empty/index.vue')['default']
+    IMdiClose: typeof import('~icons/mdi/close')['default']
+    IMdiImage: typeof import('~icons/mdi/image')['default']
     LoadingContainer: typeof import('./../src/components/loading-container/index.vue')['default']
+    LoginModal: typeof import('./../src/components/login-modal/index.vue')['default']
+    QrScanPreview: typeof import('./../src/components/qr-scan-preview/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TeamIdInputModal: typeof import('./../src/components/team-id-input-modal/index.vue')['default']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
     VanButton: typeof import('vant/es')['Button']
     VanCell: typeof import('vant/es')['Cell']
     VanCellGroup: typeof import('vant/es')['CellGroup']
     VanConfigProvider: typeof import('vant/es')['ConfigProvider']
+    VanField: typeof import('vant/es')['Field']
     VanLoading: typeof import('vant/es')['Loading']
     VanNavBar: typeof import('vant/es')['NavBar']
     VanOverlay: typeof import('vant/es')['Overlay']
+    VanPopup: typeof import('vant/es')['Popup']
   }
 }

@@ -21,12 +21,12 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     }
   },
   {
-    path: "/team-manage/:id",
-    name: "team-manage",
-    component: () => import("@/pages/team-manage/index.vue"),
+    path: "/team/:id",
+    name: "team",
+    component: () => import("@/pages/team-info/index.vue"),
     props: true,
     meta: {
-      pageName: "团队信息管理"
+      pageName: "团队信息"
     }
   }
 ];

@@ -1,0 +1,45 @@
+.team-id-input-modal {
+  width: min(88vw, 320px);
+}
+
+.team-id-input-modal__content {
+  padding: 20px;
+}
+
+.team-id-input-modal__title {
+  margin: 0 0 10px 0;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--van-text-color);
+}
+
+.team-id-input-modal__desc {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--van-text-color-2);
+}
+
+.team-id-input-modal__field {
+  margin-top: 4px;
+}
+
+.team-id-input-modal__error {
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--van-danger-color);
+}
+
+.team-id-input-modal__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+  .team-id-input-modal__button {
+    height: 40px;
+    border-radius: 8px;
+  }
+}

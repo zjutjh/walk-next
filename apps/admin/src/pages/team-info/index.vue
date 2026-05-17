@@ -106,18 +106,15 @@ const fetchTeamData = async () => {
 
   try {
     // eslint-disable-next-line camelcase
-    const res = await walkAdminService.QueryTeamStatus({ team_id: currentTeamId.value });
-    if (res.team) {
-      teamRoute.value = res.team.route_name;
-      prevPoint.value = res.team.prev_point_name;
-    }
-    if (res.member) {
-      memberList.value = res.member.map((m) => ({
-        id: m.user_id,
-        name: m.name,
-        status: (m.walk_status || "notStart") as MemberStatus
-      }));
-    }
+    const res = await walkAdminService.GetTeamStatus({ team_id: currentTeamId.value });
+    teamRoute.value = res.team.route_name;
+    prevPoint.value = res.team.prev_point_name;
+
+    memberList.value = res.members.map((m) => ({
+      id: m.user_id,
+      name: m.name,
+      status: "notStart"
+    }));
   } catch (error) {
     console.error("获取团队状态失败", error);
   }
@@ -176,7 +173,7 @@ const handleBindTeam = async () => {
   }
 
   try {
-    await walkAdminService.BindTeamCode({
+    await walkAdminService.BindCheckinCode({
       // eslint-disable-next-line camelcase
       team_id: currentTeamId.value,
       content: "TEST_CODE_123"
