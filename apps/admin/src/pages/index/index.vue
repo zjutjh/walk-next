@@ -1,7 +1,9 @@
 <template>
   <default-layout title="精弘毅行管理后台" :show-back="false">
-    <admin-info />
-    <admin-info :admin-name="authStore.adminName" :walk-point="authStore.pointText" />
+    <admin-info
+      :admin-name="authStore.adminName || '-'"
+      :walk-point="POINT_CONFIG[authStore.pointId]?.text ?? '-'"
+    />
     <section :class="styles.main">
       <van-cell-group title="签到">
         <van-cell title="扫码签到" is-link @click="handleScanClick" />
@@ -60,15 +62,16 @@ import LoginModal from "@/components/login-modal/index.vue";
 import QrScanPreview from "@/components/qr-scan-preview/index.vue";
 import TeamIdInputModal from "@/components/team-id-input-modal/index.vue";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { useAdminAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/auth";
 import { walkAdminService } from "@/utils";
+import { POINT_CONFIG } from "@/walk-config";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
 import { createCheckinHandlers } from "./utils";
 
 const router = useRouter();
-const authStore = useAdminAuthStore();
+const authStore = useAuthStore();
 
 const isLoginModalVisible = ref(!authStore.isLoggedIn);
 
@@ -90,7 +93,7 @@ const handleManualInputClick = () => {
 
 const { handleScanSuccess, handleScanError, handleTeamIdSubmit } = createCheckinHandlers({
   router,
-  getAuthPoint: () => authStore.point,
+  getAuthPoint: () => authStore.pointId,
   isProcessing,
   requestScan
 });
@@ -98,7 +101,7 @@ const { handleScanSuccess, handleScanError, handleTeamIdSubmit } = createCheckin
 const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   mutationFn: () => walkAdminService.Logout(undefined),
   onSuccess: () => {
-    authStore.clearAuth();
+    authStore.reset();
     isScanPopupVisible.value = false;
     isTeamIdModalVisible.value = false;
     isLoginModalVisible.value = true;
@@ -124,7 +127,11 @@ const handleLogout = async () => {
 };
 
 const handleLoginSuccess = (data: AdminAPI.AuthResponse) => {
-  authStore.saveLogin(data);
+  // 保存身份信息
+  authStore.adminName = data.name;
+  authStore.pointId = data.point_name;
+  authStore.isLoggedIn = true;
+  // 关闭登录弹窗
   isLoginModalVisible.value = false;
 };
 </script>

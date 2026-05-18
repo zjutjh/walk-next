@@ -24,3 +24,6 @@ export type MemberStatus =
   | "withdrawn"
   | "violated"
   | "completed";
+
+/** 用户权限等级 */
+export type PermissionLevel = "external" | "internal" | "manager" | "super";
