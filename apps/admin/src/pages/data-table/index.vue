@@ -73,7 +73,7 @@
               :disabled="isRouteStatsFetching"
               @refresh="handleRouteStatsRefresh"
             >
-              <div :class="styles.dataContainer">
+              <div :key="urlQuery.tab" :class="styles.dataContainer">
                 <!-- 经过点位人数 -->
                 <van-cell-group inset title="经过点位人数">
                   <van-cell
