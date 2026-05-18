@@ -3,7 +3,7 @@
   <van-notice-bar :class="styles.component" mode="closeable">
     <ic-outline-info :class="styles.icon" />
     <div :class="styles.tip">数据获取失败，请下拉重试</div>
-    <div :class="styles.updateTime">
+    <div v-if="props.dataUpdatedAt > 0" :class="styles.updateTime">
       上次更新于{{ dayjs(props.dataUpdatedAt).format("HH:mm:ss") }}
     </div>
   </van-notice-bar>
