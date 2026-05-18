@@ -4,9 +4,9 @@ import type { WalkerStatsMetric } from "api/types/admin";
 export const WALKER_STATS_METRIC_TEXT = {
   total_reg: "总报名",
   not_present: "未到场",
-  undeparted: "待出发",
+  pending: "待出发",
   started: "已出发",
-  walking: "进行中",
+  in_progress: "进行中",
   finished: "已结束",
   withdrawn: "下撤",
   wrong_route: "走错路线"

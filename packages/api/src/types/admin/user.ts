@@ -19,9 +19,9 @@ export type UserTypeExample = "admin" | "sudo";
 export type WalkerStatsMetric =
   | "total_reg"
   | "not_present"
-  | "undeparted"
+  | "pending"
   | "started"
-  | "walking"
+  | "in_progress"
   | "finished"
   | "withdrawn"
   | "wrong_route";

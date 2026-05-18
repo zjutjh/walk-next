@@ -13,7 +13,7 @@ export interface RouteOverviewStat {
   /** 未到场人数 */
   not_present: number;
   /** 待出发人数 */
-  undeparted: number;
+  pending: number;
   /** 已出发人数 */
   started: number;
   /** 已结束人数（无论是否违规） */
@@ -31,7 +31,7 @@ export interface RouteStat {
   /** 未到场人数 */
   not_present: number;
   /** 待出发人数 */
-  undeparted: number;
+  pending: number;
   /** 已出发人数 */
   started: number;
   /** 已结束人数（无论是否违规） */
