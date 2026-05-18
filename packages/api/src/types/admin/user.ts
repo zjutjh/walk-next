@@ -24,6 +24,4 @@ export type WalkerStatsMetric =
   | "walking"
   | "finished"
   | "withdrawn"
-  | "wrong_route"
-  | "withdrawn"
   | "wrong_route";

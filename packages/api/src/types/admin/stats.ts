@@ -45,7 +45,7 @@ export interface RouteStat {
 /** 点位统计数据 */
 export interface PointStat {
   /** 点位代号 */
-  point_name: number;
+  point_name: string;
   /** 经过该点位的总人数 */
   passed_count: number;
 }
