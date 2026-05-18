@@ -7,6 +7,8 @@ export const ADMIN_QUERY_KEY = {
   /** 统计数据相关 */
   STATS: {
     /** 总览 */
-    OVERVIEW: "overviewStats"
+    OVERVIEW: "overviewStats",
+    /** 单路线 */
+    ROUTE: "routeStats"
   }
 } as const;

@@ -187,7 +187,7 @@ const {
   enabled: () => urlQuery.value.tab !== OVERVIEW_TAB_NAME,
   staleTime: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
   refetchInterval: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
-  queryKey: ["routeStats", toRef(() => urlQuery.value.tab)] as const,
+  queryKey: [ADMIN_QUERY_KEY.STATS.ROUTE, toRef(() => urlQuery.value.tab)] as const,
   queryFn: ({ queryKey }) => walkAdminService.QueryRouteStats({ name: queryKey[1] })
 });
 
