@@ -33,7 +33,7 @@
                   inset
                 >
                   <van-cell
-                    v-for="key in overviewStatsKeyList"
+                    v-for="key in OVERVIEW_STATS_KEY_LIST"
                     :key="key"
                     :title="WALKER_STATS_METRIC_TEXT[key]"
                     :value="routeData.stats[key] ?? '-'"
@@ -97,7 +97,7 @@
                 <!-- 路段统计指标 -->
                 <van-cell-group inset title="状态">
                   <van-cell
-                    v-for="key in routeStatsKeyList"
+                    v-for="key in ROUTE_STATS_KEY_LIST"
                     :key="key"
                     :title="WALKER_STATS_METRIC_TEXT[key]"
                     :value="routeStatsData.status_stats[key] ?? '-'"
@@ -114,7 +114,6 @@
 
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
-import type { RouteOverviewStat, RouteStat } from "api/types/admin";
 import { isEmpty, isNil, last } from "lodash-es";
 import { computed, ref, toRef, watch } from "vue";
 
@@ -134,7 +133,7 @@ import {
 } from "@/walk-config";
 
 import ErrorTip from "./components/error-tip/index.vue";
-import { OVERVIEW_TAB_NAME } from "./constants";
+import { OVERVIEW_STATS_KEY_LIST, OVERVIEW_TAB_NAME, ROUTE_STATS_KEY_LIST } from "./constants";
 import styles from "./index.module.scss";
 import type { DataTableUrlQuery } from "./types";
 
@@ -176,17 +175,6 @@ const handleOverviewStatsRefresh = () => {
   refetchOverviewStats();
 };
 
-/** 总览统计数据字段列表 */
-const overviewStatsKeyList: (keyof RouteOverviewStat)[] | never = [
-  "total_reg",
-  "not_present",
-  "pending",
-  "in_progress",
-  "finished",
-  "wrong_route",
-  "withdrawn"
-];
-
 // 获取路线统计数据
 const {
   data: routeStatsData,
@@ -217,15 +205,6 @@ const handleRouteStatsRefresh = () => {
 
   refetchRouteStats();
 };
-
-/** 路线统计数据字段列表 */
-const routeStatsKeyList: (keyof RouteStat)[] = [
-  "total_reg",
-  "not_present",
-  "in_progress",
-  "wrong_route",
-  "withdrawn"
-];
 
 /** 行程段统计数据 */
 const segmentStats = computed(() => {
