@@ -14,8 +14,8 @@ export interface RouteOverviewStat {
   not_present: number;
   /** 待出发人数 */
   pending: number;
-  /** 已出发人数 */
-  started: number;
+  /** 进行中人数 */
+  in_progress: number;
   /** 已结束人数（无论是否违规） */
   finished: number;
   /** 下撤人数 */
@@ -30,12 +30,8 @@ export interface RouteStat {
   total_reg: number;
   /** 未到场人数 */
   not_present: number;
-  /** 待出发人数 */
-  pending: number;
-  /** 已出发人数 */
-  started: number;
-  /** 已结束人数（无论是否违规） */
-  finished: number;
+  /** 进行中人数 */
+  in_progress: number;
   /** 下撤人数 */
   withdrawn: number;
   /** 走错路线人数（走到另一条线路的人数） */

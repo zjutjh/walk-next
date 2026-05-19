@@ -33,10 +33,10 @@
                   inset
                 >
                   <van-cell
-                    v-for="(value, key) in routeData.stats"
+                    v-for="key in overviewStatsKeyList"
                     :key="key"
                     :title="WALKER_STATS_METRIC_TEXT[key]"
-                    :value="value ?? '-'"
+                    :value="routeData.stats[key] ?? '-'"
                   />
                 </van-cell-group>
               </div>
@@ -97,10 +97,10 @@
                 <!-- 路段统计指标 -->
                 <van-cell-group inset title="状态">
                   <van-cell
-                    v-for="(value, key) in routeStatsData?.status_stats"
+                    v-for="key in routeStatsKeyList"
                     :key="key"
                     :title="WALKER_STATS_METRIC_TEXT[key]"
-                    :value="value ?? '-'"
+                    :value="routeStatsData.status_stats[key] ?? '-'"
                   />
                 </van-cell-group>
               </div>
@@ -114,6 +114,7 @@
 
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
+import type { RouteOverviewStat, RouteStat } from "api/types/admin";
 import { isEmpty, isNil, last } from "lodash-es";
 import { computed, ref, toRef, watch } from "vue";
 
@@ -175,6 +176,17 @@ const handleOverviewStatsRefresh = () => {
   refetchOverviewStats();
 };
 
+/** 总览统计数据字段列表 */
+const overviewStatsKeyList: (keyof RouteOverviewStat)[] | never = [
+  "total_reg",
+  "not_present",
+  "pending",
+  "in_progress",
+  "finished",
+  "wrong_route",
+  "withdrawn"
+];
+
 // 获取路线统计数据
 const {
   data: routeStatsData,
@@ -205,6 +217,15 @@ const handleRouteStatsRefresh = () => {
 
   refetchRouteStats();
 };
+
+/** 路线统计数据字段列表 */
+const routeStatsKeyList: (keyof RouteStat)[] = [
+  "total_reg",
+  "not_present",
+  "in_progress",
+  "wrong_route",
+  "withdrawn"
+];
 
 /** 行程段统计数据 */
 const segmentStats = computed(() => {
