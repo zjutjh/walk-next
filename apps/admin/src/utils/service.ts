@@ -2,9 +2,7 @@ import WalkAdminService from "api/services/admin";
 import { SERVICE_TIMEOUT } from "api/utils";
 import { type CommonRespWrap, type ServiceOptions } from "api/utils";
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
-import { RequestError } from "shared";
-
-import { RESP_CODE } from "@/constants";
+import { RequestError, RESP_CODE } from "shared";
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 
