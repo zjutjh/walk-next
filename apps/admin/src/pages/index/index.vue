@@ -1,5 +1,5 @@
 <template>
-  <default-layout title="精弘毅行管理后台" :show-back="false">
+  <default-layout :show-back="false">
     <admin-info
       :admin-name="authStore.adminName || '-'"
       :walk-point="POINT_CONFIG[authStore.pointId]?.text ?? '-'"
@@ -13,7 +13,7 @@
       <van-cell-group title="数据大盘">
         <van-cell title="屏峰可视化地图" is-link />
         <van-cell title="莫干山可视化地图" is-link />
-        <van-cell title="数据表格" is-link />
+        <van-cell title="数据表格" is-link to="/data-table" />
       </van-cell-group>
 
       <van-cell-group title="人员管理">
@@ -38,6 +38,16 @@
         </van-button>
       </div>
     </section>
+
+    <qr-scan-preview
+      v-model:show="isScanPopupVisible"
+      @success="handleScanSuccess"
+      @error="handleScanError"
+    />
+
+    <team-id-input-modal v-model:show="isTeamIdModalVisible" @submit="handleTeamIdSubmit" />
+
+    <login-modal v-model:show="isLoginModalVisible" @success="handleLoginSuccess" />
 
     <qr-scan-preview
       v-model:show="isScanPopupVisible"

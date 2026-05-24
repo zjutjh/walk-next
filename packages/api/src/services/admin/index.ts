@@ -62,6 +62,30 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, params }, options);
   }
 
+  /** 获取所有路线的总览统计数据 */
+  QueryOverviewStats(
+    req: AdminAPI.QueryOverviewStatsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryOverviewStatsResponse> {
+    const url = this.genBaseURL("/dashboard/stats/route/all");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取路线统计数据 */
+  QueryRouteStats(
+    req: AdminAPI.QueryRouteStatsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryRouteStatsResponse> {
+    const url = this.genBaseURL("/dashboard/stats/route");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
   /** 获取团队状态 */
   GetTeamStatus(
     req: AdminAPI.GetTeamStatusRequest,
@@ -85,6 +109,7 @@ export default class WalkAdminService<T> extends BaseService<T> {
 
     return this.request({ url, method, data }, options);
   }
+
   /** 绑定签到码 */
   BindCheckinCode(
     req: AdminAPI.BindCheckinCodeRequest,
