@@ -1,4 +1,5 @@
 import type { QrCodeType } from "./qr-code";
+import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
 import type { TeamMemberWalkStatus, TeamWalkStatus } from "./team";
 import type {
   UserCampusExample,
@@ -68,6 +69,29 @@ export interface QueryProfileExampleResponse {
   gender: UserGenderExample;
   /** 联系方式 */
   contact: UserContactExample;
+}
+
+/** 获取所有路线统计数据 请求 */
+export type QueryOverviewStatsRequest = undefined;
+
+/** 获取所有路线统计数据 返回 */
+export interface QueryOverviewStatsResponse {
+  /** 路线统计列表 */
+  routes: OverviewStatsRouteData[];
+}
+
+/** 获取路线统计数据 请求 */
+export interface QueryRouteStatsRequest {
+  /** 路线代号 */
+  name: string;
+}
+
+/** 获取路线统计数据 返回 */
+export interface QueryRouteStatsResponse {
+  /** 路线统计数据 */
+  status_stats: RouteStat;
+  /** 路线统计数据（包含所有点位） */
+  point_stats: PointStat[];
 }
 
 /** 获取团队状态请求参数 */

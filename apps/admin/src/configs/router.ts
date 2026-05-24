@@ -21,6 +21,14 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     }
   },
   {
+    path: "/data-table",
+    name: "DataTable",
+    component: () => import("@/pages/data-table/index.vue"),
+    meta: {
+      pageName: "数据统计表格"
+    }
+  },
+  {
     path: "/team-list/:campusId",
     name: "team-list",
     component: () => import("@/pages/team-list/index.vue"),
