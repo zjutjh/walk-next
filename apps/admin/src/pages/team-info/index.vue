@@ -19,7 +19,7 @@
                 <van-tag
                   :class="styles.cellValueTag"
                   :show="teamInfoData.team.is_wrong_route"
-                  type="danger"
+                  type="warning"
                   size="large"
                   >走错</van-tag
                 >
