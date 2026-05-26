@@ -14,5 +14,6 @@
     background: var(--jh-walk-loading-container-overlay-background, #ffffff);
     opacity: 75%;
     transition: opacity 0.3s;
+    z-index: 1000;
   }
 }
