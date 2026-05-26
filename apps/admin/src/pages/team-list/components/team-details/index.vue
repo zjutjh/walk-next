@@ -87,11 +87,7 @@
               </template>
 
               <!-- 前往修改成员状态 -->
-              <van-cell
-                :to="`/team-manage/${detailsData.team_id}`"
-                title="修改团队成员状态"
-                is-link
-              />
+              <van-cell :to="`/team/${detailsData.team_id}`" title="修改团队成员状态" is-link />
             </van-cell-group>
           </div>
         </van-pull-refresh>
