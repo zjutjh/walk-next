@@ -4,11 +4,11 @@ export const ADMIN_QUERY_KEY = {
     /** 用户信息（示例） */
     INFO: "userInfo"
   },
-  /** 队伍相关 */
+  /** 团队相关 */
   TEAM: {
-    /** 队伍列表 */
+    /** 团队列表 */
     LIST: "teamList",
-    /** 队伍详情 */
+    /** 团队详情 */
     DETAILS: "teamDetails"
   }
 } as const;

@@ -15,7 +15,7 @@
         />
         <van-grid-item
           :class="styles.gridBtn"
-          text="路段队伍列表"
+          text="路段团队列表"
           icon="filter-o"
           @click="props.openSegmentFilter"
         />

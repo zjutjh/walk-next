@@ -20,18 +20,18 @@
           :class="styles.teamInfoWrapper"
           inset
         >
-          <van-cell title="队伍ID">
+          <van-cell title="团队ID">
             {{ team.team_id }}
             <van-tag :show="team.is_lost" type="danger" size="large">失联</van-tag>
           </van-cell>
           <van-cell title="队长姓名">{{ team.captain_name }}</van-cell>
           <van-cell title="队长联系电话">{{ team.captain_phone }}</van-cell>
-          <van-cell title="队伍路线">{{ ROUTE_CONFIG[team.route_name]?.text }}</van-cell>
+          <van-cell title="团队路线">{{ ROUTE_CONFIG[team.route_name]?.text }}</van-cell>
           <van-cell title="最新经过点位">{{ POINT_CONFIG[team.prev_point_name]?.text }}</van-cell>
           <van-cell title="经过点位时间">{{
             dayjs(team.prev_point_time).format("YYYY/MM/DD HH:mm")
           }}</van-cell>
-          <van-cell title="查看队伍详细信息" is-link @click="handleViewTeamDetails(team.team_id)" />
+          <van-cell title="查看团队详细信息" is-link @click="handleViewTeamDetails(team.team_id)" />
         </van-cell-group>
       </template>
 
@@ -121,7 +121,7 @@ const finishedTipText = computed(() => {
   if (teamListData.value?.pages.length && teamListData.value.pages[0]?.teams.length !== 0) {
     return "没有更多啦";
   }
-  return "暂无符合条件的队伍";
+  return "暂无符合条件的团队";
 });
 
 /** 刷新 */
@@ -142,7 +142,7 @@ const handleErrorRefetch = () => {
   fetchNextPage();
 };
 
-/** 查看队伍详情 */
+/** 查看团队详情 */
 const handleViewTeamDetails = (teamId: number) => {
   urlQuery.value.viewingTeam = teamId;
 };

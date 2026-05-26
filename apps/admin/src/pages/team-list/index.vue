@@ -1,6 +1,6 @@
-<!-- 搜索队伍页 -->
+<!-- 搜索团队页 -->
 <template>
-  <default-layout :title="`${CAMPUS_CONFIG[props.campusId].text}搜索队伍`">
+  <default-layout :title="`${CAMPUS_CONFIG[props.campusId].text}搜索团队`">
     <template #header>
       <search-bar ref="searchBarRef" v-model:url-query="urlQuery" />
       <filter-bar ref="filterBarRef" v-model:url-query="urlQuery" :campus-id="props.campusId" />

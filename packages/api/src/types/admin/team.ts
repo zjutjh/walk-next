@@ -1,9 +1,9 @@
 /** 搜索类型 */
 export type SearchType = "team_id" | "captain_phone" | "captain_name";
 
-/** 队伍信息摘要 */
+/** 团队信息摘要 */
 export interface TeamsTeamBriefInfo {
-  /** 队伍ID */
+  /** 团队ID */
   team_id: number;
   /** 是否被标记为失联 */
   is_lost: boolean;

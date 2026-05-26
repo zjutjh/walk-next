@@ -1,7 +1,7 @@
 import type { SearchType } from "api/types/admin";
 import type { DropdownItemOption } from "vant";
 
-/** 毅行队伍的搜索类型 */
+/** 毅行团队的搜索类型 */
 export const TEAM_SEARCH_TYPE = {
   captain_phone: {
     text: "队长联系电话",
@@ -14,7 +14,7 @@ export const TEAM_SEARCH_TYPE = {
     icon: "contact-o"
   },
   team_id: {
-    text: "队伍ID",
+    text: "团队ID",
     abbr: "ID",
     icon: "flag-o"
   }
@@ -33,7 +33,7 @@ export const TEAM_SEARCH_TYPE = {
 interface TeamSearchTypeOption extends DropdownItemOption {
   value: SearchType;
 }
-/** 毅行队伍的搜索类型 DropdownItem Options */
+/** 毅行团队的搜索类型 DropdownItem Options */
 export const TEAM_SEARCH_TYPE_OPTIONS = (Object.keys(TEAM_SEARCH_TYPE) as SearchType[]).map(
   (key) => ({
     value: key,

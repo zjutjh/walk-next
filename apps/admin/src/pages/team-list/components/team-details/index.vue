@@ -1,4 +1,4 @@
-<!-- 队伍详情浮窗 -->
+<!-- 团队详情浮窗 -->
 <template>
   <van-popup
     :class="styles.component"
@@ -13,7 +13,7 @@
       <span v-if="isError && !isFetching" :class="styles.errorTip"
         ><ic-baseline-error-outline :class="styles.errorIcon" />查询失败，请重试</span
       >
-      <template v-else>队伍详细信息</template>
+      <template v-else>团队详细信息</template>
     </div>
 
     <loading-container
@@ -29,10 +29,10 @@
           @refresh="handlePullRefresh"
         >
           <div :class="styles.details">
-            <!-- 队伍总体信息 -->
+            <!-- 团队总体信息 -->
             <van-cell-group :class="styles.cellGroup" inset>
-              <van-cell title="队伍ID">{{ detailsData.team_id }}</van-cell>
-              <van-cell title="队伍路线">{{ ROUTE_CONFIG[detailsData.route_name]?.text }}</van-cell>
+              <van-cell title="团队ID">{{ detailsData.team_id }}</van-cell>
+              <van-cell title="团队路线">{{ ROUTE_CONFIG[detailsData.route_name]?.text }}</van-cell>
               <van-cell title="最新经过点位">{{
                 POINT_CONFIG[detailsData.prev_point_name]?.text
               }}</van-cell>
@@ -53,7 +53,7 @@
               </van-cell>
             </van-cell-group>
 
-            <!-- 队伍成员信息 -->
+            <!-- 团队成员信息 -->
             <van-cell-group :class="styles.cellGroup" inset>
               <!-- 特殊成员信息 -->
               <template
@@ -89,7 +89,7 @@
               <!-- 前往修改成员状态 -->
               <van-cell
                 :to="`/team-manage/${detailsData.team_id}`"
-                title="修改队伍成员状态"
+                title="修改团队成员状态"
                 is-link
               />
             </van-cell-group>
@@ -118,17 +118,17 @@ import IcBaselineErrorOutline from "~icons/ic/baseline-error-outline";
 import type { TeamListUrlQuery } from "../../types";
 import styles from "./index.module.scss";
 
-/** URL Query 正在查看详情的队伍的ID */
+/** URL Query 正在查看详情的团队的ID */
 const viewingTeamId = defineModel<TeamListUrlQuery["viewingTeam"]>("teamId", { required: true });
 
 const queryClient = useQueryClient();
 
-/** 关闭队伍详情浮层 */
+/** 关闭团队详情浮层 */
 const handleClose = () => {
   viewingTeamId.value = "";
 };
 
-// 获取队伍详情
+// 获取团队详情
 const {
   data: detailsData,
   isRefetching,
@@ -155,7 +155,7 @@ const normalMemberList = computed(() =>
   detailsData.value ? detailsData.value.members.filter((member) => member.role === "member") : []
 );
 
-// 设置队伍失联状态
+// 设置团队失联状态
 const { mutate: mutateLost, isPending } = useMutation({
   mutationFn: (targetValue: boolean) =>
     walkAdminService.SetTeamLost({
@@ -177,7 +177,7 @@ const { mutate: mutateLost, isPending } = useMutation({
     );
   },
   onSettled: () => {
-    // 刷新队伍详情
+    // 刷新团队详情
     refetchTeamDetails();
   }
 });
@@ -194,7 +194,7 @@ watch(isRefetching, (newValue) => {
   if (newValue === false) isPullRefreshing.value = false;
 });
 
-/** 下拉刷新队伍详情 */
+/** 下拉刷新团队详情 */
 const handlePullRefresh = () => {
   // 展示下拉刷新态
   isPullRefreshing.value = true;

@@ -18,7 +18,7 @@
       </van-cell-group>
 
       <van-cell-group title="人员管理">
-        <van-cell title="重组队伍" is-link to="/team-rebuild" />
+        <van-cell title="重组团队" is-link to="/team-rebuild" />
         <div :class="styles.functionButtonContainer">
           <van-button type="primary" :class="styles.functionButton" block>
             待出发→进行中

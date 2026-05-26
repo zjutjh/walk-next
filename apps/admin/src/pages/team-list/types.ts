@@ -2,7 +2,7 @@ import type { SearchType } from "api/types/admin";
 
 import type { SegmentKey } from "@/walk-config";
 
-/** 搜索队伍页的URL Query */
+/** 搜索团队页的URL Query */
 export interface TeamListUrlQuery {
   /** 搜索词 */
   keyword: string;
@@ -10,6 +10,6 @@ export interface TeamListUrlQuery {
   searchType: SearchType;
   /** 行程段筛选 */
   segment: SegmentKey | "";
-  /** 正在查看详情的队伍的ID */
+  /** 正在查看详情的团队的ID */
   viewingTeam: number | "";
 }

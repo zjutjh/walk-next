@@ -1,4 +1,4 @@
-<!-- 队伍搜索栏 -->
+<!-- 团队搜索栏 -->
 <template>
   <van-search
     ref="searchRef"

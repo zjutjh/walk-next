@@ -48,7 +48,7 @@ export interface QueryProfileExampleResponse {
   contact: UserContactExample;
 }
 
-/** 搜索筛选队伍列表 请求 */
+/** 搜索筛选团队列表 请求 */
 export interface QueryTeamListRequest {
   /** 校区ID */
   campus: string;
@@ -66,25 +66,25 @@ export interface QueryTeamListRequest {
   limit: number;
 }
 
-/** 搜索筛选队伍列表 响应 */
+/** 搜索筛选团队列表 响应 */
 export interface QueryTeamListResponse {
-  /** 队伍信息摘要列表 */
+  /** 团队信息摘要列表 */
   teams: TeamsTeamBriefInfo[];
   /** 无限滚动下一页游标，0表示无更多数据 */
   next_cursor: number;
-  /** 满足要求的队伍总数 */
+  /** 满足要求的团队总数 */
   total_count: number;
 }
 
-/** 获取队伍详情 请求 */
+/** 获取团队详情 请求 */
 export interface QueryTeamDetailsRequest {
-  /** 队伍ID */
+  /** 团队ID */
   team_id: number;
 }
 
-/** 获取队伍详情 响应 */
+/** 获取团队详情 响应 */
 export interface QueryTeamDetailsResponse {
-  /** 队伍ID */
+  /** 团队ID */
   team_id: number;
   /** 是否被标记为失联 */
   is_lost: boolean;
@@ -98,15 +98,15 @@ export interface QueryTeamDetailsResponse {
   members: TeamsMemberInfo[];
 }
 
-/** 设置队伍失联状态 请求 */
+/** 设置团队失联状态 请求 */
 export interface SetTeamLostRequest {
-  /** 队伍ID */
+  /** 团队ID */
   team_id: number;
   /** 是否标记为失联 */
   is_lost: boolean;
 }
 
-/** 设置队伍失联状态 响应 */
+/** 设置团队失联状态 响应 */
 export type SetTeamLostResponse = null;
 /** 绑定签到码请求参数 */
 export interface BindCheckinCodeRequest {
@@ -129,6 +129,6 @@ export interface CheckinTeamRequest {
 
 /** 打卡(指团队到了某个点位后打卡表示已经过)响应数据 */
 export interface CheckinTeamResponse {
-  /** 队伍编号 */
+  /** 团队编号 */
   team_id: number;
 }
