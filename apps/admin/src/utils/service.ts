@@ -4,14 +4,20 @@ import { type CommonRespWrap, type ServiceOptions } from "api/utils";
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import { RequestError, RESP_CODE } from "shared";
 
+import { useAuthStore } from "@/stores/auth";
+
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 
 axiosInstance.interceptors.response.use(
   (response) => {
     const body: CommonRespWrap<unknown> = response.data;
+
     if (body.code !== RESP_CODE.OK) {
       switch (body.code) {
-        // TODO:请求错误全局处理
+        // 未登录
+        case RESP_CODE.NOT_LOGGED_IN:
+          useAuthStore().reset();
+          break;
         default:
       }
       throw new RequestError(body.message, body.code);

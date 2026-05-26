@@ -47,8 +47,6 @@
 
     <team-id-input-modal v-model:show="isTeamIdModalVisible" @submit="handleTeamIdSubmit" />
 
-    <login-modal v-model:show="isLoginModalVisible" @success="handleLoginSuccess" />
-
     <qr-scan-preview
       v-model:show="isScanPopupVisible"
       @success="handleScanSuccess"
@@ -56,8 +54,6 @@
     />
 
     <team-id-input-modal v-model:show="isTeamIdModalVisible" @submit="handleTeamIdSubmit" />
-
-    <login-modal v-model:show="isLoginModalVisible" @success="handleLoginSuccess" />
   </default-layout>
 </template>
 
@@ -68,7 +64,6 @@ import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-import LoginModal from "@/components/login-modal/index.vue";
 import QrScanPreview from "@/components/qr-scan-preview/index.vue";
 import TeamIdInputModal from "@/components/team-id-input-modal/index.vue";
 import type { QrCodeData } from "@/composables/use-qr-scanner";
@@ -82,8 +77,6 @@ import styles from "./index.module.scss";
 
 const router = useRouter();
 const authStore = useAuthStore();
-
-const isLoginModalVisible = ref(!authStore.isLoggedIn);
 
 const isScanPopupVisible = ref(false);
 const isTeamIdModalVisible = ref(false);
@@ -105,7 +98,6 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
     authStore.reset();
     isScanPopupVisible.value = false;
     isTeamIdModalVisible.value = false;
-    isLoginModalVisible.value = true;
     showSuccessToast("登出成功");
   },
   onError: (err: Error) => {
@@ -151,14 +143,5 @@ const handleLogout = async () => {
     return;
   }
   mutateLogout();
-};
-
-const handleLoginSuccess = (data: AdminAPI.AuthResponse) => {
-  // 保存身份信息
-  authStore.adminName = data.name;
-  authStore.pointId = data.point_name;
-  authStore.isLoggedIn = true;
-  // 关闭登录弹窗
-  isLoginModalVisible.value = false;
 };
 </script>
