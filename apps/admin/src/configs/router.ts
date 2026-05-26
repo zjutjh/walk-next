@@ -17,7 +17,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "team-rebuild",
     component: () => import("@/pages/team-rebuild/index.vue"),
     meta: {
-      pageName: "重组队伍"
+      pageName: "重组团队"
     }
   },
   {

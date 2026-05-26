@@ -3,9 +3,9 @@
   <div :class="styles.component">
     <div :class="styles.header">
       <div :class="styles.title">路段详情</div>
-      <!-- 查看行程段队伍列表链接 -->
+      <!-- 查看行程段团队列表链接 -->
       <div class="van-haptics-feedback" :class="styles.teamListLink" @click="handleViewTeamList">
-        查看路段队伍列表&nbsp;>
+        查看路段团队列表&nbsp;>
       </div>
     </div>
     <div :class="styles.content">
@@ -117,7 +117,7 @@ const handleRefresh = () => {
   refetch();
 };
 
-/** 查看行程段队伍列表 */
+/** 查看行程段团队列表 */
 const handleViewTeamList = () => {
   router.push({ path: `/team-list/${props.campusId}`, query: { segment: chosenSegmentKey.value } });
 };
