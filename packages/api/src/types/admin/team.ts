@@ -1,22 +1,20 @@
-export const TEAM_WALK_STATUS = {
-  NotStart: "notStart",
-  InProgress: "inProgress",
-  Completed: "completed",
-  Withdrawn: "withdrawn"
-} as const;
+/** 团队状态 */
+export type TeamWalkStatus = "not_start" | "in_progress" | "completed" | "withdrawn";
 
-export type TeamWalkStatus = (typeof TEAM_WALK_STATUS)[keyof typeof TEAM_WALK_STATUS];
-
-export const TEAM_MEMBER_WALK_STATUS = {
-  NotStart: "notStart",
-  /** 等待绑定签到码 */
-  Pending: "pending",
-  Abandoned: "abandoned",
-  InProgress: "inProgress",
-  Withdrawn: "withdrawn",
-  Violated: "violated",
-  Completed: "completed"
-} as const;
-
-export type TeamMemberWalkStatus =
-  (typeof TEAM_MEMBER_WALK_STATUS)[keyof typeof TEAM_MEMBER_WALK_STATUS];
+/** 团队状态信息 */
+export interface TeamStatusInfo {
+  /** 队名 */
+  name: string;
+  /** 上次打卡的点位ID */
+  prev_point_name: string;
+  /** 路线ID */
+  route_name: string;
+  /** 队伍状态 */
+  status: TeamWalkStatus;
+  /** 是否走错路线 */
+  is_wrong_route: boolean;
+  /** 上次打卡点位是否异常 */
+  is_prev_point_invalid: boolean;
+  /** 是否在最近一次打卡时进入错误路线 */
+  is_just_enter_wrong_route: boolean;
+}

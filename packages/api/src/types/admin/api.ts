@@ -1,12 +1,13 @@
 import type { QrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
-import type { TeamMemberWalkStatus, TeamWalkStatus } from "./team";
+import type { TeamStatusInfo } from "./team";
 import type {
   UserCampusExample,
   UserContactExample,
   UserGenderExample,
   UserTypeExample
 } from "./user";
+import { TeamStatusWalkerInfo } from "./walker";
 
 // 为什么要写 /** */？ ---> https://www.jsdoc.com.cn/
 /** 登录 请求（示例） */
@@ -71,48 +72,6 @@ export interface QueryProfileExampleResponse {
   contact: UserContactExample;
 }
 
-/** 获取团队状态 请求 */
-export interface QueryTeamStatusRequest {
-  /** 团队ID */
-  team_id: number;
-}
-
-/** 获取团队状态 返回 */
-export interface QueryTeamStatusResponse {
-  member?: {
-    name: string;
-    type: string;
-    user_id: number;
-    walk_status: string;
-  }[];
-  team?: {
-    name: string;
-    prev_point_name: string;
-    route_name: string;
-  };
-}
-
-/** 更改人员状态 请求 */
-export interface UpdateUserStatusRequest {
-  /** 未开始notStart, 待出发pending, 已放弃abandoned, 进行中inProgress */
-  walk_status: string;
-  /** 用户编号 */
-  user_id: number;
-}
-
-/** 更改人员状态 返回 */
-export interface UpdateUserStatusResponse {
-  team_id: number;
-}
-
-/** 绑定签到码 请求 */
-export interface BindTeamCodeRequest {
-  /** 签到码 */
-  content: string;
-  /** 团队编号 */
-  team_id: number;
-}
-
 /** 获取所有路线统计数据 请求 */
 export type QueryOverviewStatsRequest = undefined;
 
@@ -136,45 +95,34 @@ export interface QueryRouteStatsResponse {
   point_stats: PointStat[];
 }
 
-/** 获取团队状态请求参数 */
+/** 获取团队状态 请求 */
 export interface GetTeamStatusRequest {
-  /** 团队编号 */
+  /** 团队ID */
   team_id: number;
 }
 
-/** 团队成员状态 */
-export interface TeamStatusMember {
-  /** 姓名 */
-  name: string;
-  /** 用户身份 */
-  role: "unbind" | "member" | "captain" | (string & {});
-  /** 用户编号 */
-  user_id: number;
-  /** 用户状态 */
-  walk_status: TeamMemberWalkStatus;
-}
-
-/** 团队状态 */
-export interface TeamStatusTeam {
-  /** 队名 */
-  name: string;
-  /** 点位名称 */
-  prev_point_name: string;
-  /** 路线名称 */
-  route_name: string;
-  /** 队伍状态 */
-  status: TeamWalkStatus;
-}
-
-/** 获取团队状态响应数据 */
+/** 获取团队状态 响应 */
 export interface GetTeamStatusResponse {
   /** 团队成员 */
-  members: TeamStatusMember[];
-  /** 团队信息 */
-  team: TeamStatusTeam;
+  members: TeamStatusWalkerInfo[];
+  /** 团队状态信息 */
+  team: TeamStatusInfo;
 }
 
-/** 绑定签到码请求参数 */
+/** 更改人员状态 请求 */
+export interface UpdateWalkerStatusRequest {
+  /** 未开始notStart, 待出发pending, 已放弃abandoned, 进行中inProgress */
+  status: string;
+  /** 用户编号 */
+  user_id: number;
+}
+
+/** 更改人员状态 响应 */
+export interface UpdateWalkerStatusResponse {
+  team_id: number;
+}
+
+/** 绑定签到码 请求 */
 export interface BindCheckinCodeRequest {
   /** 签到码内容 */
   content: string;
@@ -185,7 +133,7 @@ export interface BindCheckinCodeRequest {
 /** 绑定签到码 响应 */
 export type BindCheckinCodeResponse = null;
 
-/** 打卡(指团队到了某个点位后打卡表示已经过)请求参数 */
+/** 打卡(指团队到了某个点位后打卡表示已经过) 请求 */
 export interface CheckinTeamRequest {
   /** CodeType */
   code_type: QrCodeType;
@@ -193,8 +141,26 @@ export interface CheckinTeamRequest {
   content: string;
 }
 
-/** 打卡(指团队到了某个点位后打卡表示已经过)响应数据 */
+/** 打卡(指团队到了某个点位后打卡表示已经过) 响应 */
 export interface CheckinTeamResponse {
   /** 队伍编号 */
   team_id: number;
 }
+
+/** 终点确认 请求 */
+export interface ConfirmDestinationRequest {
+  /** 团队编号 */
+  team_id: number;
+}
+
+/** 终点确认 响应 */
+export type ConfirmDestinationResponse = null;
+
+/** 标记队伍违规 请求 */
+export interface MarkTeamViolationRequest {
+  /** 团队编号 */
+  team_id: number;
+}
+
+/** 标记队伍违规 响应 */
+export type MarkTeamViolationResponse = null;

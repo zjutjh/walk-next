@@ -1,195 +1,371 @@
 <template>
-  <default-layout>
-    <div class="team-manage">
-      <van-cell-group inset class="custom-card team-manage__top-card">
-        <van-cell title="队伍路线" :value="teamRoute" value-class="highlight-value" />
-        <van-cell title="队伍剩余人数" :value="remainingCount" value-class="highlight-value" />
-        <van-cell title="上一点位" :value="prevPoint" value-class="highlight-value" />
-      </van-cell-group>
-
-      <div class="team-manage__section-title">成员状态</div>
-
-      <van-cell-group inset class="custom-card team-manage__member">
-        <van-cell
-          v-for="member in memberList"
-          :key="member.id"
-          :title="member.name"
-          is-link
-          @click="openStatusPicker(member.id)"
+  <!-- 团队信息页 -->
+  <loading-container
+    :class="styles.page"
+    :loading="isTeamInfoLoading || isAnyMutationPending"
+    :modal="isAnyMutationPending"
+  >
+    <default-layout :title="teamInfoData?.team.name">
+      <error-empty :error="teamInfoError" :disabled="isTeamInfoFetching">
+        <van-pull-refresh
+          v-if="teamInfoData"
+          :model-value="isPullRefreshing"
+          :disabled="isTeamInfoFetching"
+          @refresh="handleRefresh"
         >
-          <template #value>
-            <span :class="getStatusColor(member.status)">
-              {{ TEAM_STATUS_MAP[member.status] }}
-            </span>
-          </template>
-        </van-cell>
-      </van-cell-group>
+          <div :class="styles.contentContainer">
+            <van-cell-group v-if="teamInfoData" :class="styles.overviewCard" inset>
+              <van-cell title="团队路线">
+                <van-tag
+                  :class="styles.cellValueTag"
+                  :show="teamInfoData.team.is_wrong_route"
+                  type="danger"
+                  size="large"
+                  >走错</van-tag
+                >
+                {{ ROUTE_CONFIG[teamInfoData.team.route_name]?.text }}</van-cell
+              >
+              <van-cell title="团队剩余人数">
+                {{ remainingCount ?? "-" }}
+              </van-cell>
+              <van-cell title="上次打卡点位">
+                <van-tag
+                  :class="styles.cellValueTag"
+                  :show="teamInfoData.team.is_prev_point_invalid"
+                  type="danger"
+                  size="large"
+                  >异常</van-tag
+                >
+                {{ POINT_CONFIG[teamInfoData.team.prev_point_name]?.text ?? "-" }}
+              </van-cell>
+            </van-cell-group>
 
-      <div class="team-manage__btn-wrap">
-        <van-button class="bind-btn" block @click="handleBindTeam"> 团队码绑定 </van-button>
-      </div>
-    </div>
+            <van-cell-group title="成员状态" inset>
+              <van-cell
+                v-for="member in teamInfoData.members"
+                :key="member.user_id"
+                :title="member.name"
+                is-link
+                @click="openStatusPicker(member.user_id)"
+              >
+                <span :style="{ color: STATUS_COLOR_MAP[member.walk_status] }">{{
+                  WALKER_STATUS_TEXT[member.walk_status]
+                }}</span>
+              </van-cell>
+            </van-cell-group>
 
-    <!-- 状态选择弹窗 -->
+            <div :class="styles.buttonContainer">
+              <van-button
+                v-if="teamInfoData.team.is_prev_point_invalid"
+                type="danger"
+                block
+                @click="handleMarkViolatedClick"
+                >标记队伍违规</van-button
+              >
+              <van-button
+                v-if="isAdminAtStartPoint && !teamInfoData.team.prev_point_name"
+                type="primary"
+                block
+                @click="handleBindCheckinCodeClick"
+                >绑定纸质签到码</van-button
+              >
+              <van-button
+                v-if="isAdminAtEndPoint && teamInfoData.team.status === 'in_progress'"
+                type="primary"
+                block
+                @click="handleConfirmDestinationClick"
+                >确认到达终点</van-button
+              >
+            </div>
+          </div>
+        </van-pull-refresh>
+      </error-empty>
+    </default-layout>
+
+    <!-- 成员状态编辑弹窗 -->
     <van-action-sheet
-      v-model:show="showPicker"
-      :actions="STATUS_OPTIONS"
+      v-model:show="isStatusPickerVisible"
+      :actions="statusPickerActions"
       cancel-text="取消"
       close-on-click-action
-      @select="onSelectStatus"
+      @select="handleSelectStatus"
     />
 
-    <!-- 全屏加载遮罩层 -->
-    <van-overlay :show="isUpdatingStatus" class="loading-overlay">
-      <div class="loading-wrapper">
-        <van-loading type="spinner" color="#f0747b" vertical> 更新状态中... </van-loading>
-      </div>
-    </van-overlay>
-  </default-layout>
+    <!-- 扫码弹窗 -->
+    <qr-scan-preview
+      v-model:show="isScanPopupVisible"
+      @success="handleScanSuccess"
+      @error="handleScanError"
+    />
+  </loading-container>
 </template>
 
 <script setup lang="ts">
-import { useMutation } from "@tanstack/vue-query";
-import type { MemberStatus } from "api/types/admin";
-import { type ActionSheetAction, showSuccessToast } from "vant";
+import { useMutation, useQuery } from "@tanstack/vue-query";
+import { QR_CODE, type WalkerStatus } from "api/types/admin";
+import { first, isNil, last } from "lodash-es";
+import { showConfirmDialog, showDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref, watch } from "vue";
 
-import { STATUS_OPTIONS, TEAM_STATUS_MAP } from "@/constants/team";
+import ErrorEmpty from "@/components/error-empty/index.vue";
+import LoadingContainer from "@/components/loading-container/index.vue";
+import type { QrCodeData } from "@/composables/use-qr-scanner";
+import { WALKER_STATUS_TEXT } from "@/constants/enum-text";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
+import { useAuthStore } from "@/stores/auth";
 import { walkAdminService } from "@/utils/service";
+import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_POINT_LIST_MAP } from "@/walk-config";
+
+import { STATUS_COLOR_MAP, STATUS_PICKER_ACTION_MAP } from "./constants";
+import styles from "./index.module.scss";
+import type { StatusPickerAction } from "./types";
 
 const props = defineProps<{
-  /** 团队 ID */
-  id: string;
+  /** 团队ID字符串 */
+  teamIdStr: string;
 }>();
+/** 团队ID */
+const teamId = computed(() => Number(props.teamIdStr));
 
-const teamRoute = ref("");
-const prevPoint = ref("");
+const authStore = useAuthStore();
 
-/** 成员数据结构 */
-interface Member {
-  id: number;
-  name: string;
-  status: MemberStatus;
-}
+/** 是否已经弹出过走错路线提示 */
+const isWrongRouteAlertTriggered = ref(false);
 
-const memberList = ref<Member[]>([]);
-
-/** 当前团队 ID */
-const currentTeamId = computed(() => Number(props.id));
-
-/** 当前团队 ID 是否可用于接口请求 */
-const isCurrentTeamIdValid = computed(() => {
-  return Number.isInteger(currentTeamId.value) && currentTeamId.value > 0;
+/** 获取团队状态信息 */
+const {
+  data: teamInfoData,
+  refetch: refetchTeamData,
+  isLoading: isTeamInfoLoading,
+  isFetching: isTeamInfoFetching,
+  error: teamInfoError,
+  dataUpdatedAt: teamInfoDataUpdatedAt
+} = useQuery({
+  queryKey: ["teamManage", teamId] as const,
+  queryFn: () => walkAdminService.GetTeamStatus({ team_id: teamId.value })
 });
 
-/** 计算剩余人数 */
-const remainingCount = computed(() => {
-  return memberList.value.filter((m) => m.status !== "abandoned" && m.status !== "withdrawn")
-    .length;
+// 数据更新监听器
+watch(teamInfoDataUpdatedAt, () => {
+  // 队伍在最近的打卡中进入错误路线，显示一次提示
+  if (!isWrongRouteAlertTriggered.value && teamInfoData.value?.team.is_just_enter_wrong_route) {
+    isWrongRouteAlertTriggered.value = true;
+    showDialog({
+      title: "走错路线",
+      message: "该团队走错路线，请及时提醒！"
+    });
+  }
 });
 
-/** 重置团队信息 */
-const resetTeamData = () => {
-  teamRoute.value = "";
-  prevPoint.value = "";
-  memberList.value = [];
+/** 是否正在下拉刷新中 */
+const isPullRefreshing = ref(false);
+// refetch结束时关闭下拉刷新态
+watch(isTeamInfoFetching, (newValue) => {
+  if (newValue === false) isPullRefreshing.value = false;
+});
+
+/** 下拉刷新 */
+const handleRefresh = () => {
+  // 展示下拉刷新态
+  isPullRefreshing.value = true;
+
+  refetchTeamData();
 };
 
-/** 拉取团队信息 */
-const fetchTeamData = async () => {
-  if (!isCurrentTeamIdValid.value) {
-    resetTeamData();
-    console.error("团队 ID 不合法");
-    return;
+/** 剩余人数 */
+const remainingCount = computed(
+  () =>
+    teamInfoData.value?.members.filter((member) => {
+      switch (member.walk_status) {
+        case "abandoned":
+        case "withdrawn":
+          return false;
+        default:
+          return true;
+      }
+    }).length
+);
+
+/** 当前管理员用户是否在队伍所属路线的起点 */
+const isAdminAtStartPoint = computed(
+  () => authStore.pointId === first(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
+);
+/** 当前管理员用户是否在队伍所属路线的终点 */
+const isAdminAtEndPoint = computed(
+  () => authStore.pointId === last(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
+);
+
+/** 成员状态编辑弹层是否可见 */
+const isStatusPickerVisible = ref(false);
+
+/** 成员状态编辑弹层的可用选项列表 */
+const statusPickerActions = computed<StatusPickerAction[]>(() => {
+  const availableStatusSet: Set<WalkerStatus> = new Set();
+
+  // 用户为起点管理员，且队伍上一打卡点位为空，可选择未开始、待出发
+  if (isAdminAtStartPoint.value && !teamInfoData.value?.team.prev_point_name) {
+    availableStatusSet.add("not_start");
+    availableStatusSet.add("pending");
   }
 
-  try {
-    // eslint-disable-next-line camelcase
-    const res = await walkAdminService.GetTeamStatus({ team_id: currentTeamId.value });
-    teamRoute.value = res.team.route_name;
-    prevPoint.value = res.team.prev_point_name;
+  // 任何情况下都可以选择进行中
+  availableStatusSet.add("in_progress");
 
-    memberList.value = res.members.map((m) => ({
-      id: m.user_id,
-      name: m.name,
-      status: "notStart"
-    }));
-  } catch (error) {
-    console.error("获取团队状态失败", error);
+  // 用户为终点管理员，且队伍上一打卡点位不为空，可选择已完成
+  if (isAdminAtEndPoint.value && teamInfoData.value?.team.prev_point_name) {
+    availableStatusSet.add("completed");
   }
-};
 
-watch(currentTeamId, fetchTeamData, { immediate: true });
+  // 队伍上一打卡点位不为空，可选择已下撤、已违规
+  if (teamInfoData.value?.team.prev_point_name) {
+    availableStatusSet.add("withdrawn");
+    availableStatusSet.add("violated");
+  }
 
-const showPicker = ref(false);
-const currentEditId = ref<number | null>(null);
+  // 任何情况下都可以选择已放弃
+  availableStatusSet.add("abandoned");
 
-/** 打开状态选择弹窗 */
+  return Array.from(availableStatusSet).map((status) => STATUS_PICKER_ACTION_MAP[status]);
+});
+
+/** 成员状态编辑弹层针对的成员的ID */
+const statusPickerWalkerId = ref<number>();
+
+/** 打开成员状态编辑弹层 */
 const openStatusPicker = (id: number) => {
-  currentEditId.value = id;
-  showPicker.value = true;
+  statusPickerWalkerId.value = id;
+  isStatusPickerVisible.value = true;
 };
 
-/** 更改用户状态的 mutation */
-const { mutate: mutateUpdateStatus, isPending: isUpdatingStatus } = useMutation({
-  mutationFn: (variables: { targetId: number; newStatusEnum: MemberStatus }) =>
-    walkAdminService.UpdateUserStatus({
-      // eslint-disable-next-line camelcase
-      user_id: variables.targetId,
-      // eslint-disable-next-line camelcase
-      walk_status: variables.newStatusEnum
+// 更改成员状态
+const { mutate: mutateUpdateStatus, isPending: isUpdateStatusPending } = useMutation({
+  mutationFn: (params: { targetId: number; status: WalkerStatus }) =>
+    walkAdminService.UpdateWalkerStatus({
+      user_id: params.targetId,
+      status: params.status
     }),
-  onSuccess: (_data, variables) => {
-    showSuccessToast("状态更新成功");
-    const targetMember = memberList.value.find((m) => m.id === variables.targetId);
-    if (targetMember) {
-      targetMember.status = variables.newStatusEnum;
-    }
+  onSuccess: () => {
+    showSuccessToast("设置成功");
+    refetchTeamData();
   },
   onError: (error) => {
-    console.error("更新人员状态失败", error);
+    showFailToast(error.message || "设置失败");
   }
 });
 
-/** 处理弹窗状态选择 */
-const onSelectStatus = (action: ActionSheetAction & { value: MemberStatus }) => {
-  const newStatusEnum = action.value;
-  const targetId = currentEditId.value;
-
-  if (!targetId) return;
-
+/** 编辑成员状态 */
+const handleSelectStatus = (action: StatusPickerAction) => {
+  if (isNil(statusPickerWalkerId.value)) return;
   mutateUpdateStatus({
-    targetId,
-    newStatusEnum
+    targetId: statusPickerWalkerId.value,
+    status: action.status
   });
 };
 
-/** 绑定团队码 */
-const handleBindTeam = async () => {
-  if (!isCurrentTeamIdValid.value) {
-    console.error("团队 ID 不合法");
+/** 点击标记队伍违规 */
+const handleMarkViolatedClick = async () => {
+  try {
+    await showConfirmDialog({
+      title: "队伍违规",
+      message: "确定将队伍所有成员标记为已违规？",
+      confirmButtonText: "确认",
+      confirmButtonColor: "danger",
+      cancelButtonText: "取消"
+    });
+  } catch {
     return;
   }
+  mutateMarkViolation();
+};
 
-  try {
-    await walkAdminService.BindCheckinCode({
-      // eslint-disable-next-line camelcase
-      team_id: currentTeamId.value,
-      content: "TEST_CODE_123"
-    });
+/** 扫码弹窗是否可见 */
+const isScanPopupVisible = ref(false);
+
+/** 点击绑定纸质签到码 */
+const handleBindCheckinCodeClick = () => {
+  isScanPopupVisible.value = true;
+};
+
+// 绑定纸质签到码
+const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = useMutation({
+  mutationFn: (params: { teamId: number; content: string }) =>
+    walkAdminService.BindCheckinCode({
+      team_id: params.teamId,
+      content: params.content
+    }),
+  onSuccess: () => {
     showSuccessToast("绑定成功");
-    fetchTeamData();
-  } catch (error) {
-    console.error("团队码绑定失败", error);
+    refetchTeamData();
+  },
+  onError: (error) => {
+    showFailToast(error.message || "绑定失败");
+    isScanPopupVisible.value = true;
   }
+});
+
+/** 扫码成功 */
+const handleScanSuccess = (data: QrCodeData) => {
+  if (data.code_type !== QR_CODE.Checkin) {
+    showFailToast("请扫纸质签到码");
+    return;
+  }
+  isScanPopupVisible.value = false;
+  mutateBindCheckinCode({
+    teamId: teamId.value,
+    content: data.content
+  });
 };
 
-/** 匹配状态对应颜色 */
-const getStatusColor = (status: MemberStatus) => {
-  if (status === "pending" || status === "inProgress") return "color-yellow-green";
-  return "color-gray";
+/** 扫码失败 */
+const handleScanError = (message: string) => {
+  showFailToast(message || "扫码失败");
 };
+
+// 终点确认
+const { mutate: mutateConfirmDestination, isPending: isConfirmDestinationPending } = useMutation({
+  mutationFn: () =>
+    walkAdminService.ConfirmDestination({
+      team_id: teamId.value
+    }),
+  onSuccess: () => {
+    showSuccessToast("已确认");
+    refetchTeamData();
+  },
+  onError: (error) => {
+    showFailToast(error.message || "操作失败");
+  }
+});
+
+/** 点击确认到达终点 */
+const handleConfirmDestinationClick = () => {
+  showConfirmDialog({
+    message: "队伍已完成毅行？"
+  }).then(() => {
+    mutateConfirmDestination();
+  });
+};
+
+// 标记团队违规
+const { mutate: mutateMarkViolation, isPending: isMarkViolationPending } = useMutation({
+  mutationFn: () =>
+    walkAdminService.MarkTeamViolation({
+      team_id: teamId.value
+    }),
+  onSuccess: () => {
+    showSuccessToast("已标记违规");
+    refetchTeamData();
+  },
+  onError: (error) => {
+    showFailToast(error.message || "操作失败");
+  }
+});
+
+/** 任意mutation请求中 */
+const isAnyMutationPending = computed(
+  () =>
+    isUpdateStatusPending.value ||
+    isBindCheckinCodePending.value ||
+    isConfirmDestinationPending.value ||
+    isMarkViolationPending.value
+);
 </script>
-
-<style scoped lang="scss" src="./index.scss"></style>

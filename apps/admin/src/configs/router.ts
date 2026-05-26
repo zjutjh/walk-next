@@ -21,7 +21,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     }
   },
   {
-    path: "/team/:id",
+    path: "/team/:teamIdStr",
     name: "team",
     component: () => import("@/pages/team-info/index.vue"),
     props: true,

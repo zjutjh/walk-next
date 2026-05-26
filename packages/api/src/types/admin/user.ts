@@ -15,26 +15,5 @@ export type UserGenderExample = "female" | "male" | "unknown";
 /** 用户类型 */
 export type UserTypeExample = "admin" | "sudo";
 
-/** 人员徒步状态枚举 */
-export type MemberStatus =
-  | "notStart"
-  | "pending"
-  | "abandoned"
-  | "inProgress"
-  | "withdrawn"
-  | "violated"
-  | "completed";
-
 /** 用户权限等级 */
 export type PermissionLevel = "external" | "internal" | "manager" | "super";
-
-/** 人员统计指标 */
-export type WalkerStatsMetric =
-  | "total_reg"
-  | "not_present"
-  | "pending"
-  | "started"
-  | "in_progress"
-  | "finished"
-  | "withdrawn"
-  | "wrong_route";
