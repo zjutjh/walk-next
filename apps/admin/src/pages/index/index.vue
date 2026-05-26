@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
-import type { AdminAPI } from "api/types/admin";
+import { type AdminAPI, QR_CODE } from "api/types/admin";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -71,6 +71,7 @@ import { useRouter } from "vue-router";
 import LoginModal from "@/components/login-modal/index.vue";
 import QrScanPreview from "@/components/qr-scan-preview/index.vue";
 import TeamIdInputModal from "@/components/team-id-input-modal/index.vue";
+import type { QrCodeData } from "@/composables/use-qr-scanner";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { useAuthStore } from "@/stores/auth";
 import { walkAdminService } from "@/utils";
@@ -78,7 +79,6 @@ import { POINT_CONFIG } from "@/walk-config";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
-import { createCheckinHandlers } from "./utils";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -87,26 +87,17 @@ const isLoginModalVisible = ref(!authStore.isLoggedIn);
 
 const isScanPopupVisible = ref(false);
 const isTeamIdModalVisible = ref(false);
-const isProcessing = ref(false);
 
-const requestScan = () => {
+const handleScanClick = () => {
+  if (isCheckInPending.value) return;
   isScanPopupVisible.value = true;
 };
 
-const handleScanClick = () => {
-  requestScan();
-};
-
 const handleManualInputClick = () => {
+  if (isCheckInPending.value) return;
+
   isTeamIdModalVisible.value = true;
 };
-
-const { handleScanSuccess, handleScanError, handleTeamIdSubmit } = createCheckinHandlers({
-  router,
-  getAuthPoint: () => authStore.pointId,
-  isProcessing,
-  requestScan
-});
 
 const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   mutationFn: () => walkAdminService.Logout(undefined),
@@ -115,25 +106,51 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
     isScanPopupVisible.value = false;
     isTeamIdModalVisible.value = false;
     isLoginModalVisible.value = true;
-    showSuccessToast("退出登录成功");
+    showSuccessToast("登出成功");
   },
   onError: (err: Error) => {
-    showFailToast(err.message || "退出登录失败");
+    showFailToast(err.message || "登出失败");
   }
 });
 
+const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
+  mutationFn: (params: AdminAPI.CheckinTeamRequest) => walkAdminService.CheckinTeam(params),
+  onSuccess: (data) => {
+    router.push({ path: `/team/${data.team_id}`, query: {} }); // TODO
+  },
+  onError: (err) => {
+    showFailToast(err.message || "打卡失败");
+  }
+});
+
+/** 扫码成功 */
+const handleScanSuccess = (data: QrCodeData) => {
+  mutateCheckin(data);
+};
+
+/** 扫码失败 */
+const handleScanError = (message: string) => {
+  showFailToast(message || "扫码失败");
+};
+
+/** 手动输入队伍ID */
+const handleTeamIdSubmit = (teamId: number) => {
+  mutateCheckin({ code_type: QR_CODE.Team, content: String(teamId) });
+};
+
+/** 登出 */
 const handleLogout = async () => {
   try {
     await showConfirmDialog({
-      title: "确认退出",
+      title: "退出登录",
       message: "确定要退出当前账号吗？",
-      confirmButtonText: "退出登录",
+      confirmButtonText: "登出",
       cancelButtonText: "取消"
     });
-    mutateLogout();
   } catch {
-    // 用户取消了操作，不需要做任何处理
+    return;
   }
+  mutateLogout();
 };
 
 const handleLoginSuccess = (data: AdminAPI.AuthResponse) => {
