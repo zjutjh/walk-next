@@ -7,7 +7,7 @@ import type {
   UserGenderExample,
   UserTypeExample
 } from "./user";
-import { TeamStatusWalkerInfo } from "./walker";
+import type { TeamStatusWalkerInfo } from "./walker";
 
 // 为什么要写 /** */？ ---> https://www.jsdoc.com.cn/
 /** 登录 请求（示例） */
