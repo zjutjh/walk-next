@@ -31,13 +31,13 @@ export type LogoutExampleRequest = undefined; // 若请求body json/query params
 export type LogoutExampleResponse = null; // 若返回data为空: 写null，因为收到的data确实是null
 
 /** 获取用户信息 请求（示例） */
-export interface GetProfileExampleRequest {
+export interface QueryProfileExampleRequest {
   /** 要获取的用户的ID */
   user_id: string;
 }
 
 /** 获取用户信息 响应（示例） */
-export interface GetProfileExampleResponse {
+export interface QueryProfileExampleResponse {
   /** 学号 */
   stu_id: string;
   /** 姓名 */
@@ -96,13 +96,13 @@ export interface QueryRouteStatsResponse {
 }
 
 /** 获取团队状态 请求 */
-export interface GetTeamStatusRequest {
+export interface QueryTeamStatusRequest {
   /** 团队ID */
   team_id: number;
 }
 
 /** 获取团队状态 响应 */
-export interface GetTeamStatusResponse {
+export interface QueryTeamStatusResponse {
   /** 团队成员 */
   members: TeamStatusWalkerInfo[];
   /** 团队状态信息 */

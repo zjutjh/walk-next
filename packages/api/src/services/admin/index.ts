@@ -87,10 +87,10 @@ export default class WalkAdminService<T> extends BaseService<T> {
   }
 
   /** 获取团队状态 */
-  GetTeamStatus(
-    req: AdminAPI.GetTeamStatusRequest,
+  QueryTeamStatus(
+    req: AdminAPI.QueryTeamStatusRequest,
     options?: T
-  ): Promise<AdminAPI.GetTeamStatusResponse> {
+  ): Promise<AdminAPI.QueryTeamStatusResponse> {
     const url = this.genBaseURL("/admin/team/status");
     const method = "GET";
     const params = req;

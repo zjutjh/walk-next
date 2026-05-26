@@ -142,7 +142,7 @@ const {
   dataUpdatedAt: teamInfoDataUpdatedAt
 } = useQuery({
   queryKey: ["teamManage", teamId] as const,
-  queryFn: () => walkAdminService.GetTeamStatus({ team_id: teamId.value })
+  queryFn: () => walkAdminService.QueryTeamStatus({ team_id: teamId.value })
 });
 
 // 数据更新监听器
