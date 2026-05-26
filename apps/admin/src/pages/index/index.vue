@@ -17,7 +17,7 @@
       </van-cell-group>
 
       <van-cell-group title="人员管理">
-        <van-cell title="重组队伍" is-link to="/team-rebuild" />
+        <van-cell title="重组团队" is-link to="/team-rebuild" />
         <div :class="styles.functionButtonContainer">
           <van-button type="primary" :class="styles.functionButton" block>
             待出发→进行中
@@ -133,7 +133,7 @@ const handleScanError = (message: string) => {
   showFailToast(message || "扫码失败");
 };
 
-/** 手动输入队伍ID */
+/** 手动输入团队ID */
 const handleTeamIdSubmit = (teamId: number) => {
   mutateCheckin({ code_type: QR_CODE.Team, content: String(teamId) });
 };

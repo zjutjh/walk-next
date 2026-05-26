@@ -143,7 +143,7 @@ export interface CheckinTeamRequest {
 
 /** 打卡(指团队到了某个点位后打卡表示已经过) 响应 */
 export interface CheckinTeamResponse {
-  /** 队伍编号 */
+  /** 团队编号 */
   team_id: number;
 }
 
@@ -156,11 +156,11 @@ export interface ConfirmDestinationRequest {
 /** 终点确认 响应 */
 export type ConfirmDestinationResponse = null;
 
-/** 标记队伍违规 请求 */
+/** 标记团队违规 请求 */
 export interface MarkTeamViolationRequest {
   /** 团队编号 */
   team_id: number;
 }
 
-/** 标记队伍违规 响应 */
+/** 标记团队违规 响应 */
 export type MarkTeamViolationResponse = null;

@@ -9,7 +9,7 @@ export interface TeamStatusInfo {
   prev_point_name: string;
   /** 路线ID */
   route_name: string;
-  /** 队伍状态 */
+  /** 团队状态 */
   status: TeamWalkStatus;
   /** 是否走错路线 */
   is_wrong_route: boolean;

@@ -60,7 +60,7 @@
                 type="danger"
                 block
                 @click="handleMarkViolatedClick"
-                >标记队伍违规</van-button
+                >标记团队违规</van-button
               >
               <van-button
                 v-if="isAdminAtStartPoint && !teamInfoData.team.prev_point_name"
@@ -147,7 +147,7 @@ const {
 
 // 数据更新监听器
 watch(teamInfoDataUpdatedAt, () => {
-  // 队伍在最近的打卡中进入错误路线，显示一次提示
+  // 团队在最近的打卡中进入错误路线，显示一次提示
   if (!isWrongRouteAlertTriggered.value && teamInfoData.value?.team.is_just_enter_wrong_route) {
     isWrongRouteAlertTriggered.value = true;
     showDialog({
@@ -186,11 +186,11 @@ const remainingCount = computed(
     }).length
 );
 
-/** 当前管理员用户是否在队伍所属路线的起点 */
+/** 当前管理员用户是否在团队所属路线的起点 */
 const isAdminAtStartPoint = computed(
   () => authStore.pointId === first(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
 );
-/** 当前管理员用户是否在队伍所属路线的终点 */
+/** 当前管理员用户是否在团队所属路线的终点 */
 const isAdminAtEndPoint = computed(
   () => authStore.pointId === last(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
 );
@@ -202,7 +202,7 @@ const isStatusPickerVisible = ref(false);
 const statusPickerActions = computed<StatusPickerAction[]>(() => {
   const availableStatusSet: Set<WalkerStatus> = new Set();
 
-  // 用户为起点管理员，且队伍上一打卡点位为空，可选择未开始、待出发
+  // 用户为起点管理员，且团队上一打卡点位为空，可选择未开始、待出发
   if (isAdminAtStartPoint.value && !teamInfoData.value?.team.prev_point_name) {
     availableStatusSet.add("not_start");
     availableStatusSet.add("pending");
@@ -211,12 +211,12 @@ const statusPickerActions = computed<StatusPickerAction[]>(() => {
   // 任何情况下都可以选择进行中
   availableStatusSet.add("in_progress");
 
-  // 用户为终点管理员，且队伍上一打卡点位不为空，可选择已完成
+  // 用户为终点管理员，且团队上一打卡点位不为空，可选择已完成
   if (isAdminAtEndPoint.value && teamInfoData.value?.team.prev_point_name) {
     availableStatusSet.add("completed");
   }
 
-  // 队伍上一打卡点位不为空，可选择已下撤、已违规
+  // 团队上一打卡点位不为空，可选择已下撤、已违规
   if (teamInfoData.value?.team.prev_point_name) {
     availableStatusSet.add("withdrawn");
     availableStatusSet.add("violated");
@@ -262,12 +262,12 @@ const handleSelectStatus = (action: StatusPickerAction) => {
   });
 };
 
-/** 点击标记队伍违规 */
+/** 点击标记团队违规 */
 const handleMarkViolatedClick = async () => {
   try {
     await showConfirmDialog({
-      title: "队伍违规",
-      message: "确定将队伍所有成员标记为已违规？",
+      title: "团队违规",
+      message: "确定将团队所有成员标记为已违规？",
       confirmButtonText: "确认",
       confirmButtonColor: "danger",
       cancelButtonText: "取消"
@@ -339,7 +339,7 @@ const { mutate: mutateConfirmDestination, isPending: isConfirmDestinationPending
 /** 点击确认到达终点 */
 const handleConfirmDestinationClick = () => {
   showConfirmDialog({
-    message: "队伍已完成毅行？"
+    message: "团队已完成毅行？"
   }).then(() => {
     mutateConfirmDestination();
   });

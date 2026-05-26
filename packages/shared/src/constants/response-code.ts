@@ -25,25 +25,25 @@ export const RESP_CODE = {
   ALREADY_REGISTERED: 20010,
   /** 统一身份验证失败 */
   OAUTH_FAILED: 20011,
-  /** 已在队伍中 */
+  /** 已在团队中 */
   ALREADY_IN_TEAM: 20012,
-  /** 队伍人数已满 */
+  /** 团队人数已满 */
   TEAM_FULL: 20013,
-  /** 尚未加入队伍 */
+  /** 尚未加入团队 */
   NOT_IN_TEAM: 20014,
   /** 仅队长可操作 */
   NOT_CAPTAIN: 20015,
-  /** 创建队伍次数已用完 */
+  /** 创建团队次数已用完 */
   NO_CREATE_CHANCE: 20016,
-  /** 加入队伍次数已用完 */
+  /** 加入团队次数已用完 */
   NO_JOIN_CHANCE: 20017,
-  /** 队伍已提交，无法操作 */
+  /** 团队已提交，无法操作 */
   TEAM_SUBMITTED: 20018,
-  /** 队伍名称已存在 */
+  /** 团队名称已存在 */
   TEAM_NAME_DUPLICATED: 20019,
   /** 密码错误 */
   PASSWORD_WRONG: 20020,
-  /** 队伍人数不足 */
+  /** 团队人数不足 */
   TEAM_NOT_ENOUGH: 20021,
   /** OpenID为空 */
   OPEN_ID_EMPTY: 20022,
@@ -51,7 +51,7 @@ export const RESP_CODE = {
   WECHAT_CODE_MISSING: 20023,
   /** 账号或密码错误 */
   ACCOUNT_OR_PASSWORD_ERROR: 20024,
-  /** 队伍不存在 */
+  /** 团队不存在 */
   TEAM_NOT_FOUND: 20025,
   /** 该用户没有名额 */
   USER_NO_QUOTA: 20026,
@@ -61,7 +61,7 @@ export const RESP_CODE = {
   PEOPLE_NOT_FOUND: 20028,
   /** 校区错误 */
   CAMPUS_MISMATCH: 20029,
-  /** 该队伍已完成，无法进行点位打卡 */
+  /** 该团队已完成，无法进行点位打卡 */
   TEAM_CHECKIN_CLOSED: 20030,
   /** 上一签到点并非路线前序点位 */
   PREV_POINT_INVALID: 20031,
