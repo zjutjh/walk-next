@@ -122,6 +122,12 @@ export interface UpdateWalkerStatusResponse {
   team_id: number;
 }
 
+/** 所有待出发改为进行中 请求 */
+export type StartAllThePendingRequest = undefined;
+
+/** 所有待出发改为进行中 响应 */
+export type StartAllThePendingResponse = null;
+
 /** 绑定签到码 请求 */
 export interface BindCheckinCodeRequest {
   /** 签到码内容 */

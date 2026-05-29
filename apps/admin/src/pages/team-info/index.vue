@@ -268,9 +268,7 @@ const handleMarkViolatedClick = async () => {
     await showConfirmDialog({
       title: "团队违规",
       message: "确定将团队所有成员标记为已违规？",
-      confirmButtonText: "确认",
-      confirmButtonColor: "danger",
-      cancelButtonText: "取消"
+      confirmButtonColor: "danger"
     });
   } catch {
     return;

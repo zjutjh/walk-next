@@ -19,7 +19,13 @@
       <van-cell-group title="人员管理">
         <van-cell title="重组团队" is-link to="/team-rebuild" />
         <div :class="styles.functionButtonContainer">
-          <van-button type="primary" :class="styles.functionButton" block>
+          <van-button
+            type="primary"
+            :class="styles.functionButton"
+            :loading="isStartAllThePendingPending"
+            block
+            @click="handleStartAllThePendingClick"
+          >
             待出发→进行中
           </van-button>
         </div>
@@ -32,7 +38,7 @@
           block
           :loading="isLogoutPending"
           :disabled="isLogoutPending"
-          @click="handleLogout"
+          @click="handleLogoutClick"
         >
           退出登录
         </van-button>
@@ -92,6 +98,7 @@ const handleManualInputClick = () => {
   isTeamIdModalVisible.value = true;
 };
 
+// 登出
 const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   mutationFn: () => walkAdminService.Logout(undefined),
   onSuccess: () => {
@@ -105,6 +112,7 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   }
 });
 
+// 打卡
 const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
   mutationFn: (params: AdminAPI.CheckinTeamRequest) => walkAdminService.CheckinTeam(params),
   onSuccess: (data) => {
@@ -112,6 +120,17 @@ const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
   },
   onError: (err) => {
     showFailToast(err.message || "打卡失败");
+  }
+});
+
+// 将所有待出发改为进行中
+const { mutate: mutateStartAllThePending, isPending: isStartAllThePendingPending } = useMutation({
+  mutationFn: () => walkAdminService.StartAllThePending(undefined),
+  onSuccess: () => {
+    showSuccessToast("操作成功");
+  },
+  onError: (err: Error) => {
+    showFailToast(err.message || "操作失败");
   }
 });
 
@@ -130,18 +149,30 @@ const handleTeamIdSubmit = (teamId: number) => {
   mutateCheckin({ code_type: QR_CODE.Team, content: String(teamId) });
 };
 
-/** 登出 */
-const handleLogout = async () => {
+/** 点击登出按钮 */
+const handleLogoutClick = async () => {
   try {
     await showConfirmDialog({
       title: "退出登录",
       message: "确定要退出当前账号吗？",
-      confirmButtonText: "登出",
-      cancelButtonText: "取消"
+      confirmButtonText: "登出"
     });
   } catch {
     return;
   }
   mutateLogout();
+};
+
+/** 点击待出发改为进行中按钮 */
+const handleStartAllThePendingClick = async () => {
+  try {
+    await showConfirmDialog({
+      title: "起点放行",
+      message: "所有「待出发」人员将变为「进行中」，\n是否确认？（操作不可撤销！）"
+    });
+  } catch {
+    return;
+  }
+  mutateStartAllThePending();
 };
 </script>

@@ -110,6 +110,18 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, data }, options);
   }
 
+  /** 所有待出发改为进行中 */
+  StartAllThePending(
+    req: AdminAPI.StartAllThePendingRequest,
+    options?: T
+  ): Promise<AdminAPI.StartAllThePendingResponse> {
+    const url = this.genBaseURL("/admin/user/pending/start");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
   /** 绑定签到码 */
   BindCheckinCode(
     req: AdminAPI.BindCheckinCodeRequest,
