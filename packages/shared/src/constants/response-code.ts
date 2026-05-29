@@ -1,6 +1,9 @@
 /** 业务状态码 */
 export const RESP_CODE = {
   OK: 200,
+
+  // TODO: 等待后端修复完成后替换为正确的状态码
+
   /** 未知错误 */
   UNKNOWN_ERROR: 20000,
   /** 数据库错误 */
@@ -8,7 +11,7 @@ export const RESP_CODE = {
   /** 中间件服务错误 */
   MIDDLEWARE_SERVICE_ERROR: 20002,
   /** 用户未登录 */
-  NOT_LOGGED_IN: 20003,
+  NOT_LOGGED_IN: 20000,
   /** 用户无权限 */
   PERMISSION_DENIED: 20004,
   /** 参数错误 */
