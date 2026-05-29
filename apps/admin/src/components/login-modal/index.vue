@@ -31,7 +31,7 @@
 import "./index.scss";
 
 import { useMutation } from "@tanstack/vue-query";
-import { showFailToast } from "vant";
+import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 
 import { useAuthStore } from "@/stores/auth";
@@ -59,6 +59,8 @@ const { mutate: mutateLogin, isPending } = useMutation({
     // 清空输入内容
     account.value = "";
     password.value = "";
+    // 显示提示
+    showSuccessToast("登录成功");
     // 保存身份信息
     authStore.adminName = data.name;
     authStore.pointId = data.point_name;

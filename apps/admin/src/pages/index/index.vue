@@ -108,7 +108,7 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
 const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
   mutationFn: (params: AdminAPI.CheckinTeamRequest) => walkAdminService.CheckinTeam(params),
   onSuccess: (data) => {
-    router.push({ path: `/team/${data.team_id}`, query: {} }); // TODO
+    router.push({ path: `/team/${data.team_id}` });
   },
   onError: (err) => {
     showFailToast(err.message || "打卡失败");
