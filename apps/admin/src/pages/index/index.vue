@@ -52,14 +52,6 @@
     />
 
     <team-id-input-modal v-model:show="isTeamIdModalVisible" @submit="handleTeamIdSubmit" />
-
-    <qr-scan-preview
-      v-model:show="isScanPopupVisible"
-      @success="handleScanSuccess"
-      @error="handleScanError"
-    />
-
-    <team-id-input-modal v-model:show="isTeamIdModalVisible" @submit="handleTeamIdSubmit" />
   </default-layout>
 </template>
 
