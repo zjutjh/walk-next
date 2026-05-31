@@ -335,12 +335,15 @@ const { mutate: mutateConfirmDestination, isPending: isConfirmDestinationPending
 });
 
 /** 点击确认到达终点 */
-const handleConfirmDestinationClick = () => {
-  showConfirmDialog({
-    message: "团队已完成毅行？"
-  }).then(() => {
-    mutateConfirmDestination();
-  });
+const handleConfirmDestinationClick = async () => {
+  try {
+    await showConfirmDialog({
+      message: "团队已完成毅行？"
+    });
+  } catch {
+    return;
+  }
+  mutateConfirmDestination();
 };
 
 // 标记团队违规
