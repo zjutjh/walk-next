@@ -1,3 +1,4 @@
+import type { DashboardRoutesOverviewData } from "./dashboard";
 import type { QrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
 import type { TeamStatusInfo } from "./team";
@@ -71,6 +72,46 @@ export type LogoutRequest = undefined;
 
 /** 管理员退出登录 响应 */
 export type LogoutResponse = Record<string, never>;
+
+/** 获取数据仪表盘校区总览 请求 */
+export interface QueryDashboardCampusRequest {
+  /** 校区ID */
+  campus: string;
+}
+
+/** 获取数据仪表盘校区总览 响应 */
+export interface QueryDashboardCampusResponse {
+  /** 各路线数据总览 */
+  routes: DashboardRoutesOverviewData[];
+}
+
+/** 获取数据仪表盘点位详情 请求 */
+export interface QueryDashboardPointDetailsRequest {
+  /** 点位ID */
+  point_name: string;
+}
+
+/** 获取数据仪表盘点位详情 响应 */
+export interface QueryDashboardPointDetailsResponse {
+  /** 未到达该点位的人数 */
+  not_arrived_count: number;
+  /** 经过该点位的总人数 */
+  passed_count: number;
+}
+
+/** 获取数据仪表盘行程段详情 请求 */
+export interface QueryDashboardSegmentDetailsRequest {
+  /** 行程段始点ID */
+  prev_point_name: string;
+  /** 行程段末点ID */
+  to_point_name: string;
+}
+
+/** 获取数据仪表盘行程段详情 响应 */
+export interface QueryDashboardSegmentDetailsResponse {
+  /** 行程段上的人数 */
+  number: number;
+}
 
 /** 获取所有路线统计数据 请求 */
 export type QueryOverviewStatsRequest = undefined;

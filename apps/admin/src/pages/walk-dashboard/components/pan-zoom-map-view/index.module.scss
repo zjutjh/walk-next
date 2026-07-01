@@ -1,0 +1,36 @@
+// 支持平移与缩放的漫游地图容器
+.component {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  .map {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  // 背景
+  &::before {
+    content: "";
+    position: absolute;
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--jh-walk-pan-zoom-view-background);
+    background-attachment: local, scroll;
+    background-position: 0 -4900%;
+    background-size: 100% 5000%;
+    filter: blur(10px);
+    pointer-events: none;
+  }
+}
