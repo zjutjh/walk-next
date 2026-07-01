@@ -110,7 +110,7 @@ const STRICT_SEGMENT_DERIVATIVE = (() => {
       /** 连接 上一点位ID+分隔符+当前点位ID 得到的行程段key */
       const segmentKey =
         `${previousPointId}${SEGMENT_KEY_DELIMITER}${currentPointId}` as SegmentKey;
-      // 将 行程段key 映射到 行程段不可配置常量
+      // 将 行程段key 映射到 行程段导出属性
       result[segmentKey] = {
         from: previousPointId,
         to: currentPointId,
