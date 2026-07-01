@@ -83,7 +83,7 @@ export const useMapPanZoom = ({
       transformValue.pending.value.x < limits.translateXMin.value ||
       transformValue.pending.value.x > limits.translateXMax.value
     ) {
-      // 缩放值超限，重置漫游并约束变换值
+      // X平移值超限，重置漫游并约束变换值
       applyPendingTransform();
       transformValue.base.value.x = clamp(
         transformValue.base.value.x,
@@ -96,7 +96,7 @@ export const useMapPanZoom = ({
       transformValue.pending.value.y < limits.translateYMin.value ||
       transformValue.pending.value.y > limits.translateYMax.value
     ) {
-      // 缩放值超限，重置漫游并约束变换值
+      // Y平移值超限，重置漫游并约束变换值
       applyPendingTransform();
       transformValue.base.value.y = clamp(
         transformValue.base.value.y,
