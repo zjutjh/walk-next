@@ -10,5 +10,21 @@ export const ADMIN_QUERY_KEY = {
     LIST: "teamList",
     /** 团队详情 */
     DETAILS: "teamDetails"
+  },
+  /** 数据仪表盘相关 */
+  DASHBOARD: {
+    /** 获取校区总数据 */
+    OVERVIEW: "getCampusOverview",
+    /** 获取点位详情 */
+    POINT: "getPointDetails",
+    /** 获取行程段详情 */
+    SEGMENT: "getSegmentDetails"
+  },
+  /** 统计数据相关 */
+  STATS: {
+    /** 总览 */
+    OVERVIEW: "overviewStats",
+    /** 单路线 */
+    ROUTE: "routeStats"
   }
 } as const;
