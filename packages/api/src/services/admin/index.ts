@@ -87,15 +87,39 @@ export default class WalkAdminService<T> extends BaseService<T> {
   }
 
   /** 获取团队状态 */
-  GetTeamStatus(
-    req: AdminAPI.GetTeamStatusRequest,
+  QueryTeamStatus(
+    req: AdminAPI.QueryTeamStatusRequest,
     options?: T
-  ): Promise<AdminAPI.GetTeamStatusResponse> {
+  ): Promise<AdminAPI.QueryTeamStatusResponse> {
     const url = this.genBaseURL("/admin/team/status");
     const method = "GET";
     const params = req;
 
     return this.request({ url, method, params }, options);
+  }
+
+  /** 更改人员状态 */
+  UpdateWalkerStatus(
+    req: AdminAPI.UpdateWalkerStatusRequest,
+    options?: T
+  ): Promise<AdminAPI.UpdateWalkerStatusResponse> {
+    const url = this.genBaseURL("/admin/user/update");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 所有待出发改为进行中 */
+  StartAllThePending(
+    req: AdminAPI.StartAllThePendingRequest,
+    options?: T
+  ): Promise<AdminAPI.StartAllThePendingResponse> {
+    const url = this.genBaseURL("/admin/user/pending/start");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
   }
 
   /** 绑定签到码 */
@@ -116,6 +140,30 @@ export default class WalkAdminService<T> extends BaseService<T> {
     options?: T
   ): Promise<AdminAPI.CheckinTeamResponse> {
     const url = this.genBaseURL("/admin/team/update");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 终点确认 */
+  ConfirmDestination(
+    req: AdminAPI.ConfirmDestinationRequest,
+    options?: T
+  ): Promise<AdminAPI.ConfirmDestinationResponse> {
+    const url = this.genBaseURL("/admin/destination/confirm");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 标记团队违规 */
+  MarkTeamViolation(
+    req: AdminAPI.MarkTeamViolationRequest,
+    options?: T
+  ): Promise<AdminAPI.MarkTeamViolationResponse> {
+    const url = this.genBaseURL("/admin/team/violation/mark");
     const method = "POST";
     const data = req;
 

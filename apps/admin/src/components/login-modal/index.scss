@@ -11,11 +11,14 @@
   margin: 6px 0 16px;
   font-size: 18px;
   text-align: center;
+  user-select: none;
 }
 
 .login-modal__error {
   margin-top: 8px;
-  font-size: 12px;
+  height: 14px;
+  font-size: 14px;
+  line-height: 14px;
   color: var(--van-danger-color);
   text-align: center;
 }
@@ -25,4 +28,5 @@
   width: 160px;
   height: 36px;
   display: block;
+  user-select: none;
 }

@@ -1,0 +1,41 @@
+.page :global(.default-layout__main) {
+  font-family: "Barlow", "DingTalk Sans";
+
+  :global(.van-pull-refresh) {
+    height: 100%;
+    overflow-y: auto;
+
+    :global(.van-pull-refresh__track) {
+      height: auto;
+    }
+
+    .contentContainer {
+      padding: {
+        top: 20px;
+        bottom: 30px;
+      }
+
+      .cellValueTag {
+        margin-right: 4px;
+      }
+
+      .overviewCard {
+        :global(.van-cell__value) {
+          font-weight: 500;
+        }
+      }
+
+      .buttonContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin: var(--van-cell-group-inset-padding);
+        margin-top: 24px;
+
+        :global(.van-button__text) {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}

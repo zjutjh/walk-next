@@ -1,6 +1,6 @@
 <template>
   <van-popup
-    v-model:show="isVisible"
+    v-model:show="isLoginModalVisible"
     class="login-modal"
     position="center"
     round
@@ -13,7 +13,7 @@
       <van-field v-model="account" label="账号" placeholder="请输入账号" />
       <van-field v-model="password" label="密码" type="password" placeholder="请输入密码" />
 
-      <div v-if="errorMessage" class="login-modal__error">{{ errorMessage }}</div>
+      <div class="login-modal__error">{{ error?.message || "" }}</div>
 
       <van-button
         class="login-modal__submit"
@@ -31,28 +31,20 @@
 import "./index.scss";
 
 import { useMutation } from "@tanstack/vue-query";
-import type { AdminAPI } from "api/types/admin";
-import { computed, ref, watch } from "vue";
+import { showFailToast, showSuccessToast } from "vant";
+import { computed, ref } from "vue";
 
+import { useAuthStore } from "@/stores/auth";
 import { walkAdminService } from "@/utils";
 
-const props = defineProps<{
-  show: boolean;
-}>();
+const authStore = useAuthStore();
 
-const emit = defineEmits<{
-  "update:show": [value: boolean];
-  success: [data: AdminAPI.AuthResponse];
-}>();
+const isLoginModalVisible = computed(() => !authStore.isLoggedIn);
 
-const isVisible = computed({
-  get: () => props.show,
-  set: (value) => emit("update:show", value)
-});
+const error = ref<Error | null>(null);
 
 const account = ref("");
 const password = ref("");
-const errorMessage = ref("");
 
 const { mutate: mutateLogin, isPending } = useMutation({
   mutationFn: () =>
@@ -60,27 +52,34 @@ const { mutate: mutateLogin, isPending } = useMutation({
       account: account.value,
       password: password.value
     }),
+  onMutate: () => {
+    error.value = null;
+  },
   onSuccess: (data) => {
-    errorMessage.value = "";
-    emit("success", data);
+    // 清空输入内容
+    account.value = "";
+    password.value = "";
+    // 显示提示
+    showSuccessToast("登录成功");
+    // 保存身份信息
+    authStore.adminName = data.name;
+    authStore.pointId = data.point_name;
+    authStore.isLoggedIn = true;
   },
   onError: (err: Error) => {
-    errorMessage.value = err.message || "登录失败";
+    error.value = err;
+    showFailToast(err.message || "登录失败");
   }
 });
 
 const handleSubmit = () => {
-  errorMessage.value = "";
+  account.value = account.value.trim();
+  password.value = password.value.trim();
+  if (!account.value || !password.value) {
+    error.value = new Error("请输入账号和密码");
+    return;
+  }
+
   mutateLogin();
 };
-
-watch(
-  () => props.show,
-  (visible) => {
-    if (!visible) return;
-    account.value = "";
-    password.value = "";
-    errorMessage.value = "";
-  }
-);
 </script>

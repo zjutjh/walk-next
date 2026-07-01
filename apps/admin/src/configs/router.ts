@@ -9,7 +9,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "index",
     component: IndexPage,
     meta: {
-      pageName: "功能总览"
+      pageName: "精弘毅行管理后台"
     }
   },
   {
@@ -17,23 +17,25 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "team-rebuild",
     component: () => import("@/pages/team-rebuild/index.vue"),
     meta: {
-      pageName: "重组队伍"
+      pageName: "重组团队"
+    }
+  },
+  {
+    path: "/team/:teamIdStr",
+    name: "team",
+    component: () => import("@/pages/team-info/index.vue"),
+    props: true,
+    meta: {
+      pageName: "团队信息",
+      recreateComponentByPath: true
     }
   },
   {
     path: "/data-table",
-    name: "DataTable",
+    name: "data-table",
     component: () => import("@/pages/data-table/index.vue"),
     meta: {
       pageName: "数据统计表格"
-    }
-  },
-  {
-    path: "/team-list/:campusId",
-    name: "team-list",
-    component: () => import("@/pages/team-list/index.vue"),
-    meta: {
-      pageName: "团队信息"
     }
   }
 ];

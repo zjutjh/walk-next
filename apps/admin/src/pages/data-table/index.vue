@@ -36,8 +36,8 @@
                     v-for="key in OVERVIEW_STATS_KEY_LIST"
                     :key="key"
                     :title="WALKER_STATS_METRIC_TEXT[key]"
-                    :value="routeData.stats[key] ?? '-'"
-                  />
+                    >{{ routeData.stats[key] ?? "-" }}</van-cell
+                  >
                 </van-cell-group>
               </div>
             </van-pull-refresh>
@@ -80,8 +80,8 @@
                     v-for="pointData in routeStatsData?.point_stats"
                     :key="pointData.point_name"
                     :title="POINT_CONFIG[pointData.point_name]?.text"
-                    :value="pointData.passed_count"
-                  />
+                    >{{ pointData.passed_count ?? "-" }}</van-cell
+                  >
                 </van-cell-group>
 
                 <!-- 点位间人数 -->
@@ -90,8 +90,8 @@
                     v-for="segmentData in segmentStats"
                     :key="segmentData.segmentKey"
                     :title="segmentData.text"
-                    :value="segmentData.countOnSegment ?? '-'"
-                  />
+                    >{{ segmentData.countOnSegment ?? "-" }}</van-cell
+                  >
                 </van-cell-group>
 
                 <!-- 路段统计指标 -->
@@ -100,8 +100,8 @@
                     v-for="key in ROUTE_STATS_KEY_LIST"
                     :key="key"
                     :title="WALKER_STATS_METRIC_TEXT[key]"
-                    :value="routeStatsData.status_stats[key] ?? '-'"
-                  />
+                    >{{ routeStatsData.status_stats[key] ?? "-" }}</van-cell
+                  >
                 </van-cell-group>
               </div>
             </van-pull-refresh>
