@@ -9,7 +9,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "index",
     component: IndexPage,
     meta: {
-      pageName: "功能总览"
+      pageName: "精弘毅行管理后台"
     }
   },
   {
@@ -27,6 +27,24 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     component: () => import("@/pages/walk-dashboard/index.vue"),
     meta: {
       pageName: "数据大盘"
+    }
+  },
+  {
+    path: "/team/:teamIdStr",
+    name: "team",
+    component: () => import("@/pages/team-info/index.vue"),
+    props: true,
+    meta: {
+      pageName: "团队信息",
+      recreateComponentByPath: true
+    }
+  },
+  {
+    path: "/data-table",
+    name: "data-table",
+    component: () => import("@/pages/data-table/index.vue"),
+    meta: {
+      pageName: "数据统计表格"
     }
   }
 ];

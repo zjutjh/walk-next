@@ -1,5 +1,5 @@
 import { useFileDialog, useUserMedia } from "@vueuse/core";
-import { QR_CODE_TYPE, type QrCodeType } from "api/types/admin";
+import { QR_CODE, type QrCodeType } from "api/types/admin";
 import { ready, scan } from "qr-scanner-wechat";
 import { onBeforeUnmount, type Ref, ref } from "vue";
 
@@ -80,7 +80,7 @@ const parseQrPayload = (rawText: string): QrParseResult => {
   const codeType = record.code_type;
   const content = record.content;
 
-  if (codeType !== QR_CODE_TYPE.Team && codeType !== QR_CODE_TYPE.Checkin) {
+  if (codeType !== QR_CODE.Team && codeType !== QR_CODE.Checkin) {
     return { ok: false, error: QR_SCAN_ERROR_MESSAGE.InvalidQr };
   }
 

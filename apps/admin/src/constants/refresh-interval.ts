@@ -8,5 +8,10 @@ export const ADMIN_REFRESH_INTERVAL = {
     POINT: 30 * 1000,
     /** 获取行程段详情 */
     SEGMENT: 30 * 1000
+  },
+  /** 数据统计表格 */
+  TABLE: {
+    /** 各标签页统计数据 */
+    STATS: 10 * 1000
   }
 } as const;
