@@ -94,19 +94,20 @@ const {
   refetchOnMount: false,
   queryKey: [
     ADMIN_QUERY_KEY.TEAM.LIST,
+    props.campusId,
     toRef(() => urlQuery.value.keyword),
     toRef(() => urlQuery.value.searchType),
     toRef(() => urlQuery.value.segment)
   ] as const,
   queryFn: ({ queryKey, pageParam: cursor }) =>
     walkAdminService.QueryTeamList({
-      campus: props.campusId,
+      campus: queryKey[1],
       cursor: cursor,
       limit: PAGE_LIMIT,
-      key: queryKey[1],
-      search_type: queryKey[2],
-      prev_point_name: SEGMENT_DERIVATIVE[queryKey[3]]?.from ?? "",
-      to_point_name: SEGMENT_DERIVATIVE[queryKey[3]]?.to ?? ""
+      key: queryKey[2],
+      search_type: queryKey[3],
+      prev_point_name: SEGMENT_DERIVATIVE[queryKey[4]]?.from ?? "",
+      to_point_name: SEGMENT_DERIVATIVE[queryKey[4]]?.to ?? ""
     }),
   initialPageParam: 0,
   getNextPageParam: (lastPage) => (lastPage.next_cursor === 0 ? null : lastPage.next_cursor)
