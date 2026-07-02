@@ -11,13 +11,6 @@
         :campus-id="props.campusId"
         :map-url="CAMPUS_CONFIG[props.campusId]?.mapUrl"
       />
-      <floating-menu
-        v-if="panZoomMapViewRef"
-        v-model:url-query="urlQuery"
-        :campus-id="props.campusId"
-        :is-map-not-fit="panZoomMapViewRef.isMapNotFit"
-        :fit-to-screen-func="panZoomMapViewRef.fitToScreen"
-      />
     </div>
     <data-overview :class="styles.dataPanel" :url-query="urlQuery" :campus-id="props.campusId" />
     <!-- 展示点位或行程段详情的浮动面板 -->
@@ -42,7 +35,7 @@
 
 <script setup lang="ts">
 import { useWindowSize } from "@vueuse/core";
-import { computed, ref, useTemplateRef, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 import { useStoredUrlQuery } from "@/composables";
@@ -51,7 +44,6 @@ import { pxToSize } from "@/utils";
 import { CAMPUS_CONFIG, type CampusId } from "@/walk-config";
 
 import DataOverview from "./components/data-overview/index.vue";
-import FloatingMenu from "./components/floating-menu/index.vue";
 import PanZoomMapView from "./components/pan-zoom-map-view/index.vue";
 import PointDetails from "./components/point-details/index.vue";
 import SegmentDetails from "./components/segment-details/index.vue";
@@ -62,9 +54,6 @@ const props = defineProps<{
   /** 校区ID */
   campusId: CampusId;
 }>();
-
-/** 漫游地图容器 */
-const panZoomMapViewRef = useTemplateRef("panZoomMapViewRef");
 
 const router = useRouter();
 
