@@ -214,12 +214,12 @@ export const useMapPanZoom = ({
     mapPanZoomStore.isZooming = false;
   };
 
-  useEventListener(mapElementRef, "touchstart", handleTouchStart);
-  useEventListener(mapElementRef, "touchmove", handleTouchMove, { passive: false });
-  useEventListener(mapElementRef, ["touchcancel", "touchend"], handlePointerUp);
-  useEventListener(mapElementRef, "mousedown", (e) => handlePanStart(e.clientX, e.clientY));
-  useEventListener(mapElementRef, "mouseup", handlePointerUp);
-  useEventListener(mapElementRef, "wheel", handleMouseWheelZoom, { passive: false });
+  useEventListener(viewportElementRef, "touchstart", handleTouchStart);
+  useEventListener(viewportElementRef, "touchmove", handleTouchMove, { passive: false });
+  useEventListener(viewportElementRef, ["touchcancel", "touchend"], handlePointerUp);
+  useEventListener(viewportElementRef, "mousedown", (e) => handlePanStart(e.clientX, e.clientY));
+  useEventListener(viewportElementRef, "mouseup", handlePointerUp);
+  useEventListener(viewportElementRef, "wheel", handleMouseWheelZoom, { passive: false });
   useEventListener(window, "mousemove", handleMouseDragPan, { passive: false });
   useEventListener(window, ["mouseup", "blur"], handlePointerUp);
 
