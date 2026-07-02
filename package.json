@@ -1,12 +1,8 @@
 {
   "name": "walk-next",
   "version": "0.0.0",
-  "description": "毅行前端 monorepo, 包含用户端，扫码端，大盘",
   "private": true,
-  "packageManager": "pnpm@10.30.1",
-  "engines": {
-    "node": ">=24"
-  },
+  "description": "毅行前端 monorepo, 包含用户端，扫码端，大盘",
   "author": "zjutjh",
   "scripts": {
     "dev:admin": "pnpm -C apps/admin dev",
@@ -15,23 +11,23 @@
     "postinstall": "simple-git-hooks",
     "typecheck": "pnpm -r typecheck"
   },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.62.1",
+    "@typescript-eslint/parser": "^8.62.1",
+    "@zjutjh/eslint-config": "catalog:infra",
+    "baseline-browser-mapping": "^2.10.40",
+    "eslint": "catalog:infra",
+    "eslint-plugin-vue": "^10.9.2",
+    "jiti": "catalog:infra",
+    "lint-staged": "catalog:infra",
+    "simple-git-hooks": "catalog:infra",
+    "vue-eslint-parser": "^10.4.1"
+  },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
   },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "catalog:infra",
-    "@typescript-eslint/parser": "catalog:infra",
-    "@zjutjh/eslint-config": "catalog:infra",
-    "baseline-browser-mapping": "^2.10.25",
-    "eslint": "catalog:infra",
-    "eslint-config-prettier": "catalog:infra",
-    "eslint-plugin-format": "catalog:infra",
-    "eslint-plugin-prettier": "catalog:infra",
-    "eslint-plugin-vue": "catalog:infra",
-    "jiti": "catalog:infra",
-    "lint-staged": "catalog:infra",
-    "prettier": "catalog:infra",
-    "simple-git-hooks": "catalog:infra",
-    "vue-eslint-parser": "catalog:infra"
-  }
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@10.30.1"
 }
