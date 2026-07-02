@@ -1,26 +1,25 @@
 <!-- 搜索建议面板 -->
 <template>
   <div :class="styles.component">
-    <div v-if="props.isSearchInputFocus" :class="styles.textTip">请输入搜索内容</div>
-    <template v-else>
-      <div :class="styles.textTip">猜你想搜</div>
-      <van-grid :column-num="2" :border="false" gutter="0.5rem" icon-size="0.5rem" square clickable>
-        <van-grid-item
-          v-for="(type, typeValue) in TEAM_SEARCH_TYPE"
-          :key="type.text"
-          :class="styles.gridBtn"
-          :icon="type.icon"
-          :text="type.text"
-          @click="handleSearchTypeClick(typeValue)"
-        />
-        <van-grid-item
-          :class="styles.gridBtn"
-          text="路段团队列表"
-          icon="filter-o"
-          @click="props.openSegmentFilter"
-        />
-      </van-grid>
-    </template>
+    <div :class="styles.textTip">
+      {{ props.isSearchInputFocus ? "请输入搜索内容" : "猜你想搜" }}
+    </div>
+    <van-grid :column-num="2" :border="false" gutter="0.5rem" icon-size="0.5rem" square clickable>
+      <van-grid-item
+        v-for="(type, typeValue) in TEAM_SEARCH_TYPE"
+        :key="type.text"
+        :class="styles.gridBtn"
+        :icon="type.icon"
+        :text="type.text"
+        @click="handleSearchTypeClick(typeValue)"
+      />
+      <van-grid-item
+        :class="styles.gridBtn"
+        text="路段团队列表"
+        icon="filter-o"
+        @click="props.openSegmentFilter"
+      />
+    </van-grid>
   </div>
 </template>
 
