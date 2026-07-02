@@ -30,6 +30,8 @@ export interface RouteStat {
   total_reg: number;
   /** 未到场人数 */
   not_present: number;
+  /** 待出发人数 */
+  pending: number;
   /** 进行中人数 */
   in_progress: number;
   /** 下撤人数 */

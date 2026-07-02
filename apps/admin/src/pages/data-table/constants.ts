@@ -18,6 +18,7 @@ export const OVERVIEW_STATS_KEY_LIST: (keyof RouteOverviewStat)[] = [
 export const ROUTE_STATS_KEY_LIST: (keyof RouteStat)[] = [
   "total_reg",
   "not_present",
+  "pending",
   "in_progress",
   "wrong_route",
   "withdrawn"
