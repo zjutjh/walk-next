@@ -43,6 +43,8 @@ catalogs:
 ignoredBuiltDependencies:
   - '@parcel/watcher'
   - '@zjutjh/eslint-config'
-  - esbuild
   - simple-git-hooks
   - vue-demi
+
+onlyBuiltDependencies:
+  - esbuild
