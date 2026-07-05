@@ -1,7 +1,7 @@
 import type { DashboardRoutesOverviewData } from "./dashboard";
 import type { QrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
-import type { TeamStatusInfo } from "./team";
+import type { SearchType, TeamsMemberInfo, TeamStatusInfo, TeamsTeamBriefInfo } from "./team";
 import type {
   UserCampusExample,
   UserContactExample,
@@ -112,6 +112,67 @@ export interface QueryDashboardSegmentDetailsResponse {
   /** 行程段上的人数 */
   number: number;
 }
+
+/** 搜索筛选团队列表 请求 */
+export interface QueryTeamListRequest {
+  /** 校区ID */
+  campus: string;
+  /** 搜索关键词 */
+  key?: string;
+  /** 筛选的行程段的始点ID */
+  prev_point_name?: string;
+  /** 筛选的行程段的末点ID */
+  to_point_name?: string;
+  /** 搜索类型 */
+  search_type?: SearchType;
+  /** 无限滚动游标 */
+  cursor: number;
+  /** 无限滚动一次获取的数量 */
+  limit: number;
+}
+
+/** 搜索筛选团队列表 响应 */
+export interface QueryTeamListResponse {
+  /** 团队信息摘要列表 */
+  teams: TeamsTeamBriefInfo[];
+  /** 无限滚动下一页游标，0表示无更多数据 */
+  next_cursor: number;
+  /** 满足要求的团队总数 */
+  total_count: number;
+}
+
+/** 获取团队详情 请求 */
+export interface QueryTeamDetailsRequest {
+  /** 团队ID */
+  team_id: number;
+}
+
+/** 获取团队详情 响应 */
+export interface QueryTeamDetailsResponse {
+  /** 团队ID */
+  team_id: number;
+  /** 是否被标记为失联 */
+  is_lost: boolean;
+  /** 路线ID */
+  route_name: string;
+  /** 最新经过点位ID */
+  prev_point_name: string;
+  /** 经过点位时间 */
+  prev_point_time: string;
+  /** 队员信息列表 */
+  members: TeamsMemberInfo[];
+}
+
+/** 设置团队失联状态 请求 */
+export interface SetTeamLostRequest {
+  /** 团队ID */
+  team_id: number;
+  /** 是否标记为失联 */
+  is_lost: boolean;
+}
+
+/** 设置团队失联状态 响应 */
+export type SetTeamLostResponse = null;
 
 /** 获取所有路线统计数据 请求 */
 export type QueryOverviewStatsRequest = undefined;

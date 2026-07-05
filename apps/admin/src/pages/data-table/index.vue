@@ -46,68 +46,72 @@
       </van-tab>
 
       <!-- 具体路线统计数据 -->
-      <van-tab
-        v-for="route in ROUTE_LIST"
-        :key="route"
-        :title="ROUTE_CONFIG[route]?.text"
-        :name="route"
-      >
-        <error-tip
-          v-if="routeStatsError && !isRouteStatsFetching"
-          :class="styles.errorTip"
-          :data-updated-at="routeStatsUpdatedAt"
-        />
-        <loading-container
-          :class="styles.loadingContainer"
-          :loading="isRouteStatsLoading"
-          :modal="false"
+      <template v-for="campus in CAMPUS_LIST" :key="campus">
+        <van-tab
+          v-for="route in CAMPUS_ROUTE_LIST_MAP[campus]"
+          :key="route"
+          :title="ROUTE_CONFIG[route]?.text"
+          :name="route"
         >
-          <error-empty
-            :error="routeStatsError"
-            :disabled="!isNil(routeStatsData)"
-            @retry="refetchRouteStats"
+          <error-tip
+            v-if="routeStatsError && !isRouteStatsFetching"
+            :class="styles.errorTip"
+            :data-updated-at="routeStatsUpdatedAt"
+          />
+          <loading-container
+            :class="styles.loadingContainer"
+            :loading="isRouteStatsLoading"
+            :modal="false"
           >
-            <van-pull-refresh
-              v-if="routeStatsData"
-              :model-value="isRouteStatsPullRefreshing"
-              :disabled="isRouteStatsFetching"
-              @refresh="handleRouteStatsRefresh"
+            <error-empty
+              :error="routeStatsError"
+              :disabled="!isNil(routeStatsData)"
+              @retry="refetchRouteStats"
             >
-              <div :key="urlQuery.tab" :class="styles.dataContainer">
-                <!-- 经过点位人数 -->
-                <van-cell-group inset title="经过点位人数">
-                  <van-cell
-                    v-for="pointData in routeStatsData?.point_stats"
-                    :key="pointData.point_name"
-                    :title="POINT_CONFIG[pointData.point_name]?.text"
-                    >{{ pointData.passed_count ?? "-" }}</van-cell
-                  >
-                </van-cell-group>
+              <van-pull-refresh
+                v-if="routeStatsData"
+                :model-value="isRouteStatsPullRefreshing"
+                :disabled="isRouteStatsFetching"
+                @refresh="handleRouteStatsRefresh"
+              >
+                <div :key="urlQuery.tab" :class="styles.dataContainer">
+                  <!-- 经过点位人数 -->
+                  <van-cell-group inset title="经过点位人数">
+                    <van-cell
+                      v-for="pointData in routeStatsData?.point_stats"
+                      :key="pointData.point_name"
+                      :title="POINT_CONFIG[pointData.point_name]?.text"
+                      >{{ pointData.passed_count ?? "-" }}</van-cell
+                    >
+                  </van-cell-group>
 
-                <!-- 点位间人数 -->
-                <van-cell-group inset title="点位间人数">
-                  <van-cell
-                    v-for="segmentData in segmentStats"
-                    :key="segmentData.segmentKey"
-                    :title="segmentData.text"
-                    >{{ segmentData.countOnSegment ?? "-" }}</van-cell
-                  >
-                </van-cell-group>
+                  <!-- 点位间人数 -->
+                  <van-cell-group inset title="点位间人数">
+                    <van-cell
+                      v-for="segmentData in segmentStats"
+                      :key="segmentData.segmentKey"
+                      :title="segmentData.text"
+                      is-link
+                      :to="`/team-list/${campus}?segment=${segmentData.segmentKey}`"
+                      >{{ segmentData.countOnSegment ?? "-" }}</van-cell
+                    >
+                  </van-cell-group>
 
-                <!-- 路段统计指标 -->
-                <van-cell-group inset title="状态">
-                  <van-cell
-                    v-for="key in ROUTE_STATS_KEY_LIST"
-                    :key="key"
-                    :title="WALKER_STATS_METRIC_TEXT[key]"
-                    >{{ routeStatsData.status_stats[key] ?? "-" }}</van-cell
-                  >
-                </van-cell-group>
-              </div>
-            </van-pull-refresh>
-          </error-empty>
-        </loading-container>
-      </van-tab>
+                  <!-- 路段统计指标 -->
+                  <van-cell-group inset title="状态">
+                    <van-cell
+                      v-for="key in ROUTE_STATS_KEY_LIST"
+                      :key="key"
+                      :title="WALKER_STATS_METRIC_TEXT[key]"
+                      >{{ routeStatsData.status_stats[key] ?? "-" }}</van-cell
+                    >
+                  </van-cell-group>
+                </div>
+              </van-pull-refresh>
+            </error-empty>
+          </loading-container>
+        </van-tab>
+      </template>
     </van-tabs>
   </default-layout>
 </template>
@@ -125,9 +129,10 @@ import { ADMIN_REFRESH_INTERVAL } from "@/constants/refresh-interval";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { walkAdminService } from "@/utils";
 import {
+  CAMPUS_LIST,
+  CAMPUS_ROUTE_LIST_MAP,
   POINT_CONFIG,
   ROUTE_CONFIG,
-  ROUTE_LIST,
   SEGMENT_DERIVATIVE,
   SEGMENT_KEY_DELIMITER
 } from "@/walk-config";

@@ -1,0 +1,41 @@
+// 搜索结果列表
+.component {
+  .resultList {
+    display: flex;
+    flex-direction: column;
+    padding: {
+      top: 20px;
+      bottom: 20px;
+    }
+
+    .teamInfoWrapper {
+      margin-bottom: 20px;
+    }
+
+    .loadingText {
+      user-select: none;
+
+      .loadingIcon {
+        display: inline-block;
+        margin-right: 10px;
+      }
+    }
+
+    .errorText {
+      color: var(--van-danger-color);
+      user-select: none;
+
+      .errorIcon {
+        margin-right: 5px;
+      }
+    }
+  }
+
+  :global(.van-loading__text) {
+    user-select: none;
+  }
+}
+
+.refreshBtn {
+  background-color: var(--van-primary-color);
+}

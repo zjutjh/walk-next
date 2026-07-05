@@ -1,4 +1,10 @@
-import type { WalkerStatsMetric, WalkerStatus } from "api/types/admin";
+import type { TeamMemberRole, WalkerStatsMetric, WalkerStatus } from "api/types/admin";
+
+/** 团队成员角色的中文名 */
+export const TEAM_MEMBER_ROLE_TEXT = {
+  captain: "队长",
+  member: "队员"
+} as const satisfies Record<TeamMemberRole, string>;
 
 /** 人员状态的中文名 */
 export const WALKER_STATUS_TEXT = {

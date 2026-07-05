@@ -18,6 +18,14 @@
       :map-url="props.mapUrl"
       @resize="limitMapScale"
     />
+    <floating-menu
+      v-if="viewportRef"
+      v-model:url-query="urlQuery"
+      :campus-id="props.campusId"
+      :is-map-not-fit="isMapNotFit"
+      :fit-to-screen-func="fitToScreen"
+      @click.stop
+    />
   </div>
 </template>
 
@@ -29,6 +37,7 @@ import { useMapPanZoomStore } from "@/stores/map-pan-zoom-store";
 import type { CampusId } from "@/walk-config";
 
 import type { DashboardUrlQuery } from "../../types";
+import FloatingMenu from "../floating-menu/index.vue";
 import MapPicker from "../map-picker/index.vue";
 import styles from "./index.module.scss";
 
@@ -86,9 +95,4 @@ const fitToScreen = () => {
   // 缩放值变化可能会导致平移值超限，需要对平移值做限制
   limitMapTranslate();
 };
-
-defineExpose({
-  fitToScreen,
-  isMapNotFit
-});
 </script>

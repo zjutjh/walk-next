@@ -37,6 +37,10 @@
 
             .dataContainer {
               padding-bottom: 40px;
+
+              :global(.van-cell__title) {
+                flex: 3;
+              }
             }
           }
         }
