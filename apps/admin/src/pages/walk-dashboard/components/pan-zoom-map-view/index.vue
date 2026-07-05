@@ -24,6 +24,7 @@
       :campus-id="props.campusId"
       :is-map-not-fit="isMapNotFit"
       :fit-to-screen-func="fitToScreen"
+      @click.stop
     />
   </div>
 </template>
