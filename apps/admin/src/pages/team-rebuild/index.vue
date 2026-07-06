@@ -211,7 +211,7 @@ const handleRegisterSubmit = () => {
 
 const { mutate: submitTeam, isPending } = useMutation({
   mutationFn: () =>
-    walkAdminService.RegroupTeam({
+    walkAdminService.RebuildTeam({
       members: memberList.value.map((member) => member.id),
       // eslint-disable-next-line camelcase
       route_name: currentRoute.value

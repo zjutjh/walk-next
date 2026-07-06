@@ -180,7 +180,7 @@ export interface UpdateWalkerStatusResponse {
 /**
  * 重组队伍 请求
  */
-export interface RegroupTeamRequest {
+export interface RebuildTeamRequest {
   /** 用户编号，长度3-6人 */
   members: number[];
   /** 路线名称 */
@@ -190,7 +190,7 @@ export interface RegroupTeamRequest {
 /**
  * 重组队伍 响应
  */
-export interface RegroupTeamResponse {
+export interface RebuildTeamResponse {
   /** 新重组的队伍编号 */
   team_id: number;
 }
