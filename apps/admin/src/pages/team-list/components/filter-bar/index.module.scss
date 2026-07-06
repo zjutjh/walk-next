@@ -1,0 +1,66 @@
+// 筛选器
+.component {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  overflow-x: auto;
+  background-color: var(--van-search-background);
+  padding: {
+    bottom: 10px;
+    left: var(--van-padding-sm);
+    right: var(--van-padding-sm);
+  }
+
+  :global(.van-checkbox) {
+    flex-shrink: 0;
+    margin: 0;
+
+    :global(.van-checkbox__icon) {
+      height: 26px;
+      line-height: 26px;
+
+      .filterItem {
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        background-color: #f2f3f5;
+        color: var(--van-text-color-2);
+        padding: {
+          left: 8px;
+          right: 8px;
+        }
+
+        .filterText {
+          font-size: 16px;
+          text-align: center;
+          flex-shrink: 0;
+          padding: {
+            top: 3px;
+            bottom: 3px;
+          }
+        }
+
+        .clearFilterBtn {
+          display: none;
+          vertical-align: middle;
+          border: none;
+        }
+      }
+
+      &:global(.van-checkbox__icon--checked) {
+        .filterItem {
+          background-color: var(--van-checkbox-checked-icon-color);
+          color: var(--van-white);
+        }
+
+        .clearFilterBtn {
+          display: block;
+          margin-right: -5px;
+        }
+      }
+    }
+  }
+}

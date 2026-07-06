@@ -6,6 +6,7 @@ import { VueQueryPlugin } from "@tanstack/vue-query";
 import dayjs from "dayjs";
 import zhCn from "dayjs/locale/zh-cn";
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
 
 import App from "./app.vue";
@@ -18,5 +19,5 @@ dayjs.locale(zhCn);
 createApp(App)
   .use(routerConfig)
   .use(VueQueryPlugin, { queryClient: globalQueryClient })
-  .use(createPinia())
+  .use(createPinia().use(piniaPluginPersistedstate))
   .mount("#app");

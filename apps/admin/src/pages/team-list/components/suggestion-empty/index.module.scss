@@ -1,0 +1,19 @@
+// 搜索建议面板
+.component {
+  .textTip {
+    color: var(--van-text-color-3);
+    width: 100%;
+    text-align: center;
+    padding: {
+      top: 50px;
+      bottom: 30px;
+    }
+  }
+
+  .gridBtn :global(.van-grid-item__content) {
+    border-radius: 20px;
+    color: var(--van-text-color-2);
+    --van-grid-item-text-color: var(--van-text-color-2);
+    --van-grid-item-content-background: rgba(255, 255, 255, 0.8);
+  }
+}

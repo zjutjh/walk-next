@@ -3,21 +3,28 @@
   "language": "en",
   "dictionaries": ["typescript", "node", "html", "css", "bash", "npm"],
   "words": [
-    "zjutjh",
-    "vueuse",
-    "unplugin",
     "Apifox",
-    "ntvs",
-    "njsproj",
+    "autorenew",
+    "checkin",
     "dbaeumer",
-    "pxtorem",
-    "oxlint",
     "dingtalk",
-    "iconify"
+    "iconify",
+    "njsproj",
+    "ntvs",
+    "nums",
+    "oxlint",
+    "persistedstate",
+    "pxtorem",
+    "swipeable",
+    "unplugin",
+    "vueuse",
+    "wechat",
+    "zjutjh"
   ],
   "ignorePaths": [
     "node_modules/**",
     "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
     "**/dist/**",
     "**/public/**"
   ]

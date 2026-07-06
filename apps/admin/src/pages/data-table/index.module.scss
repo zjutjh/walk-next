@@ -1,0 +1,50 @@
+.layout :global(.default-layout__main) {
+  position: relative;
+  font-family: "Barlow", "DingTalk Sans";
+
+  .tabs {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    :global(.van-tabs__wrap) {
+      flex-shrink: 0;
+    }
+
+    :global(.van-tabs__content) {
+      flex-grow: 1;
+
+      :global(.van-tab__panel) {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        .errorTip {
+          flex-shrink: 0;
+        }
+
+        .loadingContainer {
+          flex-grow: 1;
+          height: 0;
+
+          :global(.van-pull-refresh) {
+            height: 100%;
+            overflow-y: auto;
+
+            :global(.van-pull-refresh__track) {
+              height: auto;
+            }
+
+            .dataContainer {
+              padding-bottom: 40px;
+
+              :global(.van-cell__title) {
+                flex: 3;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

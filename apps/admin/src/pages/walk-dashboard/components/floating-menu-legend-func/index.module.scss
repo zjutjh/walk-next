@@ -1,0 +1,26 @@
+// 图例功能
+.popup {
+  width: 320px;
+  padding: {
+    top: 50px;
+    bottom: 30px;
+    left: 20px;
+    right: 20px;
+  }
+
+  .cell {
+    white-space: nowrap;
+
+    .legend {
+      height: 40px;
+      max-width: 60px;
+      vertical-align: middle;
+
+      &:has(:global(.van-image__loading)),
+      &:has(:global(.van-image__error)) {
+        display: block;
+        margin-left: auto;
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+// 地图式点位/路线选择器
+.component {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+
+  .mapImage {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    user-select: none;
+    pointer-events: none;
+
+    &:has(:global(.van-image__loading)),
+    &:has(:global(.van-image__error)) {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .hotRect {
+    position: absolute;
+    transform-origin: 0 0;
+    z-index: 1;
+    cursor: pointer;
+    user-select: none;
+
+    &.chosen {
+      z-index: 0;
+    }
+
+    // 调试预览用的热区边框，只在vite development模式可见
+    & {
+      border: 2px dashed var(--jh-walk-hot-rect-border-color);
+      outline: 2px dashed
+        rgb(
+          from var(--jh-walk-hot-rect-border-color) calc(255 - r) calc(255 - g)
+            calc(255 - b)
+        );
+    }
+  }
+}

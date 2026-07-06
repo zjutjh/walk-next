@@ -3,5 +3,28 @@ export const ADMIN_QUERY_KEY = {
   USER: {
     /** 用户信息（示例） */
     INFO: "userInfo"
+  },
+  /** 团队相关 */
+  TEAM: {
+    /** 团队列表 */
+    LIST: "teamList",
+    /** 团队详情 */
+    DETAILS: "teamDetails"
+  },
+  /** 数据仪表盘相关 */
+  DASHBOARD: {
+    /** 获取校区总数据 */
+    OVERVIEW: "getCampusOverview",
+    /** 获取点位详情 */
+    POINT: "getPointDetails",
+    /** 获取行程段详情 */
+    SEGMENT: "getSegmentDetails"
+  },
+  /** 统计数据相关 */
+  STATS: {
+    /** 总览 */
+    OVERVIEW: "overviewStats",
+    /** 单路线 */
+    ROUTE: "routeStats"
   }
 } as const;

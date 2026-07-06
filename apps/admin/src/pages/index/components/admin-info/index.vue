@@ -6,9 +6,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-
-// TODO: 从接口中获取adminInfo
-const walkPoint = ref("XXX");
-const adminName = ref("XXX");
+withDefaults(
+  defineProps<{
+    adminName?: string;
+    walkPoint?: string;
+  }>(),
+  {
+    adminName: "-",
+    walkPoint: "-"
+  }
+);
 </script>

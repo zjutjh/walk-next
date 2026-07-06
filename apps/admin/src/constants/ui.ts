@@ -11,7 +11,8 @@ export const MAX_VIEW_WIDTH = 750;
 export const THEME_VAR_RECORD = {
   primaryColor: "#F58888",
   successColor: "#49DF17",
-  warningColor: "#ADDF17",
+  warningColor: "#E6A23C",
   dangerColor: "#E53935",
-  infoColor: "#3A87FA"
+  infoColor: "#3A87FA",
+  cellRightIconColor: "var(--van-gray-4)"
 } as const;

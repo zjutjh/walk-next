@@ -32,6 +32,24 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, data }, options);
   }
 
+  /** 管理员登录 */
+  Auth(req: AdminAPI.AuthRequest, options?: T): Promise<AdminAPI.AuthResponse> {
+    const url = this.genBaseURL("/admin/auth");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 管理员退出登录 */
+  Logout(req: AdminAPI.LogoutRequest, options?: T): Promise<AdminAPI.LogoutResponse> {
+    const url = this.genBaseURL("/admin/logout");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
   /** 获取用户信息（示例） */
   QueryProfileExample(
     req: AdminAPI.QueryProfileExampleRequest,
@@ -42,6 +60,114 @@ export default class WalkAdminService<T> extends BaseService<T> {
     const params = req;
 
     return this.request({ url, method, params }, options);
+  }
+
+  /** 获取数据仪表盘校区总览 */
+  QueryDashboardCampusOverview(
+    req: AdminAPI.QueryDashboardCampusRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryDashboardCampusResponse> {
+    const url = this.genBaseURL("/dashboard/overview");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取数据仪表盘点位详情 */
+  QueryDashboardPointDetails(
+    req: AdminAPI.QueryDashboardPointDetailsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryDashboardPointDetailsResponse> {
+    const url = this.genBaseURL("/dashboard/checkpoint");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取数据仪表盘行程段详情 */
+  QueryDashboardSegmentDetails(
+    req: AdminAPI.QueryDashboardSegmentDetailsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryDashboardSegmentDetailsResponse> {
+    const url = this.genBaseURL("/dashboard/segment");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 筛选搜索团队列表 */
+  QueryTeamList(
+    req: AdminAPI.QueryTeamListRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryTeamListResponse> {
+    const url = this.genBaseURL("/dashboard/teams/filter");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取团队详情 */
+  QueryTeamDetails(
+    req: AdminAPI.QueryTeamDetailsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryTeamDetailsResponse> {
+    const url = this.genBaseURL(`/dashboard/teams`);
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取所有路线的总览统计数据 */
+  QueryOverviewStats(
+    req: AdminAPI.QueryOverviewStatsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryOverviewStatsResponse> {
+    const url = this.genBaseURL("/dashboard/stats/route/all");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取路线统计数据 */
+  QueryRouteStats(
+    req: AdminAPI.QueryRouteStatsRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryRouteStatsResponse> {
+    const url = this.genBaseURL("/dashboard/stats/route");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 获取团队状态 */
+  QueryTeamStatus(
+    req: AdminAPI.QueryTeamStatusRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryTeamStatusResponse> {
+    const url = this.genBaseURL("/admin/team/status");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 更改人员状态 */
+  UpdateWalkerStatus(
+    req: AdminAPI.UpdateWalkerStatusRequest,
+    options?: T
+  ): Promise<AdminAPI.UpdateWalkerStatusResponse> {
+    const url = this.genBaseURL("/admin/user/update");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
   }
 
   /** 重组队伍 */
@@ -66,5 +192,77 @@ export default class WalkAdminService<T> extends BaseService<T> {
     const params = req;
 
     return this.request({ url, method, params }, options);
+  }
+
+  /** 所有待出发改为进行中 */
+  StartAllThePending(
+    req: AdminAPI.StartAllThePendingRequest,
+    options?: T
+  ): Promise<AdminAPI.StartAllThePendingResponse> {
+    const url = this.genBaseURL("/admin/user/pending/start");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 设置团队失联状态 */
+  SetTeamLost(
+    req: AdminAPI.SetTeamLostRequest,
+    options?: T
+  ): Promise<AdminAPI.SetTeamLostResponse> {
+    const url = this.genBaseURL(`/dashboard/teams/lost`);
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 绑定签到码 */
+  BindCheckinCode(
+    req: AdminAPI.BindCheckinCodeRequest,
+    options?: T
+  ): Promise<AdminAPI.BindCheckinCodeResponse> {
+    const url = this.genBaseURL("/admin/team/bind");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 打卡(指团队到了某个点位后打卡表示已经过) */
+  CheckinTeam(
+    req: AdminAPI.CheckinTeamRequest,
+    options?: T
+  ): Promise<AdminAPI.CheckinTeamResponse> {
+    const url = this.genBaseURL("/admin/team/update");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 终点确认 */
+  ConfirmDestination(
+    req: AdminAPI.ConfirmDestinationRequest,
+    options?: T
+  ): Promise<AdminAPI.ConfirmDestinationResponse> {
+    const url = this.genBaseURL("/admin/destination/confirm");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 标记团队违规 */
+  MarkTeamViolation(
+    req: AdminAPI.MarkTeamViolationRequest,
+    options?: T
+  ): Promise<AdminAPI.MarkTeamViolationResponse> {
+    const url = this.genBaseURL("/admin/team/violation/mark");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
   }
 }
