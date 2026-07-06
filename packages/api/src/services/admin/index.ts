@@ -133,7 +133,7 @@ export default class WalkAdminService<T> extends BaseService<T> {
     req: AdminAPI.RebuildTeamRequest,
     options?: T
   ): Promise<AdminAPI.RebuildTeamResponse> {
-    const url = this.genBaseURL("/admin/team/regroup"); // 重组队伍接口路径
+    const url = this.genBaseURL("/admin/team/rebuild"); // 重组队伍接口路径
     const method = "POST";
     const data = req;
 
