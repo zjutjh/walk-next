@@ -15,8 +15,8 @@
           v-for="campusId in CAMPUS_LIST"
           :key="campusId"
           :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
-          is-link
           :to="`/dashboard/${campusId}`"
+          is-link
         />
         <van-cell title="数据表格" is-link to="/data-table" />
       </van-cell-group>
@@ -56,7 +56,13 @@
       @error="handleScanError"
     />
 
-    <team-id-input-modal v-model:show="isTeamIdModalVisible" @submit="handleTeamIdSubmit" />
+    <prompt-dialog
+      v-model:show="isTeamIdDialogVisible"
+      title="输入签到"
+      :model-value="teamIdDialogValue"
+      :field-config="TEAM_ID_DIALOG_CONFIG"
+      @confirm="handleTeamIdConfirm"
+    />
   </default-layout>
 </template>
 
@@ -67,8 +73,9 @@ import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
+import PromptDialog from "@/components/prompt-dialog/index.vue";
+import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types.ts";
 import QrScanPreview from "@/components/qr-scan-preview/index.vue";
-import TeamIdInputModal from "@/components/team-id-input-modal/index.vue";
 import type { QrCodeData } from "@/composables/use-qr-scanner";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { useAuthStore } from "@/stores/auth";
@@ -81,18 +88,35 @@ import styles from "./index.module.scss";
 const router = useRouter();
 const authStore = useAuthStore();
 
-const isScanPopupVisible = ref(false);
-const isTeamIdModalVisible = ref(false);
+/** 团队ID输入弹窗 表单值 */
+const teamIdDialogValue = ref({ teamIdStr: "" });
+/** 团队ID输入弹窗 表单字段配置 */
+const TEAM_ID_DIALOG_CONFIG: Record<keyof typeof teamIdDialogValue.value, PromptDialogFieldConfig> =
+  {
+    teamIdStr: {
+      label: "团队ID",
+      placeholder: "请输入团队ID",
+      type: "digit",
+      rules: [{ required: true, message: "请输入团队ID" }]
+    }
+  };
 
+/** 扫码弹层是否显示 */
+const isScanPopupVisible = ref(false);
+/** 团队ID输入弹窗是否显示 */
+const isTeamIdDialogVisible = ref(false);
+
+/** 点击扫码签到按钮 */
 const handleScanClick = () => {
   if (isCheckInPending.value) return;
   isScanPopupVisible.value = true;
 };
 
+/** 点击输入签到按钮 */
 const handleManualInputClick = () => {
   if (isCheckInPending.value) return;
-
-  isTeamIdModalVisible.value = true;
+  teamIdDialogValue.value = { teamIdStr: "" };
+  isTeamIdDialogVisible.value = true;
 };
 
 // 登出
@@ -101,7 +125,7 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   onSuccess: () => {
     authStore.reset();
     isScanPopupVisible.value = false;
-    isTeamIdModalVisible.value = false;
+    isTeamIdDialogVisible.value = false;
     showSuccessToast("登出成功");
   },
   onError: (err: Error) => {
@@ -141,9 +165,9 @@ const handleScanError = (message: string) => {
   showFailToast(message || "扫码失败");
 };
 
-/** 手动输入团队ID */
-const handleTeamIdSubmit = (teamId: number) => {
-  mutateCheckin({ code_type: QR_CODE.Team, content: String(teamId) });
+/** 团队ID输入弹窗确认 */
+const handleTeamIdConfirm = () => {
+  mutateCheckin({ code_type: QR_CODE.Team, content: teamIdDialogValue.value.teamIdStr });
 };
 
 /** 点击登出按钮 */
