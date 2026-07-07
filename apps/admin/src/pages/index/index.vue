@@ -60,12 +60,15 @@
     :field-config="TEAM_ID_DIALOG_CONFIG"
     :confirm-disabled="isCheckInPending"
     @confirm="handleTeamIdDialogConfirm"
+    @cancel="handleTeamIdDialogCancel"
   />
 </template>
 
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
 import { type AdminAPI, QR_CODE } from "api/types/admin";
+import { CanceledError } from "axios";
+import { RequestError } from "shared";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -132,13 +135,20 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   }
 });
 
+/** 打卡 取消控制器 */
+let checkinAbortController: AbortController | null = null;
 // 打卡
 const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
-  mutationFn: (params: AdminAPI.CheckinTeamRequest) => walkAdminService.CheckinTeam(params),
+  mutationFn: (params: AdminAPI.CheckinTeamRequest) => {
+    checkinAbortController = new AbortController();
+    return walkAdminService.CheckinTeam(params, { signal: checkinAbortController.signal });
+  },
   onSuccess: (data) => {
+    isTeamIdDialogVisible.value = false;
     router.push({ path: `/team/${data.team_id}` });
   },
   onError: (err) => {
+    if (err instanceof RequestError && err.originError instanceof CanceledError) return;
     showFailToast(err.message || "打卡失败");
   }
 });
@@ -167,6 +177,11 @@ const handleScanError = (message: string) => {
 /** 团队ID输入弹窗确认 */
 const handleTeamIdDialogConfirm = () => {
   mutateCheckin({ code_type: QR_CODE.Team, content: teamIdDialogValue.value.teamIdStr });
+};
+
+/** 团队ID输入弹窗取消 */
+const handleTeamIdDialogCancel = () => {
+  checkinAbortController?.abort();
 };
 
 /** 点击登出按钮 */

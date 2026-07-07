@@ -67,7 +67,6 @@ const handleConfirm = async () => {
     return;
   }
   emit("confirm", modelValue.value);
-  isDialogVisible.value = false;
 };
 
 /** 点击取消按钮 */
