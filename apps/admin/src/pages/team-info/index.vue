@@ -54,6 +54,8 @@
               </van-cell>
             </van-cell-group>
 
+            <div :class="styles.middleWhiteSpace"></div>
+
             <div :class="styles.buttonContainer">
               <van-button
                 v-if="teamInfoData.team.is_prev_point_invalid"
@@ -116,7 +118,7 @@ import { useAuthStore } from "@/stores/auth";
 import { walkAdminService } from "@/utils/service";
 import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_POINT_LIST_MAP } from "@/walk-config";
 
-import { STATUS_COLOR_MAP, STATUS_PICKER_ACTION_MAP } from "./constants";
+import { STATUS_COLOR_MAP, STATUS_PICKER_ACTION_MAP } from "../../constants/member-status-config";
 import styles from "./index.module.scss";
 import type { StatusPickerAction } from "./types";
 
