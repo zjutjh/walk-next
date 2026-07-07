@@ -1,50 +1,52 @@
 <template>
   <default-layout :class="styles.page" :show-back="false">
-    <admin-info
-      :admin-name="authStore.adminName || '-'"
-      :walk-point="POINT_CONFIG[authStore.pointId]?.text ?? '-'"
-    />
-    <van-cell-group title="签到">
-      <van-cell title="扫码签到" is-link @click="handleScanClick" />
-      <van-cell title="输入签到" is-link @click="handleManualInputClick" />
-    </van-cell-group>
-
-    <van-cell-group title="数据大盘">
-      <van-cell
-        v-for="campusId in CAMPUS_LIST"
-        :key="campusId"
-        :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
-        :to="`/dashboard/${campusId}`"
-        is-link
+    <loading-container :loading="isAnyMutationPending">
+      <admin-info
+        :admin-name="authStore.adminName || '-'"
+        :walk-point="POINT_CONFIG[authStore.pointId]?.text ?? '-'"
       />
-      <van-cell title="数据表格" is-link to="/data-table" />
-    </van-cell-group>
+      <van-cell-group title="签到">
+        <van-cell title="扫码签到" is-link @click="handleScanClick" />
+        <van-cell title="输入签到" is-link @click="handleManualInputClick" />
+      </van-cell-group>
 
-    <van-cell-group title="人员管理">
-      <van-cell title="重组团队" is-link to="/team-rebuild" />
-    </van-cell-group>
+      <van-cell-group title="数据大盘">
+        <van-cell
+          v-for="campusId in CAMPUS_LIST"
+          :key="campusId"
+          :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
+          :to="`/dashboard/${campusId}`"
+          is-link
+        />
+        <van-cell title="数据表格" is-link to="/data-table" />
+      </van-cell-group>
 
-    <div :class="styles.buttonContainer">
-      <van-button
-        type="primary"
-        :class="styles.functionButton"
-        :loading="isStartAllThePendingPending"
-        block
-        @click="handleStartAllThePendingClick"
-      >
-        待出发→进行中
-      </van-button>
-      <van-button
-        type="danger"
-        plain
-        block
-        :loading="isLogoutPending"
-        :disabled="isLogoutPending"
-        @click="handleLogoutClick"
-      >
-        退出登录
-      </van-button>
-    </div>
+      <van-cell-group title="人员管理">
+        <van-cell title="重组团队" is-link to="/team-rebuild" />
+      </van-cell-group>
+
+      <div :class="styles.buttonContainer">
+        <van-button
+          type="primary"
+          :class="styles.functionButton"
+          :loading="isStartAllThePendingPending"
+          block
+          @click="handleStartAllThePendingClick"
+        >
+          待出发→进行中
+        </van-button>
+        <van-button
+          type="danger"
+          plain
+          block
+          :loading="isLogoutPending"
+          :disabled="isLogoutPending"
+          @click="handleLogoutClick"
+        >
+          退出登录
+        </van-button>
+      </div>
+    </loading-container>
   </default-layout>
 
   <qr-scan-preview
@@ -70,9 +72,10 @@ import { type AdminAPI, QR_CODE } from "api/types/admin";
 import { CanceledError } from "axios";
 import { RequestError } from "shared";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
+import LoadingContainer from "@/components/loading-container/index.vue";
 import PromptDialog from "@/components/prompt-dialog/index.vue";
 import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types.ts";
 import QrScanPreview from "@/components/qr-scan-preview/index.vue";
@@ -210,4 +213,9 @@ const handleStartAllThePendingClick = async () => {
   }
   mutateStartAllThePending();
 };
+
+/** 任意mutation请求中 */
+const isAnyMutationPending = computed(
+  () => isLogoutPending.value || isCheckInPending.value || isStartAllThePendingPending.value
+);
 </script>
