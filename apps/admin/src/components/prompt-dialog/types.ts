@@ -22,4 +22,6 @@ export interface PromptDialogProps {
   description?: string;
   /** 字段配置 */
   fieldConfig: Record<string, PromptDialogFieldConfig>;
+  /** 是否禁用确认按钮 */
+  confirmDisabled?: boolean;
 }

@@ -1,69 +1,66 @@
 <template>
-  <default-layout :show-back="false">
+  <default-layout :class="styles.page" :show-back="false">
     <admin-info
       :admin-name="authStore.adminName || '-'"
       :walk-point="POINT_CONFIG[authStore.pointId]?.text ?? '-'"
     />
-    <section :class="styles.main">
-      <van-cell-group title="签到">
-        <van-cell title="扫码签到" is-link @click="handleScanClick" />
-        <van-cell title="输入签到" is-link @click="handleManualInputClick" />
-      </van-cell-group>
+    <van-cell-group title="签到">
+      <van-cell title="扫码签到" is-link @click="handleScanClick" />
+      <van-cell title="输入签到" is-link @click="handleManualInputClick" />
+    </van-cell-group>
 
-      <van-cell-group title="数据大盘">
-        <van-cell
-          v-for="campusId in CAMPUS_LIST"
-          :key="campusId"
-          :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
-          :to="`/dashboard/${campusId}`"
-          is-link
-        />
-        <van-cell title="数据表格" is-link to="/data-table" />
-      </van-cell-group>
+    <van-cell-group title="数据大盘">
+      <van-cell
+        v-for="campusId in CAMPUS_LIST"
+        :key="campusId"
+        :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
+        :to="`/dashboard/${campusId}`"
+        is-link
+      />
+      <van-cell title="数据表格" is-link to="/data-table" />
+    </van-cell-group>
 
-      <van-cell-group title="人员管理">
-        <van-cell title="重组团队" is-link to="/team-rebuild" />
-        <div :class="styles.functionButtonContainer">
-          <van-button
-            type="primary"
-            :class="styles.functionButton"
-            :loading="isStartAllThePendingPending"
-            block
-            @click="handleStartAllThePendingClick"
-          >
-            待出发→进行中
-          </van-button>
-        </div>
-      </van-cell-group>
+    <van-cell-group title="人员管理">
+      <van-cell title="重组团队" is-link to="/team-rebuild" />
+    </van-cell-group>
 
-      <div :class="styles.logoutButtonContainer">
-        <van-button
-          type="danger"
-          plain
-          block
-          :loading="isLogoutPending"
-          :disabled="isLogoutPending"
-          @click="handleLogoutClick"
-        >
-          退出登录
-        </van-button>
-      </div>
-    </section>
-
-    <qr-scan-preview
-      v-model:show="isScanPopupVisible"
-      @success="handleScanSuccess"
-      @error="handleScanError"
-    />
-
-    <prompt-dialog
-      v-model:show="isTeamIdDialogVisible"
-      title="输入签到"
-      :model-value="teamIdDialogValue"
-      :field-config="TEAM_ID_DIALOG_CONFIG"
-      @confirm="handleTeamIdConfirm"
-    />
+    <div :class="styles.buttonContainer">
+      <van-button
+        type="primary"
+        :class="styles.functionButton"
+        :loading="isStartAllThePendingPending"
+        block
+        @click="handleStartAllThePendingClick"
+      >
+        待出发→进行中
+      </van-button>
+      <van-button
+        type="danger"
+        plain
+        block
+        :loading="isLogoutPending"
+        :disabled="isLogoutPending"
+        @click="handleLogoutClick"
+      >
+        退出登录
+      </van-button>
+    </div>
   </default-layout>
+
+  <qr-scan-preview
+    v-model:show="isScanPopupVisible"
+    @success="handleScanSuccess"
+    @error="handleScanError"
+  />
+
+  <prompt-dialog
+    v-model:show="isTeamIdDialogVisible"
+    v-model="teamIdDialogValue"
+    title="输入签到"
+    :field-config="TEAM_ID_DIALOG_CONFIG"
+    :confirm-disabled="isCheckInPending"
+    @confirm="handleTeamIdDialogConfirm"
+  />
 </template>
 
 <script setup lang="ts">
@@ -108,13 +105,15 @@ const isTeamIdDialogVisible = ref(false);
 
 /** 点击扫码签到按钮 */
 const handleScanClick = () => {
-  if (isCheckInPending.value) return;
+  if (isCheckInPending.value) {
+    showFailToast("正在打卡，请稍后再试");
+    return;
+  }
   isScanPopupVisible.value = true;
 };
 
 /** 点击输入签到按钮 */
 const handleManualInputClick = () => {
-  if (isCheckInPending.value) return;
   teamIdDialogValue.value = { teamIdStr: "" };
   isTeamIdDialogVisible.value = true;
 };
@@ -166,7 +165,7 @@ const handleScanError = (message: string) => {
 };
 
 /** 团队ID输入弹窗确认 */
-const handleTeamIdConfirm = () => {
+const handleTeamIdDialogConfirm = () => {
   mutateCheckin({ code_type: QR_CODE.Team, content: teamIdDialogValue.value.teamIdStr });
 };
 

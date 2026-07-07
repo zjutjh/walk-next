@@ -1,14 +1,9 @@
-.main {
-  .functionButtonContainer {
-    padding: 0 8px 8px 8px;
-  }
-
-  .functionButton {
-    text-align: center;
-    margin-top: 8px;
-  }
-
-  .logoutButtonContainer {
-    padding: 16px 8px 8px;
+.page :global(.default-layout__main) {
+  padding-bottom: 10px;
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 12px;
   }
 }

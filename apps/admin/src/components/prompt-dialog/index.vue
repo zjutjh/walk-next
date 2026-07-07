@@ -3,6 +3,7 @@
     :show="isDialogVisible"
     class="prompt-dialog"
     :title="props.title"
+    :confirm-button-disabled="props.confirmDisabled"
     :close-on-popstate="false"
     :close-on-click-overlay="false"
     show-cancel-button
@@ -22,6 +23,7 @@
         :type="get(props.fieldConfig, [key, 'type']) ?? undefined"
         :inputmode="get(props.fieldConfig, [key, 'inputmode']) ?? undefined"
         :rules="get(props.fieldConfig, [key, 'rules']) ?? undefined"
+        autocomplete="off"
       />
     </van-form>
   </van-dialog>
@@ -37,14 +39,8 @@ import { useTemplateRef } from "vue";
 import type { PromptDialogProps } from "./types";
 
 const props = withDefaults(defineProps<PromptDialogProps>(), {
-  description: ""
-});
-
-/** 是否显示弹窗 */
-const isDialogVisible = defineModel<boolean>("show", { required: true });
-/** 表单的值 */
-const modelValue = defineModel<Record<string, string>>({
-  required: true
+  description: "",
+  confirmDisabled: false
 });
 
 const emit = defineEmits<{
@@ -52,7 +48,15 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
+/** 表单组件 */
 const formRef = useTemplateRef<FormInstance>("formRef");
+
+/** 是否显示弹窗 */
+const isDialogVisible = defineModel<boolean>("show", { required: true });
+/** 表单的值 */
+const modelValue = defineModel<Record<string, string>>({
+  required: true
+});
 
 /** 点击确认按钮 */
 const handleConfirm = async () => {
