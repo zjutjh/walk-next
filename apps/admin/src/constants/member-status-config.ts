@@ -2,8 +2,7 @@ import type { WalkerStatus } from "api/types/admin";
 import { mapValues } from "lodash-es";
 
 import { WALKER_STATUS_TEXT } from "@/constants";
-
-import type { StatusPickerAction } from "./types";
+import type { StatusPickerAction } from "@/pages/team-info/types";
 
 /** 人员状态-CSS颜色 映射表 */
 export const STATUS_COLOR_MAP = {

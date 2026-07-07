@@ -178,7 +178,7 @@ export interface UpdateWalkerStatusResponse {
 }
 
 /**
- * 重组队伍 请求
+ * 重组团队 请求
  */
 export interface RebuildTeamRequest {
   /** 用户编号，长度3-6人 */
@@ -188,17 +188,17 @@ export interface RebuildTeamRequest {
 }
 
 /**
- * 重组队伍 响应
+ * 重组团队 响应
  */
 export interface RebuildTeamResponse {
-  /** 新重组的队伍编号 */
+  /** 新重组的团队编号 */
   team_id: number;
 }
 
 /**
  * 获取人员信息 请求
  */
-export interface QueryUserInfoRequest {
+export interface QueryMemberInfoRequest {
   /** 用户编号 */
   user_id: number;
 }
@@ -206,7 +206,7 @@ export interface QueryUserInfoRequest {
 /**
  * 获取人员信息 响应
  */
-export interface QueryUserInfoResponse {
+export interface QueryMemberInfoResponse {
   /** 姓名 */
   name: string;
 }

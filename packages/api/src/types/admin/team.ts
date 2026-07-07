@@ -53,12 +53,12 @@ export interface TeamStatusInfo {
   is_just_enter_wrong_route: boolean;
 }
 
-/** 重组队伍人员信息 */
+/** 重组团队人员信息 */
 export interface TeamRebuildMember {
   /** 用户编号 */
   id: number;
   /** 姓名 */
   name: string;
   /** 当前状态 */
-  status: string;
+  status: TeamWalkStatus;
 }

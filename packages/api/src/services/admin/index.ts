@@ -128,12 +128,12 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, data }, options);
   }
 
-  /** 重组队伍 */
+  /** 重组团队 */
   RebuildTeam(
     req: AdminAPI.RebuildTeamRequest,
     options?: T
   ): Promise<AdminAPI.RebuildTeamResponse> {
-    const url = this.genBaseURL("/admin/team/rebuild"); // 重组队伍接口路径
+    const url = this.genBaseURL("/admin/team/rebuild");
     const method = "POST";
     const data = req;
 
@@ -141,10 +141,10 @@ export default class WalkAdminService<T> extends BaseService<T> {
   }
 
   /** 获取人员信息 */
-  QueryUserInfo(
-    req: AdminAPI.QueryUserInfoRequest,
+  QueryMemberInfo(
+    req: AdminAPI.QueryMemberInfoRequest,
     options?: T
-  ): Promise<AdminAPI.QueryUserInfoResponse> {
+  ): Promise<AdminAPI.QueryMemberInfoResponse> {
     const url = this.genBaseURL("/admin/user/info");
     const method = "GET";
     const params = req;
