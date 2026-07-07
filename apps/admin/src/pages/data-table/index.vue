@@ -5,7 +5,7 @@
       <!-- 总览统计数据 -->
       <van-tab title="总览" :name="OVERVIEW_TAB_NAME">
         <error-tip
-          v-if="overviewStatsError && !isOverviewStatsFetching"
+          v-if="overviewStatsError && !isOverviewStatsFetching && overviewStatsData"
           :class="styles.errorTip"
           :data-updated-at="overviewStatsUpdatedAt"
         />
@@ -54,7 +54,7 @@
           :name="route"
         >
           <error-tip
-            v-if="routeStatsError && !isRouteStatsFetching"
+            v-if="routeStatsError && !isRouteStatsFetching && routeStatsData"
             :class="styles.errorTip"
             :data-updated-at="routeStatsUpdatedAt"
           />
