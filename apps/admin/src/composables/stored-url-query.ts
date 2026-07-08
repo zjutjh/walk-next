@@ -2,11 +2,7 @@
 import { cloneDeep, get, isNil, isObject, isUndefined, mapValues, set } from "lodash-es";
 import { defineStore } from "pinia";
 import { type Ref, ref, shallowRef, watch } from "vue";
-import type { LocationQueryRaw } from "vue-router";
-
-import { routerConfig as router } from "@/configs";
-
-const route = router.currentRoute;
+import { type LocationQueryRaw, useRoute, useRouter } from "vue-router";
 
 /** Stored URL Query 状态Store */
 const useUrlQueryStore = defineStore("urlQuery", () => {
@@ -77,8 +73,10 @@ export const useStoredUrlQuery = <
    */
 
   const urlQueryStore = useUrlQueryStore();
+  const route = useRoute();
+  const router = useRouter();
   // 获取当前页面的path
-  const currentPath = route.value.path;
+  const currentPath = route.path;
 
   /** 当前页面对应的URL Query响应式对象 */
   let urlQuery = get(urlQueryStore.refObj, currentPath) as Ref<UrlQuery | undefined> | undefined;
