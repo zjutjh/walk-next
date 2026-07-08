@@ -52,6 +52,7 @@
   <qr-scan-popup
     v-model:show="urlQuery.isScanning"
     :loading="isCheckInPending"
+    :schema="qrCodeSchema"
     @success="handleScanSuccess"
   />
 
@@ -68,9 +69,10 @@
 
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
-import { type AdminAPI, QR_CODE } from "api/types/admin";
+import { type AdminAPI, AdminQrCodeType } from "api/types/admin";
 import { CanceledError } from "axios";
 import { RequestError } from "shared";
+import { is, variant } from "valibot";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -82,8 +84,7 @@ import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { useStoredUrlQuery } from "@/composables/stored-url-query.ts";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { useAuthStore } from "@/stores/auth";
-import type { QrCodeData } from "@/utils";
-import { walkAdminService } from "@/utils";
+import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
 
 import AdminInfo from "./components/admin-info/index.vue";
@@ -93,12 +94,17 @@ import type { IndexUrlQuery } from "./types.ts";
 const router = useRouter();
 const authStore = useAuthStore();
 
-/** 扫码弹层是否显示 */
 const { urlQuery } = useStoredUrlQuery<IndexUrlQuery>({
   initialValue: {
     isScanning: false
   }
 });
+
+const qrCodeSchema = variant(
+  "type",
+  [TeamQrCodeSchema, CheckinQrCodeSchema],
+  "类型错误\n请扫团队码\n或签到码"
+);
 
 /** 团队ID输入弹窗 表单值 */
 const teamIdDialogValue = ref({ teamIdStr: "" });
@@ -180,13 +186,17 @@ const { mutate: mutateStartAllThePending, isPending: isStartAllThePendingPending
 });
 
 /** 扫码成功 */
-const handleScanSuccess = (data: QrCodeData) => {
-  mutateCheckin(data);
+const handleScanSuccess = (data: unknown) => {
+  if (is(TeamQrCodeSchema, data)) {
+    mutateCheckin({ code_type: AdminQrCodeType.Team, content: String(data.team_id) });
+  } else if (is(CheckinQrCodeSchema, data)) {
+    mutateCheckin({ code_type: AdminQrCodeType.Checkin, content: data.code });
+  }
 };
 
 /** 团队ID输入弹窗确认 */
 const handleTeamIdDialogConfirm = () => {
-  mutateCheckin({ code_type: QR_CODE.Team, content: teamIdDialogValue.value.teamIdStr });
+  mutateCheckin({ code_type: AdminQrCodeType.Team, content: teamIdDialogValue.value.teamIdStr });
 };
 
 /** 团队ID输入弹窗取消 */

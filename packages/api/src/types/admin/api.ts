@@ -1,5 +1,5 @@
 import type { DashboardRoutesOverviewData } from "./dashboard";
-import type { QrCodeType } from "./qr-code";
+import type { AdminQrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
 import type { SearchType, TeamsMemberInfo, TeamStatusInfo, TeamsTeamBriefInfo } from "./team";
 import type { TeamStatusWalkerInfo } from "./walker";
@@ -223,7 +223,7 @@ export type BindCheckinCodeResponse = null;
 /** 打卡(指团队到了某个点位后打卡表示已经过) 请求 */
 export interface CheckinTeamRequest {
   /** CodeType */
-  code_type: QrCodeType;
+  code_type: AdminQrCodeType.Checkin | AdminQrCodeType.Team;
   /** Content */
   content: string;
 }

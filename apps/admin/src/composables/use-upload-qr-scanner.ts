@@ -1,10 +1,11 @@
 import { useFileDialog } from "@vueuse/core";
 import { scan } from "qr-scanner-wechat";
+import type { BaseIssue, BaseSchema, InferInput } from "valibot";
 import { onBeforeUnmount, ref } from "vue";
 
-import { parseQrCodeRawText, type QrCodeData, type UseQrScannerOptions } from "@/utils";
+import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 
-export type UseUploadQrScannerOptions = UseQrScannerOptions;
+export type UseUploadQrScannerOptions<TData> = UseQrScannerOptions<TData>;
 
 /** 图片上传扫码钩子的状态
  * @enum idle 闲置
@@ -12,7 +13,12 @@ export type UseUploadQrScannerOptions = UseQrScannerOptions;
 export type UseUploadQrScannerStatus = "idle" | "pending";
 
 /** 图片上传扫码 */
-export const useUploadQrScanner = (options: UseUploadQrScannerOptions = {}) => {
+export const useUploadQrScanner = <
+  TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>
+>(
+  options: UseUploadQrScannerOptions<InferInput<TSchema>> = {},
+  schema: TSchema
+) => {
   // 初始化参数
   const { onSuccess = (_) => undefined, onError = (_) => undefined } = options;
 
@@ -20,7 +26,7 @@ export const useUploadQrScanner = (options: UseUploadQrScannerOptions = {}) => {
   const status = ref<UseUploadQrScannerStatus>("idle");
 
   /** 处理扫码成功 */
-  const handleSuccess = (qrCodeData: QrCodeData) => {
+  const handleSuccess = (qrCodeData: InferInput<TSchema>) => {
     onSuccess(qrCodeData);
   };
 
@@ -37,7 +43,7 @@ export const useUploadQrScanner = (options: UseUploadQrScannerOptions = {}) => {
     if (!rawText) return;
 
     // 解析原始文本
-    const qrCodeData = parseQrCodeRawText(rawText);
+    const qrCodeData = parseQrCodeRawText(rawText, schema);
 
     // 解析成功，停止扫码
     handleSuccess(qrCodeData);

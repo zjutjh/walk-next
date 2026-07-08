@@ -24,17 +24,19 @@
 <script setup lang="ts">
 import "./index.scss";
 
+import type { BaseIssue, BaseSchema } from "valibot";
 import { showFailToast } from "vant";
 import { nextTick, ref, useTemplateRef, watch } from "vue";
 
 import LoadingContainer from "@/components/loading-container/index.vue";
 import { useCameraQrScanner } from "@/composables/use-camera-qr-scanner";
 import { useUploadQrScanner } from "@/composables/use-upload-qr-scanner";
-import { type QrCodeData } from "@/utils";
 
 const props = defineProps<{
   /** 是否处于加载态 */
   loading?: boolean;
+  /** 二维码数据的类型模式 */
+  schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
   /** 两次扫描之间的间隔(毫秒) */
   scanInterval?: number;
   /** 摄像头朝向 */
@@ -43,7 +45,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   /** 扫码成功 */
-  success: [data: QrCodeData];
+  success: [data: unknown];
   /** 扫码出错 */
   error: [message: Error];
 }>();
@@ -58,7 +60,7 @@ const isVisible = defineModel<boolean>("show", { required: true });
 const error = ref<Error | null>(null);
 
 /** 扫码成功 */
-const handleScanSuccess = (data: QrCodeData) => {
+const handleScanSuccess = (data: unknown) => {
   error.value = null;
   emit("success", data);
 };
@@ -76,18 +78,25 @@ const {
   stop: stopCameraScanner,
   switchToIdle: pauseCameraScanner,
   switchToActive: resumeCameraScanner
-} = useCameraQrScanner(videoRef, {
-  scanInterval: props.scanInterval,
-  facingMode: props.facingMode,
-  onSuccess: handleScanSuccess,
-  onError: handleScanError
-});
+} = useCameraQrScanner(
+  videoRef,
+  {
+    scanInterval: props.scanInterval,
+    facingMode: props.facingMode,
+    onSuccess: handleScanSuccess,
+    onError: handleScanError
+  },
+  props.schema
+);
 
 // 上传图片扫码
-const { requestUploadQrCodeImage, status: uploadQrScannerStatus } = useUploadQrScanner({
-  onSuccess: handleScanSuccess,
-  onError: handleScanError
-});
+const { requestUploadQrCodeImage, status: uploadQrScannerStatus } = useUploadQrScanner(
+  {
+    onSuccess: handleScanSuccess,
+    onError: handleScanError
+  },
+  props.schema
+);
 
 /** 启动摄像头扫码 */
 const startCameraScan = async () => {

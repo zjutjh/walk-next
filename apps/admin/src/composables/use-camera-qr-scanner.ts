@@ -1,10 +1,11 @@
 import { useIntervalFn, useUserMedia } from "@vueuse/core";
 import { scan } from "qr-scanner-wechat";
+import type { BaseIssue, BaseSchema, InferInput } from "valibot";
 import { computed, onBeforeUnmount, type Ref, ref } from "vue";
 
-import { parseQrCodeRawText, type QrCodeData, type UseQrScannerOptions } from "@/utils";
+import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 
-export interface UseCameraQrScannerOptions extends UseQrScannerOptions {
+export interface UseCameraQrScannerOptions<TData> extends UseQrScannerOptions<TData> {
   /** 两次扫描之间的间隔(毫秒)
    * @default 120 */
   scanInterval?: number;
@@ -21,10 +22,13 @@ export interface UseCameraQrScannerOptions extends UseQrScannerOptions {
 export type UseCameraQrScannerStatus = "off" | "starting" | "active" | "idle";
 
 /** 摄像头扫码 */
-export const useCameraQrScanner = (
+export const useCameraQrScanner = <
+  TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>
+>(
   /** 绑定的<video>元素，用于摄像头显示 */
   videoRef: Ref<HTMLVideoElement | null>,
-  options: UseCameraQrScannerOptions = {}
+  options: UseCameraQrScannerOptions<InferInput<TSchema>> = {},
+  schema: TSchema
 ) => {
   // 初始化参数
   const {
@@ -47,7 +51,7 @@ export const useCameraQrScanner = (
   let lastScannedRawText: string | null | undefined = null;
 
   /** 处理扫码成功 */
-  const handleSuccess = (qrCodeData: QrCodeData) => {
+  const handleSuccess = (qrCodeData: InferInput<TSchema>) => {
     onSuccess(qrCodeData);
   };
 
@@ -107,7 +111,7 @@ export const useCameraQrScanner = (
     lastScannedRawText = rawText;
 
     // 解析原始文本
-    const qrCodeData = parseQrCodeRawText(rawText);
+    const qrCodeData = parseQrCodeRawText(rawText, schema);
 
     // 解析成功
     try {

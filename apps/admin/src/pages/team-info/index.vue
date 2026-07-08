@@ -99,6 +99,7 @@
     <!-- 扫码弹窗 -->
     <qr-scan-popup
       v-model:show="isScanPopupVisible"
+      :schema="CheckinQrCodeSchema"
       @success="handleScanSuccess"
       @error="handleScanError"
     />
@@ -107,8 +108,9 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery } from "@tanstack/vue-query";
-import { QR_CODE, type WalkerStatus } from "api/types/admin";
+import type { WalkerStatus } from "api/types/admin";
 import { first, isNil, last } from "lodash-es";
+import { is } from "valibot";
 import { showConfirmDialog, showDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref, watch } from "vue";
 
@@ -117,7 +119,7 @@ import LoadingContainer from "@/components/loading-container/index.vue";
 import { WALKER_STATUS_TEXT } from "@/constants/enum-text";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { useAuthStore } from "@/stores/auth";
-import type { QrCodeData } from "@/utils";
+import { CheckinQrCodeSchema } from "@/utils";
 import { walkAdminService } from "@/utils/service";
 import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_POINT_LIST_MAP } from "@/walk-config";
 
@@ -307,15 +309,12 @@ const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = u
 });
 
 /** 扫码成功 */
-const handleScanSuccess = (data: QrCodeData) => {
-  if (data.code_type !== QR_CODE.Checkin) {
-    showFailToast("类型错误\n请扫签到码");
-    return;
-  }
+const handleScanSuccess = (data: unknown) => {
+  if (!is(CheckinQrCodeSchema, data)) return;
   isScanPopupVisible.value = false;
   mutateBindCheckinCode({
     teamId: teamId.value,
-    content: data.content
+    content: data.code
   });
 };
 
