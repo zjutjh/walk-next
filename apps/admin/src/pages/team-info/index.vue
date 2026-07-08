@@ -5,7 +5,7 @@
     :loading="isTeamInfoLoading || isAnyMutationPending"
     :modal="isAnyMutationPending"
   >
-    <default-layout :title="teamInfoData?.team.name">
+    <default-layout :title="teamInfoData?.team.name || undefined">
       <error-empty :error="teamInfoError" :disabled="isTeamInfoFetching">
         <van-pull-refresh
           v-if="teamInfoData"
@@ -65,7 +65,10 @@
                 >标记团队违规</van-button
               >
               <van-button
-                v-if="isAdminAtStartPoint && !teamInfoData.team.prev_point_name"
+                v-if="
+                  isAdminAtStartPoint &&
+                  (!teamInfoData.team.prev_point_name || teamInfoData.team.status === 'not_start')
+                "
                 type="primary"
                 block
                 @click="handleBindCheckinCodeClick"
@@ -306,7 +309,7 @@ const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = u
 /** 扫码成功 */
 const handleScanSuccess = (data: QrCodeData) => {
   if (data.code_type !== QR_CODE.Checkin) {
-    showFailToast("请扫签到码");
+    showFailToast("类型错误\n请扫签到码");
     return;
   }
   isScanPopupVisible.value = false;
