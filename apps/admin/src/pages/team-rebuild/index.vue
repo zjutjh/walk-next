@@ -84,6 +84,14 @@
     @confirm="handleMemberIdDialogConfirm"
     @cancel="handleMemberIdDialogCancel"
   />
+
+  <!-- 扫码弹窗 -->
+  <qr-scan-popup
+    v-model:show="isScanPopupVisible"
+    :schema="MemberQrCodeSchema"
+    @success="handleScanSuccess"
+    @error="handleScanError"
+  />
 </template>
 
 <script setup lang="ts">
@@ -92,7 +100,8 @@ import type { TeamRebuildMember } from "api/types/admin";
 import { CanceledError } from "axios";
 import { find, isEmpty } from "lodash-es";
 import { RequestError } from "shared";
-import { showFailToast, showToast } from "vant";
+import { is } from "valibot";
+import { showFailToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -100,6 +109,7 @@ import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
 import { WALKER_STATUS_TEXT } from "@/constants";
 import { STATUS_COLOR_MAP } from "@/constants/member-status-config";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
+import { MemberQrCodeSchema, parseJwt } from "@/utils";
 import { walkAdminService } from "@/utils/service";
 import { ROUTE_CONFIG, ROUTE_LIST, type RouteId } from "@/walk-config";
 
@@ -144,16 +154,31 @@ const handleMemberIdDialogCancel = () => {
   addMemberAbortController?.abort();
 };
 
-/** 点击扫码添加 */
-const handleAddMemberScanClick = () => {
-  // TODO: 接入扫码登记接口后，在这里添加团队成员
-  showToast("扫码登记接口待接入");
-};
-
 /** 点击编号添加 */
 const handleAddMemberWithIdClick = () => {
   memberIdDialogValue.value.memberIdStr = "";
   isMemberIdDialogVisible.value = true;
+};
+
+/** 扫码弹窗是否可见 */
+const isScanPopupVisible = ref(false);
+
+/** 点击扫码添加 */
+const handleAddMemberScanClick = () => {
+  isScanPopupVisible.value = true;
+};
+
+/** 扫码成功 */
+const handleScanSuccess = (data: unknown) => {
+  if (!is(MemberQrCodeSchema, data)) return;
+  isScanPopupVisible.value = false;
+  const jwtPayload = parseJwt(data.jwt)?.payload;
+  mutateAddMember(parseInt(jwtPayload?.open_id));
+};
+
+/** 扫码失败 */
+const handleScanError = (err: Error) => {
+  showFailToast(err.message || "扫码失败");
 };
 
 /** 点击提交团队 */
