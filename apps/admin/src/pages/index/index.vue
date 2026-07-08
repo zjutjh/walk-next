@@ -49,10 +49,10 @@
     </loading-container>
   </default-layout>
 
-  <qr-scan-preview
-    v-model:show="isScanPopupVisible"
+  <qr-scan-popup
+    v-model:show="urlQuery.isScanning"
+    :loading="isCheckInPending"
     @success="handleScanSuccess"
-    @error="handleScanError"
   />
 
   <prompt-dialog
@@ -78,18 +78,27 @@ import { useRouter } from "vue-router";
 import LoadingContainer from "@/components/loading-container/index.vue";
 import PromptDialog from "@/components/prompt-dialog/index.vue";
 import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types.ts";
-import QrScanPreview from "@/components/qr-scan-preview/index.vue";
-import type { QrCodeData } from "@/composables/use-qr-scanner";
+import QrScanPopup from "@/components/qr-scan-popup/index.vue";
+import { useStoredUrlQuery } from "@/composables/stored-url-query.ts";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { useAuthStore } from "@/stores/auth";
+import type { QrCodeData } from "@/utils";
 import { walkAdminService } from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
+import type { IndexUrlQuery } from "./types.ts";
 
 const router = useRouter();
 const authStore = useAuthStore();
+
+/** 扫码弹层是否显示 */
+const { urlQuery } = useStoredUrlQuery<IndexUrlQuery>({
+  initialValue: {
+    isScanning: false
+  }
+});
 
 /** 团队ID输入弹窗 表单值 */
 const teamIdDialogValue = ref({ teamIdStr: "" });
@@ -104,8 +113,6 @@ const TEAM_ID_DIALOG_CONFIG: Record<keyof typeof teamIdDialogValue.value, Prompt
     }
   };
 
-/** 扫码弹层是否显示 */
-const isScanPopupVisible = ref(false);
 /** 团队ID输入弹窗是否显示 */
 const isTeamIdDialogVisible = ref(false);
 
@@ -115,7 +122,7 @@ const handleScanClick = () => {
     showFailToast("正在打卡，请稍后再试");
     return;
   }
-  isScanPopupVisible.value = true;
+  urlQuery.value.isScanning = true;
 };
 
 /** 点击输入签到按钮 */
@@ -129,7 +136,7 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   mutationFn: () => walkAdminService.Logout(undefined),
   onSuccess: () => {
     authStore.reset();
-    isScanPopupVisible.value = false;
+    urlQuery.value.isScanning = false;
     isTeamIdDialogVisible.value = false;
     showSuccessToast("登出成功");
   },
@@ -148,6 +155,11 @@ const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
   },
   onSuccess: (data) => {
     isTeamIdDialogVisible.value = false;
+    if (data.is_duplicate_check_in) {
+      showFailToast("团队重复打卡");
+    } else {
+      showSuccessToast("打卡成功");
+    }
     router.push({ path: `/team/${data.team_id}` });
   },
   onError: (err) => {
@@ -170,11 +182,6 @@ const { mutate: mutateStartAllThePending, isPending: isStartAllThePendingPending
 /** 扫码成功 */
 const handleScanSuccess = (data: QrCodeData) => {
   mutateCheckin(data);
-};
-
-/** 扫码失败 */
-const handleScanError = (message: string) => {
-  showFailToast(message || "扫码失败");
 };
 
 /** 团队ID输入弹窗确认 */

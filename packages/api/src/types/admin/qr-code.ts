@@ -1,3 +1,4 @@
+/** 二维码类型 */
 export const QR_CODE = {
   Team: "team",
   Checkin: "checkin"

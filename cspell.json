@@ -14,9 +14,11 @@
     "nums",
     "oxlint",
     "persistedstate",
+    "picklist",
     "pxtorem",
     "swipeable",
     "unplugin",
+    "ValiError",
     "vueuse",
     "wechat",
     "zjutjh"

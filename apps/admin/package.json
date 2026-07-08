@@ -24,6 +24,7 @@
     "pinia-plugin-persistedstate": "catalog:frontend",
     "qr-scanner-wechat": "^0.1.3",
     "shared": "workspace:*",
+    "valibot": "^1.4.2",
     "vant": "^4.9.22",
     "vue": "catalog:frontend",
     "vue-router": "catalog:frontend"

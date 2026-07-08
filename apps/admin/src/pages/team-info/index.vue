@@ -69,7 +69,7 @@
                 type="primary"
                 block
                 @click="handleBindCheckinCodeClick"
-                >绑定纸质签到码</van-button
+                >绑定签到码</van-button
               >
               <van-button
                 v-if="isAdminAtEndPoint && teamInfoData.team.status === 'in_progress'"
@@ -94,7 +94,7 @@
     />
 
     <!-- 扫码弹窗 -->
-    <qr-scan-preview
+    <qr-scan-popup
       v-model:show="isScanPopupVisible"
       @success="handleScanSuccess"
       @error="handleScanError"
@@ -111,10 +111,10 @@ import { computed, ref, watch } from "vue";
 
 import ErrorEmpty from "@/components/error-empty/index.vue";
 import LoadingContainer from "@/components/loading-container/index.vue";
-import type { QrCodeData } from "@/composables/use-qr-scanner";
 import { WALKER_STATUS_TEXT } from "@/constants/enum-text";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { useAuthStore } from "@/stores/auth";
+import type { QrCodeData } from "@/utils";
 import { walkAdminService } from "@/utils/service";
 import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_POINT_LIST_MAP } from "@/walk-config";
 
@@ -281,12 +281,12 @@ const handleMarkViolatedClick = async () => {
 /** 扫码弹窗是否可见 */
 const isScanPopupVisible = ref(false);
 
-/** 点击绑定纸质签到码 */
+/** 点击绑定签到码 */
 const handleBindCheckinCodeClick = () => {
   isScanPopupVisible.value = true;
 };
 
-// 绑定纸质签到码
+// 绑定签到码
 const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = useMutation({
   mutationFn: (params: { teamId: number; content: string }) =>
     walkAdminService.BindCheckinCode({
@@ -306,7 +306,7 @@ const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = u
 /** 扫码成功 */
 const handleScanSuccess = (data: QrCodeData) => {
   if (data.code_type !== QR_CODE.Checkin) {
-    showFailToast("请扫纸质签到码");
+    showFailToast("请扫签到码");
     return;
   }
   isScanPopupVisible.value = false;
@@ -317,8 +317,8 @@ const handleScanSuccess = (data: QrCodeData) => {
 };
 
 /** 扫码失败 */
-const handleScanError = (message: string) => {
-  showFailToast(message || "扫码失败");
+const handleScanError = (err: Error) => {
+  showFailToast(err.message || "扫码失败");
 };
 
 // 终点确认

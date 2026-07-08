@@ -177,9 +177,7 @@ export interface UpdateWalkerStatusResponse {
   team_id: number;
 }
 
-/**
- * 重组团队 请求
- */
+/** 重组团队 请求 */
 export interface RebuildTeamRequest {
   /** 用户编号，长度3-6人 */
   members: number[];
@@ -187,25 +185,19 @@ export interface RebuildTeamRequest {
   route_name: string;
 }
 
-/**
- * 重组团队 响应
- */
+/** 重组团队 响应 */
 export interface RebuildTeamResponse {
   /** 新重组的团队编号 */
   team_id: number;
 }
 
-/**
- * 获取人员信息 请求
- */
+/** 获取人员信息 请求 */
 export interface QueryMemberInfoRequest {
   /** 用户编号 */
   user_id: number;
 }
 
-/**
- * 获取人员信息 响应
- */
+/** 获取人员信息 响应 */
 export interface QueryMemberInfoResponse {
   /** 姓名 */
   name: string;
@@ -240,6 +232,8 @@ export interface CheckinTeamRequest {
 export interface CheckinTeamResponse {
   /** 团队编号 */
   team_id: number;
+  /** 是否重复打卡 */
+  is_duplicate_check_in: boolean;
 }
 
 /** 终点确认 请求 */
