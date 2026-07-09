@@ -96,8 +96,7 @@ import styles from "./index.module.scss";
 import type { IndexUrlQuery } from "./types.ts";
 
 const router = useRouter();
-const { adminName, adminPointId, resetAdminInfo } = useAdminInfo();
-const { hasPermission } = useAdminInfo();
+const { adminName, adminPointId, resetAdminInfo, hasPermission } = useAdminInfo();
 
 const { urlQuery } = useStoredUrlQuery<IndexUrlQuery>({
   initialValue: {

@@ -285,7 +285,6 @@ const { mutate: mutateAddMember, isPending: isAddMemberPending } = useMutation({
       name: userInfo.name,
       status: "not_start"
     });
-    isMemberIdDialogVisible.value = false;
     memberIdDialogValue.value.memberIdStr = "";
   },
   onError: (err) => {

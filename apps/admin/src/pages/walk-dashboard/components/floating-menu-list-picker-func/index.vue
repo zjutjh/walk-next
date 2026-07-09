@@ -9,6 +9,7 @@
     position="bottom"
     destroy-on-close
   >
+    <!-- height=""是为了消除vant默认的内联height，使CSS样式生效 -->
     <van-tree-select
       v-model:main-active-index="routeIndex"
       :class="styles.treeSelect"
