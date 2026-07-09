@@ -1,2 +1,2 @@
 export * from "./stored-url-query";
-export * from "./use-title-meta";
+export * from "./title-meta";

@@ -9,7 +9,7 @@ import { ready } from "qr-scanner-wechat";
 import { showFailToast } from "vant";
 import { useRoute } from "vue-router";
 
-import { useTitleMeta } from "@/composables/use-title-meta";
+import { useTitleMeta } from "@/composables/title-meta";
 import { THEME_VAR_RECORD } from "@/constants";
 
 import { useAdminInfo } from "./composables/admin-user-info";
