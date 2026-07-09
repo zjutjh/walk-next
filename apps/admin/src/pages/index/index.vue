@@ -1,3 +1,4 @@
+<!-- 首页 -->
 <template>
   <default-layout :class="styles.page" :show-back="false" title="精弘毅行管理后台">
     <loading-container :loading="isAnyMutationPending">
@@ -28,20 +29,20 @@
       <div :class="styles.buttonContainer">
         <van-button
           v-if="hasPermission('super')"
-          type="primary"
           :class="styles.functionButton"
           :loading="isStartAllThePendingPending"
+          type="primary"
           block
           @click="handleStartAllThePendingClick"
         >
           待出发→进行中
         </van-button>
         <van-button
+          :loading="isLogoutPending"
+          :disabled="isLogoutPending"
           type="danger"
           plain
           block
-          :loading="isLogoutPending"
-          :disabled="isLogoutPending"
           @click="handleLogoutClick"
         >
           退出登录
@@ -50,6 +51,7 @@
     </loading-container>
   </default-layout>
 
+  <!-- 扫码弹层 -->
   <qr-scan-popup
     v-model:show="urlQuery.isScanning"
     :loading="isCheckInPending"
@@ -57,6 +59,7 @@
     @success="handleScanSuccess"
   />
 
+  <!-- 团队ID输入弹窗 -->
   <prompt-dialog
     v-model:show="isTeamIdDialogVisible"
     v-model="teamIdDialogValue"

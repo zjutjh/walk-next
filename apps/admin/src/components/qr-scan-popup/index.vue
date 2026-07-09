@@ -1,3 +1,4 @@
+<!-- 扫码弹层 -->
 <template>
   <van-popup v-model:show="isVisible" position="bottom" class="qr-scan-popup-container">
     <loading-container class="qr-scan-popup" :loading="props.loading">

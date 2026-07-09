@@ -1,8 +1,10 @@
+<!-- 默认布局组件 -->
 <template>
   <div class="default-layout">
+    <!-- 顶栏 -->
     <van-nav-bar
-      v-if="!isNil(navbarTitle)"
-      :title="navbarTitle"
+      v-if="!isNil(getNavbarTitleText)"
+      :title="getNavbarTitleText"
       :left-arrow="props.showBack"
       class="default-layout__navbar"
       @click-left="handleBackClick"
@@ -13,6 +15,7 @@
       </template>
     </van-nav-bar>
     <slot name="header" />
+    <!-- 主内容区域 -->
     <main class="default-layout__main">
       <slot />
     </main>
@@ -61,7 +64,8 @@ const emit = defineEmits<{
 const router = useRouter();
 const route = useRoute();
 
-const navbarTitle = computed(() => {
+/** 获取导航栏标题文字 */
+const getNavbarTitleText = computed(() => {
   const currentRouteMeta = last(route.matched)?.meta;
 
   if (!props.showNavbar || !currentRouteMeta) {
@@ -72,6 +76,7 @@ const navbarTitle = computed(() => {
   return props.title ?? currentRouteMeta.pageName;
 });
 
+/** 点击返回上一页按钮 */
 const handleBackClick = () => {
   if (router.options.history.state.back) {
     router.back();

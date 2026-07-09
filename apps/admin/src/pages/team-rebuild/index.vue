@@ -1,3 +1,4 @@
+<!-- 团队重组页 -->
 <template>
   <default-layout :class="styles.page">
     <van-cell-group inset>
@@ -61,6 +62,7 @@
     </div>
   </default-layout>
 
+  <!-- 路线选择弹层 -->
   <van-action-sheet
     v-model:show="isRoutePickerVisible"
     :actions="routePickerActions"
@@ -68,6 +70,7 @@
     @select="handleSelectRoute"
   />
 
+  <!-- 成员操作弹层 -->
   <van-action-sheet
     v-model:show="isMemberActionSheetVisible"
     :actions="memberActionSheetActions"
@@ -75,6 +78,7 @@
     cancel-text="取消"
   />
 
+  <!-- 人员ID输入弹窗 -->
   <prompt-dialog
     v-model:show="isMemberIdDialogVisible"
     v-model="memberIdDialogValue"

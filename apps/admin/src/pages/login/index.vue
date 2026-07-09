@@ -1,5 +1,5 @@
+<!-- 登录页 -->
 <template>
-  <!-- 登录页 -->
   <div :class="styles.page">
     <div :class="styles.content">
       <div :class="styles.productName">精弘毅行管理系统</div>

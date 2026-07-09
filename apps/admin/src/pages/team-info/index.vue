@@ -1,5 +1,5 @@
+<!-- 团队信息页 -->
 <template>
-  <!-- 团队信息页 -->
   <loading-container
     :class="styles.page"
     :loading="isTeamInfoLoading || isAnyMutationPending"
