@@ -73,11 +73,11 @@ const navbarTitle = computed(() => {
 });
 
 const handleBackClick = () => {
-  // 直接打开页面可能没有历史记录，兜底返回首页
   if (router.options.history.state.back) {
     router.back();
   } else {
-    router.replace("/");
+    // 没有历史记录则返回首页
+    router.replace({ name: "index" });
   }
 };
 </script>

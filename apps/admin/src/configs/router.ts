@@ -52,7 +52,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   },
   {
     path: "/team/:teamIdStr",
-    name: "team",
+    name: "team-info",
     component: () => import("@/pages/team-info/index.vue"),
     props: true,
     meta: {
@@ -81,11 +81,11 @@ routerConfig.beforeEach((to, from) => {
   const { hasPermission, isLoggedIn } = useAdminInfo();
   // 拦截无效路由
   if (to.matched.length === 0) {
-    return isLoggedIn.value ? { path: "/" } : { name: "login" };
+    return isLoggedIn.value ? { name: "index" } : { name: "login" };
   }
   // 已登录状态自动进入
   if (isLoggedIn.value && to.name === "login") {
-    return { path: "/" };
+    return { name: "index" };
   }
   // 未登录状态返回登录
   if (!isLoggedIn.value && !to.meta.allowNoAuth) {
@@ -98,8 +98,8 @@ routerConfig.beforeEach((to, from) => {
       return from;
     }
     // 上一页权限不足，返回首页
-    if (to.path !== "/") {
-      return { path: "/" };
+    if (to.name !== "index") {
+      return { name: "index" };
     }
   }
 });
