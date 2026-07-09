@@ -305,7 +305,6 @@ const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = u
   },
   onError: (error) => {
     showFailToast(error.message || "绑定失败");
-    isScanPopupVisible.value = true;
   }
 });
 

@@ -51,8 +51,12 @@ export const useDelayedCameraStream = () => {
   /** 请求摄像头流 */
   const requestCameraStream = async () => {
     killDisconnectTimer();
-    if (isCameraStreamEnabled.value) return cameraStream.value;
-    return await startCameraStream();
+    try {
+      if (isCameraStreamEnabled.value) return cameraStream.value;
+      return await startCameraStream();
+    } finally {
+      enableStreamTracks();
+    }
   };
 
   /** 释放摄像头流 */

@@ -173,6 +173,11 @@ const handleScanSuccess = (data: unknown) => {
   if (!is(MemberQrCodeSchema, data)) return;
   isScanPopupVisible.value = false;
   const jwtPayload = parseJwt(data.jwt)?.payload;
+  // 查重验证
+  if (memberList.value.some((member) => String(member.id) === jwtPayload?.open_id)) {
+    showFailToast("该成员已添加\n不可重复添加");
+    return;
+  }
   mutateAddMember(parseInt(jwtPayload?.open_id));
 };
 
