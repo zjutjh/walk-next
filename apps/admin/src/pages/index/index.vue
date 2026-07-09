@@ -127,7 +127,7 @@ const isTeamIdDialogVisible = ref(false);
 /** 点击扫码签到按钮 */
 const handleScanClick = () => {
   if (isCheckInPending.value) {
-    showFailToast("正在打卡，请稍后再试");
+    showFailToast("正在打卡\n请稍后再试");
     return;
   }
   urlQuery.value.isScanning = true;
