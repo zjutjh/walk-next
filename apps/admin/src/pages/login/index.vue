@@ -5,19 +5,30 @@
       <div :class="styles.productName">精弘毅行管理系统</div>
       <div :class="styles.title">管理员登录</div>
 
-      <van-form ref="formRef" :show-error-message="false">
-        <van-field v-model="account" :rules="ACCOUNT_RULES" label="账号" placeholder="请输入账号" />
+      <van-form ref="formRef" :show-error-message="false" @submit="error = new Error('1')">
         <van-field
+          v-model="account"
+          :rules="ACCOUNT_RULES"
+          label="账号"
+          placeholder="请输入账号"
+          enterkeyhint="next"
+          @keyup.enter="(passwordFieldRef?.$el as HTMLElement).querySelector('input')?.focus?.()"
+        />
+        <van-field
+          ref="passwordFieldRef"
           v-model="password"
           :rules="PASSWORD_RULES"
           label="密码"
           placeholder="请输入密码"
           type="password"
+          enterkeyhint="done"
+          @keyup.enter="(loginButtonRef?.$el as HTMLButtonElement).click()"
         />
         <div :class="styles.error">{{ error?.message || "" }}</div>
       </van-form>
 
       <van-button
+        ref="loginButtonRef"
         :class="styles.loginButton"
         type="primary"
         :loading="isPending"
@@ -48,6 +59,10 @@ const { updateAdminInfo } = useAdminInfo();
 
 /** 表单组件 */
 const formRef = useTemplateRef<FormInstance>("formRef");
+/** 密码输入框组件 */
+const passwordFieldRef = useTemplateRef("passwordFieldRef");
+/** 登录按钮组件 */
+const loginButtonRef = useTemplateRef("loginButtonRef");
 
 /** 登录请求或校验错误 */
 const error = ref<Error | null>(null);

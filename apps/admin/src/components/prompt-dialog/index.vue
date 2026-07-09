@@ -15,7 +15,7 @@
 
     <van-form ref="formRef">
       <van-field
-        v-for="(_, key) in modelValue"
+        v-for="(_, key, index) in modelValue"
         :key="key"
         v-model="modelValue[key]"
         :label="get(props.fieldConfig, [key, 'label']) ?? key"
@@ -23,6 +23,7 @@
         :type="get(props.fieldConfig, [key, 'type']) ?? undefined"
         :inputmode="get(props.fieldConfig, [key, 'inputmode']) ?? undefined"
         :rules="get(props.fieldConfig, [key, 'rules']) ?? undefined"
+        :enterkeyhint="index === Object.keys(modelValue).length - 1 ? 'done' : 'next'"
         autocomplete="off"
       />
     </van-form>
