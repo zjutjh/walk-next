@@ -1,5 +1,5 @@
 <template>
-  <default-layout :class="styles.page" :show-back="false">
+  <default-layout :class="styles.page" :show-back="false" title="精弘毅行管理后台">
     <loading-container :loading="isAnyMutationPending">
       <admin-info
         :admin-name="authStore.adminName || '-'"
@@ -145,6 +145,8 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
     urlQuery.value.isScanning = false;
     isTeamIdDialogVisible.value = false;
     showSuccessToast("登出成功");
+    // 跳转登录页
+    router.push({ name: "login" });
   },
   onError: (err: Error) => {
     showFailToast(err.message || "登出失败");

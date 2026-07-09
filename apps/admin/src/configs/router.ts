@@ -2,6 +2,7 @@ import type { SetRequired } from "type-fest";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
 import IndexPage from "@/pages/index/index.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
@@ -9,7 +10,16 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "index",
     component: IndexPage,
     meta: {
-      pageName: "精弘毅行管理后台"
+      pageName: "首页"
+    }
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/pages/login/index.vue"),
+    meta: {
+      pageName: "管理员登录",
+      allowNoAuth: true
     }
   },
   {
@@ -61,4 +71,21 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
 export const routerConfig = createRouter({
   history: createWebHistory(),
   routes
+});
+
+// 路由守卫
+routerConfig.beforeEach((to) => {
+  const authStore = useAuthStore();
+  // 拦截无效路由
+  if (to.matched.length === 0) {
+    return authStore.isLoggedIn ? { path: "/" } : { name: "login" };
+  }
+  // 已登录状态自动进入
+  else if (authStore.isLoggedIn && to.name === "login") {
+    return { path: "/" };
+  }
+  // 未登录状态返回登录
+  else if (!authStore.isLoggedIn && !to.meta.allowNoAuth) {
+    return { name: "login", query: { fromPath: encodeURIComponent(to.fullPath) } };
+  }
 });

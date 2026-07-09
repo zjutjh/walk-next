@@ -26,8 +26,6 @@ import { isNil, last } from "lodash-es";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { useTitleMeta } from "@/composables/use-title-meta";
-
 interface DefaultLayoutProps {
   /**
    * 自定义顶栏标题文案
@@ -59,8 +57,6 @@ const emit = defineEmits<{
   /** 点击导航栏右侧插槽 */
   clickNavbarRight: [];
 }>();
-
-useTitleMeta();
 
 const router = useRouter();
 const route = useRoute();

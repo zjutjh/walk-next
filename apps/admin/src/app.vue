@@ -1,8 +1,6 @@
 <template>
   <van-config-provider :theme-vars="THEME_VAR_RECORD" theme-vars-scope="global">
     <router-view :key="route.meta.recreateComponentByPath ? route.fullPath : undefined" />
-
-    <login-modal />
   </van-config-provider>
 </template>
 
@@ -11,10 +9,12 @@ import { ready } from "qr-scanner-wechat";
 import { showFailToast } from "vant";
 import { useRoute } from "vue-router";
 
-import LoginModal from "@/components/login-modal/index.vue";
+import { useTitleMeta } from "@/composables/use-title-meta";
 import { THEME_VAR_RECORD } from "@/constants";
 
 const route = useRoute();
+
+useTitleMeta();
 
 requestIdleCallback(async () => {
   try {

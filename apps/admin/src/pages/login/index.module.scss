@@ -1,0 +1,56 @@
+.page {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent 0%,
+    transparent 35%,
+    rgb(from var(--van-success-color) r g b / 0.04) 80%,
+    rgb(from var(--van-success-color) r g b / 0.08) 100%
+  );
+
+  .productName,
+  .title {
+    font-weight: bold;
+    text-align: center;
+    user-select: none;
+    font-family: "DingTalk JinBuTi";
+  }
+
+  .productName {
+    font-size: 36px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    --van-cell-background: none;
+    font-family: "DingTalk Sans";
+
+    .error {
+      height: 14px;
+      font-size: 14px;
+      line-height: 14px;
+      color: var(--van-danger-color);
+      text-align: center;
+      margin: {
+        top: 10px;
+      }
+    }
+
+    .loginButton {
+      font-size: 18px;
+      display: block;
+      user-select: none;
+    }
+  }
+}
