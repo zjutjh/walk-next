@@ -3,7 +3,7 @@ import { BaseService } from "../../utils";
 
 export default class WalkAdminService<T> extends BaseService<T> {
   /** 管理员登录 */
-  Auth(req: AdminAPI.AuthRequest, options?: T): Promise<AdminAPI.AuthResponse> {
+  Login(req: AdminAPI.LoginRequest, options?: T): Promise<AdminAPI.LoginResponse> {
     const url = this.genBaseURL("/admin/auth");
     const method = "POST";
     const data = req;
@@ -18,6 +18,18 @@ export default class WalkAdminService<T> extends BaseService<T> {
     const data = req;
 
     return this.request({ url, method, data }, options);
+  }
+
+  /** 管理员获取自身用户信息 */
+  QueryAdminUserInfo(
+    req: AdminAPI.QueryAdminUserInfoRequest,
+    options?: T
+  ): Promise<AdminAPI.QueryAdminUserInfoResponse> {
+    const url = this.genBaseURL("/dashboard/permission");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
   }
 
   /** 获取数据仪表盘校区总览 */

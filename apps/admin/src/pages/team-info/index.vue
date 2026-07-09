@@ -116,9 +116,9 @@ import { computed, ref, watch } from "vue";
 
 import ErrorEmpty from "@/components/error-empty/index.vue";
 import LoadingContainer from "@/components/loading-container/index.vue";
+import { useAdminInfo } from "@/composables/admin-user-info";
 import { WALKER_STATUS_TEXT } from "@/constants/enum-text";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { useAuthStore } from "@/stores/auth";
 import { CheckinQrCodeSchema } from "@/utils";
 import { walkAdminService } from "@/utils/service";
 import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_POINT_LIST_MAP } from "@/walk-config";
@@ -134,7 +134,7 @@ const props = defineProps<{
 /** 团队ID */
 const teamId = computed(() => Number(props.teamIdStr));
 
-const authStore = useAuthStore();
+const { adminPointId } = useAdminInfo();
 
 /** 是否已经弹出过走错路线提示 */
 const isWrongRouteAlertTriggered = ref(false);
@@ -195,11 +195,12 @@ const remainingCount = computed(
 
 /** 当前管理员用户是否在团队所属路线的起点 */
 const isAdminAtStartPoint = computed(
-  () => authStore.pointId === first(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
+  () =>
+    adminPointId.value === first(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
 );
 /** 当前管理员用户是否在团队所属路线的终点 */
 const isAdminAtEndPoint = computed(
-  () => authStore.pointId === last(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
+  () => adminPointId.value === last(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
 );
 
 /** 成员状态编辑弹层是否可见 */

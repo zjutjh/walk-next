@@ -2,10 +2,11 @@ import type { DashboardRoutesOverviewData } from "./dashboard";
 import type { AdminQrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
 import type { SearchType, TeamsMemberInfo, TeamStatusInfo, TeamsTeamBriefInfo } from "./team";
+import type { PermissionLevel } from "./user";
 import type { TeamStatusWalkerInfo } from "./walker";
 
 /** 管理员登录 请求 */
-export interface AuthRequest {
+export interface LoginRequest {
   /** 用户名 */
   account: string;
   /** 密码 */
@@ -13,11 +14,15 @@ export interface AuthRequest {
 }
 
 /** 管理员登录 响应 */
-export interface AuthResponse {
+export interface LoginResponse {
   /** 管理员姓名 */
   name: string;
-  /** 点位名称 */
+  /** 管理员所在点位ID */
   point_name: string;
+  /** 管理员所在校区ID */
+  campus: string;
+  /** 管理员权限等级 */
+  permission: PermissionLevel;
 }
 
 /** 管理员退出登录 请求 */
@@ -25,6 +30,21 @@ export type LogoutRequest = undefined;
 
 /** 管理员退出登录 响应 */
 export type LogoutResponse = Record<string, never>;
+
+/** 管理员获取自身用户信息 请求 */
+export type QueryAdminUserInfoRequest = undefined;
+
+/** 管理员获取自身用户信息 响应 */
+export interface QueryAdminUserInfoResponse {
+  /** 管理员姓名 */
+  name: string;
+  /** 管理员所在点位ID */
+  point_name: string;
+  /** 管理员所在校区ID */
+  campus: string;
+  /** 管理员权限等级 */
+  permission: PermissionLevel;
+}
 
 /** 获取数据仪表盘校区总览 请求 */
 export interface QueryDashboardCampusRequest {

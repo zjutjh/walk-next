@@ -1,8 +1,8 @@
 import type { SetRequired } from "type-fest";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
+import { useAdminInfo } from "@/composables/admin-user-info";
 import IndexPage from "@/pages/index/index.vue";
-import { useAuthStore } from "@/stores/auth";
 
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
@@ -27,7 +27,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "team-rebuild",
     component: () => import("@/pages/team-rebuild/index.vue"),
     meta: {
-      pageName: "重组团队"
+      pageName: "重组团队",
+      requiredPermission: "super"
     }
   },
   {
@@ -36,7 +37,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "dashboard",
     component: () => import("@/pages/walk-dashboard/index.vue"),
     meta: {
-      pageName: "数据大盘"
+      pageName: "数据大盘",
+      requiredPermission: "internal"
     }
   },
   {
@@ -63,7 +65,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "data-table",
     component: () => import("@/pages/data-table/index.vue"),
     meta: {
-      pageName: "数据统计表格"
+      pageName: "数据统计表格",
+      requiredPermission: "internal"
     }
   }
 ];
@@ -74,18 +77,29 @@ export const routerConfig = createRouter({
 });
 
 // 路由守卫
-routerConfig.beforeEach((to) => {
-  const authStore = useAuthStore();
+routerConfig.beforeEach((to, from) => {
+  const { hasPermission, isLoggedIn } = useAdminInfo();
   // 拦截无效路由
   if (to.matched.length === 0) {
-    return authStore.isLoggedIn ? { path: "/" } : { name: "login" };
+    return isLoggedIn.value ? { path: "/" } : { name: "login" };
   }
   // 已登录状态自动进入
-  else if (authStore.isLoggedIn && to.name === "login") {
+  if (isLoggedIn.value && to.name === "login") {
     return { path: "/" };
   }
   // 未登录状态返回登录
-  else if (!authStore.isLoggedIn && !to.meta.allowNoAuth) {
+  if (!isLoggedIn.value && !to.meta.allowNoAuth) {
     return { name: "login", query: { fromPath: encodeURIComponent(to.fullPath) } };
+  }
+  // 权限不足
+  if (!hasPermission(to.meta.requiredPermission)) {
+    // 上一页权限满足，返回上一页
+    if (hasPermission(from.meta.requiredPermission)) {
+      return from;
+    }
+    // 上一页权限不足，返回首页
+    if (to.path !== "/") {
+      return { path: "/" };
+    }
   }
 });

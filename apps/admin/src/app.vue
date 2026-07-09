@@ -12,10 +12,15 @@ import { useRoute } from "vue-router";
 import { useTitleMeta } from "@/composables/use-title-meta";
 import { THEME_VAR_RECORD } from "@/constants";
 
-const route = useRoute();
+import { useAdminInfo } from "./composables/admin-user-info";
 
+const route = useRoute();
+const { setupAdminInfoQuery } = useAdminInfo();
+
+// 响应式管理页面标题
 useTitleMeta();
 
+// 预加载扫码模块
 requestIdleCallback(async () => {
   try {
     await ready();
@@ -24,4 +29,7 @@ requestIdleCallback(async () => {
     console.error(err);
   }
 });
+
+// 启动获取管理员用户信息的query
+setupAdminInfoQuery();
 </script>

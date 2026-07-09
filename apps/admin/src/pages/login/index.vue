@@ -37,14 +37,14 @@ import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { useAuthStore } from "@/stores/auth";
+import { useAdminInfo } from "@/composables/admin-user-info";
 import { walkAdminService } from "@/utils";
 
 import styles from "./index.module.scss";
 
-const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
+const { updateAdminInfo } = useAdminInfo();
 
 /** 表单组件 */
 const formRef = useTemplateRef<FormInstance>("formRef");
@@ -64,7 +64,7 @@ const PASSWORD_RULES: FieldRule[] = [{ required: true, message: "请输入密码
 // 登录
 const { mutate: mutateLogin, isPending } = useMutation({
   mutationFn: () =>
-    walkAdminService.Auth({
+    walkAdminService.Login({
       account: account.value,
       password: password.value
     }),
@@ -78,9 +78,14 @@ const { mutate: mutateLogin, isPending } = useMutation({
     // 显示提示
     showSuccessToast("登录成功");
     // 保存身份信息
-    authStore.adminName = data.name;
-    authStore.pointId = data.point_name;
-    authStore.isLoggedIn = true;
+    updateAdminInfo({
+      isLoggedIn: true,
+      adminName: data.name,
+      pointId: data.point_name,
+      campusId: data.campus,
+      permissionLevel: data.permission
+    });
+
     // 路由跳转
     router.replace(route.query.fromPath ? decodeURIComponent(route.query.fromPath as string) : "/");
   },

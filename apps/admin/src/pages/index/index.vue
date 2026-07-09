@@ -2,15 +2,15 @@
   <default-layout :class="styles.page" :show-back="false" title="精弘毅行管理后台">
     <loading-container :loading="isAnyMutationPending">
       <admin-info
-        :admin-name="authStore.adminName || '-'"
-        :walk-point="POINT_CONFIG[authStore.pointId]?.text ?? '-'"
+        :admin-name="adminName || '-'"
+        :walk-point="POINT_CONFIG[adminPointId]?.text ?? '-'"
       />
       <van-cell-group title="签到">
         <van-cell title="扫码签到" is-link @click="handleScanClick" />
         <van-cell title="输入签到" is-link @click="handleManualInputClick" />
       </van-cell-group>
 
-      <van-cell-group title="数据大盘">
+      <van-cell-group v-if="hasPermission('internal')" title="数据大盘">
         <van-cell
           v-for="campusId in CAMPUS_LIST"
           :key="campusId"
@@ -21,12 +21,13 @@
         <van-cell title="数据表格" is-link to="/data-table" />
       </van-cell-group>
 
-      <van-cell-group title="人员管理">
+      <van-cell-group v-if="hasPermission('super')" title="人员管理">
         <van-cell title="重组团队" is-link to="/team-rebuild" />
       </van-cell-group>
 
       <div :class="styles.buttonContainer">
         <van-button
+          v-if="hasPermission('super')"
           type="primary"
           :class="styles.functionButton"
           :loading="isStartAllThePendingPending"
@@ -81,9 +82,9 @@ import LoadingContainer from "@/components/loading-container/index.vue";
 import PromptDialog from "@/components/prompt-dialog/index.vue";
 import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types.ts";
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
+import { useAdminInfo } from "@/composables/admin-user-info";
 import { useStoredUrlQuery } from "@/composables/stored-url-query.ts";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { useAuthStore } from "@/stores/auth";
 import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
 
@@ -92,7 +93,8 @@ import styles from "./index.module.scss";
 import type { IndexUrlQuery } from "./types.ts";
 
 const router = useRouter();
-const authStore = useAuthStore();
+const { adminName, adminPointId, resetAdminInfo } = useAdminInfo();
+const { hasPermission } = useAdminInfo();
 
 const { urlQuery } = useStoredUrlQuery<IndexUrlQuery>({
   initialValue: {
@@ -141,7 +143,7 @@ const handleManualInputClick = () => {
 const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   mutationFn: () => walkAdminService.Logout(undefined),
   onSuccess: () => {
-    authStore.reset();
+    resetAdminInfo();
     urlQuery.value.isScanning = false;
     isTeamIdDialogVisible.value = false;
     showSuccessToast("登出成功");
