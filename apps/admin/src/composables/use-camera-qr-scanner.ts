@@ -1,17 +1,16 @@
-import { useIntervalFn, useUserMedia } from "@vueuse/core";
+import { useIntervalFn } from "@vueuse/core";
 import { scan } from "qr-scanner-wechat";
 import type { BaseIssue, BaseSchema, InferInput } from "valibot";
-import { computed, onBeforeUnmount, type Ref, ref } from "vue";
+import { onBeforeUnmount, type Ref, ref } from "vue";
 
 import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
+
+import { useDelayedCameraStream } from "./delayed-camera-stream";
 
 export interface UseCameraQrScannerOptions<TData> extends UseQrScannerOptions<TData> {
   /** 两次扫描之间的间隔(毫秒)
    * @default 120 */
   scanInterval?: number;
-  /** 摄像头朝向
-   * @default "environment" */
-  facingMode?: VideoFacingModeEnum;
 }
 
 /** 摄像头扫码钩子的状态
@@ -31,12 +30,7 @@ export const useCameraQrScanner = <
   schema: TSchema
 ) => {
   // 初始化参数
-  const {
-    scanInterval = 120,
-    facingMode = "environment",
-    onSuccess = (_) => undefined,
-    onError = (_) => undefined
-  } = options;
+  const { scanInterval = 120, onSuccess = (_) => undefined, onError = (_) => undefined } = options;
 
   /** 摄像头扫码钩子的状态 */
   const status = ref<UseCameraQrScannerStatus>("off");
@@ -63,42 +57,31 @@ export const useCameraQrScanner = <
     onError(err as Error);
   };
 
-  // 摄像头流
+  // 延迟关闭的摄像头流
   const {
-    stream: cameraStream,
-    isSupported: isCameraSupported,
-    start: startCameraStream,
-    stop: stopCameraStream
-  } = useUserMedia({
-    constraints: {
-      audio: false,
-      video: { facingMode: { ideal: facingMode } }
-    }
-  });
-  /** 摄像头流视频轨道列表 */
-  const cameraStreamTracks = computed(() => cameraStream.value?.getVideoTracks());
+    cameraStream,
+    isCameraSupported,
+    disableStreamTracks,
+    enableStreamTracks,
+    requestCameraStream,
+    releaseCameraStream
+  } = useDelayedCameraStream();
 
   /** 从激活状态切换到悬置状态，不会断开摄像头，仍然占用资源消耗性能 */
   const switchToIdle = () => {
     if (status.value !== "active") return;
-
-    if (!cameraStreamTracks.value) return;
-    for (const track of cameraStreamTracks.value) {
-      track.enabled = false;
-    }
     // 暂停定时扫描视频帧
     pauseScanInterval();
+    // 禁用摄像头流输出
+    disableStreamTracks();
     status.value = "idle";
   };
 
   /** 从悬置状态切换到激活状态 */
   const switchToActive = () => {
     if (status.value !== "idle") return;
-
-    if (!cameraStreamTracks.value) return;
-    for (const track of cameraStreamTracks.value) {
-      track.enabled = true;
-    }
+    // 启用摄像头流输出
+    enableStreamTracks();
     // 恢复定时扫描视频帧
     resumeScanInterval();
     status.value = "active";
@@ -200,8 +183,8 @@ export const useCameraQrScanner = <
 
       status.value = "starting";
 
-      // 开启摄像头流
-      await startCameraStream();
+      // 请求摄像头流
+      await requestCameraStream();
       if (!cameraStream.value) throw new Error("连接摄像头失败");
       // 关联视频流
       video.srcObject = cameraStream.value;
@@ -240,8 +223,8 @@ export const useCameraQrScanner = <
   const stop = () => {
     // 停止扫描视频帧
     pauseScanInterval();
-    // 关闭摄像头流
-    stopCameraStream();
+    // 释放摄像头流
+    releaseCameraStream();
     // 释放视频元素关联的资源
     const video = videoRef.value;
     if (video) {

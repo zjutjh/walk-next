@@ -1,0 +1,73 @@
+import { useTimeoutFn, useUserMedia } from "@vueuse/core";
+import { computed } from "vue";
+
+/** 允许摄像头流悬置的毫秒数 */
+const CAMERA_IDLE_TIMEOUT = 10000;
+
+// 摄像头流，模块导入后此钩子将永远存在
+const {
+  enabled: isCameraStreamEnabled,
+  stream: cameraStream,
+  isSupported: isCameraSupported,
+  start: startCameraStream,
+  stop: stopCameraStream
+} = useUserMedia({
+  constraints: {
+    audio: false,
+    video: { facingMode: { ideal: "environment" } }
+  }
+});
+
+// 定时关闭摄像头流，模块导入后此钩子将永远存在
+const {
+  start: beginDisconnectTimer,
+  stop: killDisconnectTimer,
+  isPending: isCameraStreamStopTimerPending
+} = useTimeoutFn(() => {
+  stopCameraStream();
+}, CAMERA_IDLE_TIMEOUT);
+
+/** 延迟关闭的摄像头流 */
+export const useDelayedCameraStream = () => {
+  /** 摄像头流视频轨道列表 */
+  const cameraStreamTracks = computed(() => cameraStream.value?.getVideoTracks());
+
+  /** 禁用摄像头流输出 */
+  const disableStreamTracks = () => {
+    if (!cameraStreamTracks.value) return;
+    cameraStreamTracks.value.forEach((track) => {
+      track.enabled = false;
+    });
+  };
+
+  /** 启用摄像头流输出 */
+  const enableStreamTracks = () => {
+    if (!cameraStreamTracks.value) return;
+    cameraStreamTracks.value.forEach((track) => {
+      track.enabled = true;
+    });
+  };
+
+  /** 请求摄像头流 */
+  const requestCameraStream = async () => {
+    killDisconnectTimer();
+    if (isCameraStreamEnabled.value) return cameraStream.value;
+    return await startCameraStream();
+  };
+
+  /** 释放摄像头流 */
+  const releaseCameraStream = () => {
+    if (!isCameraStreamStopTimerPending.value) {
+      beginDisconnectTimer();
+    }
+  };
+
+  return {
+    cameraStream,
+    isCameraSupported,
+    disableStreamTracks,
+    enableStreamTracks,
+    requestCameraStream,
+    releaseCameraStream
+  };
+};

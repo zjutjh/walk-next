@@ -39,8 +39,6 @@ const props = defineProps<{
   schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
   /** 两次扫描之间的间隔(毫秒) */
   scanInterval?: number;
-  /** 摄像头朝向 */
-  facingMode?: VideoFacingModeEnum;
 }>();
 
 const emit = defineEmits<{
@@ -82,7 +80,6 @@ const {
   videoRef,
   {
     scanInterval: props.scanInterval,
-    facingMode: props.facingMode,
     onSuccess: handleScanSuccess,
     onError: handleScanError
   },
