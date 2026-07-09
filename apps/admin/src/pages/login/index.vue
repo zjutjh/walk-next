@@ -5,7 +5,7 @@
       <div :class="styles.productName">精弘毅行管理系统</div>
       <div :class="styles.title">管理员登录</div>
 
-      <van-form ref="formRef" :show-error-message="false" @submit="error = new Error('1')">
+      <van-form ref="formRef" :show-error-message="false" @submit="handleLoginClick">
         <van-field
           v-model="account"
           :rules="ACCOUNT_RULES"

@@ -14,7 +14,7 @@
   >
     <div v-if="props.description" class="prompt-dialog__description">{{ props.description }}</div>
 
-    <van-form ref="formRef">
+    <van-form ref="formRef" @submit="handleConfirm">
       <van-field
         v-for="(_, key, index) in modelValue"
         :key="key"
