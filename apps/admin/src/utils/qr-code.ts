@@ -37,7 +37,7 @@ export const CheckinQrCodeSchema = object(
 /** 个人码类型模式 */
 export const MemberQrCodeSchema = object(
   {
-    type: pipe(number(BASE_MSG), value(3, "类型错误\n请扫个人码")),
+    type: pipe(number(BASE_MSG), value(ClientQrCodeType.Member, "类型错误\n请扫个人码")),
     user_id: pipe(number(BASE_MSG), integer(BASE_MSG)),
     name: string(BASE_MSG),
     jwt: pipe(string(BASE_MSG)),

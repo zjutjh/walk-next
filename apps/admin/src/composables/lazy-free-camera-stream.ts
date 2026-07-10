@@ -23,7 +23,7 @@ const useLazyFreeCameraStreamComposableStore = defineStore("lazyFreeCameraStream
 
   // 定时关闭摄像头流，模块导入后此Composable将永远存在
   const {
-    start: beginDisconnectTimer,
+    start: restartDisconnectTimer,
     stop: killDisconnectTimer,
     isPending: isCameraStreamStopTimerPending
   } = useTimeoutFn(() => {
@@ -37,7 +37,7 @@ const useLazyFreeCameraStreamComposableStore = defineStore("lazyFreeCameraStream
     startCameraStream,
     stopCameraStream,
     isCameraStreamStopTimerPending,
-    beginDisconnectTimer,
+    restartDisconnectTimer,
     killDisconnectTimer
   };
 });
@@ -47,7 +47,7 @@ export const useLazyFreeCameraStream = () => {
   const composableStore = useLazyFreeCameraStreamComposableStore();
   const { cameraStream, isCameraSupported, isCameraStreamEnabled, isCameraStreamStopTimerPending } =
     storeToRefs(composableStore);
-  const { startCameraStream, beginDisconnectTimer, killDisconnectTimer } = composableStore;
+  const { startCameraStream, restartDisconnectTimer, killDisconnectTimer } = composableStore;
 
   /** 摄像头流视频轨道列表 */
   const cameraStreamTracks = computed(() => cameraStream.value?.getVideoTracks());
@@ -82,7 +82,7 @@ export const useLazyFreeCameraStream = () => {
   /** 释放摄像头流 */
   const releaseCameraStream = () => {
     if (!isCameraStreamStopTimerPending.value) {
-      beginDisconnectTimer();
+      restartDisconnectTimer();
     }
   };
 

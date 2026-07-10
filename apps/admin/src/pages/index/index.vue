@@ -83,17 +83,17 @@ import { useRouter } from "vue-router";
 
 import LoadingContainer from "@/components/loading-container/index.vue";
 import PromptDialog from "@/components/prompt-dialog/index.vue";
-import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types.ts";
+import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { useAdminInfo } from "@/composables/admin-user-info";
-import { useStoredUrlQuery } from "@/composables/stored-url-query.ts";
+import { useStoredUrlQuery } from "@/composables/stored-url-query";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
 
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
-import type { IndexUrlQuery } from "./types.ts";
+import type { IndexUrlQuery } from "./types";
 
 const router = useRouter();
 const { adminName, adminPointId, resetAdminInfo, hasPermission } = useAdminInfo();

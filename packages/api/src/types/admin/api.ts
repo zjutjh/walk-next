@@ -29,7 +29,7 @@ export interface LoginResponse {
 export type LogoutRequest = undefined;
 
 /** 管理员退出登录 响应 */
-export type LogoutResponse = Record<string, never>;
+export type LogoutResponse = null;
 
 /** 管理员获取自身用户信息 请求 */
 export type QueryAdminUserInfoRequest = undefined;

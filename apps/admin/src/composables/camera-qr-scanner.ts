@@ -5,7 +5,7 @@ import { onBeforeUnmount, type Ref, ref } from "vue";
 
 import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 
-import { useLazyFreeCameraStream as useLazyFreeCameraStream } from "./lazy-free-camera-stream";
+import { useLazyFreeCameraStream } from "./lazy-free-camera-stream";
 
 export interface UseCameraQrScannerOptions<TData> extends UseQrScannerOptions<TData> {
   /** 两次扫描之间的间隔(毫秒)
