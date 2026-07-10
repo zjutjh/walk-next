@@ -2,11 +2,7 @@
 import { cloneDeep, get, isNil, isObject, isUndefined, mapValues, set } from "lodash-es";
 import { defineStore } from "pinia";
 import { type Ref, ref, shallowRef, watch } from "vue";
-import type { LocationQueryRaw } from "vue-router";
-
-import { routerConfig as router } from "@/configs";
-
-const route = router.currentRoute;
+import { type LocationQueryRaw, useRoute, useRouter } from "vue-router";
 
 /** Stored URL Query 状态Store */
 const useUrlQueryStore = defineStore("urlQuery", () => {
@@ -32,7 +28,14 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
 ) => {
   return mapValues(urlQueryObj, (value, key: keyof UrlQuery) => {
     if (value === null) return null;
-    if (isObject(originalTypeExample[key])) return JSON.parse(decodeURIComponent(value));
+    if (isObject(originalTypeExample[key])) {
+      try {
+        return JSON.parse(decodeURIComponent(value));
+      } catch (err) {
+        console.error(err);
+        throw new TypeError(`解析URL Query成员失败: ${String(key)}`);
+      }
+    }
     switch (typeof originalTypeExample[key]) {
       case "string":
         return value;
@@ -77,8 +80,10 @@ export const useStoredUrlQuery = <
    */
 
   const urlQueryStore = useUrlQueryStore();
+  const route = useRoute();
+  const router = useRouter();
   // 获取当前页面的path
-  const currentPath = route.value.path;
+  const currentPath = route.path;
 
   /** 当前页面对应的URL Query响应式对象 */
   let urlQuery = get(urlQueryStore.refObj, currentPath) as Ref<UrlQuery | undefined> | undefined;

@@ -1,6 +1,8 @@
 import type { SetRequired } from "type-fest";
+import { showFailToast } from "vant";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
+import { useAdminInfo } from "@/composables/admin-user-info";
 import IndexPage from "@/pages/index/index.vue";
 
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [
@@ -9,7 +11,16 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "index",
     component: IndexPage,
     meta: {
-      pageName: "精弘毅行管理后台"
+      pageName: "首页"
+    }
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/pages/login/index.vue"),
+    meta: {
+      pageName: "管理员登录",
+      allowNoAuth: true
     }
   },
   {
@@ -17,7 +28,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "team-rebuild",
     component: () => import("@/pages/team-rebuild/index.vue"),
     meta: {
-      pageName: "重组团队"
+      pageName: "重组团队",
+      requiredPermission: "super"
     }
   },
   {
@@ -26,7 +38,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "dashboard",
     component: () => import("@/pages/walk-dashboard/index.vue"),
     meta: {
-      pageName: "数据大盘"
+      pageName: "数据大盘",
+      requiredPermission: "internal"
     }
   },
   {
@@ -40,7 +53,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   },
   {
     path: "/team/:teamIdStr",
-    name: "team",
+    name: "team-info",
     component: () => import("@/pages/team-info/index.vue"),
     props: true,
     meta: {
@@ -53,7 +66,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "data-table",
     component: () => import("@/pages/data-table/index.vue"),
     meta: {
-      pageName: "数据统计表格"
+      pageName: "数据统计表格",
+      requiredPermission: "internal"
     }
   }
 ];
@@ -61,4 +75,33 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
 export const routerConfig = createRouter({
   history: createWebHistory(),
   routes
+});
+
+// 路由守卫
+routerConfig.beforeEach((to, from) => {
+  const { hasPermission, isLoggedIn } = useAdminInfo();
+  // 拦截无效路由
+  if (to.matched.length === 0) {
+    return isLoggedIn.value ? { name: "index" } : { name: "login" };
+  }
+  // 已登录状态自动进入
+  if (isLoggedIn.value && to.name === "login") {
+    return { name: "index" };
+  }
+  // 未登录状态返回登录
+  if (!isLoggedIn.value && !to.meta.allowNoAuth) {
+    return { name: "login", query: { fromPath: encodeURIComponent(to.fullPath) } };
+  }
+  // 权限不足
+  if (!hasPermission(to.meta.requiredPermission)) {
+    showFailToast("权限不足");
+    // 上一页权限满足，返回上一页
+    if (hasPermission(from.meta.requiredPermission)) {
+      return from;
+    }
+    // 上一页权限不足，返回首页
+    if (to.name !== "index") {
+      return { name: "index" };
+    }
+  }
 });

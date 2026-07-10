@@ -7,6 +7,9 @@
     "./*/admin": {
       "import": "./src/*/admin/index.ts"
     },
+    "./*/client": {
+      "import": "./src/*/client/index.ts"
+    },
     "./utils": {
       "import": "./src/utils/index.ts"
     }

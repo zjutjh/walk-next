@@ -7,7 +7,7 @@
 import { storeToRefs } from "pinia";
 import { onErrorCaptured } from "vue";
 
-import { useErrorBoundary } from "./use-error-boundary";
+import { useErrorBoundaryStore } from "./error-boundary-store";
 
 const slots = defineSlots<{
   default: (() => void) | undefined;
@@ -18,7 +18,7 @@ if (!slots.default && !slots.fallback) {
   throw new Error("ErrorBoundary component must have child components.");
 }
 
-const { error } = storeToRefs(useErrorBoundary());
+const { error } = storeToRefs(useErrorBoundaryStore());
 
 const emit = defineEmits<{
   errorCaptured: [err: unknown];

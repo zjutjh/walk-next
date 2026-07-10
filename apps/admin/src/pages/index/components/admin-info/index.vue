@@ -1,3 +1,4 @@
+<!-- 管理员信息卡片 -->
 <template>
   <van-cell-group title="管理员信息">
     <van-cell title="管理员">{{ adminName }}</van-cell>

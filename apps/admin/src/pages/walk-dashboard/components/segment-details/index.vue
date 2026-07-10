@@ -104,7 +104,7 @@ const {
   refetchInterval: ADMIN_REFRESH_INTERVAL.DASHBOARD.SEGMENT,
   queryKey: [ADMIN_QUERY_KEY.DASHBOARD.SEGMENT, chosenSegmentKey] as const,
   queryFn: ({ queryKey }) => {
-    if (queryKey[1] === "") return;
+    if (queryKey[1] === "") return Promise.reject();
     return walkAdminService.QueryDashboardSegmentDetails({
       prev_point_name: SEGMENT_DERIVATIVE[queryKey[1]].from,
       to_point_name: SEGMENT_DERIVATIVE[queryKey[1]].to
@@ -119,6 +119,10 @@ const handleRefresh = () => {
 
 /** 查看行程段团队列表 */
 const handleViewTeamList = () => {
-  router.push({ path: `/team-list/${props.campusId}`, query: { segment: chosenSegmentKey.value } });
+  router.push({
+    name: "team-list",
+    params: { campusId: props.campusId },
+    query: { segment: chosenSegmentKey.value }
+  });
 };
 </script>

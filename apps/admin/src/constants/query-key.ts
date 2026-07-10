@@ -1,8 +1,8 @@
 export const ADMIN_QUERY_KEY = {
-  /** 用户相关（示例） */
+  /** 用户相关 */
   USER: {
-    /** 用户信息（示例） */
-    INFO: "userInfo"
+    /** 用户信息 */
+    SELF: "userInfo"
   },
   /** 团队相关 */
   TEAM: {

@@ -23,7 +23,7 @@
         :jh-walk-hot-rect-tip="SEGMENT_DERIVATIVE[segmentKey].text"
         :class="[styles.hotRect, urlQuery.segment === segmentKey ? styles.chosen : '']"
         :style="isEmpty(hotRectCss) ? hotRectDefaultStyle : hotRectCss"
-        @click.stop="handleSegmentChosen(segmentKey)"
+        @click.stop.prevent="handleSegmentChosen(segmentKey)"
       ></div>
     </template>
     <!-- 点位热区 -->
@@ -34,7 +34,7 @@
         :jh-walk-hot-rect-tip="POINT_CONFIG[pointId].text"
         :class="[styles.hotRect, urlQuery.point === pointId ? styles.chosen : '']"
         :style="isEmpty(hotRectCss) ? hotRectDefaultStyle : hotRectCss"
-        @click.stop="handlePointChosen(pointId)"
+        @click.stop.prevent="handlePointChosen(pointId)"
       ></div>
     </template>
   </div>

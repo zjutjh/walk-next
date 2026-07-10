@@ -34,10 +34,10 @@
               <van-cell title="团队ID">{{ detailsData.team_id }}</van-cell>
               <van-cell title="团队路线">{{ ROUTE_CONFIG[detailsData.route_name]?.text }}</van-cell>
               <van-cell title="最新经过点位">{{
-                POINT_CONFIG[detailsData.prev_point_name]?.text
+                POINT_CONFIG[detailsData.latest_point_name]?.text
               }}</van-cell>
               <van-cell title="经过点位时间">{{
-                dayjs(detailsData.prev_point_time).format("YYYY/MM/DD HH:mm")
+                dayjs(detailsData.latest_point_time).format("YYYY/MM/DD HH:mm")
               }}</van-cell>
               <van-cell title="标记为失联">
                 <template #right-icon>

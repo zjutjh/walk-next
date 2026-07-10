@@ -1,58 +1,12 @@
 import type { DashboardRoutesOverviewData } from "./dashboard";
-import type { QrCodeType } from "./qr-code";
+import type { MemberWalkStatus, TeamStatusMemberInfo } from "./member";
+import type { AdminQrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
 import type { SearchType, TeamsMemberInfo, TeamStatusInfo, TeamsTeamBriefInfo } from "./team";
-import type {
-  UserCampusExample,
-  UserContactExample,
-  UserGenderExample,
-  UserTypeExample
-} from "./user";
-import type { TeamStatusWalkerInfo } from "./walker";
-
-// 为什么要写 /** */？ ---> https://www.jsdoc.com.cn/
-/** 登录 请求（示例） */
-export interface LoginExampleRequest {
-  /** 用户名 */
-  account: string;
-  /** 密码 */
-  password: string;
-}
-
-/** 登录 响应（示例） */
-export type LoginExampleResponse = {
-  /** 用户类型 */
-  user_type: UserTypeExample;
-};
-
-/** 登出 请求（示例） */
-export type LogoutExampleRequest = undefined; // 若请求body json/query params为空: 写undefined，因为其类型是“可选成员”，undefined合法，null不合法
-
-/** 登出 响应（示例） */
-export type LogoutExampleResponse = null; // 若返回data为空: 写null，因为收到的data确实是null
-
-/** 获取用户信息 请求（示例） */
-export interface QueryProfileExampleRequest {
-  /** 要获取的用户的ID */
-  user_id: string;
-}
-
-/** 获取用户信息 响应（示例） */
-export interface QueryProfileExampleResponse {
-  /** 学号 */
-  stu_id: string;
-  /** 姓名 */
-  name: string;
-  /** 校区 */
-  campus: UserCampusExample;
-  /** 性别 */
-  gender: UserGenderExample;
-  /** 联系方式 */
-  contact: UserContactExample;
-}
+import type { PermissionLevel } from "./user";
 
 /** 管理员登录 请求 */
-export interface AuthRequest {
+export interface LoginRequest {
   /** 用户名 */
   account: string;
   /** 密码 */
@@ -60,18 +14,37 @@ export interface AuthRequest {
 }
 
 /** 管理员登录 响应 */
-export interface AuthResponse {
+export interface LoginResponse {
   /** 管理员姓名 */
   name: string;
-  /** 点位名称 */
+  /** 管理员所在点位ID */
   point_name: string;
+  /** 管理员所在校区ID */
+  campus: string;
+  /** 管理员权限等级 */
+  permission: PermissionLevel;
 }
 
 /** 管理员退出登录 请求 */
 export type LogoutRequest = undefined;
 
 /** 管理员退出登录 响应 */
-export type LogoutResponse = Record<string, never>;
+export type LogoutResponse = null;
+
+/** 管理员获取自身用户信息 请求 */
+export type QueryAdminUserInfoRequest = undefined;
+
+/** 管理员获取自身用户信息 响应 */
+export interface QueryAdminUserInfoResponse {
+  /** 管理员姓名 */
+  name: string;
+  /** 管理员所在点位ID */
+  point_name: string;
+  /** 管理员所在校区ID */
+  campus: string;
+  /** 管理员权限等级 */
+  permission: PermissionLevel;
+}
 
 /** 获取数据仪表盘校区总览 请求 */
 export interface QueryDashboardCampusRequest {
@@ -156,9 +129,9 @@ export interface QueryTeamDetailsResponse {
   /** 路线ID */
   route_name: string;
   /** 最新经过点位ID */
-  prev_point_name: string;
+  latest_point_name: string;
   /** 经过点位时间 */
-  prev_point_time: string;
+  latest_point_time: string;
   /** 队员信息列表 */
   members: TeamsMemberInfo[];
 }
@@ -206,7 +179,7 @@ export interface QueryTeamStatusRequest {
 /** 获取团队状态 响应 */
 export interface QueryTeamStatusResponse {
   /** 团队成员 */
-  members: TeamStatusWalkerInfo[];
+  members: TeamStatusMemberInfo[];
   /** 团队状态信息 */
   team: TeamStatusInfo;
 }
@@ -222,6 +195,34 @@ export interface UpdateWalkerStatusRequest {
 /** 更改人员状态 响应 */
 export interface UpdateWalkerStatusResponse {
   team_id: number;
+}
+
+/** 重组团队 请求 */
+export interface RebuildTeamRequest {
+  /** 用户编号，长度3-6人 */
+  members: number[];
+  /** 路线名称 */
+  route_name: string;
+}
+
+/** 重组团队 响应 */
+export interface RebuildTeamResponse {
+  /** 新重组的团队编号 */
+  team_id: number;
+}
+
+/** 获取人员信息 请求 */
+export interface QueryMemberInfoRequest {
+  /** 用户编号 */
+  user_id: number;
+}
+
+/** 获取人员信息 响应 */
+export interface QueryMemberInfoResponse {
+  /** 姓名 */
+  name: string;
+  /** 人员状态 */
+  status: MemberWalkStatus;
 }
 
 /** 所有待出发改为进行中 请求 */
@@ -244,7 +245,7 @@ export type BindCheckinCodeResponse = null;
 /** 打卡(指团队到了某个点位后打卡表示已经过) 请求 */
 export interface CheckinTeamRequest {
   /** CodeType */
-  code_type: QrCodeType;
+  code_type: AdminQrCodeType.Checkin | AdminQrCodeType.Team;
   /** Content */
   content: string;
 }
@@ -253,6 +254,8 @@ export interface CheckinTeamRequest {
 export interface CheckinTeamResponse {
   /** 团队编号 */
   team_id: number;
+  /** 是否重复打卡 */
+  is_duplicate_check_in: boolean;
 }
 
 /** 终点确认 请求 */

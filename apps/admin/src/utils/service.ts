@@ -4,7 +4,8 @@ import { type CommonRespWrap, type ServiceOptions } from "api/utils";
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import { RequestError, RESP_CODE } from "shared";
 
-import { useAuthStore } from "@/stores/auth";
+import { useAdminInfo } from "@/composables/admin-user-info";
+import { routerConfig as router } from "@/configs";
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 
@@ -16,7 +17,11 @@ axiosInstance.interceptors.response.use(
       switch (body.code) {
         // 未登录
         case RESP_CODE.NOT_LOGGED_IN:
-          useAuthStore().reset();
+          useAdminInfo().resetAdminInfo();
+          router.push({
+            name: "login",
+            query: { fromPath: encodeURIComponent(router.currentRoute.value.fullPath) }
+          });
           break;
         default:
       }

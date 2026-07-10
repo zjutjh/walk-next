@@ -1,3 +1,5 @@
+import type { MemberWalkStatus } from "./member";
+
 /** 搜索类型 */
 export type SearchType = "team_id" | "captain_phone" | "captain_name";
 
@@ -10,9 +12,9 @@ export interface TeamsTeamBriefInfo {
   /** 路线ID */
   route_name: string;
   /** 最新经过点位ID */
-  prev_point_name: string;
+  latest_point_name: string;
   /** 最新经过点位时间 */
-  prev_point_time: string;
+  latest_point_time: string;
   /** 队长姓名 */
   captain_name: string;
   /** 队长联系电话 */
@@ -51,4 +53,14 @@ export interface TeamStatusInfo {
   is_prev_point_invalid: boolean;
   /** 是否在最近一次打卡时进入错误路线 */
   is_just_enter_wrong_route: boolean;
+}
+
+/** 重组团队人员信息 */
+export interface TeamRebuildMember {
+  /** 用户编号 */
+  id: number;
+  /** 姓名 */
+  name: string;
+  /** 当前状态 */
+  status: MemberWalkStatus;
 }

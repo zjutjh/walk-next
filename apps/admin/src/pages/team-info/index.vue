@@ -1,11 +1,11 @@
+<!-- 团队信息页 -->
 <template>
-  <!-- 团队信息页 -->
   <loading-container
     :class="styles.page"
     :loading="isTeamInfoLoading || isAnyMutationPending"
     :modal="isAnyMutationPending"
   >
-    <default-layout :title="teamInfoData?.team.name">
+    <default-layout :title="teamInfoData?.team.name || undefined">
       <error-empty :error="teamInfoError" :disabled="isTeamInfoFetching">
         <van-pull-refresh
           v-if="teamInfoData"
@@ -48,11 +48,13 @@
                 is-link
                 @click="openStatusPicker(member.user_id)"
               >
-                <span :style="{ color: STATUS_COLOR_MAP[member.walk_status] }">{{
+                <span :style="{ color: MEMBER_STATUS_COLOR_MAP[member.walk_status] }">{{
                   WALKER_STATUS_TEXT[member.walk_status]
                 }}</span>
               </van-cell>
             </van-cell-group>
+
+            <div :class="styles.middleWhiteSpace"></div>
 
             <div :class="styles.buttonContainer">
               <van-button
@@ -63,11 +65,11 @@
                 >标记团队违规</van-button
               >
               <van-button
-                v-if="isAdminAtStartPoint && !teamInfoData.team.prev_point_name"
+                v-if="isAdminAtStartPoint && isTeamMaybeNotStart"
                 type="primary"
                 block
                 @click="handleBindCheckinCodeClick"
-                >绑定纸质签到码</van-button
+                >绑定签到码</van-button
               >
               <van-button
                 v-if="isAdminAtEndPoint && teamInfoData.team.status === 'in_progress'"
@@ -92,31 +94,33 @@
     />
 
     <!-- 扫码弹窗 -->
-    <qr-scan-preview
+    <qr-scan-popup
       v-model:show="isScanPopupVisible"
+      :schema="CheckinQrCodeSchema"
       @success="handleScanSuccess"
-      @error="handleScanError"
     />
   </loading-container>
 </template>
 
 <script setup lang="ts">
 import { useMutation, useQuery } from "@tanstack/vue-query";
-import { QR_CODE, type WalkerStatus } from "api/types/admin";
+import type { MemberWalkStatus } from "api/types/admin";
 import { first, isNil, last } from "lodash-es";
+import { is } from "valibot";
 import { showConfirmDialog, showDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref, watch } from "vue";
 
 import ErrorEmpty from "@/components/error-empty/index.vue";
 import LoadingContainer from "@/components/loading-container/index.vue";
-import type { QrCodeData } from "@/composables/use-qr-scanner";
+import { useAdminInfo } from "@/composables/admin-user-info";
 import { WALKER_STATUS_TEXT } from "@/constants/enum-text";
+import { MEMBER_STATUS_COLOR_MAP } from "@/constants/member-status-config";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { useAuthStore } from "@/stores/auth";
+import { CheckinQrCodeSchema } from "@/utils";
 import { walkAdminService } from "@/utils/service";
 import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_POINT_LIST_MAP } from "@/walk-config";
 
-import { STATUS_COLOR_MAP, STATUS_PICKER_ACTION_MAP } from "./constants";
+import { STATUS_PICKER_ACTION_MAP } from "./constants";
 import styles from "./index.module.scss";
 import type { StatusPickerAction } from "./types";
 
@@ -127,10 +131,12 @@ const props = defineProps<{
 /** 团队ID */
 const teamId = computed(() => Number(props.teamIdStr));
 
-const authStore = useAuthStore();
+const { adminPointId } = useAdminInfo();
 
 /** 是否已经弹出过走错路线提示 */
 const isWrongRouteAlertTriggered = ref(false);
+/** 本次进入页面后，是否出现过未开始/待出发成员 */
+const isPendingOrNotStartMemberEverAppeared = ref(false);
 
 /** 获取团队状态信息 */
 const {
@@ -146,16 +152,34 @@ const {
 });
 
 // 数据更新监听器
-watch(teamInfoDataUpdatedAt, () => {
-  // 团队在最近的打卡中进入错误路线，显示一次提示
-  if (!isWrongRouteAlertTriggered.value && teamInfoData.value?.team.is_just_enter_wrong_route) {
-    isWrongRouteAlertTriggered.value = true;
-    showDialog({
-      title: "走错路线",
-      message: "该团队走错路线，请及时提醒！"
-    });
-  }
-});
+watch(
+  teamInfoDataUpdatedAt,
+  () => {
+    if (isNil(teamInfoData.value)) return;
+    // 团队在最近的打卡中进入错误路线，显示一次提示
+    if (!isWrongRouteAlertTriggered.value && teamInfoData.value.team.is_just_enter_wrong_route) {
+      isWrongRouteAlertTriggered.value = true;
+      showDialog({
+        title: "走错路线",
+        message: "该团队走错路线，请及时提醒！"
+      });
+    }
+    // 检查是否出现了未开始或待出发成员
+    if (!isPendingOrNotStartMemberEverAppeared.value) {
+      isPendingOrNotStartMemberEverAppeared.value = teamInfoData.value.members.some(
+        (member) => member.walk_status === "not_start" || member.walk_status === "pending"
+      );
+    }
+  },
+  { immediate: true }
+);
+
+/** 是否认为团队可能尚未真正出发 */
+const isTeamMaybeNotStart = computed(
+  () =>
+    // 团队上一打卡点位为空 或 进入页面后出现过未开始与待出发成员
+    !teamInfoData.value?.team.prev_point_name || isPendingOrNotStartMemberEverAppeared.value
+);
 
 /** 是否正在下拉刷新中 */
 const isPullRefreshing = ref(false);
@@ -188,11 +212,12 @@ const remainingCount = computed(
 
 /** 当前管理员用户是否在团队所属路线的起点 */
 const isAdminAtStartPoint = computed(
-  () => authStore.pointId === first(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
+  () =>
+    adminPointId.value === first(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
 );
 /** 当前管理员用户是否在团队所属路线的终点 */
 const isAdminAtEndPoint = computed(
-  () => authStore.pointId === last(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
+  () => adminPointId.value === last(ROUTE_POINT_LIST_MAP[teamInfoData.value?.team.route_name ?? ""])
 );
 
 /** 成员状态编辑弹层是否可见 */
@@ -200,10 +225,10 @@ const isStatusPickerVisible = ref(false);
 
 /** 成员状态编辑弹层的可用选项列表 */
 const statusPickerActions = computed<StatusPickerAction[]>(() => {
-  const availableStatusSet: Set<WalkerStatus> = new Set();
+  const availableStatusSet: Set<MemberWalkStatus> = new Set();
 
-  // 用户为起点管理员，且团队上一打卡点位为空，可选择未开始、待出发
-  if (isAdminAtStartPoint.value && !teamInfoData.value?.team.prev_point_name) {
+  // 用户为起点管理员，且团队可能尚未真正出发，可选择未开始、待出发
+  if (isAdminAtStartPoint.value && isTeamMaybeNotStart.value) {
     availableStatusSet.add("not_start");
     availableStatusSet.add("pending");
   }
@@ -239,7 +264,7 @@ const openStatusPicker = (id: number) => {
 
 // 更改成员状态
 const { mutate: mutateUpdateStatus, isPending: isUpdateStatusPending } = useMutation({
-  mutationFn: (params: { targetId: number; status: WalkerStatus }) =>
+  mutationFn: (params: { targetId: number; status: MemberWalkStatus }) =>
     walkAdminService.UpdateWalkerStatus({
       user_id: params.targetId,
       status: params.status
@@ -279,12 +304,12 @@ const handleMarkViolatedClick = async () => {
 /** 扫码弹窗是否可见 */
 const isScanPopupVisible = ref(false);
 
-/** 点击绑定纸质签到码 */
+/** 点击绑定签到码 */
 const handleBindCheckinCodeClick = () => {
   isScanPopupVisible.value = true;
 };
 
-// 绑定纸质签到码
+// 绑定签到码
 const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = useMutation({
   mutationFn: (params: { teamId: number; content: string }) =>
     walkAdminService.BindCheckinCode({
@@ -297,26 +322,17 @@ const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = u
   },
   onError: (error) => {
     showFailToast(error.message || "绑定失败");
-    isScanPopupVisible.value = true;
   }
 });
 
 /** 扫码成功 */
-const handleScanSuccess = (data: QrCodeData) => {
-  if (data.code_type !== QR_CODE.Checkin) {
-    showFailToast("请扫纸质签到码");
-    return;
-  }
+const handleScanSuccess = (data: unknown) => {
+  if (!is(CheckinQrCodeSchema, data)) return;
   isScanPopupVisible.value = false;
   mutateBindCheckinCode({
     teamId: teamId.value,
-    content: data.content
+    content: data.code
   });
-};
-
-/** 扫码失败 */
-const handleScanError = (message: string) => {
-  showFailToast(message || "扫码失败");
 };
 
 // 终点确认

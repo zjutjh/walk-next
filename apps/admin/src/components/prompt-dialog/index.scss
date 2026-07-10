@@ -1,0 +1,16 @@
+.prompt-dialog {
+  .van-dialog__content {
+    padding: {
+      left: 12px;
+      right: 12px;
+    }
+
+    .prompt-dialog__description {
+      margin: 0 0 10px 0;
+      font-size: 12px;
+      line-height: 1.4;
+      text-align: center;
+      color: var(--van-text-color-2);
+    }
+  }
+}

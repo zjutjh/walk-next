@@ -1,6 +1,6 @@
 // 团队详情浮窗
 .component {
-  height: calc(100vh - var(--van-nav-bar-height));
+  height: calc(100svh - var(--van-nav-bar-height));
   display: flex;
   flex-direction: column;
   background-color: var(--van-background);
