@@ -55,7 +55,7 @@
   <qr-scan-popup
     v-model:show="urlQuery.isScanning"
     :loading="isCheckInPending"
-    :schema="qrCodeSchema"
+    :schema="checkinQrCodeSchema"
     @success="handleScanSuccess"
   />
 
@@ -76,7 +76,7 @@ import { useMutation } from "@tanstack/vue-query";
 import { type AdminAPI, AdminQrCodeType } from "api/types/admin";
 import { CanceledError } from "axios";
 import { RequestError } from "shared";
-import { is, variant } from "valibot";
+import { is } from "valibot";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -94,6 +94,7 @@ import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
 import AdminInfo from "./components/admin-info/index.vue";
 import styles from "./index.module.scss";
 import type { IndexUrlQuery } from "./types";
+import { checkinQrCodeSchema } from "./utils";
 
 const router = useRouter();
 const { adminName, adminPointId, resetAdminInfo, hasPermission } = useAdminInfo();
@@ -103,12 +104,6 @@ const { urlQuery } = useStoredUrlQuery<IndexUrlQuery>({
     isScanning: false
   }
 });
-
-const qrCodeSchema = variant(
-  "type",
-  [TeamQrCodeSchema, CheckinQrCodeSchema],
-  "类型错误\n请扫团队码\n或签到码"
-);
 
 /** 团队ID输入弹窗 表单值 */
 const teamIdDialogValue = ref({ teamIdStr: "" });
