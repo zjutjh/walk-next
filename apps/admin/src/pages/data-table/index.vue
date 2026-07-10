@@ -118,7 +118,7 @@
 
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
-import { isEmpty, isNil, last } from "lodash-es";
+import { isNil } from "lodash-es";
 import { computed, ref, toRef, watch } from "vue";
 
 import LoadingContainer from "@/components/loading-container/index.vue";
@@ -140,7 +140,7 @@ import {
 import ErrorTip from "./components/error-tip/index.vue";
 import { OVERVIEW_STATS_KEY_LIST, OVERVIEW_TAB_NAME, ROUTE_STATS_KEY_LIST } from "./constants";
 import styles from "./index.module.scss";
-import type { DataTableUrlQuery } from "./types";
+import type { DataTableUrlQuery, SegmentStat } from "./types";
 
 const { urlQuery } = useStoredUrlQuery<DataTableUrlQuery>({
   initialValue: {
@@ -213,23 +213,23 @@ const handleRouteStatsRefresh = () => {
 
 /** 行程段统计数据 */
 const segmentStats = computed(() => {
-  /** 最后一个点位的数据 */
-  const lastPointData = last(routeStatsData.value?.point_stats);
-  /** 除最后一个点位外的点位数据数组 */
-  const pointDataArrExceptLast = routeStatsData.value?.point_stats.slice(0, -1);
-  if (isNil(pointDataArrExceptLast) || isEmpty(pointDataArrExceptLast) || isNil(lastPointData))
-    return [];
-  return pointDataArrExceptLast.map((pointData, index, pointArr) => {
+  /** 点位数据数组 */
+  const pointDataArr = routeStatsData.value?.point_stats;
+  if (isNil(pointDataArr)) return [];
+  return pointDataArr.reduce((acc, pointData, index) => {
     /** 下一个点位的数据 */
-    const nextPointData = pointArr.at(index + 1) ?? lastPointData;
+    const nextPointData = pointDataArr.at(index + 1);
+    // 没有下一个点位数据
+    if (isNil(nextPointData)) return acc;
     /** 行程段key */
     const segmentKey = `${pointData.point_name}${SEGMENT_KEY_DELIMITER}${nextPointData.point_name}`;
-    const segmentData = {
+    // 添加当前点位到下一个点位的行程段数据
+    acc.push({
       segmentKey: segmentKey,
       text: SEGMENT_DERIVATIVE[segmentKey]?.text ?? "",
       countOnSegment: pointData.passed_count - nextPointData.passed_count
-    };
-    return segmentData;
-  });
+    });
+    return acc;
+  }, [] as SegmentStat[]);
 });
 </script>
