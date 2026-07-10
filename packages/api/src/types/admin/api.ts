@@ -129,9 +129,9 @@ export interface QueryTeamDetailsResponse {
   /** 路线ID */
   route_name: string;
   /** 最新经过点位ID */
-  prev_point_name: string;
+  latest_point_name: string;
   /** 经过点位时间 */
-  prev_point_time: string;
+  latest_point_time: string;
   /** 队员信息列表 */
   members: TeamsMemberInfo[];
 }
