@@ -121,7 +121,7 @@ const handleRefresh = () => {
 const handleViewTeamList = () => {
   router.push({
     name: "team-list",
-    params: { campusId: props.campusId },
+    params: { campusIdParam: props.campusId },
     query: { segment: chosenSegmentKey.value }
   });
 };

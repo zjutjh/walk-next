@@ -167,7 +167,7 @@ const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
     } else {
       showSuccessToast("打卡成功");
     }
-    router.push({ name: "team-info", params: { teamIdStr: data.team_id } });
+    router.push({ name: "team-info", params: { teamIdParam: data.team_id } });
   },
   onError: (err) => {
     if (err instanceof RequestError && err.originError instanceof CanceledError) return;

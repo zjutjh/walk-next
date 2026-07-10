@@ -33,7 +33,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     }
   },
   {
-    path: "/dashboard/:campusId",
+    path: "/dashboard/:campusIdParam",
     props: true,
     name: "dashboard",
     component: () => import("@/pages/walk-dashboard/index.vue"),
@@ -43,7 +43,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     }
   },
   {
-    path: "/team-list/:campusId",
+    path: "/team-list/:campusIdParam",
     props: true,
     name: "team-list",
     component: () => import("@/pages/team-list/index.vue"),
@@ -52,7 +52,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     }
   },
   {
-    path: "/team/:teamIdStr",
+    path: "/team/:teamIdParam",
     name: "team-info",
     component: () => import("@/pages/team-info/index.vue"),
     props: true,

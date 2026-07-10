@@ -1,35 +1,38 @@
 <!-- 数据仪表盘页 -->
 <template>
-  <default-layout :class="styles.layout" :title="`${CAMPUS_CONFIG[props.campusId]?.text}数据大盘`">
+  <default-layout :class="styles.layout" :title="`${CAMPUS_CONFIG[campusId]?.text}数据大盘`">
     <template #right>
       <van-icon name="search" size="22" @click="handleSearchClick" />
     </template>
-    <div :class="styles.topArea">
-      <pan-zoom-map-view
-        ref="panZoomMapViewRef"
-        v-model:url-query="urlQuery"
-        :campus-id="props.campusId"
-        :map-url="CAMPUS_CONFIG[props.campusId]?.mapUrl"
-      />
-    </div>
-    <data-overview :class="styles.dataPanel" :url-query="urlQuery" :campus-id="props.campusId" />
-    <!-- 展示点位或行程段详情的浮动面板 -->
-    <van-floating-panel
-      v-model:height="floatingPanelHeight"
-      :class="styles.floatingPanel"
-      :anchors="floatingPanelAnchors"
-    >
-      <point-details
-        v-if="urlQuery.point !== ''"
-        v-model:point="urlQuery.point"
-        :campus-id="props.campusId"
-      />
-      <segment-details
-        v-else-if="urlQuery.segment !== ''"
-        v-model:segment="urlQuery.segment"
-        :campus-id="props.campusId"
-      />
-    </van-floating-panel>
+    <template v-if="campusId">
+      <div :class="styles.topArea">
+        <pan-zoom-map-view
+          ref="panZoomMapViewRef"
+          v-model:url-query="urlQuery"
+          :campus-id="campusId"
+          :map-url="CAMPUS_CONFIG[campusId]?.mapUrl"
+        />
+      </div>
+      <data-overview :class="styles.dataPanel" :url-query="urlQuery" :campus-id="campusId" />
+      <!-- 展示点位或行程段详情的浮动面板 -->
+      <van-floating-panel
+        v-model:height="floatingPanelHeight"
+        :class="styles.floatingPanel"
+        :anchors="floatingPanelAnchors"
+      >
+        <point-details
+          v-if="urlQuery.point !== ''"
+          v-model:point="urlQuery.point"
+          :campus-id="campusId"
+        />
+        <segment-details
+          v-else-if="urlQuery.segment !== ''"
+          v-model:segment="urlQuery.segment"
+          :campus-id="campusId"
+        />
+      </van-floating-panel>
+    </template>
+    <error-empty v-else :error="new Error(`校区不存在：${props.campusIdParam}`)" />
   </default-layout>
 </template>
 
@@ -41,7 +44,7 @@ import { useRouter } from "vue-router";
 import { useStoredUrlQuery } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { pxToSize } from "@/utils";
-import { CAMPUS_CONFIG, type CampusId } from "@/walk-config";
+import { CAMPUS_CONFIG, CAMPUS_LIST, type CampusId } from "@/walk-config";
 
 import DataOverview from "./components/data-overview/index.vue";
 import PanZoomMapView from "./components/pan-zoom-map-view/index.vue";
@@ -51,9 +54,16 @@ import styles from "./index.module.scss";
 import type { DashboardUrlQuery } from "./types";
 
 const props = defineProps<{
-  /** 校区ID */
-  campusId: CampusId;
+  /** Path Param传入的校区ID */
+  campusIdParam: string;
 }>();
+/** 校区ID */
+const campusId = computed(() => {
+  if (CAMPUS_LIST.includes(props.campusIdParam as CampusId)) {
+    return props.campusIdParam as CampusId;
+  }
+  return "";
+});
 
 const router = useRouter();
 
@@ -96,6 +106,6 @@ const floatingPanelHeight = computed({
 
 /** 前往搜索页 */
 const handleSearchClick = () => {
-  router.push({ name: "team-list", params: { campusId: props.campusId } });
+  router.push({ name: "team-list", params: { campusIdParam: props.campusIdParam } });
 };
 </script>

@@ -1,23 +1,31 @@
 <!-- 搜索团队页 -->
 <template>
-  <default-layout :title="`${CAMPUS_CONFIG[props.campusId].text}搜索团队`">
+  <default-layout :title="`${CAMPUS_CONFIG[props.campusIdParam]?.text}搜索团队`">
     <template #header>
       <search-bar ref="searchBarRef" v-model:url-query="urlQuery" />
-      <filter-bar ref="filterBarRef" v-model:url-query="urlQuery" :campus-id="props.campusId" />
+      <filter-bar
+        v-if="campusId"
+        ref="filterBarRef"
+        v-model:url-query="urlQuery"
+        :campus-id="campusId"
+      />
     </template>
-    <result-list
-      v-if="isQueryEnabled"
-      :campus-id="props.campusId"
-      :url-query="urlQuery"
-      :is-query-enabled="isQueryEnabled"
-    />
-    <suggestion-empty
-      v-else-if="filterBarComponent && searchBarComponent"
-      v-model:url-query="urlQuery"
-      :is-search-input-focus="searchBarComponent?.isSearchInputFocus"
-      :search-instance="searchBarComponent?.vantSearchComponent"
-      :open-segment-filter="filterBarComponent?.openSegmentFilter"
-    />
+    <template v-if="campusId">
+      <result-list
+        v-if="isQueryEnabled"
+        :campus-id="campusId"
+        :url-query="urlQuery"
+        :is-query-enabled="isQueryEnabled"
+      />
+      <suggestion-empty
+        v-else-if="filterBarComponent && searchBarComponent"
+        v-model:url-query="urlQuery"
+        :is-search-input-focus="searchBarComponent?.isSearchInputFocus"
+        :search-instance="searchBarComponent?.vantSearchComponent"
+        :open-segment-filter="filterBarComponent?.openSegmentFilter"
+      />
+    </template>
+    <error-empty v-else :error="new Error(`校区不存在：${props.campusIdParam}`)" />
     <team-details v-model:team-id="urlQuery.viewingTeam" />
   </default-layout>
 </template>
@@ -27,7 +35,7 @@ import { computed, useTemplateRef } from "vue";
 
 import { useStoredUrlQuery } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { CAMPUS_CONFIG, type CampusId } from "@/walk-config";
+import { CAMPUS_CONFIG, CAMPUS_LIST, type CampusId } from "@/walk-config";
 
 import FilterBar from "./components/filter-bar/index.vue";
 import ResultList from "./components/result-list/index.vue";
@@ -37,9 +45,16 @@ import TeamDetails from "./components/team-details/index.vue";
 import type { TeamListUrlQuery } from "./types";
 
 const props = defineProps<{
-  /** 校区ID */
-  campusId: CampusId;
+  /** Path Param传入的校区ID */
+  campusIdParam: string;
 }>();
+/** 校区ID */
+const campusId = computed(() => {
+  if (CAMPUS_LIST.includes(props.campusIdParam as CampusId)) {
+    return props.campusIdParam as CampusId;
+  }
+  return "";
+});
 
 const { urlQuery } = useStoredUrlQuery<TeamListUrlQuery>({
   initialValue: {

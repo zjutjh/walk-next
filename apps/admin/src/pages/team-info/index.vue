@@ -125,11 +125,11 @@ import styles from "./index.module.scss";
 import type { StatusPickerAction } from "./types";
 
 const props = defineProps<{
-  /** 团队ID字符串 */
-  teamIdStr: string;
+  /** Path Param传入的团队ID */
+  teamIdParam: string;
 }>();
 /** 团队ID */
-const teamId = computed(() => Number(props.teamIdStr));
+const teamId = computed(() => Number(props.teamIdParam));
 
 const { adminPointId } = useAdminInfo();
 
