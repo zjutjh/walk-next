@@ -1,34 +1,54 @@
 import { useTimeoutFn, useUserMedia } from "@vueuse/core";
+import { defineStore, storeToRefs } from "pinia";
 import { computed } from "vue";
 
 /** 允许摄像头流悬置的毫秒数 */
 const CAMERA_IDLE_TIMEOUT = 10000;
 
-// 摄像头流，模块导入后此钩子将永远存在
-const {
-  enabled: isCameraStreamEnabled,
-  stream: cameraStream,
-  isSupported: isCameraSupported,
-  start: startCameraStream,
-  stop: stopCameraStream
-} = useUserMedia({
-  constraints: {
-    audio: false,
-    video: { facingMode: { ideal: "environment" } }
-  }
-});
+/** 延迟关闭的摄像头流Composable使用的全局Composable */
+const useDelayedCameraStreamComposableStore = defineStore("delayedCameraStreamComposable", () => {
+  // 摄像头流
+  const {
+    enabled: isCameraStreamEnabled,
+    stream: cameraStream,
+    isSupported: isCameraSupported,
+    start: startCameraStream,
+    stop: stopCameraStream
+  } = useUserMedia({
+    constraints: {
+      audio: false,
+      video: { facingMode: { ideal: "environment" } }
+    }
+  });
 
-// 定时关闭摄像头流，模块导入后此钩子将永远存在
-const {
-  start: beginDisconnectTimer,
-  stop: killDisconnectTimer,
-  isPending: isCameraStreamStopTimerPending
-} = useTimeoutFn(() => {
-  stopCameraStream();
-}, CAMERA_IDLE_TIMEOUT);
+  // 定时关闭摄像头流，模块导入后此Composable将永远存在
+  const {
+    start: beginDisconnectTimer,
+    stop: killDisconnectTimer,
+    isPending: isCameraStreamStopTimerPending
+  } = useTimeoutFn(() => {
+    stopCameraStream();
+  }, CAMERA_IDLE_TIMEOUT);
+
+  return {
+    cameraStream,
+    isCameraSupported,
+    isCameraStreamEnabled,
+    startCameraStream,
+    stopCameraStream,
+    isCameraStreamStopTimerPending,
+    beginDisconnectTimer,
+    killDisconnectTimer
+  };
+});
 
 /** 延迟关闭的摄像头流 */
 export const useDelayedCameraStream = () => {
+  const composableStore = useDelayedCameraStreamComposableStore();
+  const { cameraStream, isCameraSupported, isCameraStreamEnabled, isCameraStreamStopTimerPending } =
+    storeToRefs(composableStore);
+  const { startCameraStream, beginDisconnectTimer, killDisconnectTimer } = composableStore;
+
   /** 摄像头流视频轨道列表 */
   const cameraStreamTracks = computed(() => cameraStream.value?.getVideoTracks());
 

@@ -7,6 +7,7 @@
 <script setup lang="ts">
 import { ready } from "qr-scanner-wechat";
 import { showFailToast } from "vant";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
 
 import { useTitleMeta } from "@/composables/title-meta";
@@ -21,9 +22,12 @@ const { setupAdminInfoQuery } = useAdminInfo();
 useTitleMeta();
 
 // 预加载扫码模块
+const isQrScannerPreloaded = ref(false);
 requestIdleCallback(async () => {
+  if (isQrScannerPreloaded.value) return;
   try {
     await ready();
+    isQrScannerPreloaded.value = true;
   } catch (err) {
     showFailToast("扫码模块加载失败");
     console.error(err);

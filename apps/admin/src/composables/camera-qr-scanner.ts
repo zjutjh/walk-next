@@ -13,7 +13,7 @@ export interface UseCameraQrScannerOptions<TData> extends UseQrScannerOptions<TD
   scanInterval?: number;
 }
 
-/** 摄像头扫码钩子的状态
+/** 摄像头扫码Composable的状态
  * @enum off 关闭，所有媒体资源均被释放
  * @enum starting 启动中，正在准备媒体资源，尚未开始扫描
  * @enum active 激活，占用媒体资源，定时扫描视频帧
@@ -32,7 +32,7 @@ export const useCameraQrScanner = <
   // 初始化参数
   const { scanInterval = 120, onSuccess = (_) => undefined, onError = (_) => undefined } = options;
 
-  /** 摄像头扫码钩子的状态 */
+  /** 摄像头扫码Composable的状态 */
   const status = ref<UseCameraQrScannerStatus>("off");
 
   /** 用于扫描二维码的Canvas */
@@ -110,7 +110,7 @@ export const useCameraQrScanner = <
   const scanVideoFrame = async () => {
     // 上次扫描未结束
     if (isScanFramePending.value) return;
-    // 摄像头扫码钩子未启动
+    // 摄像头扫码Composable未启动
     if (status.value !== "active") return;
     const video = videoRef.value;
     // 视频元素尚不可用

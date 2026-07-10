@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/vue-query";
+import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { AdminAPI, PermissionLevel } from "api/types/admin";
 import { assign, isNil } from "lodash-es";
 import { defineStore } from "pinia";
-import { ref, toRef, watch } from "vue";
+import { getCurrentScope, onScopeDispose, ref, toRef, watch } from "vue";
 
 import { globalQueryClient } from "@/configs";
 import { ADMIN_QUERY_KEY } from "@/constants";
@@ -30,14 +30,17 @@ const useAdminStore = defineStore(
   "adminUserInfo",
   () => {
     const data = ref(buildDefaultAdminUserInfo());
+    const isQueryExist = ref(false);
 
     return {
-      data
+      data,
+      isQueryExist
     };
   },
   {
     persist: {
-      key: "walk-next:admin-user-info"
+      key: "walk-next:admin-user-info",
+      pick: ["data"]
     }
   }
 );
@@ -61,6 +64,7 @@ const PERMISSION_WEIGHT_MAP = {
 /** 管理员用户信息 */
 export const useAdminInfo = () => {
   const adminStore = useAdminStore();
+  const queryClient = getCurrentScope() ? useQueryClient() : globalQueryClient;
 
   const isLoggedIn = toRef(() => adminStore.data.isLoggedIn);
   const adminName = toRef(() => adminStore.data.adminName);
@@ -79,7 +83,7 @@ export const useAdminInfo = () => {
   const updateAdminInfo = (patch: Partial<AdminUserInfo>) => {
     assign(adminStore.data, patch);
     // 更新query缓存
-    globalQueryClient.setQueriesData<AdminAPI.QueryAdminUserInfoResponse>(
+    queryClient.setQueriesData<AdminAPI.QueryAdminUserInfoResponse>(
       { queryKey: [ADMIN_QUERY_KEY.USER.SELF] },
       (oldData) => {
         if (isNil(permissionLevel.value)) return oldData;
@@ -97,14 +101,20 @@ export const useAdminInfo = () => {
   const resetAdminInfo = () => {
     updateAdminInfo(buildDefaultAdminUserInfo());
     // 清理query缓存
-    globalQueryClient.invalidateQueries({ queryKey: [ADMIN_QUERY_KEY.USER.SELF] });
+    queryClient.invalidateQueries({ queryKey: [ADMIN_QUERY_KEY.USER.SELF] });
   };
 
   /** 启动query，需要在顶层组件调用 */
   const setupAdminInfoQuery = () => {
+    // 防止重复启动query
+    if (adminStore.isQueryExist) return;
+    adminStore.isQueryExist = true;
+    onScopeDispose(() => {
+      adminStore.isQueryExist = false;
+    });
     // 获取管理员用户信息
     const { data } = useQuery({
-      enabled: isLoggedIn,
+      enabled: () => isLoggedIn.value,
       queryKey: [ADMIN_QUERY_KEY.USER.SELF] as const,
       queryFn: () => walkAdminService.QueryAdminUserInfo(undefined),
       staleTime: Infinity

@@ -104,7 +104,7 @@ const {
   refetchInterval: ADMIN_REFRESH_INTERVAL.DASHBOARD.SEGMENT,
   queryKey: [ADMIN_QUERY_KEY.DASHBOARD.SEGMENT, chosenSegmentKey] as const,
   queryFn: ({ queryKey }) => {
-    if (queryKey[1] === "") return;
+    if (queryKey[1] === "") return Promise.reject();
     return walkAdminService.QueryDashboardSegmentDetails({
       prev_point_name: SEGMENT_DERIVATIVE[queryKey[1]].from,
       to_point_name: SEGMENT_DERIVATIVE[queryKey[1]].to
