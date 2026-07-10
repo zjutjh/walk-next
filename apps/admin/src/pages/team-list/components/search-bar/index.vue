@@ -5,7 +5,7 @@
     v-model.trim="searchValue"
     :class="styles.component"
     :show-action="Boolean(searchValue.trim())"
-    :placeholder="`搜索${TEAM_SEARCH_TYPE[searchType]?.text}`"
+    :placeholder="`搜索${TEAM_SEARCH_TYPE[urlQuery.searchType]?.text}`"
     clear-trigger="always"
     input-align="center"
     shape="round"
@@ -17,15 +17,15 @@
     <template #left>
       <van-dropdown-menu :class="styles.typeDropdownMenu">
         <van-dropdown-item
-          v-model="searchType"
-          :title="TEAM_SEARCH_TYPE[searchType]?.abbr"
+          v-model="urlQuery.searchType"
+          :title="TEAM_SEARCH_TYPE[urlQuery.searchType]?.abbr"
           :options="TEAM_SEARCH_TYPE_OPTIONS"
         />
       </van-dropdown-menu>
     </template>
     <template #action>
       <div
-        v-if="searchValue !== urlQuery.keyword || searchType !== urlQuery.searchType"
+        v-if="searchValue !== urlQuery.keyword"
         :class="styles.searchBtn"
         @click="handleSearchApply"
       >
@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import type { SearchInstance } from "vant";
-import { ref, useTemplateRef, watch } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import type { TeamListUrlQuery } from "../../types";
 import { TEAM_SEARCH_TYPE, TEAM_SEARCH_TYPE_OPTIONS } from "../constants";
@@ -49,16 +49,6 @@ const urlQuery = defineModel<TeamListUrlQuery>("urlQuery", { required: true });
 /** vant搜索框组件 */
 const vantSearchComponent = useTemplateRef<SearchInstance>("searchRef");
 
-/** 选中的搜索类型 */
-const searchType = ref(urlQuery.value.searchType);
-// 实际搜索值发生变化时，与实际搜索值同步
-watch(
-  () => urlQuery.value.searchType,
-  (newValue) => {
-    searchType.value = newValue;
-  }
-);
-
 /** 搜索输入框的内容 */
 const searchValue = ref(urlQuery.value.keyword);
 
@@ -67,7 +57,6 @@ const handleSearchApply = () => {
   // 判空
   if (searchValue.value.length === 0) return;
   // 应用搜索
-  urlQuery.value.searchType = searchType.value;
   urlQuery.value.keyword = searchValue.value;
 };
 
