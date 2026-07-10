@@ -18,7 +18,7 @@
         is-link
         @click="openMemberActionSheet(member.id)"
       >
-        <span :style="{ color: STATUS_COLOR_MAP[member.status] }">{{
+        <span :style="{ color: MEMBER_STATUS_COLOR_MAP[member.status] }">{{
           WALKER_STATUS_TEXT[member.status]
         }}</span>
       </van-cell>
@@ -111,7 +111,7 @@ import { useRouter } from "vue-router";
 
 import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
 import { WALKER_STATUS_TEXT } from "@/constants";
-import { STATUS_COLOR_MAP } from "@/constants/member-status-config";
+import { MEMBER_STATUS_COLOR_MAP } from "@/constants/member-status-config";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { MemberQrCodeSchema } from "@/utils";
 import { walkAdminService } from "@/utils/service";

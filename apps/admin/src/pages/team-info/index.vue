@@ -48,7 +48,7 @@
                 is-link
                 @click="openStatusPicker(member.user_id)"
               >
-                <span :style="{ color: STATUS_COLOR_MAP[member.walk_status] }">{{
+                <span :style="{ color: MEMBER_STATUS_COLOR_MAP[member.walk_status] }">{{
                   WALKER_STATUS_TEXT[member.walk_status]
                 }}</span>
               </van-cell>
@@ -115,12 +115,13 @@ import ErrorEmpty from "@/components/error-empty/index.vue";
 import LoadingContainer from "@/components/loading-container/index.vue";
 import { useAdminInfo } from "@/composables/admin-user-info";
 import { WALKER_STATUS_TEXT } from "@/constants/enum-text";
+import { MEMBER_STATUS_COLOR_MAP } from "@/constants/member-status-config";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { CheckinQrCodeSchema } from "@/utils";
 import { walkAdminService } from "@/utils/service";
 import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_POINT_LIST_MAP } from "@/walk-config";
 
-import { STATUS_COLOR_MAP, STATUS_PICKER_ACTION_MAP } from "../../constants/member-status-config";
+import { STATUS_PICKER_ACTION_MAP } from "./constants";
 import styles from "./index.module.scss";
 import type { StatusPickerAction } from "./types";
 

@@ -1,11 +1,7 @@
 import type { MemberWalkStatus } from "api/types/admin";
-import { mapValues } from "lodash-es";
-
-import { WALKER_STATUS_TEXT } from "@/constants";
-import type { StatusPickerAction } from "@/pages/team-info/types";
 
 /** 人员状态-CSS颜色 映射表 */
-export const STATUS_COLOR_MAP = {
+export const MEMBER_STATUS_COLOR_MAP = {
   not_start: "var(--van-gray-5)",
   pending: "#addf17",
   in_progress: "var(--van-green)",
@@ -14,13 +10,3 @@ export const STATUS_COLOR_MAP = {
   violated: "var(--van-danger-color)",
   completed: "var(--van-black)"
 } satisfies Record<MemberWalkStatus, string>;
-
-/** 人员状态-状态选择器选项配置 映射表（导出） */
-export const STATUS_PICKER_ACTION_MAP = mapValues(STATUS_COLOR_MAP, (color, key) => {
-  const status = key as MemberWalkStatus;
-  return {
-    status: status,
-    name: WALKER_STATUS_TEXT[status],
-    color: color
-  } satisfies StatusPickerAction;
-});
