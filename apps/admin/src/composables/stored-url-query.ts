@@ -28,7 +28,14 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
 ) => {
   return mapValues(urlQueryObj, (value, key: keyof UrlQuery) => {
     if (value === null) return null;
-    if (isObject(originalTypeExample[key])) return JSON.parse(decodeURIComponent(value));
+    if (isObject(originalTypeExample[key])) {
+      try {
+        return JSON.parse(decodeURIComponent(value));
+      } catch (err) {
+        console.error(err);
+        throw new TypeError(`解析URL Query成员失败: ${String(key)}`);
+      }
+    }
     switch (typeof originalTypeExample[key]) {
       case "string":
         return value;

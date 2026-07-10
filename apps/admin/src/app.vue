@@ -27,16 +27,20 @@ useTitleMeta();
 
 // 预加载扫码模块
 const isQrScannerPreloaded = ref(false);
-requestIdleCallback(async () => {
-  if (isQrScannerPreloaded.value) return;
-  try {
-    await ready();
-    isQrScannerPreloaded.value = true;
-  } catch (err) {
-    showFailToast("扫码模块加载失败");
-    console.error(err);
-  }
-});
+try {
+  requestIdleCallback(async () => {
+    if (isQrScannerPreloaded.value) return;
+    try {
+      await ready();
+      isQrScannerPreloaded.value = true;
+    } catch (err) {
+      showFailToast("扫码模块加载失败");
+      console.error(err);
+    }
+  });
+} catch {
+  console.warn("requestIdleCallback不可用");
+}
 
 // 启动获取管理员用户信息的query
 setupAdminInfoQuery();
