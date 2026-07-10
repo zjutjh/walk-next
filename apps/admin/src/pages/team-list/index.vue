@@ -35,7 +35,7 @@ import { computed, useTemplateRef } from "vue";
 
 import { useStoredUrlQuery } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { CAMPUS_CONFIG, CAMPUS_LIST, type CampusId } from "@/walk-config";
+import { CAMPUS_CONFIG, type CampusId } from "@/walk-config";
 
 import FilterBar from "./components/filter-bar/index.vue";
 import ResultList from "./components/result-list/index.vue";
@@ -50,7 +50,7 @@ const props = defineProps<{
 }>();
 /** 校区ID */
 const campusId = computed(() => {
-  if (CAMPUS_LIST.includes(props.campusIdParam as CampusId)) {
+  if (Object.hasOwn(CAMPUS_CONFIG, props.campusIdParam)) {
     return props.campusIdParam as CampusId;
   }
   return "";

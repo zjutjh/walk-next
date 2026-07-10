@@ -44,7 +44,7 @@ import { useRouter } from "vue-router";
 import { useStoredUrlQuery } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { pxToSize } from "@/utils";
-import { CAMPUS_CONFIG, CAMPUS_LIST, type CampusId } from "@/walk-config";
+import { CAMPUS_CONFIG, type CampusId } from "@/walk-config";
 
 import DataOverview from "./components/data-overview/index.vue";
 import PanZoomMapView from "./components/pan-zoom-map-view/index.vue";
@@ -59,7 +59,7 @@ const props = defineProps<{
 }>();
 /** 校区ID */
 const campusId = computed(() => {
-  if (CAMPUS_LIST.includes(props.campusIdParam as CampusId)) {
+  if (Object.hasOwn(CAMPUS_CONFIG, props.campusIdParam)) {
     return props.campusIdParam as CampusId;
   }
   return "";
