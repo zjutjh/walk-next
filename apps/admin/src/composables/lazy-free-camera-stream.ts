@@ -5,8 +5,8 @@ import { computed } from "vue";
 /** 允许摄像头流悬置的毫秒数 */
 const CAMERA_IDLE_TIMEOUT = 10000;
 
-/** 延迟关闭的摄像头流Composable使用的全局Composable */
-const useDelayedCameraStreamComposableStore = defineStore("delayedCameraStreamComposable", () => {
+/** 惰性关闭的摄像头流Composable使用的全局Composable */
+const useLazyFreeCameraStreamComposableStore = defineStore("lazyFreeCameraStreamComposable", () => {
   // 摄像头流
   const {
     enabled: isCameraStreamEnabled,
@@ -42,9 +42,9 @@ const useDelayedCameraStreamComposableStore = defineStore("delayedCameraStreamCo
   };
 });
 
-/** 延迟关闭的摄像头流 */
-export const useDelayedCameraStream = () => {
-  const composableStore = useDelayedCameraStreamComposableStore();
+/** 惰性关闭的摄像头流 */
+export const useLazyFreeCameraStream = () => {
+  const composableStore = useLazyFreeCameraStreamComposableStore();
   const { cameraStream, isCameraSupported, isCameraStreamEnabled, isCameraStreamStopTimerPending } =
     storeToRefs(composableStore);
   const { startCameraStream, beginDisconnectTimer, killDisconnectTimer } = composableStore;

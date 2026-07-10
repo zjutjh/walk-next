@@ -5,7 +5,7 @@ import { onBeforeUnmount, type Ref, ref } from "vue";
 
 import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 
-import { useDelayedCameraStream } from "./delayed-camera-stream";
+import { useLazyFreeCameraStream as useLazyFreeCameraStream } from "./lazy-free-camera-stream";
 
 export interface UseCameraQrScannerOptions<TData> extends UseQrScannerOptions<TData> {
   /** 两次扫描之间的间隔(毫秒)
@@ -57,7 +57,7 @@ export const useCameraQrScanner = <
     onError(err as Error);
   };
 
-  // 延迟关闭的摄像头流
+  // 惰性关闭的摄像头流
   const {
     cameraStream,
     isCameraSupported,
@@ -65,7 +65,7 @@ export const useCameraQrScanner = <
     enableStreamTracks,
     requestCameraStream,
     releaseCameraStream
-  } = useDelayedCameraStream();
+  } = useLazyFreeCameraStream();
 
   /** 从激活状态切换到悬置状态，不会断开摄像头，仍然占用资源消耗性能 */
   const switchToIdle = () => {
