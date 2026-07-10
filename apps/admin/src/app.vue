@@ -1,7 +1,9 @@
 <template>
-  <van-config-provider :theme-vars="THEME_VAR_RECORD" theme-vars-scope="global">
-    <router-view :key="route.meta.recreateComponentByPath ? route.fullPath : undefined" />
-  </van-config-provider>
+  <error-boundary>
+    <van-config-provider :theme-vars="THEME_VAR_RECORD" theme-vars-scope="global">
+      <router-view :key="route.meta.recreateComponentByPath ? route.fullPath : undefined" />
+    </van-config-provider>
+  </error-boundary>
 </template>
 
 <script setup lang="ts">

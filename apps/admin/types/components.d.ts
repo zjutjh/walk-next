@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ErrorBoundary: typeof import('./../src/components/error-boundary/index.vue')['default']
     ErrorEmpty: typeof import('./../src/components/error-empty/index.vue')['default']
     IMdiClose: typeof import('~icons/mdi/close')['default']
     IMdiImage: typeof import('~icons/mdi/image')['default']

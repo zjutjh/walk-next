@@ -1,4 +1,4 @@
 import ErrorBoundary from "./error-boundary.vue";
-import { useErrorBoundary } from "./use-error-boundary";
+import { useErrorBoundaryStore } from "./error-boundary-store.ts";
 
-export { ErrorBoundary, useErrorBoundary };
+export { ErrorBoundary, useErrorBoundaryStore };
