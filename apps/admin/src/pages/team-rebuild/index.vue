@@ -113,7 +113,7 @@ import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
 import { WALKER_STATUS_TEXT } from "@/constants";
 import { STATUS_COLOR_MAP } from "@/constants/member-status-config";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { MemberQrCodeSchema, parseJwt } from "@/utils";
+import { MemberQrCodeSchema } from "@/utils";
 import { walkAdminService } from "@/utils/service";
 import { ROUTE_CONFIG, ROUTE_LIST, type RouteId } from "@/walk-config";
 
@@ -176,13 +176,12 @@ const handleAddMemberScanClick = () => {
 const handleScanSuccess = (data: unknown) => {
   if (!is(MemberQrCodeSchema, data)) return;
   isScanPopupVisible.value = false;
-  const jwtPayload = parseJwt(data.jwt)?.payload;
   // 查重验证
-  if (memberList.value.some((member) => String(member.id) === jwtPayload?.open_id)) {
+  if (memberList.value.some((member) => member.id === data.user_id)) {
     showFailToast("该成员已添加\n不可重复添加");
     return;
   }
-  mutateAddMember(parseInt(jwtPayload?.open_id));
+  mutateAddMember(data.user_id);
 };
 
 /** 扫码失败 */
@@ -252,7 +251,7 @@ const MEMBER_ID_DIALOG_CONFIG: Record<
       { required: true, message: "请输入毅行人员ID" },
       // 查重验证
       {
-        validator: (val) => !memberList.value.some((member) => String(member.id) === val),
+        validator: (val) => !memberList.value.some((member) => member.id === Number(val)),
         message: "该成员已添加，不可重复添加"
       }
     ]
