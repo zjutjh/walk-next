@@ -102,7 +102,11 @@ const { mutate: mutateLogin, isPending } = useMutation({
     });
 
     // 路由跳转
-    router.replace(route.query.fromPath ? decodeURIComponent(route.query.fromPath as string) : "/");
+    router.replace(
+      route.query.fromPath
+        ? { path: decodeURIComponent(route.query.fromPath as string) }
+        : { name: "index" }
+    );
   },
   onError: (err: Error) => {
     error.value = err;

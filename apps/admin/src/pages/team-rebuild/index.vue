@@ -302,7 +302,7 @@ const { mutate: mutateRebuildTeam, isPending: isRebuildTeamPending } = useMutati
     memberList.value = [];
     teamRoute.value = "";
     showSuccessToast("重组成功");
-    router.push({ path: `/team/${res.team_id}` });
+    router.push({ name: "team-info", params: { teamIdStr: res.team_id } });
   },
   onError: (err) => {
     showFailToast(err.message || "重组团队失败");

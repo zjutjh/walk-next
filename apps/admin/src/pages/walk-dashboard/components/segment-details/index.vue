@@ -119,6 +119,10 @@ const handleRefresh = () => {
 
 /** 查看行程段团队列表 */
 const handleViewTeamList = () => {
-  router.push({ path: `/team-list/${props.campusId}`, query: { segment: chosenSegmentKey.value } });
+  router.push({
+    name: "team-list",
+    params: { campusId: props.campusId },
+    query: { segment: chosenSegmentKey.value }
+  });
 };
 </script>

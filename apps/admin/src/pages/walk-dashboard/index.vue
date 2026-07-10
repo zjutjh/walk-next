@@ -96,6 +96,6 @@ const floatingPanelHeight = computed({
 
 /** 前往搜索页 */
 const handleSearchClick = () => {
-  router.push(`/team-list/${props.campusId}`);
+  router.push({ name: "team-list", params: { campusId: props.campusId } });
 };
 </script>
