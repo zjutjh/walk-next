@@ -7,6 +7,8 @@
 </template>
 
 <script setup lang="ts">
+import "@vant/touch-emulator";
+
 import { ready } from "qr-scanner-wechat";
 import { showFailToast } from "vant";
 import { ref } from "vue";

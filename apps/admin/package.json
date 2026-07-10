@@ -14,6 +14,7 @@
     "@iconify-json/ic": "catalog:frontend",
     "@iconify-json/mdi": "catalog:frontend",
     "@tanstack/vue-query": "catalog:frontend",
+    "@vant/touch-emulator": "^1.5.0",
     "@vueuse/core": "catalog:frontend",
     "api": "workspace:*",
     "axios": "catalog:frontend",
