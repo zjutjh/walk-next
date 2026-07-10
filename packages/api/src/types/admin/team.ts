@@ -1,4 +1,4 @@
-import { MemberWalkStatus } from "./member";
+import type { MemberWalkStatus } from "./member";
 
 /** 搜索类型 */
 export type SearchType = "team_id" | "captain_phone" | "captain_name";
