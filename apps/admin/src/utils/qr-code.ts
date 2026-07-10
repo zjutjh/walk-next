@@ -19,8 +19,7 @@ const BASE_MSG = "二维码格式错误";
 export const TeamQrCodeSchema = object(
   {
     type: pipe(number(BASE_MSG), value(ClientQrCodeType.Team, "类型错误\n请扫团队码")),
-    team_id: pipe(number(BASE_MSG), integer(BASE_MSG)),
-    time: pipe(number(BASE_MSG), integer(BASE_MSG))
+    team_id: pipe(number(BASE_MSG), integer(BASE_MSG))
   },
   BASE_MSG
 );
@@ -39,9 +38,6 @@ export const MemberQrCodeSchema = object(
   {
     type: pipe(number(BASE_MSG), value(ClientQrCodeType.Member, "类型错误\n请扫个人码")),
     user_id: pipe(number(BASE_MSG), integer(BASE_MSG)),
-    name: string(BASE_MSG),
-    jwt: pipe(string(BASE_MSG)),
-    time: pipe(number(BASE_MSG), integer(BASE_MSG))
   },
   BASE_MSG
 );
