@@ -25,7 +25,7 @@
         :open-segment-filter="filterBarComponent?.openSegmentFilter"
       />
     </template>
-    <error-empty v-else :error="new Error(`校区不存在：${props.campusIdParam}`)" />
+    <error-empty v-else :error="`校区不存在：${props.campusIdParam}`" />
     <team-details v-model:team-id="urlQuery.viewingTeam" />
   </default-layout>
 </template>

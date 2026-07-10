@@ -32,7 +32,7 @@
         />
       </van-floating-panel>
     </template>
-    <error-empty v-else :error="new Error(`校区不存在：${props.campusIdParam}`)" />
+    <error-empty v-else :error="`校区不存在：${props.campusIdParam}`" />
   </default-layout>
 </template>
 
