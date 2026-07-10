@@ -1,6 +1,6 @@
 <!-- 数据仪表盘页 -->
 <template>
-  <default-layout :class="styles.layout" :title="`${CAMPUS_CONFIG[campusId]?.text}数据大盘`">
+  <default-layout :class="styles.layout" :title="`${CAMPUS_CONFIG[campusId]?.text ?? ''}数据大盘`">
     <template #right>
       <van-icon name="search" size="22" @click="handleSearchClick" />
     </template>
