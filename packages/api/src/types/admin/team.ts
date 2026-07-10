@@ -1,3 +1,5 @@
+import { MemberWalkStatus } from "./member";
+
 /** 搜索类型 */
 export type SearchType = "team_id" | "captain_phone" | "captain_name";
 
@@ -60,5 +62,5 @@ export interface TeamRebuildMember {
   /** 姓名 */
   name: string;
   /** 当前状态 */
-  status: TeamWalkStatus;
+  status: MemberWalkStatus;
 }

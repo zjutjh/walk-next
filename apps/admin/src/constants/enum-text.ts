@@ -1,4 +1,4 @@
-import type { TeamMemberRole, WalkerStatsMetric, WalkerStatus } from "api/types/admin";
+import type { MemberStatsMetric, MemberWalkStatus, TeamMemberRole } from "api/types/admin";
 
 /** 团队成员角色的中文名 */
 export const TEAM_MEMBER_ROLE_TEXT = {
@@ -15,7 +15,7 @@ export const WALKER_STATUS_TEXT = {
   withdrawn: "已下撤",
   violated: "已违规",
   completed: "已完成"
-} as const satisfies Record<WalkerStatus, string>;
+} as const satisfies Record<MemberWalkStatus, string>;
 
 /** 人员统计指标的中文名 */
 export const WALKER_STATS_METRIC_TEXT = {
@@ -26,4 +26,4 @@ export const WALKER_STATS_METRIC_TEXT = {
   finished: "已结束",
   withdrawn: "下撤",
   wrong_route: "走错路线"
-} as const satisfies Record<WalkerStatsMetric, string>;
+} as const satisfies Record<MemberStatsMetric, string>;

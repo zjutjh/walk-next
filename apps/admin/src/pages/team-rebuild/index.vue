@@ -279,11 +279,16 @@ const { mutate: mutateAddMember, isPending: isAddMemberPending } = useMutation({
     );
   },
   onSuccess: (userInfo, userId) => {
+    // 人员状态验证
+    if (userInfo.status !== "not_start" && userInfo.status !== "pending") {
+      showFailToast("须为未开始或待出发人员");
+      return;
+    }
     isMemberIdDialogVisible.value = false;
     memberList.value.push({
       id: userId,
       name: userInfo.name,
-      status: "not_start"
+      status: userInfo.status
     });
     memberIdDialogValue.value.memberIdStr = "";
   },

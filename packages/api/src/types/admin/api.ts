@@ -1,9 +1,9 @@
 import type { DashboardRoutesOverviewData } from "./dashboard";
+import type { MemberWalkStatus, TeamStatusMemberInfo } from "./member";
 import type { AdminQrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
 import type { SearchType, TeamsMemberInfo, TeamStatusInfo, TeamsTeamBriefInfo } from "./team";
 import type { PermissionLevel } from "./user";
-import type { TeamStatusWalkerInfo } from "./walker";
 
 /** 管理员登录 请求 */
 export interface LoginRequest {
@@ -179,7 +179,7 @@ export interface QueryTeamStatusRequest {
 /** 获取团队状态 响应 */
 export interface QueryTeamStatusResponse {
   /** 团队成员 */
-  members: TeamStatusWalkerInfo[];
+  members: TeamStatusMemberInfo[];
   /** 团队状态信息 */
   team: TeamStatusInfo;
 }
@@ -221,6 +221,8 @@ export interface QueryMemberInfoRequest {
 export interface QueryMemberInfoResponse {
   /** 姓名 */
   name: string;
+  /** 人员状态 */
+  status: MemberWalkStatus;
 }
 
 /** 所有待出发改为进行中 请求 */

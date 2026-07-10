@@ -1,5 +1,5 @@
 /** 人员状态 */
-export type WalkerStatus =
+export type MemberWalkStatus =
   | "not_start"
   | "pending"
   | "abandoned"
@@ -9,7 +9,7 @@ export type WalkerStatus =
   | "completed";
 
 /** 人员统计指标 */
-export type WalkerStatsMetric =
+export type MemberStatsMetric =
   | "total_reg"
   | "not_present"
   | "pending"
@@ -19,7 +19,7 @@ export type WalkerStatsMetric =
   | "wrong_route";
 
 /** 团队状态中的成员信息 */
-export interface TeamStatusWalkerInfo {
+export interface TeamStatusMemberInfo {
   /** 姓名 */
   name: string;
   /** 用户身份 */
@@ -27,5 +27,5 @@ export interface TeamStatusWalkerInfo {
   /** 用户编号 */
   user_id: number;
   /** 用户状态 */
-  walk_status: WalkerStatus;
+  walk_status: MemberWalkStatus;
 }
