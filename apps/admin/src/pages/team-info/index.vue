@@ -98,7 +98,6 @@
       v-model:show="isScanPopupVisible"
       :schema="CheckinQrCodeSchema"
       @success="handleScanSuccess"
-      @error="handleScanError"
     />
   </loading-container>
 </template>
@@ -334,11 +333,6 @@ const handleScanSuccess = (data: unknown) => {
     teamId: teamId.value,
     content: data.code
   });
-};
-
-/** 扫码失败 */
-const handleScanError = (err: Error) => {
-  showFailToast(err.message || "扫码失败");
 };
 
 // 终点确认

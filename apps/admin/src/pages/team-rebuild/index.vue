@@ -94,7 +94,6 @@
     v-model:show="isScanPopupVisible"
     :schema="MemberQrCodeSchema"
     @success="handleScanSuccess"
-    @error="handleScanError"
   />
 </template>
 
@@ -182,11 +181,6 @@ const handleScanSuccess = (data: unknown) => {
     return;
   }
   mutateAddMember(data.user_id);
-};
-
-/** 扫码失败 */
-const handleScanError = (err: Error) => {
-  showFailToast(err.message || "扫码失败");
 };
 
 /** 点击提交团队 */
