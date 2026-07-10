@@ -1,4 +1,5 @@
 import type { SetRequired } from "type-fest";
+import { showFailToast } from "vant";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
 import { useAdminInfo } from "@/composables/admin-user-info";
@@ -93,6 +94,7 @@ routerConfig.beforeEach((to, from) => {
   }
   // 权限不足
   if (!hasPermission(to.meta.requiredPermission)) {
+    showFailToast("权限不足");
     // 上一页权限满足，返回上一页
     if (hasPermission(from.meta.requiredPermission)) {
       return from;

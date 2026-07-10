@@ -105,7 +105,7 @@ import { CanceledError } from "axios";
 import { find, isEmpty } from "lodash-es";
 import { RequestError } from "shared";
 import { is } from "valibot";
-import { showFailToast } from "vant";
+import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -307,6 +307,7 @@ const { mutate: mutateRebuildTeam, isPending: isRebuildTeamPending } = useMutati
   onSuccess: (res) => {
     memberList.value = [];
     teamRoute.value = "";
+    showSuccessToast("重组成功");
     router.push({ path: `/team/${res.team_id}` });
   },
   onError: (err) => {
