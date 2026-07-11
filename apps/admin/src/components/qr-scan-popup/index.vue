@@ -4,12 +4,12 @@
     <loading-container class="qr-scan-popup" :loading="props.loading">
       <video ref="videoRef" class="qr-scan-popup__video" autoplay muted playsinline></video>
 
-      <button class="qr-scan-popup__close" type="button" @click="handleClose">
+      <button class="qr-scan-popup__close van-haptics-feedback" type="button" @click="handleClose">
         <i-mdi-close />
       </button>
 
       <button
-        class="qr-scan-popup__album"
+        class="qr-scan-popup__album van-haptics-feedback"
         :disabled="uploadQrScannerStatus === 'pending'"
         type="button"
         @click="handleUploadImageClick"
