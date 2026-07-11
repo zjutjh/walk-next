@@ -40,10 +40,7 @@ apps/admin/src/
 ├── utils/         # 全局工具
 ├── app.vue        # 根组件
 ├── global.scss    # 全局样式
-├── index.html     # 入口 HTML
-├── main.ts        # 入口 TS
-├── .env           # 环境变量配置
-└── .env.example   # 环境变量模板
+└── main.ts        # 入口 TS
 ```
 
 ## 3. 环境准备
