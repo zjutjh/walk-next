@@ -6,6 +6,7 @@
 
 以下规则优先级最高：
 
+- **强制要求：读取AGENTS.md**：执行任何任务前，必须先确定相关子项目（admin/client），**必须读取该子项目目录下的 AGENTS.md 文件**。
 - **先读后改**：修改任何文件前必须先使用 Read 工具读取，理解现有逻辑后再动手
 - **最小变更**：只修改与任务直接相关的代码
 - **复用优先**：新增前先搜索项目中是否已有类似组件/工具/composable，禁止重复造轮子
@@ -21,7 +22,7 @@
 
 ### 2.1 子项目
 
-- **`apps/admin`**：[@/apps/admin/AGENTS.md](./apps/admin/AGENTS.md)
+- **`admin`**：[@/apps/admin/AGENTS.md](./apps/admin/AGENTS.md)
 
 ### 2.2 内部包
 
