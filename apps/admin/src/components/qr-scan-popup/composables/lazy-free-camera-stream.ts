@@ -21,7 +21,7 @@ const useLazyFreeCameraStreamComposableStore = defineStore("lazyFreeCameraStream
     }
   });
 
-  // 定时关闭摄像头流，模块导入后此Composable将永远存在
+  // 定时关闭摄像头流
   const {
     start: restartDisconnectTimer,
     stop: killDisconnectTimer,
