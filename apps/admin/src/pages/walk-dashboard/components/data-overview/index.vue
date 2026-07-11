@@ -30,7 +30,7 @@
             </div>
             <div :class="styles.data">
               <span :class="styles.dataKey">进行中</span
-              ><span :class="styles.dataValue">{{ routeData.walking }}</span>
+              ><span :class="styles.dataValue">{{ routeData.in_progress }}</span>
             </div>
             <div :class="styles.data">
               <span :class="styles.dataKey">已结束</span
