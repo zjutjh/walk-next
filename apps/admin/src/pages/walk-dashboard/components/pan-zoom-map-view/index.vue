@@ -32,10 +32,10 @@
 <script setup lang="ts">
 import { computed, type StyleValue, toRef, useTemplateRef } from "vue";
 
-import { useMapPanZoom } from "@/composables/map-pan-zoom";
 import { useMapPanZoomStore } from "@/stores/map-pan-zoom-store";
 import type { CampusId } from "@/walk-config";
 
+import { useMapPanZoom } from "../../composables/map-pan-zoom.ts";
 import type { DashboardUrlQuery } from "../../types";
 import FloatingMenu from "../floating-menu/index.vue";
 import MapPicker from "../map-picker/index.vue";

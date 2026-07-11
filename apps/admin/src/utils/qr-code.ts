@@ -37,7 +37,7 @@ export const CheckinQrCodeSchema = object(
 export const MemberQrCodeSchema = object(
   {
     type: pipe(number(BASE_MSG), value(ClientQrCodeType.Member, "类型错误\n请扫个人码")),
-    user_id: pipe(number(BASE_MSG), integer(BASE_MSG)),
+    user_id: pipe(number(BASE_MSG), integer(BASE_MSG))
   },
   BASE_MSG
 );

@@ -30,8 +30,9 @@ import { showFailToast } from "vant";
 import { nextTick, ref, useTemplateRef, watch } from "vue";
 
 import LoadingContainer from "@/components/loading-container/index.vue";
-import { useCameraQrScanner } from "@/composables/camera-qr-scanner";
-import { useUploadQrScanner } from "@/composables/upload-qr-scanner";
+
+import { useCameraQrScanner } from "./composables/camera-qr-scanner";
+import { useUploadQrScanner } from "./composables/upload-qr-scanner";
 
 const props = defineProps<{
   /** 是否处于加载态 */
