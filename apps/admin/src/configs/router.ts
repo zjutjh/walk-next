@@ -2,7 +2,7 @@ import type { SetRequired } from "type-fest";
 import { showFailToast } from "vant";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
-import { useAdminInfo } from "@/composables/admin-user-info";
+import { useAdminInfo } from "@/composables";
 import IndexPage from "@/pages/index/index.vue";
 
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [

@@ -122,10 +122,8 @@ import { isNil } from "lodash-es";
 import { computed, ref, toRef, watch } from "vue";
 
 import LoadingContainer from "@/components/loading-container/index.vue";
-import { useStoredUrlQuery } from "@/composables/stored-url-query";
-import { ADMIN_QUERY_KEY } from "@/constants";
-import { WALKER_STATS_METRIC_TEXT } from "@/constants/enum-text";
-import { ADMIN_REFRESH_INTERVAL } from "@/constants/refresh-interval";
+import { useStoredUrlQuery } from "@/composables";
+import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL, WALKER_STATS_METRIC_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { walkAdminService } from "@/utils";
 import {

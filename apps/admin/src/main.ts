@@ -1,4 +1,4 @@
-import "./global.scss";
+import "@/global.scss";
 import "vant/es/toast/style";
 import "vant/es/dialog/style";
 
@@ -9,8 +9,8 @@ import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
 
-import App from "./app.vue";
-import { globalQueryClient, initializeRootFontSize, routerConfig } from "./configs";
+import App from "@/app.vue";
+import { globalQueryClient, initializeRootFontSize, routerConfig } from "@/configs";
 
 initializeRootFontSize();
 

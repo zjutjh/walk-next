@@ -109,11 +109,9 @@ import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
-import { WALKER_STATUS_TEXT } from "@/constants";
-import { MEMBER_STATUS_COLOR_MAP } from "@/constants/member-status-config";
+import { MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { MemberQrCodeSchema } from "@/utils";
-import { walkAdminService } from "@/utils/service";
+import { MemberQrCodeSchema, walkAdminService } from "@/utils";
 import { ROUTE_CONFIG, ROUTE_LIST, type RouteId } from "@/walk-config";
 
 import { TEAM_REBUILD_MEMBER_COUNT_LIMIT } from "./constants";

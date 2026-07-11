@@ -14,10 +14,8 @@ import { showFailToast } from "vant";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 
-import { useTitleMeta } from "@/composables/title-meta";
+import { useAdminInfo, useTitleMeta } from "@/composables";
 import { THEME_VAR_RECORD } from "@/constants";
-
-import { useAdminInfo } from "./composables/admin-user-info";
 
 const route = useRoute();
 const { setupAdminInfoQuery } = useAdminInfo();

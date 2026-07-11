@@ -48,7 +48,7 @@ import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { useAdminInfo } from "@/composables/admin-user-info";
+import { useAdminInfo } from "@/composables";
 import { walkAdminService } from "@/utils";
 
 import styles from "./index.module.scss";

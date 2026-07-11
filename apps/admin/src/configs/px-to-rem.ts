@@ -1,6 +1,6 @@
 import { round } from "lodash-es";
 
-import { BASE_ROOT_FONT_SIZE, DESIGN_WIDTH, MAX_VIEW_WIDTH } from "@/constants/ui";
+import { BASE_ROOT_FONT_SIZE, DESIGN_WIDTH, MAX_VIEW_WIDTH } from "@/constants";
 
 /**
  * 获取视口宽度，限制了最大视口宽度，防止在超大屏幕上字体过大

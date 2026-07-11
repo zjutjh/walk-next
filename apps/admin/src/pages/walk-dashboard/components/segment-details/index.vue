@@ -48,8 +48,7 @@ import { includes } from "lodash-es";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 
-import { ADMIN_QUERY_KEY } from "@/constants";
-import { ADMIN_REFRESH_INTERVAL } from "@/constants/refresh-interval";
+import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL } from "@/constants";
 import { walkAdminService } from "@/utils";
 import {
   CAMPUS_ROUTE_LIST_MAP,

@@ -112,12 +112,10 @@ import { computed, ref, watch } from "vue";
 
 import ErrorEmpty from "@/components/error-empty/index.vue";
 import LoadingContainer from "@/components/loading-container/index.vue";
-import { useAdminInfo } from "@/composables/admin-user-info";
-import { WALKER_STATUS_TEXT } from "@/constants/enum-text";
-import { MEMBER_STATUS_COLOR_MAP } from "@/constants/member-status-config";
+import { useAdminInfo } from "@/composables";
+import { MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { CheckinQrCodeSchema } from "@/utils";
-import { walkAdminService } from "@/utils/service";
+import { CheckinQrCodeSchema, walkAdminService } from "@/utils";
 import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_POINT_LIST_MAP } from "@/walk-config";
 
 import { STATUS_PICKER_ACTION_MAP } from "./constants";

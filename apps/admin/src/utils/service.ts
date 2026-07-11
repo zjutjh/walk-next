@@ -4,7 +4,7 @@ import { type CommonRespWrap, type ServiceOptions } from "api/utils";
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import { RequestError, RESP_CODE } from "shared";
 
-import { useAdminInfo } from "@/composables/admin-user-info";
+import { useAdminInfo } from "@/composables";
 import { routerConfig as router } from "@/configs";
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
