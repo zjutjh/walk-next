@@ -66,5 +66,7 @@ export const RESP_CODE = {
   /** 登录失败次数过多，请稍后再试 */
   ADMIN_LOGIN_TOO_FREQUENTLY: 200322,
   /** 团队行进方向错误 */
-  TEAM_DIRECTION_INVALID: 200323
+  TEAM_DIRECTION_INVALID: 200323,
+  /** 团队刚打过卡，不可标记失联 */
+  TEAM_LOST_LOCKED: 200324
 } as const;
