@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useLocalStorage } from "@vueuse/core";
 import { cloneDeep, get, isNil, isObject, isUndefined, mapValues, set } from "lodash-es";
 import { defineStore } from "pinia";
 import { type Ref, ref, shallowRef, watch } from "vue";
@@ -100,8 +101,12 @@ export const useStoredUrlQuery = <
    * 初始化URL Query
    */
 
-  /** path对应的localStorage的key */
-  const localStorageKey = `stored-url-query-${currentPath}`;
+  /** path对应的localStorage */
+  const localStorageState = useLocalStorage(
+    `stored-url-query-${currentPath}`,
+    {},
+    { writeDefaults: false }
+  );
   // 获取当前页面的URL Query
   const currentSearchParams = new URLSearchParams(window.location.search || "");
   const currentValue: Record<string, any> = {};
@@ -119,10 +124,7 @@ export const useStoredUrlQuery = <
     Object.assign(initialValue, urlQuery.value);
   } else if (persist === "persistent") {
     // 合并localStorage中的URL Query
-    const localStorageValue = localStorage.getItem(localStorageKey);
-    if (localStorageValue !== null) {
-      Object.assign(initialValue, JSON.parse(localStorageValue));
-    }
+    Object.assign(initialValue, localStorageState.value);
   }
   // 合并当前的URL Query
   Object.assign(initialValue, currentValue);
@@ -143,7 +145,7 @@ export const useStoredUrlQuery = <
       router.replace({ query: stringifyUrlQueryObj<UrlQuery>(newObj) });
       // 更新localStorage
       if (persist === "persistent") {
-        localStorage.setItem(localStorageKey, JSON.stringify(newObj));
+        localStorageState.value = newObj;
       }
     },
     {
