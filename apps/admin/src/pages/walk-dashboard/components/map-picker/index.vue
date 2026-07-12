@@ -8,11 +8,16 @@
     }"
   >
     <!-- 地图 -->
-    <van-image :class="styles.mapImage" :src="props.mapUrl" @load="handleImageLoad">
+    <van-image
+      :key="imageComponentKey"
+      :class="styles.mapImage"
+      :src="props.mapUrl"
+      @load="handleImageLoad"
+    >
       <template #loading><van-loading size="0.5rem" /></template>
-      <template #error
-        ><van-empty image="error" image-size="1rem" description="地图加载失败，请刷新重试"
-      /></template>
+      <template #error>
+        <error-empty error="地图加载失败，请重试" @retry="handleRerenderImage" />
+      </template>
     </van-image>
 
     <!-- 行程段热区 -->
@@ -43,8 +48,9 @@
 <script setup lang="ts">
 import { useDebounceFn, useResizeObserver } from "@vueuse/core";
 import { isEmpty, isNull } from "lodash-es";
-import { type StyleValue, toRef, useTemplateRef } from "vue";
+import { ref, type StyleValue, toRef, useTemplateRef } from "vue";
 
+import ErrorEmpty from "@/components/error-empty/index.vue";
 import {
   CAMPUS_POINT_LIST_MAP,
   CAMPUS_SEGMENT_LIST_MAP,
@@ -124,7 +130,9 @@ useResizeObserver(
   toRef(() => componentRef.value?.parentElement),
   useDebounceFn(() => {
     if (isNull(componentRef.value)) return;
-    const imgDOM = componentRef.value.querySelector(`.${styles.mapImage} img`);
+    const imgDOM = componentRef.value.querySelector(
+      `.${styles.mapImage} img[src="${props.mapUrl}"]`
+    );
     if (!(imgDOM instanceof HTMLImageElement)) return;
     // 重置旧样式
     componentRef.value.style.width = "";
@@ -137,6 +145,14 @@ useResizeObserver(
     emit("resize");
   }, 50)
 );
+
+/** 图片组件key，用于重新渲染图片组件 */
+const imageComponentKey = ref(0);
+/** 重新渲染图片组件 */
+const handleRerenderImage = () => {
+  console.log(imageComponentKey.value);
+  imageComponentKey.value += 1;
+};
 
 /** 选择点位 */
 const handlePointChosen = (pointId: PointId) => {

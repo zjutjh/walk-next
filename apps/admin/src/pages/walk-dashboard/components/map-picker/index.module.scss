@@ -17,6 +17,11 @@
     &:has(:global(.van-image__error)) {
       width: 100%;
       height: 100%;
+
+      :global(.error-empty__retry) {
+        pointer-events: auto;
+        z-index: 2;
+      }
     }
   }
 
