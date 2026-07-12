@@ -6,6 +6,7 @@
       v-if="!isNil(getNavbarTitleText)"
       :title="getNavbarTitleText"
       :left-arrow="props.showBack"
+      :left-disabled="props.backDisabled"
       class="default-layout__navbar"
       @click-left="handleBackClick"
       @click-right="emit('clickNavbarRight')"
@@ -48,12 +49,19 @@ interface DefaultLayoutProps {
    * @default true
    */
   showBack?: boolean;
+  /**
+   * 是否禁用返回上一页的按钮
+   *
+   * @default false
+   */
+  backDisabled?: boolean;
 }
 
 const props = withDefaults(defineProps<DefaultLayoutProps>(), {
   title: undefined,
   showNavbar: true,
-  showBack: true
+  showBack: true,
+  backDisabled: false
 });
 
 const emit = defineEmits<{

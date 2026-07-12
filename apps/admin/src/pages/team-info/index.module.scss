@@ -1,47 +1,51 @@
 .page :global(.default-layout__main) {
   font-family: "Barlow", "DingTalk Sans";
 
-  :global(.van-pull-refresh) {
+  .loadingContainer {
     height: 100%;
-    overflow-y: auto;
 
-    .contentContainer {
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      padding: {
-        top: 20px;
-        bottom: 40px;
-      }
+    :global(.van-pull-refresh) {
+      height: 100%;
+      overflow-y: auto;
 
-      & > * {
-        flex-shrink: 0;
-      }
-
-      .cellValueTag {
-        margin-right: 4px;
-      }
-
-      .overviewCard {
-        :global(.van-cell__value) {
-          font-weight: 500;
-        }
-      }
-
-      .middleWhiteSpace {
-        flex-grow: 1;
-        flex-shrink: 1;
-      }
-
-      .buttonContainer {
+      .contentContainer {
+        min-height: 100%;
         display: flex;
         flex-direction: column;
-        gap: 14px;
-        margin: var(--van-cell-group-inset-padding);
-        margin-top: 24px;
+        padding: {
+          top: 20px;
+          bottom: 40px;
+        }
 
-        :global(.van-button__text) {
-          font-size: 18px;
+        & > * {
+          flex-shrink: 0;
+        }
+
+        .cellValueTag {
+          margin-right: 4px;
+        }
+
+        .overviewCard {
+          :global(.van-cell__value) {
+            font-weight: 500;
+          }
+        }
+
+        .middleWhiteSpace {
+          flex-grow: 1;
+          flex-shrink: 1;
+        }
+
+        .buttonContainer {
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          margin: var(--van-cell-group-inset-padding);
+          margin-top: 24px;
+
+          :global(.van-button__text) {
+            font-size: 18px;
+          }
         }
       }
     }

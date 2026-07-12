@@ -1,11 +1,15 @@
 <!-- 团队信息页 -->
 <template>
-  <loading-container
+  <default-layout
     :class="styles.page"
-    :loading="isTeamInfoLoading || isAnyMutationPending"
-    :modal="isAnyMutationPending"
+    :title="teamInfoData?.team.name || undefined"
+    :back-disabled="isAnyMutationPending"
   >
-    <default-layout :title="teamInfoData?.team.name || undefined">
+    <loading-container
+      :class="styles.loadingContainer"
+      :loading="isTeamInfoLoading || isAnyMutationPending"
+      :modal="isAnyMutationPending"
+    >
       <error-empty :error="teamInfoError" :disabled="isTeamInfoFetching">
         <van-pull-refresh
           v-if="teamInfoData"
@@ -82,24 +86,24 @@
           </div>
         </van-pull-refresh>
       </error-empty>
-    </default-layout>
+    </loading-container>
+  </default-layout>
 
-    <!-- 成员状态编辑弹窗 -->
-    <van-action-sheet
-      v-model:show="isStatusPickerVisible"
-      :actions="statusPickerActions"
-      cancel-text="取消"
-      close-on-click-action
-      @select="handleSelectStatus"
-    />
+  <!-- 成员状态编辑弹窗 -->
+  <van-action-sheet
+    v-model:show="isStatusPickerVisible"
+    :actions="statusPickerActions"
+    cancel-text="取消"
+    close-on-click-action
+    @select="handleSelectStatus"
+  />
 
-    <!-- 扫码弹窗 -->
-    <qr-scan-popup
-      v-model:show="isScanPopupVisible"
-      :schema="CheckinQrCodeSchema"
-      @success="handleScanSuccess"
-    />
-  </loading-container>
+  <!-- 扫码弹窗 -->
+  <qr-scan-popup
+    v-model:show="isScanPopupVisible"
+    :schema="CheckinQrCodeSchema"
+    @success="handleScanSuccess"
+  />
 </template>
 
 <script setup lang="ts">
