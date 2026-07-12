@@ -5,14 +5,14 @@
   overflow: hidden;
   background-color: var(--van-background);
 
-  &__main {
+  .loading-container {
     flex-grow: 1;
     height: 0;
+  }
 
-    &__content {
-      height: 100%;
-      overflow-y: auto;
-    }
+  &__main {
+    height: 100%;
+    overflow-y: auto;
   }
 
   &__navbar {
