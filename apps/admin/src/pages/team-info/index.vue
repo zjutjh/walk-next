@@ -102,8 +102,8 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery } from "@tanstack/vue-query";
-import type { MemberWalkStatus } from "api/types/admin";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import type { AdminAPI, MemberWalkStatus } from "api/types/admin";
 import { first, isNil, last } from "lodash-es";
 import { is } from "valibot";
 import { showConfirmDialog, showDialog, showFailToast, showSuccessToast } from "vant";
@@ -127,6 +127,7 @@ const props = defineProps<{
 /** 团队ID */
 const teamId = computed(() => Number(props.teamIdParam));
 
+const queryClient = useQueryClient();
 const { adminPointId } = useAdminInfo();
 
 /** 是否已经弹出过走错路线提示 */
@@ -265,12 +266,27 @@ const { mutate: mutateUpdateStatus, isPending: isUpdateStatusPending } = useMuta
       user_id: params.targetId,
       status: params.status
     }),
-  onSuccess: () => {
+  onSuccess: (_data, params) => {
     showSuccessToast("设置成功");
-    refetchTeamData();
+    // 提前更新缓存
+    queryClient.setQueryData(
+      [ADMIN_QUERY_KEY.TEAM.STATUS, teamId.value],
+      (oldData: AdminAPI.QueryTeamStatusResponse) => {
+        return {
+          ...oldData,
+          members: oldData.members.map((member) =>
+            member.user_id === params.targetId ? { ...member, walk_status: params.status } : member
+          )
+        };
+      }
+    );
   },
   onError: (error) => {
     showFailToast(error.message || "设置失败");
+  },
+  onSettled: () => {
+    // 刷新团队数据
+    refetchTeamData();
   }
 });
 
