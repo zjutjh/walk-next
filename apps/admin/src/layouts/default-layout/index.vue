@@ -33,7 +33,7 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import loadingContainer from "@/components/loading-container/index.vue";
+import LoadingContainer from "@/components/loading-container/index.vue";
 import { useRouterStateStore } from "@/stores/router-state";
 
 interface DefaultLayoutProps {
