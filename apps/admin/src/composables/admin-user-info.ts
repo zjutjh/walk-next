@@ -83,8 +83,8 @@ export const useAdminInfo = () => {
   const updateAdminInfo = (patch: Partial<AdminUserInfo>) => {
     assign(adminStore.data, patch);
     // 更新query缓存
-    queryClient.setQueriesData<AdminAPI.QueryAdminUserInfoResponse>(
-      { queryKey: [ADMIN_QUERY_KEY.USER.SELF] },
+    queryClient.setQueryData<AdminAPI.QueryAdminUserInfoResponse>(
+      [ADMIN_QUERY_KEY.USER.SELF],
       (oldData) => {
         if (isNil(permissionLevel.value)) return oldData;
         return {

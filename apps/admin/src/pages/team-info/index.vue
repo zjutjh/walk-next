@@ -113,7 +113,7 @@ import { computed, ref, watch } from "vue";
 import ErrorEmpty from "@/components/error-empty/index.vue";
 import LoadingContainer from "@/components/loading-container/index.vue";
 import { useAdminInfo } from "@/composables";
-import { MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
+import { ADMIN_QUERY_KEY, MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { CheckinQrCodeSchema, walkAdminService } from "@/utils";
 import { POINT_CONFIG, ROUTE_CONFIG, ROUTE_POINT_LIST_MAP } from "@/walk-config";
@@ -145,7 +145,7 @@ const {
   error: teamInfoError,
   dataUpdatedAt: teamInfoDataUpdatedAt
 } = useQuery({
-  queryKey: ["teamManage", teamId] as const,
+  queryKey: [ADMIN_QUERY_KEY.TEAM.STATUS, teamId] as const,
   queryFn: () => walkAdminService.QueryTeamStatus({ team_id: teamId.value })
 });
 

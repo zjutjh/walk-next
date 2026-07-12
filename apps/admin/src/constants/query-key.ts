@@ -9,16 +9,18 @@ export const ADMIN_QUERY_KEY = {
     /** 团队列表 */
     LIST: "teamList",
     /** 团队详情 */
-    DETAILS: "teamDetails"
+    DETAILS: "teamDetails",
+    /** 团队状态 */
+    STATUS: "teamStatus"
   },
   /** 数据仪表盘相关 */
   DASHBOARD: {
     /** 获取校区总数据 */
-    OVERVIEW: "getCampusOverview",
+    OVERVIEW: "campusOverview",
     /** 获取点位详情 */
-    POINT: "getPointDetails",
+    POINT: "pointDetails",
     /** 获取行程段详情 */
-    SEGMENT: "getSegmentDetails"
+    SEGMENT: "segmentDetails"
   },
   /** 统计数据相关 */
   STATS: {
