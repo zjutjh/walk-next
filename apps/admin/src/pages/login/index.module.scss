@@ -2,48 +2,90 @@
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(
-    circle at 50% 50%,
-    transparent 0%,
-    transparent 35%,
-    rgb(from var(--van-success-color) r g b / 0.04) 80%,
-    rgb(from var(--van-success-color) r g b / 0.08) 100%
-  );
+  font-family: "DingTalk Sans";
+  background:
+    url("@/assets/login-page-logo.svg") right 35px top 55px/60px no-repeat,
+    radial-gradient(
+      circle at center -100vw,
+      var(--van-background) 230vw,
+      transparent 230vw
+    ),
+    radial-gradient(
+      circle at left -100vw,
+      transparent 250vw,
+      rgb(from var(--van-primary-color) r g b / 0.6) 250vw,
+      transparent
+    ),
+    radial-gradient(
+      circle at right -200vw,
+      transparent 370vw,
+      rgb(from var(--van-primary-color) r g b / 0.7) 370vw,
+      transparent
+    ),
+    radial-gradient(
+      circle at left -300vw,
+      transparent 485vw,
+      rgb(from var(--van-primary-color) r g b / 0.8) 485vw,
+      transparent
+    ),
+    radial-gradient(
+      circle at center center,
+      rgb(from var(--van-primary-color) r g b / 0.5)
+    ),
+    var(--van-background);
+  padding: {
+    top: 60px;
+    left: 35px;
+    right: 35px;
+    bottom: 50px;
+  }
 
-  .productName,
-  .title {
-    font-weight: bold;
+  .title,
+  .productName {
     text-align: center;
     user-select: none;
-    font-family: "DingTalk JinBuTi";
+    align-self: flex-start;
+  }
+
+  .title {
+    font-size: 40px;
+    color: var(--van-black);
+    font-weight: bold;
   }
 
   .productName {
-    font-size: 36px;
+    font-size: 21px;
+    color: var(--van-gray-8);
+    margin-top: 20px;
   }
 
-  .title {
-    font-size: 24px;
-  }
-
-  .content {
+  .form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 30px;
+    margin-top: 25px;
     --van-cell-background: none;
-    font-family: "DingTalk Sans";
+    --van-cell-horizontal-padding: 0;
+    --van-cell-large-value-font-size: 20px;
+
+    :global(.van-field__label) {
+      color: var(--van-gray-8);
+      margin-bottom: 8px;
+    }
+
+    :global(.van-field__value) {
+      font-family: initial;
+      font-weight: 500;
+    }
 
     .error {
-      height: 14px;
-      font-size: 14px;
-      line-height: 14px;
+      font-size: 16px;
+      height: 1em;
+      line-height: 1em;
       color: var(--van-danger-color);
       text-align: center;
       margin: {
-        top: 10px;
+        top: 12px;
+        bottom: 12px;
       }
     }
 

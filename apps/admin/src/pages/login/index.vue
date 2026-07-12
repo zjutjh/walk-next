@@ -1,31 +1,42 @@
 <!-- 登录页 -->
 <template>
   <loading-container :class="styles.page" :loading="isNavigationPending">
-    <div :class="styles.content">
-      <div :class="styles.productName">精弘毅行管理系统</div>
-      <div :class="styles.title">管理员登录</div>
+    <div :class="styles.title">登录</div>
+    <div :class="styles.productName">精弘毅行管理系统</div>
 
-      <van-form ref="formRef" :show-error-message="false" @submit="handleLoginClick">
-        <van-field
-          v-model="account"
-          :rules="ACCOUNT_RULES"
-          label="账号"
-          placeholder="请输入账号"
-          enterkeyhint="next"
-          @keyup.enter="(passwordFieldRef?.$el as HTMLElement).querySelector('input')?.focus?.()"
-        />
-        <van-field
-          ref="passwordFieldRef"
-          v-model="password"
-          :rules="PASSWORD_RULES"
-          label="密码"
-          placeholder="请输入密码"
-          type="password"
-          enterkeyhint="done"
-          @keyup.enter="(loginButtonRef?.$el as HTMLButtonElement).click()"
-        />
-        <div :class="styles.error">{{ error?.message || "" }}</div>
-      </van-form>
+    <van-form
+      ref="formRef"
+      :class="styles.form"
+      :show-error-message="false"
+      :disabled="isPending"
+      label-align="top"
+      @submit="handleLoginClick"
+    >
+      <van-field
+        v-model="account"
+        :rules="ACCOUNT_RULES"
+        size="large"
+        label="账号"
+        placeholder="请输入账号"
+        left-icon="user"
+        enterkeyhint="next"
+        clearable
+        @keyup.enter="(passwordFieldRef?.$el as HTMLElement).querySelector('input')?.focus?.()"
+      />
+      <van-field
+        ref="passwordFieldRef"
+        v-model="password"
+        :rules="PASSWORD_RULES"
+        size="large"
+        label="密码"
+        placeholder="请输入密码"
+        left-icon="lock"
+        type="password"
+        enterkeyhint="done"
+        clearable
+        @keyup.enter="(loginButtonRef?.$el as HTMLButtonElement).click()"
+      />
+      <div :class="styles.error">{{ error?.message || "" }}</div>
 
       <van-button
         ref="loginButtonRef"
@@ -36,7 +47,7 @@
         @click="handleLoginClick"
         >登录</van-button
       >
-    </div>
+    </van-form>
   </loading-container>
 </template>
 
