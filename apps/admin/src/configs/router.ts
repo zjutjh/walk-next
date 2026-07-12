@@ -72,13 +72,13 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   }
 ];
 
-export const routerConfig = createRouter({
-  history: createWebHistory(),
+export const routerInstance = createRouter({
+  history: createWebHistory("/admin"),
   routes
 });
 
 // 路由守卫
-routerConfig.beforeEach((to, from) => {
+routerInstance.beforeEach((to, from) => {
   const { hasPermission, isLoggedIn } = useAdminInfo();
   // 拦截无效路由
   if (to.matched.length === 0) {

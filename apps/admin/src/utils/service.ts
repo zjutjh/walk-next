@@ -5,7 +5,7 @@ import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import { RequestError, RESP_CODE } from "shared";
 
 import { useAdminInfo } from "@/composables";
-import { routerConfig as router } from "@/configs";
+import { routerInstance } from "@/configs";
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 
@@ -18,9 +18,9 @@ axiosInstance.interceptors.response.use(
         // 未登录
         case RESP_CODE.NOT_LOGGED_IN:
           useAdminInfo().resetAdminInfo();
-          router.push({
+          routerInstance.push({
             name: "login",
-            query: { fromPath: encodeURIComponent(router.currentRoute.value.fullPath) }
+            query: { fromPath: encodeURIComponent(routerInstance.currentRoute.value.fullPath) }
           });
           break;
         default:

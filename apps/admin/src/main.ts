@@ -10,14 +10,14 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
 
 import App from "@/app.vue";
-import { globalQueryClient, initializeRootFontSize, routerConfig } from "@/configs";
+import { globalQueryClient, initializeRootFontSize, routerInstance } from "@/configs";
 
 initializeRootFontSize();
 
 dayjs.locale(zhCn);
 
 createApp(App)
-  .use(routerConfig)
+  .use(routerInstance)
   .use(VueQueryPlugin, { queryClient: globalQueryClient })
   .use(createPinia().use(piniaPluginPersistedstate))
   .mount("#app");
