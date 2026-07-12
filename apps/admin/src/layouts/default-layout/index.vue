@@ -73,7 +73,8 @@ const props = withDefaults(defineProps<DefaultLayoutProps>(), {
   title: undefined,
   showNavbar: true,
   showBack: true,
-  backDisabled: false
+  backDisabled: false,
+  loading: false
 });
 
 const emit = defineEmits<{
