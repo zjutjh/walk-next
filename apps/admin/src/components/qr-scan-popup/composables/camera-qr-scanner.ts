@@ -125,7 +125,7 @@ export const useCameraQrScanner = <
         canvas = document.createElement("canvas");
         canvasCtx = canvas.getContext("2d", { willReadFrequently: true });
       }
-      if (!canvasCtx) throw new Error("设备或浏览器不支持扫码，请尝试拍照后上传");
+      if (!canvasCtx) throw new Error("设备或浏览器\n不支持扫码\n请拍照上传");
       // 设置Canvas画布尺寸与视频一致
       if (canvas.width !== videoWidth || canvas.height !== videoHeight) {
         canvas.width = videoWidth;
@@ -170,27 +170,27 @@ export const useCameraQrScanner = <
 
       // 非安全上下文，不支持调用摄像头
       if (typeof window !== "undefined" && !window.isSecureContext) {
-        throw new Error("地址不安全，请使用 HTTPS 地址或拍照上传图片");
+        throw new Error("地址不安全\n请使用HTTPS\n或拍照上传");
       }
       // 不支持摄像头媒体
       if (!isCameraSupported.value) {
-        throw new Error("设备或浏览器不支持扫码，请尝试拍照后上传");
+        throw new Error("设备或浏览器\n不支持扫码\n请拍照上传");
       }
       lastScannedRawText = null;
 
       const video = videoRef.value;
-      if (!video) throw new Error("页面加载失败，请刷新重试");
+      if (!video) throw new Error("页面加载失败\n请刷新重试");
 
       status.value = "starting";
 
       // 请求摄像头流
       await requestCameraStream();
-      if (!cameraStream.value) throw new Error("连接摄像头失败");
+      if (!cameraStream.value) throw new Error("连接摄像头\n失败");
       // 关联视频流
       video.srcObject = cameraStream.value;
       await video.play();
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (status.value !== "starting") throw new Error("状态异常，扫码启动失败");
+      if (status.value !== "starting") throw new Error("状态异常\n扫码启动失败");
       status.value = "active";
       // 开始定时扫描视频帧
       resumeScanInterval();
@@ -202,17 +202,17 @@ export const useCameraQrScanner = <
         if (!(err instanceof Error)) return "未知错误";
         switch (err.name) {
           case "NotReadableError":
-            return "无法播放摄像头画面";
+            return "无法播放\n摄像头画面";
           case "NotAllowedError":
           case "PermissionDeniedError":
-            return "获取摄像头权限失败，请检查设置";
+            return "获取摄像头\n权限失败\n请检查设置";
           case "NotFoundError":
           case "DevicesNotFoundError":
-            return "未找到可用摄像头";
+            return "未找到\n可用摄像头";
           case "TrackStartError":
             return "摄像头被占用";
           default:
-            return "扫码启动失败";
+            return err.message || "扫码启动失败";
         }
       })();
       handleError(new Error(humanizedMsg, { cause: err }));
