@@ -1,9 +1,17 @@
+import { storeToRefs } from "pinia";
 import type { SetRequired } from "type-fest";
 import { showFailToast } from "vant";
-import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  isNavigationFailure,
+  NavigationFailureType,
+  type RouteRecordRaw
+} from "vue-router";
 
 import { useAdminInfo } from "@/composables";
 import IndexPage from "@/pages/index/index.vue";
+import { useRouterStateStore } from "@/stores/router-state";
 
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
@@ -77,9 +85,11 @@ export const routerInstance = createRouter({
   routes
 });
 
-// 路由守卫
+// 前置路由守卫
 routerInstance.beforeEach((to, from) => {
   const { hasPermission, isLoggedIn } = useAdminInfo();
+  const { pendingNavigationCount } = storeToRefs(useRouterStateStore());
+
   // 拦截无效路由
   if (to.matched.length === 0) {
     return isLoggedIn.value ? { name: "index" } : { name: "login" };
@@ -103,5 +113,18 @@ routerInstance.beforeEach((to, from) => {
     if (to.name !== "index") {
       return { name: "index" };
     }
+  }
+
+  // 更新路由状态
+  pendingNavigationCount.value += 1;
+});
+
+// 后置路由守卫
+routerInstance.afterEach((_to, _from, failure) => {
+  const { pendingNavigationCount } = storeToRefs(useRouterStateStore());
+
+  if (!isNavigationFailure(failure, NavigationFailureType.duplicated)) {
+    // 更新路由状态
+    pendingNavigationCount.value -= 1;
   }
 });

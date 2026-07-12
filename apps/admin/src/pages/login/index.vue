@@ -1,6 +1,6 @@
 <!-- 登录页 -->
 <template>
-  <div :class="styles.page">
+  <loading-container :class="styles.page" :loading="isNavigationPending">
     <div :class="styles.content">
       <div :class="styles.productName">精弘毅行管理系统</div>
       <div :class="styles.title">管理员登录</div>
@@ -37,23 +37,27 @@
         >登录</van-button
       >
     </div>
-  </div>
+  </loading-container>
 </template>
 
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
 import { isArray } from "lodash-es";
+import { storeToRefs } from "pinia";
 import type { FieldRule, FormInstance } from "vant";
 import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import LoadingContainer from "@/components/loading-container/index.vue";
 import { useAdminInfo } from "@/composables";
+import { useRouterStateStore } from "@/stores/router-state";
 import { walkAdminService } from "@/utils";
 
 import styles from "./index.module.scss";
 
 const router = useRouter();
+const { isNavigationPending } = storeToRefs(useRouterStateStore());
 const route = useRoute();
 const { updateAdminInfo } = useAdminInfo();
 
