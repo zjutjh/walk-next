@@ -35,6 +35,8 @@
 
   /* 阻止部分浏览器的强制两指缩放 */
   touch-action: pan-x pan-y;
+  /* 阻止部分浏览器的下拉reload行为 */
+  overscroll-behavior: none;
 }
 
 body {
