@@ -150,7 +150,6 @@ useResizeObserver(
 const imageComponentKey = ref(0);
 /** 重新渲染图片组件 */
 const handleRerenderImage = () => {
-  console.log(imageComponentKey.value);
   imageComponentKey.value += 1;
 };
 
