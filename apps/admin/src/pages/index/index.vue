@@ -1,54 +1,57 @@
 <!-- 首页 -->
 <template>
-  <default-layout :class="styles.page" :show-back="false" title="精弘毅行管理后台">
-    <loading-container :loading="isAnyMutationPending">
-      <admin-info
-        :admin-name="adminName || '-'"
-        :walk-point="POINT_CONFIG[adminPointId]?.text ?? '-'"
+  <default-layout
+    :class="styles.page"
+    :loading="isAnyMutationPending"
+    :show-back="false"
+    title="精弘毅行管理后台"
+  >
+    <admin-info
+      :admin-name="adminName || '-'"
+      :walk-point="POINT_CONFIG[adminPointId]?.text ?? '-'"
+    />
+    <van-cell-group title="签到">
+      <van-cell title="扫码签到" is-link @click="handleScanClick" />
+      <van-cell title="输入签到" is-link @click="handleManualInputClick" />
+    </van-cell-group>
+
+    <van-cell-group v-if="hasPermission('internal')" title="数据大盘">
+      <van-cell
+        v-for="campusId in CAMPUS_LIST"
+        :key="campusId"
+        :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
+        :to="`/dashboard/${campusId}`"
+        is-link
       />
-      <van-cell-group title="签到">
-        <van-cell title="扫码签到" is-link @click="handleScanClick" />
-        <van-cell title="输入签到" is-link @click="handleManualInputClick" />
-      </van-cell-group>
+      <van-cell title="数据表格" is-link to="/data-table" />
+    </van-cell-group>
 
-      <van-cell-group v-if="hasPermission('internal')" title="数据大盘">
-        <van-cell
-          v-for="campusId in CAMPUS_LIST"
-          :key="campusId"
-          :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
-          :to="`/dashboard/${campusId}`"
-          is-link
-        />
-        <van-cell title="数据表格" is-link to="/data-table" />
-      </van-cell-group>
+    <van-cell-group v-if="hasPermission('super')" title="人员管理">
+      <van-cell title="重组团队" is-link to="/team-rebuild" />
+    </van-cell-group>
 
-      <van-cell-group v-if="hasPermission('super')" title="人员管理">
-        <van-cell title="重组团队" is-link to="/team-rebuild" />
-      </van-cell-group>
-
-      <div :class="styles.buttonContainer">
-        <van-button
-          v-if="hasPermission('super')"
-          :class="styles.functionButton"
-          :loading="isStartAllThePendingPending"
-          type="primary"
-          block
-          @click="handleStartAllThePendingClick"
-        >
-          待出发→进行中
-        </van-button>
-        <van-button
-          :loading="isLogoutPending"
-          :disabled="isLogoutPending"
-          type="danger"
-          plain
-          block
-          @click="handleLogoutClick"
-        >
-          退出登录
-        </van-button>
-      </div>
-    </loading-container>
+    <div :class="styles.buttonContainer">
+      <van-button
+        v-if="hasPermission('super')"
+        :class="styles.functionButton"
+        :loading="isStartAllThePendingPending"
+        type="primary"
+        block
+        @click="handleStartAllThePendingClick"
+      >
+        待出发→进行中
+      </van-button>
+      <van-button
+        :loading="isLogoutPending"
+        :disabled="isLogoutPending"
+        type="danger"
+        plain
+        block
+        @click="handleLogoutClick"
+      >
+        退出登录
+      </van-button>
+    </div>
   </default-layout>
 
   <!-- 扫码弹层 -->
@@ -81,7 +84,6 @@ import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import LoadingContainer from "@/components/loading-container/index.vue";
 import PromptDialog from "@/components/prompt-dialog/index.vue";
 import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";

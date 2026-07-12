@@ -4,89 +4,84 @@
     :class="styles.page"
     :title="teamInfoData?.team.name || undefined"
     :back-disabled="isAnyMutationPending"
+    :loading="isTeamInfoLoading || isAnyMutationPending"
   >
-    <loading-container
-      :class="styles.loadingContainer"
-      :loading="isTeamInfoLoading || isAnyMutationPending"
-      :modal="isAnyMutationPending"
-    >
-      <error-empty :error="teamInfoError" :disabled="isTeamInfoFetching">
-        <van-pull-refresh
-          v-if="teamInfoData"
-          :model-value="isPullRefreshing"
-          :disabled="isTeamInfoFetching"
-          @refresh="handleRefresh"
-        >
-          <div :class="styles.contentContainer">
-            <van-cell-group v-if="teamInfoData" :class="styles.overviewCard" inset>
-              <van-cell title="团队路线">
-                <van-tag
-                  :class="styles.cellValueTag"
-                  :show="teamInfoData.team.is_wrong_route"
-                  type="warning"
-                  size="large"
-                  >走错</van-tag
-                >
-                {{ ROUTE_CONFIG[teamInfoData.team.route_name]?.text }}</van-cell
+    <error-empty :error="teamInfoError" :disabled="isTeamInfoFetching">
+      <van-pull-refresh
+        v-if="teamInfoData"
+        :model-value="isPullRefreshing"
+        :disabled="isTeamInfoFetching"
+        @refresh="handleRefresh"
+      >
+        <div :class="styles.contentContainer">
+          <van-cell-group v-if="teamInfoData" :class="styles.overviewCard" inset>
+            <van-cell title="团队路线">
+              <van-tag
+                :class="styles.cellValueTag"
+                :show="teamInfoData.team.is_wrong_route"
+                type="warning"
+                size="large"
+                >走错</van-tag
               >
-              <van-cell title="团队剩余人数">
-                {{ remainingCount ?? "-" }}
-              </van-cell>
-              <van-cell title="上次打卡点位">
-                <van-tag
-                  :class="styles.cellValueTag"
-                  :show="teamInfoData.team.is_prev_point_invalid"
-                  type="danger"
-                  size="large"
-                  >异常</van-tag
-                >
-                {{ POINT_CONFIG[teamInfoData.team.prev_point_name]?.text ?? "-" }}
-              </van-cell>
-            </van-cell-group>
-
-            <van-cell-group title="成员状态" inset>
-              <van-cell
-                v-for="member in teamInfoData.members"
-                :key="member.user_id"
-                :title="member.name"
-                is-link
-                @click="openStatusPicker(member.user_id)"
-              >
-                <span :style="{ color: MEMBER_STATUS_COLOR_MAP[member.walk_status] }">{{
-                  WALKER_STATUS_TEXT[member.walk_status]
-                }}</span>
-              </van-cell>
-            </van-cell-group>
-
-            <div :class="styles.middleWhiteSpace"></div>
-
-            <div :class="styles.buttonContainer">
-              <van-button
-                v-if="teamInfoData.team.is_prev_point_invalid"
+              {{ ROUTE_CONFIG[teamInfoData.team.route_name]?.text }}</van-cell
+            >
+            <van-cell title="团队剩余人数">
+              {{ remainingCount ?? "-" }}
+            </van-cell>
+            <van-cell title="上次打卡点位">
+              <van-tag
+                :class="styles.cellValueTag"
+                :show="teamInfoData.team.is_prev_point_invalid"
                 type="danger"
-                block
-                @click="handleMarkViolatedClick"
-                >标记团队违规</van-button
+                size="large"
+                >异常</van-tag
               >
-              <van-button
-                v-if="isAdminAtStartPoint && isTeamMaybeNotStart"
-                type="primary"
-                block
-                @click="handleBindCheckinCodeClick"
-                >绑定签到码</van-button
-              >
-              <van-button
-                v-if="isAdminAtEndPoint && teamInfoData.team.status === 'in_progress'"
-                type="primary"
-                block
-                @click="handleConfirmDestinationClick"
-                >确认到达终点</van-button
-              >
-            </div>
+              {{ POINT_CONFIG[teamInfoData.team.prev_point_name]?.text ?? "-" }}
+            </van-cell>
+          </van-cell-group>
+
+          <van-cell-group title="成员状态" inset>
+            <van-cell
+              v-for="member in teamInfoData.members"
+              :key="member.user_id"
+              :title="member.name"
+              is-link
+              @click="openStatusPicker(member.user_id)"
+            >
+              <span :style="{ color: MEMBER_STATUS_COLOR_MAP[member.walk_status] }">{{
+                WALKER_STATUS_TEXT[member.walk_status]
+              }}</span>
+            </van-cell>
+          </van-cell-group>
+
+          <div :class="styles.middleWhiteSpace"></div>
+
+          <div :class="styles.buttonContainer">
+            <van-button
+              v-if="teamInfoData.team.is_prev_point_invalid"
+              type="danger"
+              block
+              @click="handleMarkViolatedClick"
+              >标记团队违规</van-button
+            >
+            <van-button
+              v-if="isAdminAtStartPoint && isTeamMaybeNotStart"
+              type="primary"
+              block
+              @click="handleBindCheckinCodeClick"
+              >绑定签到码</van-button
+            >
+            <van-button
+              v-if="isAdminAtEndPoint && teamInfoData.team.status === 'in_progress'"
+              type="primary"
+              block
+              @click="handleConfirmDestinationClick"
+              >确认到达终点</van-button
+            >
           </div>
-        </van-pull-refresh>
-      </error-empty>
-    </loading-container>
+        </div>
+      </van-pull-refresh>
+    </error-empty>
   </default-layout>
 
   <!-- 成员状态编辑弹窗 -->
@@ -115,7 +110,6 @@ import { showConfirmDialog, showDialog, showFailToast, showSuccessToast } from "
 import { computed, ref, watch } from "vue";
 
 import ErrorEmpty from "@/components/error-empty/index.vue";
-import LoadingContainer from "@/components/loading-container/index.vue";
 import { useAdminInfo } from "@/composables";
 import { ADMIN_QUERY_KEY, MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";

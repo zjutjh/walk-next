@@ -17,9 +17,11 @@
     </van-nav-bar>
     <slot name="header" />
     <!-- 主内容区域 -->
-    <main class="default-layout__main">
-      <slot />
-    </main>
+    <loading-container class="default-layout__main" :loading="props.loading">
+      <main class="default-layout__main__content">
+        <slot />
+      </main>
+    </loading-container>
   </div>
 </template>
 
@@ -29,6 +31,8 @@ import "./index.scss";
 import { isNil, last } from "lodash-es";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+import loadingContainer from "@/components/loading-container/index.vue";
 
 interface DefaultLayoutProps {
   /**
@@ -55,6 +59,12 @@ interface DefaultLayoutProps {
    * @default false
    */
   backDisabled?: boolean;
+  /**
+   * 是否为整个主内容区域显示加载态
+   *
+   * @default false
+   */
+  loading?: boolean;
 }
 
 const props = withDefaults(defineProps<DefaultLayoutProps>(), {

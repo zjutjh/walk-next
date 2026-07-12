@@ -6,9 +6,13 @@
   background-color: var(--van-background);
 
   &__main {
-    flex: 1;
-    position: relative;
-    overflow-y: var(--layout-scroll-type, auto);
+    flex-grow: 1;
+    height: 0;
+
+    &__content {
+      height: 100%;
+      overflow-y: auto;
+    }
   }
 
   &__navbar {
