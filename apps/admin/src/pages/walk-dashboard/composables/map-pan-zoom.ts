@@ -148,9 +148,6 @@ export const useMapPanZoom = ({
   };
   /** 触摸点移动 */
   const handleTouchMove = (e: TouchEvent) => {
-    if (e.cancelable) {
-      e.preventDefault();
-    }
     if (e.touches.length === 1) {
       if (!e.touches[0]) return;
       handlePan(e.touches[0].clientX, e.touches[0].clientY);

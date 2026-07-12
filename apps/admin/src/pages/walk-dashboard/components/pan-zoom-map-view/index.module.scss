@@ -6,6 +6,7 @@
   height: 100%;
   overflow: hidden;
   cursor: grab;
+  touch-action: none;
 
   &:active {
     cursor: grabbing;
