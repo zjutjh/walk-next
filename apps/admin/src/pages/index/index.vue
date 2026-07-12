@@ -78,7 +78,6 @@
 import { useMutation } from "@tanstack/vue-query";
 import { type AdminAPI, AdminQrCodeType } from "api/types/admin";
 import { CanceledError } from "axios";
-import { storeToRefs } from "pinia";
 import { RequestError } from "shared";
 import { is } from "valibot";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
@@ -88,9 +87,8 @@ import { useRouter } from "vue-router";
 import PromptDialog from "@/components/prompt-dialog/index.vue";
 import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
-import { useAdminInfo, useStoredUrlQuery } from "@/composables";
+import { useAdminInfo, useRouterState, useStoredUrlQuery } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { useRouterStateStore } from "@/stores/router-state.ts";
 import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
 
@@ -100,7 +98,7 @@ import type { IndexUrlQuery } from "./types";
 import { checkinQrCodeSchema } from "./utils";
 
 const router = useRouter();
-const { isNavigationPending } = storeToRefs(useRouterStateStore());
+const { isNavigationPending } = useRouterState();
 const { adminName, adminPointId, resetAdminInfo, hasPermission } = useAdminInfo();
 
 const { urlQuery } = useStoredUrlQuery<IndexUrlQuery>({

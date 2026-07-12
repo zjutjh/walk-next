@@ -1,4 +1,3 @@
-import { storeToRefs } from "pinia";
 import type { SetRequired } from "type-fest";
 import { showFailToast } from "vant";
 import {
@@ -9,9 +8,8 @@ import {
   type RouteRecordRaw
 } from "vue-router";
 
-import { useAdminInfo } from "@/composables";
+import { useAdminInfo, useRouterState } from "@/composables";
 import IndexPage from "@/pages/index/index.vue";
-import { useRouterStateStore } from "@/stores/router-state";
 
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
@@ -88,7 +86,7 @@ export const routerInstance = createRouter({
 // 前置路由守卫
 routerInstance.beforeEach((to, from) => {
   const { hasPermission, isLoggedIn } = useAdminInfo();
-  const { pendingNavigationCount } = storeToRefs(useRouterStateStore());
+  const { pendingNavigationCount } = useRouterState();
 
   // 拦截无效路由
   if (to.matched.length === 0) {
@@ -121,10 +119,21 @@ routerInstance.beforeEach((to, from) => {
 
 // 后置路由守卫
 routerInstance.afterEach((_to, _from, failure) => {
-  const { pendingNavigationCount } = storeToRefs(useRouterStateStore());
+  const { pendingNavigationCount } = useRouterState();
 
+  /**
+   * Vue Router 5.x中，duplicated会跳过navigate，也就不会执行beforeEach，需要过滤，以免计数器泄露
+   *  @see https://github.com/vuejs/router/blob/main/packages/router/src/router.ts */
   if (!isNavigationFailure(failure, NavigationFailureType.duplicated)) {
     // 更新路由状态
     pendingNavigationCount.value -= 1;
   }
+});
+
+// 路由内部逻辑错误处理
+routerInstance.onError((error) => {
+  console.error(error);
+  // 重置路由状态
+  const { pendingNavigationCount } = useRouterState();
+  pendingNavigationCount.value = 0;
 });

@@ -3,7 +3,7 @@ import { defineStore, storeToRefs } from "pinia";
 import { computed } from "vue";
 
 /** 允许摄像头流悬置的毫秒数 */
-const CAMERA_IDLE_TIMEOUT = 10000;
+const CAMERA_IDLE_TIMEOUT = 10000 as const;
 
 /** 惰性关闭的摄像头流Composable使用的全局Composable */
 const useLazyFreeCameraStreamComposableStore = defineStore("lazyFreeCameraStreamComposable", () => {

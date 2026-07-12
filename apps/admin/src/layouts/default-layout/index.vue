@@ -29,12 +29,11 @@
 import "./index.scss";
 
 import { isNil, last } from "lodash-es";
-import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import LoadingContainer from "@/components/loading-container/index.vue";
-import { useRouterStateStore } from "@/stores/router-state";
+import { useRouterState } from "@/composables";
 
 interface DefaultLayoutProps {
   /**
@@ -83,7 +82,7 @@ const emit = defineEmits<{
 }>();
 
 const router = useRouter();
-const { isNavigationPending } = storeToRefs(useRouterStateStore());
+const { isNavigationPending } = useRouterState();
 const route = useRoute();
 
 /** 获取导航栏标题文字 */

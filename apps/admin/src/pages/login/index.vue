@@ -43,21 +43,19 @@
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
 import { isArray } from "lodash-es";
-import { storeToRefs } from "pinia";
 import type { FieldRule, FormInstance } from "vant";
 import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import LoadingContainer from "@/components/loading-container/index.vue";
-import { useAdminInfo } from "@/composables";
-import { useRouterStateStore } from "@/stores/router-state";
+import { useAdminInfo, useRouterState } from "@/composables";
 import { walkAdminService } from "@/utils";
 
 import styles from "./index.module.scss";
 
 const router = useRouter();
-const { isNavigationPending } = storeToRefs(useRouterStateStore());
+const { isNavigationPending } = useRouterState();
 const route = useRoute();
 const { updateAdminInfo } = useAdminInfo();
 
