@@ -56,11 +56,16 @@ packages/api/src/
 
 ```plaintext
 packages/shared/src/
+├── assets/            # 静态资源
+│   └── error.png      # 错误图片
 ├── components/        # 共享组件
-│   └── error-boundary/
-│       ├── error-boundary-store.ts
-│       ├── error-boundary.vue
-│       └── index.ts
+│   ├── error-boundary/
+│   ├── error-empty/   # 错误空态组件
+│   ├── loading-container/ # 加载容器组件
+│   └── prompt-dialog/ # 输入弹窗组件
+├── composables/       # 组合式函数
+│   ├── router-state.ts # 路由导航状态管理
+│   └── stored-url-query.ts # URL Query Composable
 ├── constants/         # 共享常量
 │   └── response-code.ts # 业务状态码
 ├── utils/             # 共享工具
