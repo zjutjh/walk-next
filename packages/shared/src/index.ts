@@ -1,3 +1,7 @@
+export {
+  default as CellGroup,
+  type ExpandedCellGroupProps
+} from "./components/cell-group/index.vue";
 export * from "./components/error-boundary";
 export { default as ErrorEmpty } from "./components/error-empty/index.vue";
 export { default as LoadingContainer } from "./components/loading-container/index.vue";

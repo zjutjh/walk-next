@@ -26,9 +26,10 @@
               @refresh="handleOverviewStatsRefresh"
             >
               <div :class="styles.dataContainer">
-                <van-cell-group
+                <cell-group
                   v-for="routeData in overviewStatsData?.routes"
                   :key="routeData.route_name"
+                  :loading="isOverviewStatsFetching"
                   :title="ROUTE_CONFIG[routeData.route_name]?.text"
                   inset
                 >
@@ -38,7 +39,7 @@
                     :title="WALKER_STATS_METRIC_TEXT[key]"
                     >{{ routeData.stats[key] ?? "-" }}</van-cell
                   >
-                </van-cell-group>
+                </cell-group>
               </div>
             </van-pull-refresh>
           </error-empty>
@@ -80,17 +81,25 @@
               >
                 <div :key="urlQuery.tab" :class="styles.dataContainer">
                   <!-- 经过点位人数 -->
-                  <van-cell-group inset title="经过点位人数">
+                  <cell-group
+                    :loading="routeStatsQueryMap[routeId].isFetching"
+                    inset
+                    title="经过点位人数"
+                  >
                     <van-cell
                       v-for="pointData in routeStatsQueryMap[routeId].data?.point_stats"
                       :key="pointData.point_name"
                       :title="POINT_CONFIG[pointData.point_name]?.text"
                       >{{ pointData.passed_count ?? "-" }}</van-cell
                     >
-                  </van-cell-group>
+                  </cell-group>
 
                   <!-- 点位间人数 -->
-                  <van-cell-group inset title="点位间人数">
+                  <cell-group
+                    :loading="routeStatsQueryMap[routeId].isFetching"
+                    inset
+                    title="点位间人数"
+                  >
                     <van-cell
                       v-for="segmentData in segmentStatsMap[routeId]?.value"
                       :key="segmentData.segmentKey"
@@ -99,17 +108,17 @@
                       :to="`/team-list/${campusId}?segment=${segmentData.segmentKey}`"
                       >{{ segmentData.countOnSegment ?? "-" }}</van-cell
                     >
-                  </van-cell-group>
+                  </cell-group>
 
                   <!-- 路线统计指标 -->
-                  <van-cell-group inset title="状态">
+                  <cell-group :loading="routeStatsQueryMap[routeId].isFetching" inset title="状态">
                     <van-cell
                       v-for="key in ROUTE_STATS_KEY_LIST"
                       :key="key"
                       :title="WALKER_STATS_METRIC_TEXT[key]"
                       >{{ routeStatsQueryMap[routeId].data?.status_stats[key] ?? "-" }}</van-cell
                     >
-                  </van-cell-group>
+                  </cell-group>
                 </div>
               </van-pull-refresh>
             </error-empty>
@@ -123,7 +132,7 @@
 <script setup lang="ts">
 import { useQueries, useQuery } from "@tanstack/vue-query";
 import { forEach, fromPairs, isNil, map, zipObject } from "lodash-es";
-import { ErrorEmpty, LoadingContainer, useStoredUrlQuery } from "shared";
+import { CellGroup, ErrorEmpty, LoadingContainer, useStoredUrlQuery } from "shared";
 import { computed, reactive, ref, watch } from "vue";
 
 import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL, WALKER_STATS_METRIC_TEXT } from "@/constants";

@@ -40,7 +40,7 @@
             </van-cell>
           </van-cell-group>
 
-          <van-cell-group title="成员状态" inset>
+          <cell-group :loading="isTeamInfoFetching" title="成员状态" inset>
             <van-cell
               v-for="member in teamInfoData.members"
               :key="member.user_id"
@@ -52,7 +52,7 @@
                 WALKER_STATUS_TEXT[member.walk_status]
               }}</span>
             </van-cell>
-          </van-cell-group>
+          </cell-group>
 
           <div :class="styles.middleWhiteSpace"></div>
 
@@ -105,7 +105,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { AdminAPI, MemberWalkStatus } from "api/types/admin";
 import { first, isNil, last } from "lodash-es";
-import { ErrorEmpty } from "shared";
+import { CellGroup, ErrorEmpty } from "shared";
 import { is } from "valibot";
 import { showConfirmDialog, showDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref, watch } from "vue";
