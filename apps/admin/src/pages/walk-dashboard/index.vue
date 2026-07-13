@@ -38,10 +38,10 @@
 
 <script setup lang="ts">
 import { useWindowSize } from "@vueuse/core";
+import { ErrorEmpty, useStoredUrlQuery } from "shared";
 import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
-import { useStoredUrlQuery } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { pxToSize } from "@/utils";
 import { CAMPUS_CONFIG, type CampusId } from "@/walk-config";

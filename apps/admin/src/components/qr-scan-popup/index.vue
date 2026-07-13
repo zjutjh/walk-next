@@ -25,11 +25,10 @@
 <script setup lang="ts">
 import "./index.scss";
 
+import { LoadingContainer } from "shared";
 import type { BaseIssue, BaseSchema } from "valibot";
 import { showFailToast } from "vant";
 import { nextTick, ref, useTemplateRef, watch } from "vue";
-
-import LoadingContainer from "@/components/loading-container/index.vue";
 
 import { useCameraQrScanner } from "./composables/camera-qr-scanner";
 import { useUploadQrScanner } from "./composables/upload-qr-scanner";

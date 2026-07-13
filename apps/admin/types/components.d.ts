@@ -12,11 +12,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ErrorBoundary: typeof import('./../src/components/error-boundary/index.vue')['default']
-    ErrorEmpty: typeof import('./../src/components/error-empty/index.vue')['default']
     IMdiClose: typeof import('~icons/mdi/close')['default']
     IMdiImage: typeof import('~icons/mdi/image')['default']
-    LoadingContainer: typeof import('./../src/components/loading-container/index.vue')['default']
-    PromptDialog: typeof import('./../src/components/prompt-dialog/index.vue')['default']
     QrScanPopup: typeof import('./../src/components/qr-scan-popup/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

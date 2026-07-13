@@ -31,9 +31,9 @@
 </template>
 
 <script setup lang="ts">
+import { ErrorEmpty, useStoredUrlQuery } from "shared";
 import { computed, useTemplateRef } from "vue";
 
-import { useStoredUrlQuery } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { CAMPUS_CONFIG, type CampusId } from "@/walk-config";
 

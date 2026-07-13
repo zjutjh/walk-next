@@ -119,10 +119,9 @@
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
 import { isNil } from "lodash-es";
+import { ErrorEmpty, LoadingContainer, useStoredUrlQuery } from "shared";
 import { computed, ref, toRef, watch } from "vue";
 
-import LoadingContainer from "@/components/loading-container/index.vue";
-import { useStoredUrlQuery } from "@/composables";
 import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL, WALKER_STATS_METRIC_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { walkAdminService } from "@/utils";

@@ -101,11 +101,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { AdminAPI } from "api/types/admin";
 import dayjs from "dayjs";
 import { isNil } from "lodash-es";
+import { ErrorEmpty, LoadingContainer } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref, watch } from "vue";
 
-import errorEmpty from "@/components/error-empty/index.vue";
-import loadingContainer from "@/components/loading-container/index.vue";
 import { ADMIN_QUERY_KEY, TEAM_MEMBER_ROLE_TEXT } from "@/constants";
 import { walkAdminService } from "@/utils";
 import { POINT_CONFIG, ROUTE_CONFIG } from "@/walk-config";

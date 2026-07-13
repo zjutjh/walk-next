@@ -1,3 +1,4 @@
+import { useRouterState } from "shared";
 import type { SetRequired } from "type-fest";
 import { showFailToast, showToast } from "vant";
 import {
@@ -8,7 +9,7 @@ import {
   type RouteRecordRaw
 } from "vue-router";
 
-import { useAdminInfo, useRouterState } from "@/composables";
+import { useAdminInfo } from "@/composables";
 import IndexPage from "@/pages/index/index.vue";
 
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [

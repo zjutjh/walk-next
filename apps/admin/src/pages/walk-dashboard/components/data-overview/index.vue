@@ -59,8 +59,8 @@
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
 import { isNil } from "lodash-es";
+import { ErrorEmpty } from "shared";
 
-import errorEmpty from "@/components/error-empty/index.vue";
 import { ADMIN_QUERY_KEY } from "@/constants";
 import { ADMIN_REFRESH_INTERVAL } from "@/constants/refresh-interval";
 import { walkAdminService } from "@/utils";

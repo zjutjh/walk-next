@@ -29,11 +29,9 @@
 import "./index.scss";
 
 import { isNil, last } from "lodash-es";
+import { LoadingContainer, useRouterState } from "shared";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-
-import LoadingContainer from "@/components/loading-container/index.vue";
-import { useRouterState } from "@/composables";
 
 interface DefaultLayoutProps {
   /**

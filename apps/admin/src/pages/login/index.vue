@@ -54,13 +54,13 @@
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
 import { isArray } from "lodash-es";
+import { LoadingContainer, useRouterState } from "shared";
 import type { FieldRule, FormInstance } from "vant";
 import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import LoadingContainer from "@/components/loading-container/index.vue";
-import { useAdminInfo, useRouterState } from "@/composables";
+import { useAdminInfo } from "@/composables";
 import { walkAdminService } from "@/utils";
 
 import styles from "./index.module.scss";

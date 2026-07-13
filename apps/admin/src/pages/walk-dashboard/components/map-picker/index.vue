@@ -48,9 +48,9 @@
 <script setup lang="ts">
 import { useDebounceFn, useResizeObserver } from "@vueuse/core";
 import { isEmpty, isNull } from "lodash-es";
+import { ErrorEmpty } from "shared";
 import { ref, type StyleValue, toRef, useTemplateRef } from "vue";
 
-import ErrorEmpty from "@/components/error-empty/index.vue";
 import {
   CAMPUS_POINT_LIST_MAP,
   CAMPUS_SEGMENT_LIST_MAP,

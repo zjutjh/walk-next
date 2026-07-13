@@ -38,7 +38,19 @@ import { get } from "lodash-es";
 import type { FormInstance } from "vant";
 import { useTemplateRef } from "vue";
 
-import type { PromptDialogProps } from "./types";
+import type { PromptDialogFieldConfig } from "./types";
+
+/** 输入弹窗组件Props */
+export interface PromptDialogProps {
+  /** 弹窗标题 */
+  title: string;
+  /** 弹窗描述 */
+  description?: string;
+  /** 字段配置 */
+  fieldConfig: Record<string, PromptDialogFieldConfig>;
+  /** 是否禁用确认按钮 */
+  confirmDisabled?: boolean;
+}
 
 const props = withDefaults(defineProps<PromptDialogProps>(), {
   description: "",

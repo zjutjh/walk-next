@@ -78,16 +78,15 @@
 import { useMutation } from "@tanstack/vue-query";
 import { type AdminAPI, AdminQrCodeType } from "api/types/admin";
 import { CanceledError } from "axios";
-import { RequestError } from "shared";
+import type { PromptDialogFieldConfig } from "shared";
+import { PromptDialog, RequestError, useRouterState, useStoredUrlQuery } from "shared";
 import { is } from "valibot";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import PromptDialog from "@/components/prompt-dialog/index.vue";
-import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
-import { useAdminInfo, useRouterState, useStoredUrlQuery } from "@/composables";
+import { useAdminInfo } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";

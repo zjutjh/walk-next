@@ -102,13 +102,13 @@ import { useMutation } from "@tanstack/vue-query";
 import type { TeamRebuildMember } from "api/types/admin";
 import { CanceledError } from "axios";
 import { find, isEmpty } from "lodash-es";
-import { RequestError } from "shared";
+import type { PromptDialogFieldConfig } from "shared";
+import { PromptDialog, RequestError } from "shared";
 import { is } from "valibot";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
 import { MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { MemberQrCodeSchema, walkAdminService } from "@/utils";

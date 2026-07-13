@@ -105,11 +105,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { AdminAPI, MemberWalkStatus } from "api/types/admin";
 import { first, isNil, last } from "lodash-es";
+import { ErrorEmpty } from "shared";
 import { is } from "valibot";
 import { showConfirmDialog, showDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref, watch } from "vue";
 
-import ErrorEmpty from "@/components/error-empty/index.vue";
 import { useAdminInfo } from "@/composables";
 import { ADMIN_QUERY_KEY, MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";

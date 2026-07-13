@@ -14,8 +14,13 @@
   },
   "peerDependencies": {
     "@vueuse/core": "catalog:frontend",
+    "pinia": "catalog:frontend",
+    "lodash-es": "catalog:frontend",
     "axios": "catalog:frontend",
-    "vue": "catalog:frontend"
+    "vant": "catalog:frontend",
+    "vue": "catalog:frontend",
+    "vue-router": "catalog:frontend",
+    "vite": "catalog:infra"
   },
   "devDependencies": {
     "@types/lodash-es": "catalog:types",
@@ -25,7 +30,10 @@
     "lodash-es": "catalog:frontend",
     "pinia": "catalog:frontend",
     "typescript": "catalog:infra",
+    "vant": "catalog:frontend",
     "vue": "catalog:frontend",
-    "vue-tsc": "catalog:infra"
+    "vue-router": "catalog:frontend",
+    "vue-tsc": "catalog:infra",
+    "vite": "catalog:infra"
   }
 }

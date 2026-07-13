@@ -13,15 +13,3 @@ export interface PromptDialogFieldConfig {
   /** 字段校验规则 */
   rules?: FieldRule[];
 }
-
-/** 输入弹窗组件Props */
-export interface PromptDialogProps {
-  /** 弹窗标题 */
-  title: string;
-  /** 弹窗描述 */
-  description?: string;
-  /** 字段配置 */
-  fieldConfig: Record<string, PromptDialogFieldConfig>;
-  /** 是否禁用确认按钮 */
-  confirmDisabled?: boolean;
-}

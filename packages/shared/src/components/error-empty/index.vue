@@ -23,7 +23,7 @@ import { isNil } from "lodash-es";
 import type { EmptyProps } from "vant";
 import { computed } from "vue";
 
-import errorImageUrl from "@/assets/error.png";
+import errorImageUrl from "../../assets/error.png";
 
 export interface ErrorEmptyProps extends Pick<EmptyProps, "imageSize"> {
   /** 错误 */
