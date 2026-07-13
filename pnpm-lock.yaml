@@ -15,6 +15,9 @@ catalogs:
     '@tanstack/vue-query':
       specifier: ^5.92.9
       version: 5.92.9
+    '@vant/touch-emulator':
+      specifier: ^1.5.0
+      version: 1.5.0
     '@vueuse/core':
       specifier: ^14.2.1
       version: 14.2.1
@@ -27,12 +30,24 @@ catalogs:
     lodash-es:
       specifier: ^4.17.23
       version: 4.17.23
+    modern-normalize:
+      specifier: ^3.0.1
+      version: 3.0.1
     pinia:
       specifier: ^3.0.4
       version: 3.0.4
     pinia-plugin-persistedstate:
       specifier: ^4.7.1
       version: 4.7.1
+    qr-scanner-wechat:
+      specifier: ^0.1.3
+      version: 0.1.3
+    valibot:
+      specifier: ^1.4.2
+      version: 1.4.2
+    vant:
+      specifier: ^4.9.22
+      version: 4.9.22
     vue:
       specifier: ^3.5.28
       version: 3.5.28
@@ -46,6 +61,12 @@ catalogs:
     '@typescript-eslint/parser':
       specifier: ^8.56.0
       version: 8.56.0
+    '@vant/auto-import-resolver':
+      specifier: ^1.3.0
+      version: 1.3.0
+    '@vitejs/plugin-vue':
+      specifier: ^6.0.4
+      version: 6.0.4
     '@vue/tsconfig':
       specifier: ^0.8.1
       version: 0.8.1
@@ -73,18 +94,33 @@ catalogs:
     lint-staged:
       specifier: ^16.2.7
       version: 16.2.7
+    postcss-pxtorem:
+      specifier: ^6.1.0
+      version: 6.1.0
     prettier:
       specifier: ^3.8.1
       version: 3.8.1
+    sass-embedded:
+      specifier: ^1.97.3
+      version: 1.97.3
     simple-git-hooks:
       specifier: ^2.13.1
       version: 2.13.1
     typescript:
       specifier: ~5.9.3
       version: 5.9.3
+    unplugin-auto-import:
+      specifier: ^21.0.0
+      version: 21.0.0
     unplugin-icons:
       specifier: ^23.0.1
       version: 23.0.1
+    unplugin-vue-components:
+      specifier: ^31.0.0
+      version: 31.0.0
+    vite:
+      specifier: ^7.3.1
+      version: 7.3.1
     vue-eslint-parser:
       specifier: ^10.4.0
       version: 10.4.0
@@ -164,7 +200,7 @@ importers:
         specifier: catalog:frontend
         version: 5.92.9(vue@3.5.28(typescript@5.9.3))
       '@vant/touch-emulator':
-        specifier: ^1.5.0
+        specifier: catalog:frontend
         version: 1.5.0
       '@vueuse/core':
         specifier: catalog:frontend
@@ -182,7 +218,7 @@ importers:
         specifier: catalog:frontend
         version: 4.17.23
       modern-normalize:
-        specifier: ^3.0.1
+        specifier: catalog:frontend
         version: 3.0.1
       pinia:
         specifier: catalog:frontend
@@ -191,16 +227,16 @@ importers:
         specifier: catalog:frontend
         version: 4.7.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))
       qr-scanner-wechat:
-        specifier: ^0.1.3
+        specifier: catalog:frontend
         version: 0.1.3
       shared:
         specifier: workspace:*
         version: link:../../packages/shared
       valibot:
-        specifier: ^1.4.2
+        specifier: catalog:frontend
         version: 1.4.2(typescript@5.9.3)
       vant:
-        specifier: ^4.9.22
+        specifier: catalog:frontend
         version: 4.9.22(vue@3.5.28(typescript@5.9.3))
       vue:
         specifier: catalog:frontend
@@ -219,19 +255,19 @@ importers:
         specifier: catalog:types
         version: 6.1.0
       '@vant/auto-import-resolver':
-        specifier: ^1.3.0
+        specifier: catalog:infra
         version: 1.3.0
       '@vitejs/plugin-vue':
-        specifier: ^6.0.4
+        specifier: catalog:infra
         version: 6.0.4(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(yaml@2.8.2))(vue@3.5.28(typescript@5.9.3))
       '@vue/tsconfig':
         specifier: catalog:infra
         version: 0.8.1(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3))
       postcss-pxtorem:
-        specifier: ^6.1.0
+        specifier: catalog:infra
         version: 6.1.0(postcss@8.5.6)
       sass-embedded:
-        specifier: ^1.97.3
+        specifier: catalog:infra
         version: 1.97.3
       type-fest:
         specifier: catalog:types
@@ -240,16 +276,16 @@ importers:
         specifier: catalog:infra
         version: 5.9.3
       unplugin-auto-import:
-        specifier: ^21.0.0
+        specifier: catalog:infra
         version: 21.0.0(@vueuse/core@14.2.1(vue@3.5.28(typescript@5.9.3)))
       unplugin-icons:
         specifier: catalog:infra
         version: 23.0.1(@vue/compiler-sfc@3.5.28)
       unplugin-vue-components:
-        specifier: ^31.0.0
+        specifier: catalog:infra
         version: 31.0.0(vue@3.5.28(typescript@5.9.3))
       vite:
-        specifier: ^7.3.1
+        specifier: catalog:infra
         version: 7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(yaml@2.8.2)
       vue-tsc:
         specifier: catalog:infra
@@ -284,9 +320,18 @@ importers:
       typescript:
         specifier: catalog:infra
         version: 5.9.3
+      vant:
+        specifier: catalog:frontend
+        version: 4.9.22(vue@3.5.28(typescript@5.9.3))
+      vite:
+        specifier: catalog:infra
+        version: 7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(yaml@2.8.2)
       vue:
         specifier: catalog:frontend
         version: 3.5.28(typescript@5.9.3)
+      vue-router:
+        specifier: catalog:frontend
+        version: 5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
       vue-tsc:
         specifier: catalog:infra
         version: 3.2.5(typescript@5.9.3)
@@ -5044,7 +5089,7 @@ snapshots:
 
   unimport@5.6.0:
     dependencies:
-      acorn: 8.15.0
+      acorn: 8.16.0
       escape-string-regexp: 5.0.0
       estree-walker: 3.0.3
       local-pkg: 1.1.2
@@ -5131,7 +5176,7 @@ snapshots:
     dependencies:
       '@vant/popperjs': 1.3.0
       '@vant/use': 1.6.0(vue@3.5.28(typescript@5.9.3))
-      '@vue/shared': 3.5.27
+      '@vue/shared': 3.5.28
       vue: 3.5.28(typescript@5.9.3)
 
   varint@6.0.0: {}
