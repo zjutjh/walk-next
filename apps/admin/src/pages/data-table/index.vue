@@ -46,39 +46,43 @@
       </van-tab>
 
       <!-- 具体路线统计数据 -->
-      <template v-for="campus in CAMPUS_LIST" :key="campus">
+      <template v-for="campusId in CAMPUS_LIST" :key="campusId">
         <van-tab
-          v-for="route in CAMPUS_ROUTE_LIST_MAP[campus]"
-          :key="route"
-          :title="ROUTE_CONFIG[route]?.text"
-          :name="route"
+          v-for="routeId in CAMPUS_ROUTE_LIST_MAP[campusId]"
+          :key="routeId"
+          :title="ROUTE_CONFIG[routeId]?.text"
+          :name="routeId"
         >
           <error-tip
-            v-if="routeStatsError && !isRouteStatsFetching && routeStatsData"
+            v-if="
+              routeStatsQueryMap[routeId]?.error &&
+              !routeStatsQueryMap[routeId]?.isFetching &&
+              routeStatsQueryMap[routeId]?.data
+            "
             :class="styles.errorTip"
-            :data-updated-at="routeStatsUpdatedAt"
+            :data-updated-at="routeStatsQueryMap[routeId]?.dataUpdatedAt"
           />
           <loading-container
+            v-if="routeStatsQueryMap[routeId]"
             :class="styles.loadingContainer"
-            :loading="isRouteStatsLoading"
+            :loading="routeStatsQueryMap[routeId].isLoading"
             :modal="false"
           >
             <error-empty
-              :error="routeStatsError"
-              :disabled="!isNil(routeStatsData)"
-              @retry="refetchRouteStats"
+              :error="routeStatsQueryMap[routeId].error"
+              :disabled="!isNil(routeStatsQueryMap[routeId]?.data)"
+              @retry="routeStatsQueryMap[routeId].refetch()"
             >
               <van-pull-refresh
-                v-if="routeStatsData"
-                :model-value="isRouteStatsPullRefreshing"
-                :disabled="isRouteStatsFetching"
-                @refresh="handleRouteStatsRefresh"
+                :model-value="isRouteStatsPullRefreshingMap[routeId]"
+                :disabled="routeStatsQueryMap[routeId].isFetching"
+                @refresh="handleRouteStatsRefresh(routeId)"
               >
                 <div :key="urlQuery.tab" :class="styles.dataContainer">
                   <!-- 经过点位人数 -->
                   <van-cell-group inset title="经过点位人数">
                     <van-cell
-                      v-for="pointData in routeStatsData?.point_stats"
+                      v-for="pointData in routeStatsQueryMap[routeId].data?.point_stats"
                       :key="pointData.point_name"
                       :title="POINT_CONFIG[pointData.point_name]?.text"
                       >{{ pointData.passed_count ?? "-" }}</van-cell
@@ -88,22 +92,22 @@
                   <!-- 点位间人数 -->
                   <van-cell-group inset title="点位间人数">
                     <van-cell
-                      v-for="segmentData in segmentStats"
+                      v-for="segmentData in segmentStatsMap[routeId]?.value"
                       :key="segmentData.segmentKey"
                       :title="segmentData.text"
                       is-link
-                      :to="`/team-list/${campus}?segment=${segmentData.segmentKey}`"
+                      :to="`/team-list/${campusId}?segment=${segmentData.segmentKey}`"
                       >{{ segmentData.countOnSegment ?? "-" }}</van-cell
                     >
                   </van-cell-group>
 
-                  <!-- 路段统计指标 -->
+                  <!-- 路线统计指标 -->
                   <van-cell-group inset title="状态">
                     <van-cell
                       v-for="key in ROUTE_STATS_KEY_LIST"
                       :key="key"
                       :title="WALKER_STATS_METRIC_TEXT[key]"
-                      >{{ routeStatsData.status_stats[key] ?? "-" }}</van-cell
+                      >{{ routeStatsQueryMap[routeId].data?.status_stats[key] ?? "-" }}</van-cell
                     >
                   </van-cell-group>
                 </div>
@@ -117,10 +121,10 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from "@tanstack/vue-query";
-import { isNil } from "lodash-es";
+import { useQueries, useQuery } from "@tanstack/vue-query";
+import { forEach, fromPairs, isNil, map, zipObject } from "lodash-es";
 import { ErrorEmpty, LoadingContainer, useStoredUrlQuery } from "shared";
-import { computed, ref, toRef, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 
 import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL, WALKER_STATS_METRIC_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
@@ -130,6 +134,8 @@ import {
   CAMPUS_ROUTE_LIST_MAP,
   POINT_CONFIG,
   ROUTE_CONFIG,
+  ROUTE_LIST,
+  type RouteId,
   SEGMENT_DERIVATIVE,
   SEGMENT_KEY_DELIMITER
 } from "@/walk-config";
@@ -178,55 +184,65 @@ const handleOverviewStatsRefresh = () => {
 };
 
 // 获取路线统计数据
-const {
-  data: routeStatsData,
-  error: routeStatsError,
-  isLoading: isRouteStatsLoading,
-  isFetching: isRouteStatsFetching,
-  refetch: refetchRouteStats,
-  dataUpdatedAt: routeStatsUpdatedAt
-} = useQuery({
-  enabled: () => urlQuery.value.tab !== OVERVIEW_TAB_NAME,
-  staleTime: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
-  refetchInterval: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
-  queryKey: [ADMIN_QUERY_KEY.STATS.ROUTE, toRef(() => urlQuery.value.tab)] as const,
-  queryFn: ({ queryKey }) => walkAdminService.QueryRouteStats({ name: queryKey[1] })
+const routeStatsQueryMap = useQueries({
+  queries: ROUTE_LIST.map((routeId) => ({
+    enabled: () => urlQuery.value.tab === routeId,
+    staleTime: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
+    refetchInterval: ADMIN_REFRESH_INTERVAL.TABLE.STATS,
+    queryKey: [ADMIN_QUERY_KEY.STATS.ROUTE, routeId] as const,
+    queryFn: () => walkAdminService.QueryRouteStats({ name: routeId })
+  })),
+  combine: (results) => zipObject(ROUTE_LIST, results)
 });
 
 /** 路线统计数据是否正在下拉刷新中 */
-const isRouteStatsPullRefreshing = ref(false);
+const isRouteStatsPullRefreshingMap = reactive(
+  fromPairs(map(ROUTE_LIST, (routeId) => [routeId, false]))
+);
 // 路线统计数据refetch结束时关闭下拉刷新态
-watch(isRouteStatsFetching, (newValue) => {
-  if (newValue === false) isRouteStatsPullRefreshing.value = false;
+forEach(ROUTE_LIST, (routeId) => {
+  watch(
+    () => routeStatsQueryMap.value[routeId]?.isFetching,
+    (newValue) => {
+      if (newValue === false) {
+        isRouteStatsPullRefreshingMap[routeId] = false;
+      }
+    }
+  );
 });
 
 /** 下拉刷新路线统计数据 */
-const handleRouteStatsRefresh = () => {
+const handleRouteStatsRefresh = (routeId: RouteId) => {
   // 展示下拉刷新态
-  isRouteStatsPullRefreshing.value = true;
+  isRouteStatsPullRefreshingMap[routeId] = true;
 
-  refetchRouteStats();
+  routeStatsQueryMap.value[routeId]?.refetch();
 };
 
 /** 行程段统计数据 */
-const segmentStats = computed(() => {
-  /** 点位数据数组 */
-  const pointDataArr = routeStatsData.value?.point_stats;
-  if (isNil(pointDataArr)) return [];
-  return pointDataArr.reduce((acc, pointData, index) => {
-    /** 下一个点位的数据 */
-    const nextPointData = pointDataArr.at(index + 1);
-    // 没有下一个点位数据
-    if (isNil(nextPointData)) return acc;
-    /** 行程段key */
-    const segmentKey = `${pointData.point_name}${SEGMENT_KEY_DELIMITER}${nextPointData.point_name}`;
-    // 添加当前点位到下一个点位的行程段数据
-    acc.push({
-      segmentKey: segmentKey,
-      text: SEGMENT_DERIVATIVE[segmentKey]?.text ?? "",
-      countOnSegment: pointData.passed_count - nextPointData.passed_count
-    });
-    return acc;
-  }, [] as SegmentStat[]);
-});
+const segmentStatsMap = fromPairs(
+  map(ROUTE_LIST, (routeId) => [
+    routeId,
+    computed(() => {
+      /** 点位数据数组 */
+      const pointDataArr = routeStatsQueryMap.value[routeId]?.data?.point_stats;
+      if (isNil(pointDataArr)) return [];
+      return pointDataArr.reduce((acc, pointData, index) => {
+        /** 下一个点位的数据 */
+        const nextPointData = pointDataArr.at(index + 1);
+        // 没有下一个点位数据
+        if (isNil(nextPointData)) return acc;
+        /** 行程段key */
+        const segmentKey = `${pointData.point_name}${SEGMENT_KEY_DELIMITER}${nextPointData.point_name}`;
+        // 添加当前点位到下一个点位的行程段数据
+        acc.push({
+          segmentKey: segmentKey,
+          text: SEGMENT_DERIVATIVE[segmentKey]?.text ?? "",
+          countOnSegment: pointData.passed_count - nextPointData.passed_count
+        });
+        return acc;
+      }, [] as SegmentStat[]);
+    })
+  ])
+);
 </script>
