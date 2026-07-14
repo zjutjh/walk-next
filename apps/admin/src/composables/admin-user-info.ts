@@ -12,7 +12,7 @@ export interface AdminUserInfo {
   adminName: string;
   pointId: string;
   campusId: string;
-  permissionLevel: PermissionLevel | undefined;
+  permissionLevel: PermissionLevel;
 }
 
 /** 管理员用户信息空值 */
@@ -21,7 +21,7 @@ const buildDefaultAdminUserInfo = (): AdminUserInfo => ({
   adminName: "",
   pointId: "",
   campusId: "",
-  permissionLevel: undefined
+  permissionLevel: "external"
 });
 
 /** 管理员用户信息Store */
@@ -75,7 +75,6 @@ export const useAdminInfo = (queryClient: QueryClient = useQueryClient()) => {
   /** 检查当前用户是否达到指定权限等级 */
   const hasPermission = (targetLevel: PermissionLevel | undefined) => {
     if (isNil(targetLevel)) return true;
-    if (isNil(permissionLevel.value)) return false;
     return PERMISSION_WEIGHT_MAP[permissionLevel.value] >= PERMISSION_WEIGHT_MAP[targetLevel];
   };
 
@@ -83,7 +82,7 @@ export const useAdminInfo = (queryClient: QueryClient = useQueryClient()) => {
   const updateAdminInfo = (patch: Partial<AdminUserInfo>) => {
     assign(adminStore.data, patch);
     // 更新query缓存
-    queryClient.setQueryData<Partial<AdminAPI.QueryAdminUserInfoResponse>>(
+    queryClient.setQueryData<AdminAPI.QueryAdminUserInfoResponse>(
       [ADMIN_QUERY_KEY.USER.SELF],
       () => ({
         name: adminName.value,
