@@ -8,7 +8,7 @@
     :close-on-popstate="false"
     :close-on-click-overlay="false"
     show-cancel-button
-    @confirm="handleConfirm"
+    @confirm="handleSubmit"
     @cancel="handleCancel"
     @open="handleDialogOpen"
   >
@@ -91,11 +91,6 @@ const handleSubmit = async () => {
     return;
   }
   emit("submit", modelValue.value);
-};
-
-/** 点击确认按钮 */
-const handleConfirm = () => {
-  formRef.value?.submit();
 };
 
 /** 点击取消按钮 */

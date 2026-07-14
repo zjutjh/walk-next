@@ -46,7 +46,7 @@
         type="primary"
         :loading="isLoginPending"
         block
-        @click="handleLoginClick"
+        @click="handleSubmit"
         >登录</van-button
       >
     </van-form>
@@ -146,10 +146,5 @@ const handleSubmit = async () => {
   }
 
   mutateLogin();
-};
-
-/** 点击登录 */
-const handleLoginClick = () => {
-  handleSubmit();
 };
 </script>
