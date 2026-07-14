@@ -110,6 +110,7 @@ import { is } from "valibot";
 import { showConfirmDialog, showDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref, watch } from "vue";
 
+import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { useAdminInfo } from "@/composables";
 import { ADMIN_QUERY_KEY, MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";

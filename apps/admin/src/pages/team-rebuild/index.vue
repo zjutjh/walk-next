@@ -109,6 +109,7 @@ import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
+import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { MemberQrCodeSchema, walkAdminService } from "@/utils";

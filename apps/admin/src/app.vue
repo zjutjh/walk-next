@@ -14,6 +14,7 @@ import { showFailToast } from "vant";
 import { onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
+import ErrorBoundary from "@/components/error-boundary/index.vue";
 import { useAdminInfo, useTitleMeta } from "@/composables";
 import { THEME_VAR_RECORD } from "@/constants";
 
@@ -23,7 +24,7 @@ const { setupAdminInfoQuery } = useAdminInfo();
 // 响应式管理页面标题
 useTitleMeta();
 
-// 预加载扫码模块
+// 预加载扫码模块 这不是必需的，预加载之前调用扫码同样会进行加载
 const isQrScannerPreloaded = ref(false);
 try {
   const idleCallbackId = requestIdleCallback(async () => {

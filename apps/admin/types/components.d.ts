@@ -11,10 +11,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ErrorBoundary: typeof import('./../src/components/error-boundary/index.vue')['default']
     IMdiClose: typeof import('~icons/mdi/close')['default']
     IMdiImage: typeof import('~icons/mdi/image')['default']
-    QrScanPopup: typeof import('./../src/components/qr-scan-popup/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
