@@ -18,5 +18,6 @@ export function pxToRem(px: number): `${number}rem` {
  * 计算出的尺寸不会随屏幕宽度变化有响应式关系
  */
 export function pxToSize(px: number): number {
+  // 无需round，由渲染引擎自行处理
   return (px / DESIGN_WIDTH) * getViewWidth();
 }

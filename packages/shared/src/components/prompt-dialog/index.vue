@@ -4,7 +4,7 @@
     :show="isDialogVisible"
     class="prompt-dialog"
     :title="props.title"
-    :confirm-button-disabled="props.confirmDisabled"
+    :confirm-button-disabled="props.submitDisabled"
     :close-on-popstate="false"
     :close-on-click-overlay="false"
     show-cancel-button
@@ -14,7 +14,7 @@
   >
     <div v-if="props.description" class="prompt-dialog__description">{{ props.description }}</div>
 
-    <van-form ref="formRef" @submit="handleConfirm">
+    <van-form ref="formRef" @submit="handleSubmit">
       <van-field
         v-for="(_, key, index) in modelValue"
         :key="key"
@@ -44,21 +44,30 @@ import type { PromptDialogFieldConfig } from "./types";
 export interface PromptDialogProps {
   /** 弹窗标题 */
   title: string;
-  /** 弹窗描述 */
-  description?: string;
   /** 字段配置 */
   fieldConfig: Record<string, PromptDialogFieldConfig>;
-  /** 是否禁用确认按钮 */
-  confirmDisabled?: boolean;
+  /** 弹窗描述
+   * @default ""
+   */
+  description?: string;
+  /** 是否禁用提交
+   * @default false
+   */
+  submitDisabled?: boolean;
+  /** 点击取消是否立刻关闭弹窗
+   * @default true
+   */
+  closeOnCancel?: boolean;
 }
 
 const props = withDefaults(defineProps<PromptDialogProps>(), {
   description: "",
-  confirmDisabled: false
+  submitDisabled: false,
+  closeOnCancel: true
 });
 
 const emit = defineEmits<{
-  confirm: [value: Record<string, string>];
+  submit: [value: Record<string, string>];
   cancel: [];
 }>();
 
@@ -72,21 +81,29 @@ const modelValue = defineModel<Record<string, string>>({
   required: true
 });
 
-/** 点击确认按钮 */
-const handleConfirm = async () => {
+/** 提交表单 */
+const handleSubmit = async () => {
+  if (props.submitDisabled) return;
   if (!formRef.value) return;
   try {
     await formRef.value.validate();
   } catch {
     return;
   }
-  emit("confirm", modelValue.value);
+  emit("submit", modelValue.value);
+};
+
+/** 点击确认按钮 */
+const handleConfirm = () => {
+  formRef.value?.submit();
 };
 
 /** 点击取消按钮 */
 const handleCancel = () => {
   emit("cancel");
-  isDialogVisible.value = false;
+  if (props.closeOnCancel) {
+    isDialogVisible.value = false;
+  }
 };
 
 /** 弹窗打开 */

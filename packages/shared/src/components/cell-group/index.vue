@@ -1,6 +1,6 @@
 <!-- 拓展功能的单元格组 -->
 <template>
-  <van-cell-group class="expanded-cell-group" v-bind="props">
+  <van-cell-group class="expanded-cell-group" :border="props.border" :inset="props.inset">
     <template #title>
       <div class="expanded-cell-group__title">
         <slot v-if="$slots.title" name="title" />

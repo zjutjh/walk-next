@@ -84,8 +84,8 @@
     v-model="memberIdDialogValue"
     title="编号添加"
     :field-config="MEMBER_ID_DIALOG_CONFIG"
-    :confirm-disabled="isAddMemberPending"
-    @confirm="handleMemberIdDialogConfirm"
+    :submit-disabled="isAddMemberPending"
+    @submit="handleMemberIdDialogSubmit"
     @cancel="handleMemberIdDialogCancel"
   />
 
@@ -144,8 +144,8 @@ const isAddMemberButtonDisabled = computed(
     memberList.value.length >= TEAM_REBUILD_MEMBER_COUNT_LIMIT.MAX
 );
 
-/** 人员ID输入弹窗确认 */
-const handleMemberIdDialogConfirm = () => {
+/** 人员ID输入弹窗提交 */
+const handleMemberIdDialogSubmit = () => {
   const userId = Number(memberIdDialogValue.value.memberIdStr);
   mutateAddMember(userId);
 };
@@ -261,6 +261,7 @@ let addMemberAbortController: AbortController | null = null;
 // 获取成员信息并添加成员到团队
 const { mutate: mutateAddMember, isPending: isAddMemberPending } = useMutation({
   mutationFn: (userId: number) => {
+    addMemberAbortController?.abort();
     addMemberAbortController = new AbortController();
     return walkAdminService.QueryMemberInfo(
       {

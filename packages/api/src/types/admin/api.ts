@@ -186,8 +186,8 @@ export interface QueryTeamStatusResponse {
 
 /** 更改人员状态 请求 */
 export interface UpdateWalkerStatusRequest {
-  /** 未开始notStart, 待出发pending, 已放弃abandoned, 进行中inProgress */
-  status: string;
+  /** 人员状态 */
+  status: MemberWalkStatus;
   /** 用户编号 */
   user_id: number;
 }

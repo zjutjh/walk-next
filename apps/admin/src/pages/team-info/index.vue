@@ -269,9 +269,10 @@ const { mutate: mutateUpdateStatus, isPending: isUpdateStatusPending } = useMuta
   onSuccess: (_data, params) => {
     showSuccessToast("设置成功");
     // 提前更新缓存
-    queryClient.setQueryData(
+    queryClient.setQueryData<AdminAPI.QueryTeamStatusResponse>(
       [ADMIN_QUERY_KEY.TEAM.STATUS, teamId.value],
-      (oldData: AdminAPI.QueryTeamStatusResponse) => {
+      (oldData) => {
+        if (isNil(oldData)) return oldData;
         return {
           ...oldData,
           members: oldData.members.map((member) =>

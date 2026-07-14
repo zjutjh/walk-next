@@ -95,8 +95,6 @@ const handleSegmentPickerCancel = () => {
 
 /** 打开行程段筛选器 */
 const handleSegmentFilterOpen = () => {
-  // 与实际搜索值同步
-  segment.value = [urlQuery.value.segment];
   // 显示弹出层
   isSegmentPickerVisible.value = true;
 };

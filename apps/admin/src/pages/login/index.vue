@@ -21,7 +21,9 @@
         left-icon="user"
         enterkeyhint="next"
         clearable
-        @keyup.enter="(passwordFieldRef?.$el as HTMLElement).querySelector('input')?.focus?.()"
+        @keyup.enter="
+          (passwordFieldRef?.$el as HTMLElement | undefined)?.querySelector('input')?.focus?.()
+        "
       />
       <van-field
         ref="passwordFieldRef"
@@ -34,7 +36,7 @@
         type="password"
         enterkeyhint="done"
         clearable
-        @keyup.enter="(loginButtonRef?.$el as HTMLButtonElement).click()"
+        @keyup.enter="(loginButtonRef?.$el as HTMLButtonElement | undefined)?.click()"
       />
       <div :class="styles.error">{{ error?.message || "" }}</div>
 

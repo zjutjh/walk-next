@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useLocalStorage } from "@vueuse/core";
 import { cloneDeep, get, isNil, isObject, isUndefined, mapValues, set } from "lodash-es";
 import { defineStore } from "pinia";
@@ -13,6 +12,7 @@ const useUrlQueryStore = defineStore("urlQuery", () => {
 });
 
 /** 将URL Query对象的所有成员编码为字符串或字符串数组形式 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const stringifyUrlQueryObj = <UrlQuery extends Record<string, any>>(urlQueryObj: UrlQuery) => {
   return mapValues(urlQueryObj, (value) => {
     if (isNil(value)) return "";
@@ -22,6 +22,7 @@ const stringifyUrlQueryObj = <UrlQuery extends Record<string, any>>(urlQueryObj:
 };
 
 /** （初始化时）将URL Query对象中的字符串成员解析为原类型 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
   urlQueryObj: UrlQuery,
   /** 传入类型与URL Query原类型完全相符的对象作为样板 */
@@ -34,7 +35,7 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
         return JSON.parse(decodeURIComponent(value));
       } catch (err) {
         console.error(err);
-        throw new TypeError(`解析URL Query成员失败: ${String(key)}`);
+        throw new TypeError(`Failed to parse URL Query member: ${String(key)}.`, { cause: err });
       }
     }
     switch (typeof originalTypeExample[key]) {
@@ -49,7 +50,9 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
       case "bigint":
         return BigInt(value);
       default:
-        throw new TypeError(`不支持的URL Query成员类型:${typeof originalTypeExample[key]}`);
+        throw new TypeError(
+          `Unsupported URL Query member type: ${typeof originalTypeExample[key]}.`
+        );
     }
   }) as UrlQuery;
 };
@@ -69,6 +72,7 @@ type Options<UrlQuery> = {
 
 /** 加载Stored URL Query */
 export const useStoredUrlQuery = <
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   UrlQuery extends Record<string, any> = Record<string, string | string[]>
 >(
   options: Options<UrlQuery>
@@ -109,6 +113,7 @@ export const useStoredUrlQuery = <
   );
   // 获取当前页面的URL Query
   const currentSearchParams = new URLSearchParams(window.location.search || "");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const currentValue: Record<string, any> = {};
   for (const query of currentSearchParams.keys()) {
     // 参数唯一则原样获取，否则以参数数组的形式获取
@@ -142,7 +147,7 @@ export const useStoredUrlQuery = <
     (newObj) => {
       if (isUndefined(newObj)) return;
       // 更新地址栏URL Query
-      router.replace({ query: stringifyUrlQueryObj<UrlQuery>(newObj) });
+      router.replace({ query: { ...route.query, ...stringifyUrlQueryObj<UrlQuery>(newObj) } });
       // 更新localStorage
       if (persist === "persistent") {
         localStorageState.value = newObj;

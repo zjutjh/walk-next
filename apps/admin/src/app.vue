@@ -11,7 +11,7 @@ import "@vant/touch-emulator";
 
 import { ready } from "qr-scanner-wechat";
 import { showFailToast } from "vant";
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import { useAdminInfo, useTitleMeta } from "@/composables";
@@ -26,7 +26,7 @@ useTitleMeta();
 // 预加载扫码模块
 const isQrScannerPreloaded = ref(false);
 try {
-  requestIdleCallback(async () => {
+  const idleCallbackId = requestIdleCallback(async () => {
     if (isQrScannerPreloaded.value) return;
     try {
       await ready();
@@ -36,8 +36,12 @@ try {
       console.error(err);
     }
   });
+
+  onUnmounted(() => {
+    cancelIdleCallback(idleCallbackId);
+  });
 } catch {
-  console.warn("requestIdleCallback不可用");
+  console.warn("'requestIdleCallback' is not supported.");
 }
 
 // 启动获取管理员用户信息的query

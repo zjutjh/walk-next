@@ -32,5 +32,3 @@ export abstract class BaseService<T> {
     return this.#baseURL + path;
   }
 }
-
-export const SERVICE_TIMEOUT = 15000 as const;

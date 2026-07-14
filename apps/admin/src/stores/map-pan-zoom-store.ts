@@ -1,6 +1,6 @@
-import { cloneDeep, defaultTo, isNil } from "lodash-es";
+import { cloneDeep, isNil } from "lodash-es";
 import { defineStore } from "pinia";
-import { computed, type Ref, ref, toRef } from "vue";
+import { computed, ref } from "vue";
 
 import type { CampusId } from "@/walk-config";
 
@@ -20,16 +20,20 @@ export const useMapPanZoomStore = defineStore("mapPanZoom", () => {
   const transformValue = ref<Partial<Record<CampusId, MapTransform>>>({});
   /** 获取内存中存储的指定校区的地图变换值 */
   const getTransformValue = (campusId: CampusId) => {
-    // 内存中没有指定校区的变换值，初始化
-    if (isNil(transformValue.value[campusId])) {
-      transformValue.value[campusId] = {
-        x: 0,
-        y: 0,
-        scale: 1
-      };
-    }
-
-    const transformValueBase = toRef(transformValue.value, campusId) as Ref<MapTransform>;
+    const transformValueBase = computed({
+      get: () => {
+        // 内存中没有指定校区的变换值，初始化
+        if (isNil(transformValue.value[campusId])) {
+          transformValue.value[campusId] = {
+            x: 0,
+            y: 0,
+            scale: 1
+          };
+        }
+        return transformValue.value[campusId];
+      },
+      set: (value) => (transformValue.value[campusId] = value)
+    });
     const transformValuePending = computed(
       () =>
         ({
@@ -76,24 +80,24 @@ export const useMapPanZoomStore = defineStore("mapPanZoom", () => {
   const getDistance = (x1: number, y1: number, x2: number, y2: number) =>
     Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
   /** 当前正在进行的缩放产生的比例累乘系数 */
-  const pendingZoom = computed(() =>
-    defaultTo(
-      // 当前两触点的距离 比 初始两触点的距离
+  const pendingZoom = computed(() => {
+    /** 当前两触点的距离 比 初始两触点的距离 */
+    const zoomScale =
       getDistance(
         zoomCurrentTouchPoints.value.x1,
         zoomCurrentTouchPoints.value.y1,
         zoomCurrentTouchPoints.value.x2,
         zoomCurrentTouchPoints.value.y2
       ) /
-        getDistance(
-          zoomStartTouchPoints.value.x1,
-          zoomStartTouchPoints.value.y1,
-          zoomStartTouchPoints.value.x2,
-          zoomStartTouchPoints.value.y2
-        ),
-      1
-    )
-  );
+      getDistance(
+        zoomStartTouchPoints.value.x1,
+        zoomStartTouchPoints.value.y1,
+        zoomStartTouchPoints.value.x2,
+        zoomStartTouchPoints.value.y2
+      );
+    if (!zoomScale || !isFinite(zoomScale)) return 1;
+    return zoomScale;
+  });
 
   return {
     /** 获取内存中存储的指定校区的地图变换值 */

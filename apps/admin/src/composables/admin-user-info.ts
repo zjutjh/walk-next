@@ -1,10 +1,9 @@
-import { useQuery, useQueryClient } from "@tanstack/vue-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { AdminAPI, PermissionLevel } from "api/types/admin";
 import { assign, isNil } from "lodash-es";
 import { defineStore } from "pinia";
 import { getCurrentScope, onScopeDispose, ref, toRef, watch } from "vue";
 
-import { globalQueryClient } from "@/configs";
 import { ADMIN_QUERY_KEY } from "@/constants";
 import { walkAdminService } from "@/utils";
 
@@ -61,10 +60,11 @@ const PERMISSION_WEIGHT_MAP = {
   super: PermissionWeight.SUPER
 } as const satisfies Record<PermissionLevel, PermissionWeight>;
 
-/** 管理员用户信息 */
-export const useAdminInfo = () => {
+/** 管理员用户信息
+ * @param queryClient Tanstack Query的QueryClient实例，EffectScope外调用必须传入
+ */
+export const useAdminInfo = (queryClient: QueryClient = useQueryClient()) => {
   const adminStore = useAdminStore();
-  const queryClient = getCurrentScope() ? useQueryClient() : globalQueryClient;
 
   const isLoggedIn = toRef(() => adminStore.data.isLoggedIn);
   const adminName = toRef(() => adminStore.data.adminName);
@@ -83,17 +83,14 @@ export const useAdminInfo = () => {
   const updateAdminInfo = (patch: Partial<AdminUserInfo>) => {
     assign(adminStore.data, patch);
     // 更新query缓存
-    queryClient.setQueryData<AdminAPI.QueryAdminUserInfoResponse>(
+    queryClient.setQueryData<Partial<AdminAPI.QueryAdminUserInfoResponse>>(
       [ADMIN_QUERY_KEY.USER.SELF],
-      (oldData) => {
-        if (isNil(permissionLevel.value)) return oldData;
-        return {
-          name: adminName.value,
-          point_name: adminPointId.value,
-          campus: adminCampusId.value,
-          permission: permissionLevel.value
-        };
-      }
+      () => ({
+        name: adminName.value,
+        point_name: adminPointId.value,
+        campus: adminCampusId.value,
+        permission: permissionLevel.value
+      })
     );
   };
 
@@ -106,6 +103,9 @@ export const useAdminInfo = () => {
 
   /** 启动query，需要在顶层组件调用 */
   const setupAdminInfoQuery = () => {
+    if (!getCurrentScope()) {
+      throw new Error("Function 'setupAdminInfoQuery' must be called in Vue effectScope.");
+    }
     // 防止重复启动query
     if (adminStore.isQueryExist) return;
     adminStore.isQueryExist = true;

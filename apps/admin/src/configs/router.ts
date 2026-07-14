@@ -12,6 +12,8 @@ import {
 import { useAdminInfo } from "@/composables";
 import IndexPage from "@/pages/index/index.vue";
 
+import { globalQueryClient } from "./vue-query";
+
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
     path: "/",
@@ -86,7 +88,7 @@ export const routerInstance = createRouter({
 
 // 前置路由守卫
 routerInstance.beforeEach((to, from) => {
-  const { hasPermission, isLoggedIn } = useAdminInfo();
+  const { hasPermission, isLoggedIn } = useAdminInfo(globalQueryClient);
   const { pendingNavigationCount } = useRouterState();
 
   // 拦截无效路由

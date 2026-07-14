@@ -212,6 +212,7 @@ export const useCameraQrScanner = <
           case "TrackStartError":
             return "摄像头被占用";
           default:
+            console.error(err);
             return err.message || "扫码启动失败";
         }
       })();

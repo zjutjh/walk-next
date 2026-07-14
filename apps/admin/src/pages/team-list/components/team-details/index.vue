@@ -163,12 +163,15 @@ const { mutate: mutateLost, isPending } = useMutation({
   onSuccess: (_data, targetValue) => {
     showSuccessToast(targetValue ? "已标记失联" : "已取消标记");
     // 提前更新缓存中的失联状态
-    queryClient.setQueryData(
+    queryClient.setQueryData<AdminAPI.QueryTeamDetailsResponse>(
       [ADMIN_QUERY_KEY.TEAM.DETAILS, viewingTeamId],
-      (oldData: AdminAPI.QueryTeamDetailsResponse) => ({
-        ...oldData,
-        is_lost: targetValue
-      })
+      (oldData) => {
+        if (isNil(oldData)) return oldData;
+        return {
+          ...oldData,
+          is_lost: targetValue
+        };
+      }
     );
   },
   onSettled: () => {

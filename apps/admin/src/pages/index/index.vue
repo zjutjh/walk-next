@@ -68,8 +68,8 @@
     v-model="teamIdDialogValue"
     title="输入签到"
     :field-config="TEAM_ID_DIALOG_CONFIG"
-    :confirm-disabled="isCheckInPending"
-    @confirm="handleTeamIdDialogConfirm"
+    :submit-disabled="isCheckInPending"
+    @submit="handleTeamIdDialogSubmit"
     @cancel="handleTeamIdDialogCancel"
   />
 </template>
@@ -158,6 +158,7 @@ let checkinAbortController: AbortController | null = null;
 // 打卡
 const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
   mutationFn: (params: AdminAPI.CheckinTeamRequest) => {
+    checkinAbortController?.abort();
     checkinAbortController = new AbortController();
     return walkAdminService.CheckinTeam(params, { signal: checkinAbortController.signal });
   },
@@ -196,8 +197,8 @@ const handleScanSuccess = (data: unknown) => {
   }
 };
 
-/** 团队ID输入弹窗确认 */
-const handleTeamIdDialogConfirm = () => {
+/** 团队ID输入弹窗提交 */
+const handleTeamIdDialogSubmit = () => {
   mutateCheckin({ code_type: AdminQrCodeType.Team, content: teamIdDialogValue.value.teamIdStr });
 };
 

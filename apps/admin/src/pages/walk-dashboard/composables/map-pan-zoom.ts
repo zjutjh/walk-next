@@ -202,6 +202,7 @@ export const useMapPanZoom = ({
   /** 鼠标滚轮缩放 */
   const handleMouseWheelZoom = (e: WheelEvent) => {
     e.preventDefault();
+    if (mapPanZoomStore.isPanning) return;
     transformValue.base.value.scale *= clamp(1 - e.deltaY / 600, 0.5, 1.5);
     limitScale();
   };
