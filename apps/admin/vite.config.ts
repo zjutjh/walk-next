@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => {
         dts: "types/auto-imports.d.ts"
       }),
       Components({
+        dirs: [],
         resolvers: [VantResolver(), IconsResolver()],
         dts: "types/components.d.ts"
       })
