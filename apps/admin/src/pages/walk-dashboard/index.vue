@@ -68,7 +68,7 @@ const campusId = computed(() => {
 const router = useRouter();
 
 const { urlQuery } = useStoredUrlQuery<DashboardUrlQuery>({
-  initialValue: {
+  defaultValue: {
     point: "",
     segment: ""
   },

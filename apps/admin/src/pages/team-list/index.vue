@@ -57,7 +57,7 @@ const campusId = computed(() => {
 });
 
 const { urlQuery } = useStoredUrlQuery<TeamListUrlQuery>({
-  initialValue: {
+  defaultValue: {
     keyword: "",
     searchType: "captain_phone",
     segment: "",

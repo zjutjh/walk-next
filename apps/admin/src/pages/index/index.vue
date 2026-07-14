@@ -101,7 +101,7 @@ const { isNavigationPending } = useRouterState();
 const { adminName, adminPointId, resetAdminInfo, hasPermission } = useAdminInfo();
 
 const { urlQuery } = useStoredUrlQuery<IndexUrlQuery>({
-  initialValue: {
+  defaultValue: {
     isScanning: false
   }
 });

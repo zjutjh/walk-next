@@ -11,26 +11,36 @@ const useUrlQueryStore = defineStore("urlQuery", () => {
   return { refObj };
 });
 
-/** 将URL Query对象的所有成员编码为字符串或字符串数组形式 */
+/** 将URL Query对象的所有成员编码为字符串形式 */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const stringifyUrlQueryObj = <UrlQuery extends Record<string, any>>(urlQueryObj: UrlQuery) => {
-  return mapValues(urlQueryObj, (value) => {
+const stringifyUrlQueryObj = <UrlQuery extends Record<string, any>>(
+  urlQueryObj: UrlQuery,
+  /** 传入类型与URL Query默认值类型完全相符的对象作为Schema */
+  schemaExample: Readonly<UrlQuery>
+) => {
+  return mapValues(urlQueryObj, (value, key) => {
+    // 默认值类型中无该成员，不做转换
+    if (!Object.hasOwn(schemaExample, key)) return value;
+    // 分类型转换
     if (isNil(value)) return "";
     if (isObject(value)) return encodeURIComponent(JSON.stringify(value));
     return String(value);
   }) as LocationQueryRaw;
 };
 
-/** （初始化时）将URL Query对象中的字符串成员解析为原类型 */
+/** （初始化时）将URL Query对象中的字符串成员解析为默认值类型 */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
   urlQueryObj: UrlQuery,
-  /** 传入类型与URL Query原类型完全相符的对象作为样板 */
-  originalTypeExample: Readonly<UrlQuery>
+  /** 传入类型与URL Query默认值类型完全相符的对象作为Schema */
+  schemaExample: Readonly<UrlQuery>
 ) => {
-  return mapValues(urlQueryObj, (value, key: keyof UrlQuery) => {
+  return mapValues(urlQueryObj, (value, key) => {
+    // 默认值类型中无该成员，不做转换
+    if (!Object.hasOwn(schemaExample, key)) return value;
+    // 分类型转换
     if (value === null) return null;
-    if (isObject(originalTypeExample[key])) {
+    if (isObject(schemaExample[key])) {
       try {
         return JSON.parse(decodeURIComponent(value));
       } catch (err) {
@@ -38,7 +48,7 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
         throw new TypeError(`Failed to parse URL Query member: ${String(key)}.`, { cause: err });
       }
     }
-    switch (typeof originalTypeExample[key]) {
+    switch (typeof schemaExample[key]) {
       case "string":
         return value;
       case "undefined":
@@ -50,9 +60,7 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
       case "bigint":
         return BigInt(value);
       default:
-        throw new TypeError(
-          `Unsupported URL Query member type: ${typeof originalTypeExample[key]}.`
-        );
+        throw new TypeError(`Unsupported URL Query member type: ${typeof schemaExample[key]}.`);
     }
   }) as UrlQuery;
 };
@@ -67,7 +75,7 @@ type Options<UrlQuery> = {
    */
   persist?: "memory" | "persistent";
   /** 初始值 */
-  initialValue: Readonly<UrlQuery>;
+  defaultValue: Readonly<UrlQuery>;
 };
 
 /** 加载Stored URL Query */
@@ -78,7 +86,7 @@ export const useStoredUrlQuery = <
   options: Options<UrlQuery>
 ) => {
   // 解包传入的参数，设置默认值
-  const { initialValue: originalInitialValue, persist } = options;
+  const { defaultValue, persist } = options;
 
   /**
    * 获取响应式对象
@@ -112,18 +120,9 @@ export const useStoredUrlQuery = <
     { writeDefaults: false }
   );
   // 获取当前页面的URL Query
-  const currentSearchParams = new URLSearchParams(window.location.search || "");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const currentValue: Record<string, any> = {};
-  for (const query of currentSearchParams.keys()) {
-    // 参数唯一则原样获取，否则以参数数组的形式获取
-    currentValue[query] =
-      currentSearchParams.getAll(query).length > 1
-        ? currentSearchParams.getAll(query)
-        : currentSearchParams.get(query);
-  }
+  const currentUrlQuery = route.query;
   // 计算初始值
-  const initialValue = cloneDeep(originalInitialValue);
+  const initialValue = cloneDeep(defaultValue);
   if (persist === "memory") {
     // 合并内存中Store的URL Query
     Object.assign(initialValue, urlQuery.value);
@@ -132,10 +131,10 @@ export const useStoredUrlQuery = <
     Object.assign(initialValue, localStorageState.value);
   }
   // 合并当前的URL Query
-  Object.assign(initialValue, currentValue);
+  Object.assign(initialValue, currentUrlQuery);
 
   // 设置URL Query初值
-  urlQuery.value = parseUrlQueryObj<UrlQuery>(initialValue, originalInitialValue);
+  urlQuery.value = parseUrlQueryObj<UrlQuery>(initialValue, defaultValue);
 
   /**
    * 启动侦听器，使地址栏与URL Query对象同步
@@ -147,7 +146,9 @@ export const useStoredUrlQuery = <
     (newObj) => {
       if (isUndefined(newObj)) return;
       // 更新地址栏URL Query
-      router.replace({ query: { ...route.query, ...stringifyUrlQueryObj<UrlQuery>(newObj) } });
+      router.replace({
+        query: stringifyUrlQueryObj<UrlQuery>(newObj, defaultValue)
+      });
       // 更新localStorage
       if (persist === "persistent") {
         localStorageState.value = newObj;

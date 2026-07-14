@@ -155,7 +155,7 @@ import styles from "./index.module.scss";
 import type { DataTableUrlQuery, SegmentStat } from "./types";
 
 const { urlQuery } = useStoredUrlQuery<DataTableUrlQuery>({
-  initialValue: {
+  defaultValue: {
     tab: OVERVIEW_TAB_NAME
   },
   persist: "memory"
