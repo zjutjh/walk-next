@@ -128,7 +128,7 @@ const finishedTipText = computed(() => {
 /** 刷新 */
 const handleRefresh = () => {
   // 删除缓存数据
-  queryClient.setQueriesData({ queryKey: [ADMIN_QUERY_KEY.TEAM.LIST] }, () => {
+  queryClient.setQueriesData({ queryKey: [ADMIN_QUERY_KEY.TEAM.LIST, props.campusId] }, () => {
     return {
       pages: [],
       pageParams: []

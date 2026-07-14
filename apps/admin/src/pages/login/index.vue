@@ -8,9 +8,9 @@
       ref="formRef"
       :class="styles.form"
       :show-error-message="false"
-      :disabled="isPending"
+      :disabled="isLoginPending"
       label-align="top"
-      @submit="handleLoginClick"
+      @submit="handleSubmit"
     >
       <van-field
         v-model="account"
@@ -44,7 +44,7 @@
         ref="loginButtonRef"
         :class="styles.loginButton"
         type="primary"
-        :loading="isPending"
+        :loading="isLoginPending"
         block
         @click="handleLoginClick"
         >登录</van-button
@@ -92,7 +92,7 @@ const password = ref("");
 const PASSWORD_RULES: FieldRule[] = [{ required: true, message: "请输入密码" }];
 
 // 登录
-const { mutate: mutateLogin, isPending } = useMutation({
+const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
   mutationFn: () =>
     walkAdminService.Login({
       account: account.value,
@@ -118,8 +118,8 @@ const { mutate: mutateLogin, isPending } = useMutation({
 
     // 路由跳转
     router.replace(
-      route.query.fromPath
-        ? { path: decodeURIComponent(route.query.fromPath as string) }
+      route.query.fromPath && typeof route.query.fromPath === "string"
+        ? { path: decodeURIComponent(route.query.fromPath) }
         : { name: "index" }
     );
   },
@@ -129,10 +129,12 @@ const { mutate: mutateLogin, isPending } = useMutation({
   }
 });
 
-/** 点击登录 */
-const handleLoginClick = async () => {
+/** 提交登录表单 */
+const handleSubmit = async () => {
   account.value = account.value.trim();
   password.value = password.value.trim();
+
+  if (isLoginPending.value) return;
 
   // 表单校验
   try {
@@ -144,5 +146,10 @@ const handleLoginClick = async () => {
   }
 
   mutateLogin();
+};
+
+/** 点击登录 */
+const handleLoginClick = () => {
+  handleSubmit();
 };
 </script>

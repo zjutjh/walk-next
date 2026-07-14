@@ -47,7 +47,7 @@
                     :disabled="isFetching"
                     active-color="var(--van-danger-color)"
                     size="0.2rem"
-                    @change="handleSwitchLost(!detailsData.is_lost)"
+                    @change="handleSwitchLost"
                   />
                 </template>
               </van-cell>
