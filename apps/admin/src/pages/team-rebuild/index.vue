@@ -101,11 +101,17 @@
 import { useMutation } from "@tanstack/vue-query";
 import type { TeamRebuildMember } from "api/types/admin";
 import { CanceledError } from "axios";
-import { find, isEmpty } from "lodash-es";
+import { find, isEmpty, isNil } from "lodash-es";
 import type { PromptDialogFieldConfig } from "shared";
 import { PromptDialog, RequestError } from "shared";
 import { is } from "valibot";
-import { showConfirmDialog, showFailToast, showSuccessToast, showToast } from "vant";
+import {
+  type ActionSheetAction,
+  showConfirmDialog,
+  showFailToast,
+  showSuccessToast,
+  showToast
+} from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -233,6 +239,26 @@ const handleSelectRoute = (action: RoutePickerAction) => {
   isRoutePickerVisible.value = false;
 };
 
+/** 成员操作弹层当前操作的成员ID */
+const memberActionSheetMemberId = ref<number>();
+/** 成员操作弹层当前操作的成员 */
+const memberActionSheetMember = computed(() =>
+  find(memberList.value, (member) => member.id === memberActionSheetMemberId.value)
+);
+/** 成员操作弹层是否可见 */
+const isMemberActionSheetVisible = ref(false);
+
+/** 将成员设为队长 */
+const handleSetCaptain = () => {
+  if (isNil(memberActionSheetMember.value)) return;
+  memberList.value = [
+    memberActionSheetMember.value,
+    ...memberList.value.filter((member) => member.id !== memberActionSheetMemberId.value)
+  ];
+  showSuccessToast("设置成功");
+  isMemberActionSheetVisible.value = false;
+};
+
 /** 删除成员 */
 const handleDeleteMember = () => {
   memberList.value = memberList.value.filter(
@@ -241,18 +267,15 @@ const handleDeleteMember = () => {
   isMemberActionSheetVisible.value = false;
 };
 
-/** 成员操作弹层是否可见 */
-const isMemberActionSheetVisible = ref(false);
 /** 成员操作弹层选项列表 */
-const memberActionSheetActions = [
+const memberActionSheetActions = computed<ActionSheetAction[]>(() => [
+  {
+    name: "设为队长",
+    disabled: memberActionSheetMemberId.value === memberList.value.at(0)?.id,
+    callback: handleSetCaptain
+  },
   { name: "删除", color: "var(--van-danger-color)", callback: handleDeleteMember }
-];
-/** 成员操作弹层当前操作的成员ID */
-const memberActionSheetMemberId = ref<number>();
-/** 成员操作弹层当前操作的成员 */
-const memberActionSheetMember = computed(() =>
-  find(memberList.value, (member) => member.id === memberActionSheetMemberId.value)
-);
+]);
 
 /** 人员ID输入弹窗是否显示 */
 const isMemberIdDialogVisible = ref(false);
