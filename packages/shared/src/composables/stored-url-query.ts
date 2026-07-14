@@ -1,5 +1,5 @@
 import { useLocalStorage } from "@vueuse/core";
-import { cloneDeep, get, isNil, isObject, isUndefined, mapValues, set } from "lodash-es";
+import { cloneDeep, get, isNil, isObject, isUndefined, mapValues, set, unset } from "lodash-es";
 import { defineStore } from "pinia";
 import { type Ref, ref, shallowRef, watch } from "vue";
 import { type LocationQueryRaw, useRoute, useRouter } from "vue-router";
@@ -13,14 +13,8 @@ const useUrlQueryStore = defineStore("urlQuery", () => {
 
 /** 将URL Query对象的所有成员编码为字符串形式 */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const stringifyUrlQueryObj = <UrlQuery extends Record<string, any>>(
-  urlQueryObj: UrlQuery,
-  /** 传入类型与URL Query默认值类型完全相符的对象作为Schema */
-  schemaExample: Readonly<UrlQuery>
-) => {
-  return mapValues(urlQueryObj, (value, key) => {
-    // 默认值类型中无该成员，不做转换
-    if (!Object.hasOwn(schemaExample, key)) return value;
+const stringifyUrlQueryObj = <UrlQuery extends Record<string, any>>(urlQueryObj: UrlQuery) => {
+  return mapValues(urlQueryObj, (value) => {
     // 分类型转换
     if (isNil(value)) return "";
     if (isObject(value)) return encodeURIComponent(JSON.stringify(value));
@@ -36,8 +30,6 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
   schemaExample: Readonly<UrlQuery>
 ) => {
   return mapValues(urlQueryObj, (value, key) => {
-    // 默认值类型中无该成员，不做转换
-    if (!Object.hasOwn(schemaExample, key)) return value;
     // 分类型转换
     if (value === null) return null;
     if (isObject(schemaExample[key])) {
@@ -120,7 +112,13 @@ export const useStoredUrlQuery = <
     { writeDefaults: false }
   );
   // 获取当前页面的URL Query
-  const currentUrlQuery = route.query;
+  const currentUrlQuery = cloneDeep(route.query);
+  // 滤除不在默认值类型中的成员
+  for (const key of Object.keys(currentUrlQuery)) {
+    if (!Object.hasOwn(defaultValue, key)) {
+      unset(currentUrlQuery, key);
+    }
+  }
   // 计算初始值
   const initialValue = cloneDeep(defaultValue);
   if (persist === "memory") {
@@ -147,7 +145,10 @@ export const useStoredUrlQuery = <
       if (isUndefined(newObj)) return;
       // 更新地址栏URL Query
       router.replace({
-        query: stringifyUrlQueryObj<UrlQuery>(newObj, defaultValue)
+        query: {
+          ...route.query,
+          ...stringifyUrlQueryObj<UrlQuery>(newObj)
+        }
       });
       // 更新localStorage
       if (persist === "persistent") {
