@@ -97,21 +97,26 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { type InfiniteData, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { AdminAPI } from "api/types/admin";
 import dayjs from "dayjs";
 import { isNil } from "lodash-es";
-import { ErrorEmpty, LoadingContainer } from "shared";
+import { ErrorEmpty, LoadingContainer, patchInfiniteQueryPages } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref, watch } from "vue";
 
 import { ADMIN_QUERY_KEY, TEAM_MEMBER_ROLE_TEXT } from "@/constants";
 import { walkAdminService } from "@/utils";
-import { POINT_CONFIG, ROUTE_CONFIG } from "@/walk-config";
+import { type CampusId, POINT_CONFIG, ROUTE_CONFIG } from "@/walk-config";
 import IcBaselineErrorOutline from "~icons/ic/baseline-error-outline";
 
 import type { TeamListUrlQuery } from "../../types";
 import styles from "./index.module.scss";
+
+const props = defineProps<{
+  /** 校区ID */
+  campusId: CampusId;
+}>();
 
 /** URL Query 正在查看详情的团队的ID */
 const viewingTeamId = defineModel<TeamListUrlQuery["viewingTeam"]>("teamId", { required: true });
@@ -172,6 +177,21 @@ const { mutate: mutateLost, isPending } = useMutation({
           is_lost: targetValue
         };
       }
+    );
+    // 更新搜索列表中的缓存
+    queryClient.setQueriesData<InfiniteData<AdminAPI.QueryTeamListResponse>>(
+      { queryKey: [ADMIN_QUERY_KEY.TEAM.LIST, props.campusId] },
+      (oldData) =>
+        patchInfiniteQueryPages(oldData, (page) => ({
+          ...page,
+          teams: page.teams.map((team) => {
+            if (team.team_id !== viewingTeamId.value) return team;
+            return {
+              ...team,
+              is_lost: targetValue
+            };
+          })
+        }))
     );
   },
   onSettled: () => {

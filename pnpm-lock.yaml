@@ -299,6 +299,9 @@ importers:
 
   packages/shared:
     devDependencies:
+      '@tanstack/vue-query':
+        specifier: catalog:frontend
+        version: 5.92.9(vue@3.5.28(typescript@5.9.3))
       '@types/lodash-es':
         specifier: catalog:types
         version: 4.17.12

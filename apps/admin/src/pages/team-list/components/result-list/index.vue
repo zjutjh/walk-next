@@ -54,7 +54,8 @@
 </template>
 
 <script setup lang="ts">
-import { useInfiniteQuery, useQueryClient } from "@tanstack/vue-query";
+import { type InfiniteData, useInfiniteQuery, useQueryClient } from "@tanstack/vue-query";
+import type { AdminAPI } from "api/types/admin";
 import dayjs from "dayjs";
 import { computed, toRef } from "vue";
 
@@ -128,12 +129,15 @@ const finishedTipText = computed(() => {
 /** 刷新 */
 const handleRefresh = () => {
   // 删除缓存数据
-  queryClient.setQueriesData({ queryKey: [ADMIN_QUERY_KEY.TEAM.LIST, props.campusId] }, () => {
-    return {
-      pages: [],
-      pageParams: []
-    };
-  });
+  queryClient.setQueriesData<InfiniteData<AdminAPI.QueryTeamListResponse>>(
+    { queryKey: [ADMIN_QUERY_KEY.TEAM.LIST, props.campusId] },
+    () => {
+      return {
+        pages: [],
+        pageParams: []
+      };
+    }
+  );
   // 重拉
   refetch();
 };

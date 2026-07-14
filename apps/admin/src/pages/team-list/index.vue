@@ -24,9 +24,9 @@
         :search-instance="searchBarComponent?.vantSearchComponent"
         :open-segment-filter="filterBarComponent?.openSegmentFilter"
       />
+      <team-details v-model:team-id="urlQuery.viewingTeam" :campus-id="campusId" />
     </template>
     <error-empty v-else :error="`校区不存在：${props.campusIdParam}`" />
-    <team-details v-model:team-id="urlQuery.viewingTeam" />
   </default-layout>
 </template>
 

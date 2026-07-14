@@ -13,3 +13,4 @@ export * from "./composables/stored-url-query";
 export * from "./constants/response-code";
 export * from "./utils/error";
 export * from "./utils/request-error";
+export * from "./utils/vue-query";
