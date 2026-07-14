@@ -5,6 +5,8 @@ import { computed, type ShallowRef } from "vue";
 import { useMapPanZoomStore } from "@/stores/map-pan-zoom-store";
 import type { CampusId } from "@/walk-config";
 
+import { useMapPanZoomState } from "./map-pan-zoom-state";
+
 /** 为地图启用平移缩放功能 */
 export const useMapPanZoom = ({
   campusId,
@@ -15,10 +17,9 @@ export const useMapPanZoom = ({
   viewportElementRef: Readonly<ShallowRef<HTMLDivElement | null | undefined>>;
   mapElementRef: Readonly<ShallowRef<HTMLDivElement | null | undefined>>;
 }) => {
-  /** 地图的变换状态 */
   const mapPanZoomStore = useMapPanZoomStore();
-  /** 地图的变换值 */
-  const transformValue = mapPanZoomStore.getTransformValue(campusId);
+  // 校区对应地图的变换值
+  const { transformValue } = useMapPanZoomState(campusId);
 
   /** 视口元素的尺寸 */
   const viewSize = useElementSize(viewportElementRef, undefined, { box: "border-box" });

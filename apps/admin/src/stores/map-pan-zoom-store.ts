@@ -1,6 +1,6 @@
-import { cloneDeep, isNil } from "lodash-es";
+import { cloneDeep } from "lodash-es";
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 import type { CampusId } from "@/walk-config";
 
@@ -14,42 +14,10 @@ export interface MapTransform {
   scale: number;
 }
 
-/** 地图的变换状态 */
+/** 地图的变换状态Store */
 export const useMapPanZoomStore = defineStore("mapPanZoom", () => {
-  /** 地图的变换值 */
-  const transformValue = ref<Partial<Record<CampusId, MapTransform>>>({});
-  /** 获取内存中存储的指定校区的地图变换值 */
-  const getTransformValue = (campusId: CampusId) => {
-    const transformValueBase = computed({
-      get: () => {
-        // 内存中没有指定校区的变换值，初始化
-        if (isNil(transformValue.value[campusId])) {
-          transformValue.value[campusId] = {
-            x: 0,
-            y: 0,
-            scale: 1
-          };
-        }
-        return transformValue.value[campusId];
-      },
-      set: (value) => (transformValue.value[campusId] = value)
-    });
-    const transformValuePending = computed(
-      () =>
-        ({
-          x: transformValueBase.value.x + pendingPanX.value,
-          y: transformValueBase.value.y + pendingPanY.value,
-          scale: transformValueBase.value.scale * pendingZoom.value
-        }) as const
-    );
-
-    return {
-      /** 地图的变换值（不包含当前正在进行的变换） */
-      base: transformValueBase,
-      /** 地图的变换值（包含当前正在进行的变换） */
-      pending: transformValuePending
-    };
-  };
+  /** 校区ID-地图变换值 映射表 */
+  const transformValueMap = ref<Partial<Record<CampusId, MapTransform>>>({});
 
   /** 是否正在平移 */
   const isPanning = ref(false);
@@ -60,10 +28,6 @@ export const useMapPanZoomStore = defineStore("mapPanZoom", () => {
   });
   /** 当前正在进行的平移的触点坐标 */
   const panCurrentPos = ref(cloneDeep(panStartPos.value));
-  /** 当前正在进行的平移产生的地图X坐标累加值 */
-  const pendingPanX = computed(() => panCurrentPos.value.x - panStartPos.value.x);
-  /** 当前正在进行的平移产生的地图Y坐标累加值 */
-  const pendingPanY = computed(() => panCurrentPos.value.y - panStartPos.value.y);
 
   /** 是否正在缩放 */
   const isZooming = ref(false);
@@ -76,49 +40,14 @@ export const useMapPanZoomStore = defineStore("mapPanZoom", () => {
   });
   /** 当前正在进行的缩放目前的触点坐标 */
   const zoomCurrentTouchPoints = ref(cloneDeep(zoomStartTouchPoints.value));
-  /** 计算两点间距离 */
-  const getDistance = (x1: number, y1: number, x2: number, y2: number) =>
-    Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-  /** 当前正在进行的缩放产生的比例累乘系数 */
-  const pendingZoom = computed(() => {
-    /** 当前两触点的距离 比 初始两触点的距离 */
-    const zoomScale =
-      getDistance(
-        zoomCurrentTouchPoints.value.x1,
-        zoomCurrentTouchPoints.value.y1,
-        zoomCurrentTouchPoints.value.x2,
-        zoomCurrentTouchPoints.value.y2
-      ) /
-      getDistance(
-        zoomStartTouchPoints.value.x1,
-        zoomStartTouchPoints.value.y1,
-        zoomStartTouchPoints.value.x2,
-        zoomStartTouchPoints.value.y2
-      );
-    if (!zoomScale || !isFinite(zoomScale)) return 1;
-    return zoomScale;
-  });
 
   return {
-    /** 获取内存中存储的指定校区的地图变换值 */
-    getTransformValue,
-    /** 是否正在平移 */
+    transformValueMap,
     isPanning,
-    /** 是否正在缩放 */
     isZooming,
-    /** 当前正在进行的平移开始时的触点坐标 */
     panStartPos,
-    /** 当前正在进行的平移的触点坐标 */
     panCurrentPos,
-    /** 当前正在进行的平移产生的地图X坐标累加值 */
-    pendingPanX,
-    /** 当前正在进行的平移产生的地图Y坐标累加值 */
-    pendingPanY,
-    /** 当前正在进行的缩放开始时的触点坐标 */
     zoomStartTouchPoints,
-    /** 当前正在进行的缩放目前的触点坐标 */
-    zoomCurrentTouchPoints,
-    /** 当前正在进行的缩放产生的比例累乘系数 */
-    pendingZoom
+    zoomCurrentTouchPoints
   };
 });

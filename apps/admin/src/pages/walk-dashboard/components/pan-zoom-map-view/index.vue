@@ -32,10 +32,10 @@
 <script setup lang="ts">
 import { computed, type StyleValue, toRef, useTemplateRef } from "vue";
 
-import { useMapPanZoomStore } from "@/stores/map-pan-zoom-store";
 import type { CampusId } from "@/walk-config";
 
 import { useMapPanZoom } from "../../composables/map-pan-zoom";
+import { useMapPanZoomState } from "../../composables/map-pan-zoom-state.ts";
 import type { DashboardUrlQuery } from "../../types";
 import FloatingMenu from "../floating-menu/index.vue";
 import MapPicker from "../map-picker/index.vue";
@@ -55,10 +55,8 @@ const mapComponentRef = useTemplateRef("map");
 
 /** URL Query */
 const urlQuery = defineModel<DashboardUrlQuery>("urlQuery", { required: true });
-/** 地图的变换状态 */
-const mapPanZoomStore = useMapPanZoomStore();
-/** 地图的变换值 */
-const transformValue = mapPanZoomStore.getTransformValue(props.campusId);
+// 校区对应地图的变换值
+const { transformValue } = useMapPanZoomState(props.campusId);
 
 // 为地图启用平移缩放功能
 const { mapTransformLimits, applyMapPendingTransform, limitMapTranslate, limitMapScale } =
