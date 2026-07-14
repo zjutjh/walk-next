@@ -101,7 +101,7 @@ routerInstance.beforeEach((to, from) => {
   }
   // 未登录状态返回登录
   if (!isLoggedIn.value && !to.meta.allowNoAuth) {
-    showToast("未登录");
+    showToast({ message: "未登录", position: "bottom" });
     return { name: "login", query: { fromPath: encodeURIComponent(to.fullPath) } };
   }
   // 权限不足
