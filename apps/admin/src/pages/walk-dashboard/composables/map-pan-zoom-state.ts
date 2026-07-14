@@ -5,6 +5,10 @@ import { computed } from "vue";
 import { useMapPanZoomStore } from "@/stores/map-pan-zoom-store";
 import type { CampusId } from "@/walk-config";
 
+/** 计算两点间距离 */
+const getDistance = (x1: number, y1: number, x2: number, y2: number) =>
+  Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+
 /** 指定校区地图的变换状态 */
 export const useMapPanZoomState = (campusId: CampusId) => {
   const {
@@ -53,10 +57,6 @@ export const useMapPanZoomState = (campusId: CampusId) => {
   const pendingPanX = computed(() => panCurrentPos.value.x - panStartPos.value.x);
   /** 当前正在进行的平移产生的地图Y坐标累加值 */
   const pendingPanY = computed(() => panCurrentPos.value.y - panStartPos.value.y);
-
-  /** 计算两点间距离 */
-  const getDistance = (x1: number, y1: number, x2: number, y2: number) =>
-    Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 
   /** 当前正在进行的缩放产生的比例累乘系数 */
   const pendingZoom = computed(() => {
