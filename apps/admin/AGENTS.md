@@ -74,6 +74,7 @@ apps/admin/src/
 - 使用 Composition API + `<script setup lang="ts">`，禁止 Options API。
 - Props, Emits, Model 必须使用 TypeScript 写法：`defineProps<{ …: Type }>()`, `defineEmits<{ …: […: Type] }>()`, `defineModel<…>("…", { required: … })`
 - 模板引用必须使用 `useTemplateRef<>()`，禁止直接用 `ref()`
+- 模板中使用props必须使用`props.属性名`访问，禁止直接使用解构后的属性名
 - 优先使用组件库组件和共享组件，禁止随意自行实现；如果只能自行实现，必须模仿存量代码风格
 
 ### 5.2 样式规范
