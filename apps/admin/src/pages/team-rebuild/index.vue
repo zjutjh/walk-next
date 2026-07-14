@@ -105,7 +105,7 @@ import { find, isEmpty } from "lodash-es";
 import type { PromptDialogFieldConfig } from "shared";
 import { PromptDialog, RequestError } from "shared";
 import { is } from "valibot";
-import { showFailToast, showSuccessToast } from "vant";
+import { showConfirmDialog, showFailToast, showSuccessToast, showToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -156,8 +156,22 @@ const handleMemberIdDialogCancel = () => {
   addMemberAbortController?.abort();
 };
 
+/** 引导用户先选择路线 */
+const guideSelectRouteFirst = () => {
+  showToast({
+    message: "请先选择路线",
+    zIndex: 3000
+  });
+  openRoutePickerSheet();
+};
+
 /** 点击编号添加 */
 const handleAddMemberWithIdClick = () => {
+  // 未选择路线
+  if (!teamRoute.value) {
+    guideSelectRouteFirst();
+    return;
+  }
   memberIdDialogValue.value.memberIdStr = "";
   isMemberIdDialogVisible.value = true;
 };
@@ -167,6 +181,11 @@ const isScanPopupVisible = ref(false);
 
 /** 点击扫码添加 */
 const handleAddMemberScanClick = () => {
+  // 未选择路线
+  if (!teamRoute.value) {
+    guideSelectRouteFirst();
+    return;
+  }
   isScanPopupVisible.value = true;
 };
 
@@ -183,7 +202,15 @@ const handleScanSuccess = (data: unknown) => {
 };
 
 /** 点击提交团队 */
-const handleSubmitClick = () => {
+const handleSubmitClick = async () => {
+  try {
+    await showConfirmDialog({
+      title: "重组团队",
+      message: "列表中的成员将移至新团队，\n是否确认？（操作不可撤销！）"
+    });
+  } catch {
+    return;
+  }
   mutateRebuildTeam();
 };
 
