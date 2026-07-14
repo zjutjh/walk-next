@@ -57,7 +57,11 @@ const enum PointEnum {
   // cspell:enable
 }
 
-// API中使用的实体的唯一标识符 包括校区ID、路线ID、点位ID 必须与服务端保持一致
+/**
+ * API中使用的实体的唯一标识符 包括校区ID、路线ID、点位ID
+ * 必须与服务端保持一致
+ * 注："ID"是前端对实体唯一标识符的别称；服务端以及接口中，实体的唯一标识符称为Name
+ */
 
 /** 校区ID列表 */
 export const CAMPUS_LIST = [
