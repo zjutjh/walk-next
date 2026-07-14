@@ -10,7 +10,7 @@
           <pre>{{ lastError?.stack }}</pre>
         </div>
         <div :class="styles?.buttons">
-          <button v-if="windowHistoryStateBack" @click="handleBackClick()">返回上页</button>
+          <button v-if="historyStateBack" @click="handleBackClick()">返回上页</button>
           <button @click="handleRefresh()">刷新重试</button>
         </div>
       </div>
@@ -32,9 +32,7 @@ const { error } = storeToRefs(useErrorBoundaryStore());
 const lastError = computed(() => unknownToError(error.value));
 
 /** 历史记录中的上个地址(不包括Origin) */
-const windowHistoryStateBack = computed(
-  () => ((window as Window | undefined)?.history as History | undefined)?.state?.back
-);
+const historyStateBack = computed(() => history.state?.back);
 
 /** 控制台报错 */
 function handleErrorCaptured(err: unknown) {
@@ -44,7 +42,7 @@ function handleErrorCaptured(err: unknown) {
 /** 点击返回上页按钮 */
 function handleBackClick() {
   try {
-    window.location.replace(windowHistoryStateBack.value);
+    location.replace(historyStateBack.value);
   } catch (err) {
     console.error(err);
   }
@@ -52,6 +50,10 @@ function handleBackClick() {
 
 /** 点击刷新页面按钮 */
 function handleRefresh() {
-  window.location.reload();
+  try {
+    location.reload();
+  } catch (err) {
+    console.error(err);
+  }
 }
 </script>

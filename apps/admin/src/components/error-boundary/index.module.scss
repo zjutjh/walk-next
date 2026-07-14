@@ -32,31 +32,32 @@
   button {
     outline: none;
     border: none;
-    background-color: var(--el-color-primary, #409eff);
+    background-color: var(--van-primary-color);
     color: #ffffff;
     border-radius: 5px;
     font-size: 16px;
     font-weight: 600;
     user-select: none;
     cursor: pointer;
+    opacity: 0.9;
     margin: {
       left: 12px;
       right: 12px;
     }
     padding: {
-      top: 5px;
+      top: 7px;
       bottom: 7px;
       left: 15px;
       right: 15px;
     }
 
     &:hover {
-      background-color: var(--el-color-primary-light-3, #7fbbff);
+      opacity: 0.8;
     }
 
     &:active {
-      background-color: var(--el-color-primary-dark-2, #337ecc);
       transform: scale(1.02);
+      opacity: 1;
     }
   }
 }
