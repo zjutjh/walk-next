@@ -82,7 +82,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
 ];
 
 export const routerInstance = createRouter({
-  history: createWebHistory("/admin"),
+  history: createWebHistory(import.meta.env.VITE_BASE_PATH),
   routes
 });
 
