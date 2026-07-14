@@ -208,10 +208,13 @@ export const useMapPanZoom = ({
   };
 
   /** 鼠标或触摸点抬起 */
-  const handlePointerUp = () => {
+  const handlePointerUp = (e: MouseEvent | TouchEvent) => {
     applyPendingTransform();
     mapPanZoomStore.isPanning = false;
     mapPanZoomStore.isZooming = false;
+    if (e instanceof TouchEvent && e.touches.length !== 0) {
+      handleTouchStart(e);
+    }
   };
 
   useEventListener(viewportElementRef, "touchstart", handleTouchStart);
