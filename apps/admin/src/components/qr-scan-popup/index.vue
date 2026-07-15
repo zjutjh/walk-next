@@ -10,7 +10,7 @@
     <loading-container class="qr-scan-popup__content" :loading="props.loading">
       <!-- 摄像头视频 -->
       <video
-        v-show="isPermissionGranted"
+        v-show="isPermissionGranted && !isNoCamera"
         ref="videoRef"
         class="qr-scan-popup__video"
         autoplay
@@ -25,10 +25,6 @@
         btn-text="上传图片"
         @btn-click="handleUploadImageClick"
       />
-      <!-- 准备中提示 -->
-      <template v-else-if="isPermissionGranted">
-        <div v-if="!isCameraVideoPlayable" class="qr-scan-popup__loading">正在连接摄像头...</div>
-      </template>
       <!-- 权限被拒绝提示 -->
       <error-empty
         v-else-if="isCameraPermissionRefused"
@@ -37,10 +33,19 @@
         @btn-click="handleReloadWindow"
       />
       <!-- 获取权限中提示 -->
-      <div v-else class="qr-scan-popup__permission-tip">
+      <div v-else-if="!isPermissionGranted" class="qr-scan-popup__permission-tip">
         <div>正在请求您的摄像头权限</div>
         <div>请按提示操作</div>
       </div>
+      <!-- 无摄像头提示 -->
+      <error-empty
+        v-else-if="isNoCamera"
+        error="未找到可用摄像头"
+        btn-text="上传图片"
+        @btn-click="handleUploadImageClick"
+      />
+      <!-- 准备中提示 -->
+      <div v-else-if="!isCameraVideoPlayable" class="qr-scan-popup__loading">正在连接摄像头...</div>
 
       <!-- 关闭按钮 -->
       <van-button class="qr-scan-popup__btn qr-scan-popup__close" round @click="handleCloseClick">
@@ -86,7 +91,7 @@
 <script setup lang="ts">
 import "./index.scss";
 
-import { find } from "lodash-es";
+import { find, isEmpty } from "lodash-es";
 import { ErrorEmpty, LoadingContainer } from "shared";
 import type { BaseIssue, BaseSchema } from "valibot";
 import { showFailToast } from "vant";
@@ -127,6 +132,8 @@ const {
   isCameraListUpdating,
   ensurePermissions
 } = useScannerCameraList();
+/** 是否没有可用摄像头 */
+const isNoCamera = computed(() => !isCameraListUpdating.value && isEmpty(cameraList.value));
 
 /** 扫码弹层是否可见 */
 const isVisible = defineModel<boolean>("show", { required: true });
