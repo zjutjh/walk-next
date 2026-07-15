@@ -8,7 +8,7 @@
       <error-empty
         :error="error"
         :disabled="!isNil(overviewData)"
-        :show-retry="false"
+        :show-btn="false"
         image-size="1rem"
       >
         <van-skeleton :class="styles.skeleton" title :row="4" :loading="isLoading">

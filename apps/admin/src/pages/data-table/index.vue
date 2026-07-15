@@ -17,7 +17,7 @@
           <error-empty
             :error="overviewStatsError"
             :disabled="!isNil(overviewStatsData)"
-            @retry="refetchOverviewStats"
+            @btn-click="refetchOverviewStats"
           >
             <van-pull-refresh
               v-if="overviewStatsData"
@@ -72,7 +72,7 @@
             <error-empty
               :error="routeStatsQueryMap[routeId].error"
               :disabled="!isNil(routeStatsQueryMap[routeId]?.data)"
-              @retry="routeStatsQueryMap[routeId].refetch()"
+              @btn-click="routeStatsQueryMap[routeId].refetch()"
             >
               <van-pull-refresh
                 :model-value="isRouteStatsPullRefreshingMap[routeId]"

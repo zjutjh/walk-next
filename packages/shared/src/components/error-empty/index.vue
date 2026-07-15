@@ -5,12 +5,12 @@
       <template v-if="errorText" #description>{{ errorText }}</template>
     </van-empty>
     <van-button
-      v-if="props.showRetry"
-      class="error-empty__retry"
+      v-if="props.showBtn"
+      class="error-empty__btn"
       round
       type="primary"
-      @click="handleRetry"
-      >重试</van-button
+      @click="handleBtnClick"
+      >{{ props.btnText }}</van-button
     >
   </div>
   <slot v-else />
@@ -28,21 +28,30 @@ import errorImageUrl from "../../assets/error.png";
 export interface ErrorEmptyProps extends Pick<EmptyProps, "imageSize"> {
   /** 错误 */
   error: Error | string | null | undefined;
-  /** 忽略错误，不展示错误态 */
+  /** 忽略错误，不展示错误态
+   * @default false
+   */
   disabled?: boolean;
-  /** 是否显示重试按钮 */
-  showRetry?: boolean;
+  /** 是否显示按钮
+   * @default true
+   */
+  showBtn?: boolean;
+  /** 按钮文本
+   * @default "重试"
+   */
+  btnText?: string;
 }
 
 const props = withDefaults(defineProps<ErrorEmptyProps>(), {
   imageSize: "1.6rem",
   disabled: false,
-  showRetry: true
+  showBtn: true,
+  btnText: "重试"
 });
 
 const emit = defineEmits<{
-  /** 要求父组件刷新重试 */
-  retry: [];
+  /** 点击错误态中的按钮 */
+  btnClick: [];
 }>();
 
 /** 显示的错误文本 */
@@ -51,9 +60,8 @@ const errorText = computed(() => {
   return props.error;
 });
 
-/** 点击重试按钮 */
-const handleRetry = () => {
-  // 向父组件发出事件，父组件使用v-on监听并绑定刷新函数
-  emit("retry");
+/** 点击错误态中的按钮 */
+const handleBtnClick = () => {
+  emit("btnClick");
 };
 </script>

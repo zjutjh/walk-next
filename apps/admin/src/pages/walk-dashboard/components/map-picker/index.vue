@@ -16,7 +16,7 @@
     >
       <template #loading><van-loading size="0.5rem" /></template>
       <template #error>
-        <error-empty error="地图加载失败，请重试" @retry="handleRerenderImage" />
+        <error-empty error="地图加载失败，请重试" @btn-click="handleRerenderImage" />
       </template>
     </van-image>
 
@@ -150,7 +150,7 @@ useResizeObserver(
 const imageComponentKey = ref(0);
 /** 重新渲染图片组件 */
 const handleRerenderImage = () => {
-  imageComponentKey.value += 1;
+  imageComponentKey.value = Date.now();
 };
 
 /** 选择点位 */

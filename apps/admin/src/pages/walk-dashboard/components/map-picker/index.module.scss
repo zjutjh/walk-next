@@ -18,7 +18,7 @@
       width: 100%;
       height: 100%;
 
-      :global(.error-empty__retry) {
+      :global(.error-empty__btn) {
         pointer-events: auto;
         z-index: 2;
       }

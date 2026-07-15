@@ -21,7 +21,7 @@
       :loading="isFetching && !isPullRefreshing"
       :modal="false"
     >
-      <error-empty :error="error" :disabled="!isNil(detailsData)" @retry="refetchTeamDetails">
+      <error-empty :error="error" :disabled="!isNil(detailsData)" @btn-click="refetchTeamDetails">
         <van-pull-refresh
           v-if="detailsData"
           :model-value="isPullRefreshing"
