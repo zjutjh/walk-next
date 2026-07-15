@@ -4,8 +4,8 @@ import { onBeforeUnmount, readonly, ref, watch } from "vue";
 
 import type { ExtendedCameraInfo } from "../types";
 
-/** 向摄像头信息中添加首个视频轨道的MediaTrackSettings */
-const buildExtendedCameraInfo = async (device: MediaDeviceInfo) => {
+/** 获取设备首个视频轨道的MediaTrackSettings */
+const getVideoTrackSettings = async (device: MediaDeviceInfo) => {
   /** 设备的摄像头流 */
   const cameraStream = await navigator.mediaDevices.getUserMedia({
     audio: false,
@@ -17,15 +17,7 @@ const buildExtendedCameraInfo = async (device: MediaDeviceInfo) => {
     /** 首个视频轨道 */
     const primaryTrack = cameraStream.getVideoTracks().at(0);
     if (!primaryTrack) throw new Error("Video track not found.");
-    /** 视频轨道参数 */
-    return {
-      // MediaDeviceInfo的成员均是不可枚举成员，必须手动提取
-      deviceId: device.deviceId,
-      label: device.label,
-      kind: device.kind,
-      groupId: device.groupId,
-      settings: primaryTrack.getSettings()
-    };
+    return primaryTrack.getSettings();
   } finally {
     // 关闭摄像头流
     cameraStream.getTracks().forEach((track) => track.stop());
@@ -97,21 +89,22 @@ export const useScannerCameraList = () => {
 
       // 由于设备可能不支持同时打开多个摄像头流，必须串行
       for (const device of videoDeviceListVal) {
+        let videoTrackSettings: MediaTrackSettings = {};
         try {
-          // 添加MediaTrackSettings信息
-          const extendedInfo = await buildExtendedCameraInfo(device);
-          result.push(extendedInfo);
-        } catch {
-          // 添加MediaTrackSettings失败
-          result.push({
-            // MediaDeviceInfo的成员均是不可枚举成员，必须手动提取
-            deviceId: device.deviceId,
-            label: device.label,
-            kind: device.kind,
-            groupId: device.groupId,
-            settings: {}
-          });
+          // 获取MediaTrackSettings
+          videoTrackSettings = await getVideoTrackSettings(device);
+        } catch (err) {
+          // 获取MediaTrackSettings失败，静默
+          console.error(err);
         }
+        result.push({
+          // MediaDeviceInfo的成员均是不可枚举成员，必须手动提取
+          deviceId: device.deviceId,
+          label: device.label,
+          kind: device.kind,
+          groupId: device.groupId,
+          settings: videoTrackSettings
+        });
         // 存在比当前任务更晚开始的任务，中止
         if (latestUpdateTaskSymbol !== currentTaskSymbol) return;
       }
