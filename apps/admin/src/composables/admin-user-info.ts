@@ -5,6 +5,7 @@ import { defineStore } from "pinia";
 import { getCurrentScope, onScopeDispose, ref, toRef, watch } from "vue";
 
 import { ADMIN_QUERY_KEY } from "@/constants";
+import { ADMIN_PINIA_PERSIST_KEY } from "@/constants/pinia-persist-key";
 import { walkAdminService } from "@/utils";
 
 export interface AdminUserInfo {
@@ -38,7 +39,7 @@ const useAdminStore = defineStore(
   },
   {
     persist: {
-      key: "walk-next:admin-user-info",
+      key: ADMIN_PINIA_PERSIST_KEY.ADMIN_USER_INFO,
       pick: ["data"]
     }
   }

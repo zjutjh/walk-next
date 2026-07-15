@@ -1,7 +1,7 @@
 import { useFileDialog } from "@vueuse/core";
 import { scan } from "qr-scanner-wechat";
 import type { BaseIssue, BaseSchema, InferInput } from "valibot";
-import { onBeforeUnmount, ref } from "vue";
+import { onBeforeUnmount, readonly, ref } from "vue";
 
 import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 
@@ -35,6 +35,7 @@ export const useUploadQrScanner = <
     if (!(err instanceof Error)) {
       err = new Error(String(err));
     }
+    console.error(err, (err as Error).cause);
     onError(err as Error);
   };
 
@@ -152,7 +153,7 @@ export const useUploadQrScanner = <
   });
 
   return {
-    status,
+    status: readonly(status),
     requestUploadQrCodeImage
   };
 };

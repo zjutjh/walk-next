@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    IMdiCameraFlip: typeof import('~icons/mdi/camera-flip')['default']
     IMdiClose: typeof import('~icons/mdi/close')['default']
     IMdiImage: typeof import('~icons/mdi/image')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

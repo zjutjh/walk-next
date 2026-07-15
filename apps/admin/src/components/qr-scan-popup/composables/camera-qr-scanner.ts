@@ -1,15 +1,33 @@
 import { useIntervalFn } from "@vueuse/core";
 import { scan } from "qr-scanner-wechat";
 import type { BaseIssue, BaseSchema, InferInput } from "valibot";
-import { onBeforeUnmount, type Ref, ref } from "vue";
+import { onBeforeUnmount, readonly, type Ref, ref, watch } from "vue";
 
 import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 
 import { useLazyFreeCameraStream } from "./lazy-free-camera-stream";
 
+/** 转译启动时抛出的错误消息 */
+const humanizeErrMsg = (err: unknown) => {
+  if (!(err instanceof Error)) return "未知错误";
+  switch (err.name) {
+    case "NotReadableError":
+      return "无法播放\n摄像头画面";
+    case "NotAllowedError":
+    case "PermissionDeniedError":
+      return "获取摄像头\n权限失败\n请检查设置";
+    case "NotFoundError":
+    case "DevicesNotFoundError":
+      return "未找到\n可用摄像头";
+    case "TrackStartError":
+      return "摄像头被占用";
+    default:
+      return err.message || "扫码启动失败";
+  }
+};
 export interface UseCameraQrScannerOptions<TData> extends UseQrScannerOptions<TData> {
   /** 两次扫描之间的间隔(毫秒)
-   * @default 120 */
+   * @default 200 */
   scanInterval?: number;
 }
 
@@ -17,7 +35,7 @@ export interface UseCameraQrScannerOptions<TData> extends UseQrScannerOptions<TD
  * @enum off 关闭，所有媒体资源均被释放
  * @enum starting 启动中，正在准备媒体资源，尚未开始扫描
  * @enum active 激活，占用媒体资源，定时扫描视频帧
- * @enum idle 悬置，占用媒体资源，但不做任何处理 */
+ * @enum idle 悬置，占用媒体资源，但不输出画面也不扫描 */
 export type UseCameraQrScannerStatus = "off" | "starting" | "active" | "idle";
 
 /** 摄像头扫码 */
@@ -30,10 +48,12 @@ export const useCameraQrScanner = <
   schema: TSchema
 ) => {
   // 初始化参数
-  const { scanInterval = 120, onSuccess = (_) => undefined, onError = (_) => undefined } = options;
+  const { scanInterval = 200, onSuccess = (_) => undefined, onError = (_) => undefined } = options;
 
   /** 摄像头扫码Composable的状态 */
   const status = ref<UseCameraQrScannerStatus>("off");
+  /** 视频元素能否播放摄像头画面 */
+  const isCameraVideoPlayable = ref(false);
 
   /** 用于扫描二维码的Canvas */
   let canvas: HTMLCanvasElement | null = null;
@@ -54,6 +74,7 @@ export const useCameraQrScanner = <
     if (!(err instanceof Error)) {
       err = new Error(String(err));
     }
+    console.error(err, (err as Error).cause);
     onError(err as Error);
   };
 
@@ -64,10 +85,47 @@ export const useCameraQrScanner = <
     disableStreamTracks,
     enableStreamTracks,
     requestCameraStream,
-    releaseCameraStream
+    releaseCameraStream,
+    restartCameraStream
   } = useLazyFreeCameraStream();
 
-  /** 从激活状态切换到悬置状态，不会断开摄像头，仍然占用资源消耗性能 */
+  // 释放视频元素相关资源，重置状态
+  const releaseVideoResources = () => {
+    const video = videoRef.value;
+    if (!video) return;
+    isCameraVideoPlayable.value = false;
+    video.pause();
+    video.srcObject = null;
+  };
+
+  // 绑定摄像头流
+  watch([cameraStream, status], async ([cameraStreamVal, statusVal]) => {
+    try {
+      const video = videoRef.value;
+      if (!video) throw new Error("页面加载失败\n请刷新重试");
+
+      // 摄像头流未改变，忽略
+      if (video.srcObject === cameraStreamVal) return;
+      // 处于关闭状态，中止
+      if (statusVal === "off") return;
+
+      // 摄像头流为空
+      if (!cameraStreamVal) {
+        releaseVideoResources();
+        return;
+      }
+
+      // 关联视频流
+      video.srcObject = cameraStreamVal;
+      // 播放视频流
+      await video.play();
+      isCameraVideoPlayable.value = true;
+    } catch (err) {
+      handleError(err);
+    }
+  });
+
+  /** 从激活状态切换到悬置状态（不会断开摄像头，仍然占用资源 消耗性能） */
   const switchToIdle = () => {
     if (status.value !== "active") return;
     // 暂停定时扫描视频帧
@@ -114,10 +172,18 @@ export const useCameraQrScanner = <
     if (status.value !== "active") return;
     const video = videoRef.value;
     // 视频元素尚不可用
-    if (!video || video.readyState < 2) return;
+    if (!video || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
     const videoWidth = video.videoWidth;
     const videoHeight = video.videoHeight;
     if (!videoWidth || !videoHeight) return;
+
+    // 摄像头流异常失效，重启摄像头流
+    if (!cameraStream.value?.active) {
+      pauseScanInterval();
+      await restartCameraStream();
+      resumeScanInterval();
+      return;
+    }
 
     try {
       // 初始化Canvas
@@ -176,19 +242,16 @@ export const useCameraQrScanner = <
       if (!isCameraSupported.value) {
         throw new Error("设备或浏览器\n不支持扫码\n请拍照上传");
       }
+
+      // 重置状态，进入启动中状态
       lastScannedRawText = null;
-
-      const video = videoRef.value;
-      if (!video) throw new Error("页面加载失败\n请刷新重试");
-
       status.value = "starting";
 
       // 请求摄像头流
       await requestCameraStream();
       if (!cameraStream.value) throw new Error("连接摄像头\n失败");
-      // 关联视频流
-      video.srcObject = cameraStream.value;
-      await video.play();
+
+      // 进入激活状态
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (status.value !== "starting") throw new Error("状态异常\n扫码启动失败");
       status.value = "active";
@@ -198,25 +261,8 @@ export const useCameraQrScanner = <
       if (status.value !== "off") {
         stop();
       }
-      const humanizedMsg = (() => {
-        if (!(err instanceof Error)) return "未知错误";
-        switch (err.name) {
-          case "NotReadableError":
-            return "无法播放\n摄像头画面";
-          case "NotAllowedError":
-          case "PermissionDeniedError":
-            return "获取摄像头\n权限失败\n请检查设置";
-          case "NotFoundError":
-          case "DevicesNotFoundError":
-            return "未找到\n可用摄像头";
-          case "TrackStartError":
-            return "摄像头被占用";
-          default:
-            console.error(err);
-            return err.message || "扫码启动失败";
-        }
-      })();
-      handleError(new Error(humanizedMsg, { cause: err }));
+
+      handleError(new Error(humanizeErrMsg(err), { cause: err }));
     }
   };
 
@@ -227,11 +273,7 @@ export const useCameraQrScanner = <
     // 释放摄像头流
     releaseCameraStream();
     // 释放视频元素关联的资源
-    const video = videoRef.value;
-    if (video) {
-      video.pause();
-      video.srcObject = null;
-    }
+    releaseVideoResources();
     // 清理Canvas
     canvas = null;
     canvasCtx = null;
@@ -250,7 +292,8 @@ export const useCameraQrScanner = <
   return {
     start,
     stop,
-    status,
+    status: readonly(status),
+    isCameraVideoPlayable: readonly(isCameraVideoPlayable),
     switchToIdle,
     switchToActive
   };
