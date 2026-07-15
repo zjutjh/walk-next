@@ -84,7 +84,7 @@
     </error-empty>
   </default-layout>
 
-  <!-- 成员状态编辑弹窗 -->
+  <!-- 成员状态编辑弹层 -->
   <van-action-sheet
     v-model:show="isStatusPickerVisible"
     :actions="statusPickerActions"
