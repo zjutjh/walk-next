@@ -1,55 +1,61 @@
 <!-- 登录页 -->
 <template>
   <loading-container :class="styles.page" :loading="isNavigationPending">
-    <div :class="styles.title">登录</div>
-    <div :class="styles.productName">精弘毅行管理系统</div>
+    <img :class="styles.logo" :src="loginPageLogoUrl" alt="logo" />
 
-    <van-form
-      ref="formRef"
-      :class="styles.form"
-      :show-error-message="false"
-      :disabled="isLoginPending"
-      label-align="top"
-      @submit="handleSubmit"
-    >
-      <van-field
-        v-model="account"
-        :rules="ACCOUNT_RULES"
-        size="large"
-        label="账号"
-        placeholder="请输入账号"
-        left-icon="user"
-        enterkeyhint="next"
-        clearable
-        @keyup.enter="
-          (passwordFieldRef?.$el as HTMLElement | undefined)?.querySelector('input')?.focus?.()
-        "
-      />
-      <van-field
-        ref="passwordFieldRef"
-        v-model="password"
-        :rules="PASSWORD_RULES"
-        size="large"
-        label="密码"
-        placeholder="请输入密码"
-        left-icon="lock"
-        type="password"
-        enterkeyhint="done"
-        clearable
-        @keyup.enter="(loginButtonRef?.$el as HTMLButtonElement | undefined)?.click()"
-      />
-      <div :class="styles.error">{{ error?.message || "" }}</div>
+    <div :class="styles.topArea">
+      <div :class="styles.title">登录</div>
+      <div :class="styles.productName">精弘毅行管理系统</div>
 
-      <van-button
-        ref="loginButtonRef"
-        :class="styles.loginButton"
-        type="primary"
-        :loading="isLoginPending"
-        block
-        @click="handleSubmit"
-        >登录</van-button
+      <van-form
+        ref="formRef"
+        :class="styles.form"
+        :show-error-message="false"
+        :disabled="isLoginPending"
+        label-align="top"
+        @submit="handleSubmit"
       >
-    </van-form>
+        <van-field
+          v-model="account"
+          :rules="ACCOUNT_RULES"
+          size="large"
+          label="账号"
+          placeholder="请输入账号"
+          left-icon="user"
+          enterkeyhint="next"
+          clearable
+          @keyup.enter="
+            (passwordFieldRef?.$el as HTMLElement | undefined)?.querySelector('input')?.focus?.()
+          "
+        />
+        <van-field
+          ref="passwordFieldRef"
+          v-model="password"
+          :rules="PASSWORD_RULES"
+          size="large"
+          label="密码"
+          placeholder="请输入密码"
+          left-icon="lock"
+          type="password"
+          enterkeyhint="done"
+          clearable
+          @keyup.enter="(loginButtonRef?.$el as HTMLButtonElement | undefined)?.click()"
+        />
+        <div :class="styles.error">{{ error?.message || "" }}</div>
+
+        <van-button
+          ref="loginButtonRef"
+          :class="styles.loginButton"
+          type="primary"
+          :loading="isLoginPending"
+          block
+          @click="handleSubmit"
+          >登录</van-button
+        >
+      </van-form>
+    </div>
+
+    <img :class="styles.decoration" :src="loginPageDecorationUrl" alt="decoration" />
   </loading-container>
 </template>
 
@@ -62,6 +68,8 @@ import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import loginPageDecorationUrl from "@/assets/images/login-page-background.svg";
+import loginPageLogoUrl from "@/assets/images/login-page-logo.svg";
 import { useAdminInfo } from "@/composables";
 import { walkAdminService } from "@/utils";
 
