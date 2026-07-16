@@ -342,6 +342,7 @@ const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = u
 /** 扫码成功 */
 const handleScanSuccess = (data: unknown) => {
   if (!is(CheckinQrCodeSchema, data)) return;
+  // 关闭扫码弹层
   isScanPopupVisible.value = false;
   mutateBindCheckinCode({
     teamId: teamId.value,

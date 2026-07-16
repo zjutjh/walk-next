@@ -1,33 +1,20 @@
 import { useIntervalFn } from "@vueuse/core";
 import { scan } from "qr-scanner-wechat";
-import type { BaseIssue, BaseSchema, InferInput } from "valibot";
+import { type BaseIssue, type BaseSchema, type InferInput, ValiError } from "valibot";
 import { onBeforeUnmount, readonly, type Ref, ref, watch } from "vue";
 
 import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 
 import { useLazyFreeCameraStream } from "./lazy-free-camera-stream";
 
-/** 转译启动时抛出的错误消息 */
-const humanizeErrMsg = (err: unknown) => {
-  if (!(err instanceof Error)) return "未知错误";
-  switch (err.name) {
-    case "NotReadableError":
-      return "无法播放\n摄像头画面";
-    case "NotAllowedError":
-    case "PermissionDeniedError":
-      return "获取摄像头\n权限失败\n请检查设置";
-    case "NotFoundError":
-    case "DevicesNotFoundError":
-      return "未找到\n可用摄像头";
-    case "TrackStartError":
-      return "摄像头被占用";
-    default:
-      return err.message || "扫码启动失败";
-  }
-};
+/** 两次扫描之间的间隔(毫秒)默认值 */
+const DEFAULT_SCAN_INTERVAL = 200 as const;
+
+/** 两次重复扫码之间的最短时长(毫秒) */
+const DUPLICATE_SCAN_INTERVAL = 5000 as const;
+
 export interface UseCameraQrScannerOptions<TData> extends UseQrScannerOptions<TData> {
-  /** 两次扫描之间的间隔(毫秒)
-   * @default 200 */
+  /** 两次扫描之间的间隔(毫秒)  */
   scanInterval?: number;
 }
 
@@ -48,7 +35,11 @@ export const useCameraQrScanner = <
   schema: TSchema
 ) => {
   // 初始化参数
-  const { scanInterval = 200, onSuccess = (_) => undefined, onError = (_) => undefined } = options;
+  const {
+    scanInterval = DEFAULT_SCAN_INTERVAL,
+    onSuccess: emitSuccess = (_) => undefined,
+    onError: emitError = (_) => undefined
+  } = options;
 
   /** 摄像头扫码Composable的状态 */
   const status = ref<UseCameraQrScannerStatus>("off");
@@ -63,20 +54,8 @@ export const useCameraQrScanner = <
   /** 最近一次识别到的扫描结果原始文本
    * 扫描不到二维码时，qr-scanner-wechat的scan实际会返回undefined（与类型推断不符），undefined不可去除 */
   let lastScannedRawText: string | null | undefined = null;
-
-  /** 处理扫码成功 */
-  const handleSuccess = (qrCodeData: InferInput<TSchema>) => {
-    onSuccess(qrCodeData);
-  };
-
-  /** 处理错误 */
-  const handleError = (err: unknown) => {
-    if (!(err instanceof Error)) {
-      err = new Error(String(err));
-    }
-    console.error(err, (err as Error).cause);
-    onError(err as Error);
-  };
+  /** 最近一次识别到二维码的时间戳 */
+  let lastScannedTimestamp = 0;
 
   // 惰性关闭的摄像头流
   const {
@@ -100,11 +79,10 @@ export const useCameraQrScanner = <
 
   // 绑定摄像头流
   watch(
-    [cameraStream, status],
-    async ([cameraStreamVal, statusVal]) => {
+    [cameraStream, status, videoRef],
+    async ([cameraStreamVal, statusVal, video]) => {
       try {
-        const video = videoRef.value;
-        if (!video) throw new Error("页面加载失败\n请刷新重试");
+        if (!video) return;
 
         // 摄像头流未改变，忽略
         if (video.srcObject === cameraStreamVal) return;
@@ -121,9 +99,16 @@ export const useCameraQrScanner = <
         video.srcObject = cameraStreamVal;
         // 播放视频流
         await video.play();
+        // @ts-expect-error: 2367
+        if (statusVal === "off") return;
         isCameraVideoPlayable.value = true;
       } catch (err) {
-        handleError(err);
+        // play完成前被pause中断，静默忽略
+        if (err instanceof DOMException && err.name === "AbortError") {
+          return console.warn(err);
+        }
+
+        emitError(err);
       }
     },
     { immediate: true }
@@ -149,53 +134,41 @@ export const useCameraQrScanner = <
     status.value = "active";
   };
 
-  /** 处理扫描结果原始文本 */
-  const handleScanRawText = (rawText: string | null | undefined) => {
-    // 空内容或重复识别，不处理
-    if (!rawText || rawText === lastScannedRawText) return;
-    lastScannedRawText = rawText;
-
-    // 解析原始文本
-    const qrCodeData = parseQrCodeRawText(rawText, schema);
-
-    // 解析成功
-    try {
-      handleSuccess(qrCodeData);
-    } finally {
-      stop();
-    }
-  };
-
   /** 是否正在尝试从视频帧中扫描二维码 */
   const isScanFramePending = ref(false);
   /** 尝试扫描当前视频帧中的二维码 */
   const scanVideoFrame = async () => {
     // 上次扫描未结束
     if (isScanFramePending.value) return;
-    // 摄像头扫码Composable未启动
-    if (status.value !== "active") return;
-    const video = videoRef.value;
-    // 视频元素尚不可用
-    if (!video || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
-    const videoWidth = video.videoWidth;
-    const videoHeight = video.videoHeight;
-    if (!videoWidth || !videoHeight) return;
 
-    // 摄像头流异常失效，重启摄像头流
-    if (!cameraStream.value?.active) {
-      pauseScanInterval();
-      await restartCameraStream();
-      resumeScanInterval();
-      return;
-    }
+    // 摄像头扫码Composable不在激活状态
+    if (status.value !== "active") return;
+
+    const video = videoRef.value;
 
     try {
+      // 视频元素尚不可用
+      if (!video || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+      const videoWidth = video.videoWidth;
+      const videoHeight = video.videoHeight;
+      if (!videoWidth || !videoHeight) return;
+
+      // 摄像头流异常失效，重启摄像头流
+      if (!cameraStream.value?.active) {
+        pauseScanInterval();
+        await restartCameraStream();
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (status.value !== "active") return;
+        resumeScanInterval();
+        return;
+      }
+
       // 初始化Canvas
       if (!canvas || !canvasCtx) {
         canvas = document.createElement("canvas");
         canvasCtx = canvas.getContext("2d", { willReadFrequently: true });
       }
-      if (!canvasCtx) throw new Error("设备或浏览器\n不支持扫码\n请拍照上传");
+      if (!canvasCtx) throw new Error("设备或浏览器不支持扫码，请拍照上传");
       // 设置Canvas画布尺寸与视频一致
       if (canvas.width !== videoWidth || canvas.height !== videoHeight) {
         canvas.width = videoWidth;
@@ -203,7 +176,8 @@ export const useCameraQrScanner = <
       }
     } catch (err) {
       stop();
-      throw err;
+
+      return emitError(err, { blocking: true });
     }
 
     // 扫描当前视频帧
@@ -213,8 +187,29 @@ export const useCameraQrScanner = <
       canvasCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
       // 尝试扫描二维码
       const result = await scan(canvas);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (status.value !== "active") return;
+
+      // 未识别到二维码，忽略
+      if (!result.text) return;
+
+      // 短时间内重复识别，忽略
+      if (
+        result.text === lastScannedRawText &&
+        Date.now() - lastScannedTimestamp < DUPLICATE_SCAN_INTERVAL
+      ) {
+        return;
+      }
+      lastScannedRawText = result.text;
+      lastScannedTimestamp = Date.now();
+
       // 处理扫描结果原始文本
-      handleScanRawText(result.text);
+      const parseResult = parseQrCodeRawText(result.text, schema);
+      if (parseResult.success) {
+        emitSuccess(parseResult.output);
+      } else {
+        emitError(new ValiError(parseResult.issues));
+      }
     } finally {
       isScanFramePending.value = false;
     }
@@ -226,7 +221,7 @@ export const useCameraQrScanner = <
       try {
         await scanVideoFrame();
       } catch (err) {
-        handleError(err);
+        emitError(err);
       }
     },
     scanInterval,
@@ -240,24 +235,25 @@ export const useCameraQrScanner = <
 
       // 非安全上下文，不支持调用摄像头
       if (typeof window !== "undefined" && !window.isSecureContext) {
-        throw new Error("地址不安全\n请使用HTTPS\n或拍照上传");
+        throw new Error("地址不安全，请使用HTTPS或拍照上传");
       }
       // 不支持摄像头媒体
       if (!isCameraSupported.value) {
-        throw new Error("设备或浏览器\n不支持扫码\n请拍照上传");
+        throw new Error("设备或浏览器不支持扫码，请拍照上传");
       }
 
       // 重置状态，进入启动中状态
       lastScannedRawText = null;
+      lastScannedTimestamp = 0;
       status.value = "starting";
 
       // 请求摄像头流
       await requestCameraStream();
-      if (!cameraStream.value) throw new Error("连接摄像头\n失败");
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (status.value !== "starting") throw new Error("状态异常，扫码启动失败");
+      if (!cameraStream.value) throw new Error("连接摄像头失败，请刷新重试");
 
       // 进入激活状态
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (status.value !== "starting") throw new Error("状态异常\n扫码启动失败");
       status.value = "active";
       // 开始定时扫描视频帧
       resumeScanInterval();
@@ -266,7 +262,7 @@ export const useCameraQrScanner = <
         stop();
       }
 
-      handleError(new Error(humanizeErrMsg(err), { cause: err }));
+      emitError(err, { blocking: true });
     }
   };
 
@@ -284,6 +280,7 @@ export const useCameraQrScanner = <
 
     // 重置状态
     lastScannedRawText = null;
+    lastScannedTimestamp = 0;
     isScanFramePending.value = false;
     status.value = "off";
   };

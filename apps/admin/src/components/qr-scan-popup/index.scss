@@ -74,16 +74,4 @@
   &__left-bottom {
     left: 18px;
   }
-
-  &__error {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 74px;
-    text-align: center;
-    font-size: 12px;
-    color: #ffffff;
-    z-index: 2;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  }
 }

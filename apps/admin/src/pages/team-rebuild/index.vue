@@ -198,6 +198,7 @@ const handleAddMemberScanClick = () => {
 /** 扫码成功 */
 const handleScanSuccess = (data: unknown) => {
   if (!is(MemberQrCodeSchema, data)) return;
+  // 关闭扫码弹层
   isScanPopupVisible.value = false;
   // 查重验证
   if (memberList.value.some((member) => member.id === data.user_id)) {

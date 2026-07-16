@@ -10,16 +10,13 @@
     <loading-container class="qr-scan-popup__content" :loading="props.loading">
       <!-- 摄像头视频 -->
       <video
-        v-show="isPermissionGranted && !isNoCamera"
+        v-show="isVideoVisible"
         ref="videoRef"
         class="qr-scan-popup__video"
         autoplay
         muted
         playsinline
       ></video>
-
-      <!-- 扫码错误 -->
-      <div v-if="error" class="qr-scan-popup__error">{{ error.message }}</div>
 
       <!-- 关闭按钮 -->
       <van-button
@@ -62,7 +59,7 @@
         <!-- 上传图片按钮 -->
         <van-button
           class="qr-scan-popup__btn"
-          :disabled="uploadQrScannerStatus === 'pending'"
+          :loading="uploadQrScannerStatus === 'pending'"
           round
           @click="handleUploadImageClick"
         >
@@ -96,8 +93,15 @@
         btn-text="上传图片"
         @btn-click="handleUploadImageClick"
       />
+      <!-- 阻断性的扫码错误 -->
+      <error-empty v-else-if="blockingError" :error="blockingError" :show-btn="false" />
       <!-- 准备中提示 -->
-      <div v-else-if="!isCameraVideoPlayable" class="qr-scan-popup__loading">正在连接摄像头...</div>
+      <div
+        v-else-if="!isCameraVideoPlayable && cameraScannerStatus !== 'off'"
+        class="qr-scan-popup__loading"
+      >
+        正在连接摄像头...
+      </div>
     </loading-container>
 
     <!-- 摄像头选择弹层 -->
@@ -115,10 +119,12 @@
 import "./index.scss";
 
 import { find, isEmpty } from "lodash-es";
-import { ErrorEmpty, LoadingContainer } from "shared";
+import { ErrorEmpty, LoadingContainer, unknownToError } from "shared";
 import type { BaseIssue, BaseSchema } from "valibot";
 import { showFailToast } from "vant";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+
+import { humanizeScannerErr, type UseQrScannerErrorOptions } from "@/utils";
 
 import { useCameraQrScanner } from "./composables/camera-qr-scanner";
 import { useLazyFreeCameraStream } from "./composables/lazy-free-camera-stream";
@@ -126,14 +132,20 @@ import { useScannerCameraList } from "./composables/scanner-camera-list";
 import { useUploadQrScanner } from "./composables/upload-qr-scanner";
 import type { CameraPickerAction, ExtendedCameraInfo } from "./types";
 
-const props = defineProps<{
-  /** 是否处于加载态 */
-  loading?: boolean;
-  /** 二维码数据的类型模式 */
-  schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
-  /** 两次扫描之间的间隔(毫秒) */
-  scanInterval?: number;
-}>();
+const props = withDefaults(
+  defineProps<{
+    /** 二维码数据的类型模式 */
+    schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
+    /** 是否处于加载态 */
+    loading?: boolean;
+    /** 两次扫描之间的间隔(毫秒) */
+    scanInterval?: number;
+  }>(),
+  {
+    loading: false,
+    scanInterval: undefined
+  }
+);
 
 const emit = defineEmits<{
   /** 扫码成功 */
@@ -162,8 +174,8 @@ const isNoCamera = computed(() => !isCameraListUpdating.value && isEmpty(cameraL
 /** 扫码弹层是否可见 */
 const isVisible = defineModel<boolean>("show", { required: true });
 
-/** 当前显示的错误 */
-const error = ref<Error | null>(null);
+/** 最后一个抛出的阻断性错误 */
+const blockingError = ref<Error | null>(null);
 
 /** 无摄像头权限，且请求摄像头权限失败 */
 const isCameraPermissionRefused = ref(false);
@@ -171,17 +183,41 @@ const isCameraPermissionRefused = ref(false);
 /** 摄像头选择弹层是否可见 */
 const isCameraPickerVisible = ref(false);
 
+/** 视频元素是否可见 */
+const isVideoVisible = computed(
+  () => isPermissionGranted.value && !isNoCamera.value && !blockingError.value
+);
+
 /** 扫码成功 */
 const handleScanSuccess = (data: unknown) => {
-  error.value = null;
+  // 扫码弹层已关闭或处于加载态，忽略扫码结果
+  if (!isVisible.value || props.loading) return;
+
   emit("success", data);
 };
 
-/** 扫码出错 */
-const handleScanError = (err: Error) => {
-  showFailToast(err.message);
-  error.value = err;
-  emit("error", err);
+/** 错误处理 */
+const handleError = (err: unknown, errOptions?: UseQrScannerErrorOptions) => {
+  const { blocking = false } = errOptions || {};
+
+  const safeErr = unknownToError(err);
+  if (!safeErr) return;
+
+  /** 转译 */
+  const humanizedErr = humanizeScannerErr(safeErr);
+
+  // 更新错误态
+  if (blocking) {
+    // 阻断性错误展示错误态
+    console.error(err);
+    blockingError.value = humanizedErr;
+  } else {
+    // 非阻断性错误Toast提示
+    console.warn(err);
+    showFailToast(humanizedErr.message);
+  }
+
+  emit("error", humanizedErr);
 };
 
 // 摄像头扫码
@@ -195,9 +231,9 @@ const {
 } = useCameraQrScanner(
   videoRef,
   {
-    scanInterval: props.scanInterval,
     onSuccess: handleScanSuccess,
-    onError: handleScanError
+    onError: handleError,
+    scanInterval: props.scanInterval
   },
   props.schema
 );
@@ -206,7 +242,7 @@ const {
 const { requestUploadQrCodeImage, status: uploadQrScannerStatus } = useUploadQrScanner(
   {
     onSuccess: handleScanSuccess,
-    onError: handleScanError
+    onError: handleError
   },
   props.schema
 );
@@ -226,8 +262,7 @@ const handleUploadImageClick = async () => {
     pauseCameraScanner();
     await requestUploadQrCodeImage();
   } catch (err) {
-    if (!(err instanceof Error)) return;
-    emit("error", err);
+    handleError(err);
   } finally {
     if (isVisible.value) {
       resumeCameraScanner();
@@ -235,20 +270,22 @@ const handleUploadImageClick = async () => {
   }
 };
 
-/** 扫码弹窗打开 */
+/** 扫码弹层打开 */
 const handleScanPopupOpen = async () => {
   if (!videoRef.value) {
     await nextTick();
   }
   // 获取权限
   isCameraPermissionRefused.value = !(await ensurePermissions());
+  // 重置状态
+  blockingError.value = null;
   /**
    * 不可以在此处启动摄像头扫码，否则会与useScannerCameraList竞争摄像头流，在部分移动设备上出错
    * 启动放在了cameraList和isVisible的监听器回调中
    */
 };
 
-/** 扫码弹窗关闭（动画结束） */
+/** 扫码弹层关闭（动画结束） */
 const handleScanPopupClosed = () => {
   stopCameraScanner();
 };
@@ -333,8 +370,11 @@ const handleReloadWindow = () => {
 watch(
   [cameraList, isCameraListUpdating, isVisible],
   ([cameraListVal, isCameraListUpdatingVal, isVisibleVal]) => {
-    // 摄像头列表为空
-    if (!cameraListVal[0]) return;
+    if (!isVisibleVal) return;
+
+    if (!cameraListVal[0])
+      // 摄像头列表为空
+      return;
 
     // 未指定摄像头或指定的摄像头不在列表中，则设置为第一个摄像头
     if (
@@ -347,10 +387,11 @@ watch(
     // 摄像头列表更新未结束，不启动扫码，以免竞争摄像头流
     if (isCameraListUpdatingVal) return;
 
-    if (isVisibleVal && cameraScannerStatus.value === "off") {
-      // 启动摄像头扫码
-      startCameraScanner();
-    }
+    // 重复启动
+    if (cameraScannerStatus.value !== "off") return;
+
+    // 启动摄像头扫码
+    startCameraScanner();
   },
   { immediate: true }
 );

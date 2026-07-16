@@ -16,7 +16,6 @@ declare module 'vue' {
     IMdiFlashlight: typeof import('~icons/mdi/flashlight')['default']
     IMdiFlashlightOff: typeof import('~icons/mdi/flashlight-off')['default']
     IMdiImage: typeof import('~icons/mdi/image')['default']
-    IMdiLightbulb: typeof import('~icons/mdi/lightbulb')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
