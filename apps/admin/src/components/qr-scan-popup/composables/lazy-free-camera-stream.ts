@@ -1,7 +1,7 @@
 import { useTimeoutFn, useUserMedia } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
 import { showFailToast } from "vant";
-import { computed, readonly, ref, watchEffect } from "vue";
+import { computed, readonly, ref, watch } from "vue";
 
 import { ADMIN_PINIA_PERSIST_KEY } from "@/constants/pinia-persist-key";
 
@@ -62,9 +62,13 @@ const useLazyFreeCameraStreamComposableStore = defineStore(
     /** 手电筒是否已开启 */
     const isTorchOn = ref(false);
     // 与手电筒初始状态保持同步
-    watchEffect(() => {
-      isTorchOn.value = Boolean(primaryVideoTrack.value?.getSettings().torch);
-    });
+    watch(
+      primaryVideoTrack,
+      (track) => {
+        isTorchOn.value = Boolean(track?.getSettings().torch);
+      },
+      { immediate: true }
+    );
 
     return {
       cameraStream,
