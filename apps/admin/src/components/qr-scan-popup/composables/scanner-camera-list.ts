@@ -41,7 +41,7 @@ const cameraListSorter = (camera: ExtendedCameraInfo) => {
   } else if (camera.settings.width < 1000 && camera.settings.height < 1000) {
     score -= 10;
   }
-  // 有闪光灯开闭信息
+  // 有手电筒开闭信息
   if (typeof camera.settings.torch === "boolean") {
     score += 10;
   }

@@ -38,7 +38,6 @@
   }
 
   &__btn {
-    position: absolute;
     width: 50px;
     height: 50px;
     box-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
@@ -53,19 +52,27 @@
     }
   }
 
-  &__close {
+  &__close-btn {
+    position: absolute;
     top: 22px;
     right: 18px;
   }
 
-  &__album {
-    right: 18px;
+  &__right-bottom,
+  &__left-bottom {
+    position: absolute;
     bottom: 22px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 12px;
   }
 
-  &__switch-camera {
+  &__right-bottom {
+    right: 18px;
+  }
+
+  &__left-bottom {
     left: 18px;
-    bottom: 22px;
   }
 
   &__error {

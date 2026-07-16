@@ -18,6 +18,58 @@
         playsinline
       ></video>
 
+      <!-- 扫码错误 -->
+      <div v-if="error" class="qr-scan-popup__error">{{ error.message }}</div>
+
+      <!-- 关闭按钮 -->
+      <van-button
+        class="qr-scan-popup__btn qr-scan-popup__close-btn"
+        round
+        @click="handleCloseClick"
+      >
+        <template #icon><i-mdi-close /></template>
+      </van-button>
+
+      <!-- 左下角按钮列表 -->
+      <div class="qr-scan-popup__left-bottom">
+        <!-- 切换摄像头按钮 -->
+        <van-button
+          v-if="isPermissionGranted && (isCameraListUpdating || cameraList.length > 1)"
+          class="qr-scan-popup__btn"
+          :loading="isCameraListUpdating"
+          round
+          @click="handleSwitchCameraClick"
+        >
+          <template #icon><i-mdi-camera-flip /></template>
+        </van-button>
+
+        <!-- 手电筒按钮 -->
+        <van-button
+          v-if="isPermissionGranted && hasTorch"
+          class="qr-scan-popup__btn"
+          round
+          @click="handleSwitchTorchClick"
+        >
+          <template #icon>
+            <i-mdi-flashlight-off v-if="isTorchOn" />
+            <i-mdi-flashlight v-else />
+          </template>
+        </van-button>
+      </div>
+
+      <!-- 右下角按钮列表 -->
+      <div class="qr-scan-popup__right-bottom">
+        <!-- 上传图片按钮 -->
+        <van-button
+          class="qr-scan-popup__btn"
+          :disabled="uploadQrScannerStatus === 'pending'"
+          round
+          @click="handleUploadImageClick"
+        >
+          <template #icon><i-mdi-image /></template>
+        </van-button>
+      </div>
+
       <!-- 浏览器不支持提示 -->
       <error-empty
         v-if="!isCameraApiSupported"
@@ -46,35 +98,6 @@
       />
       <!-- 准备中提示 -->
       <div v-else-if="!isCameraVideoPlayable" class="qr-scan-popup__loading">正在连接摄像头...</div>
-
-      <!-- 关闭按钮 -->
-      <van-button class="qr-scan-popup__btn qr-scan-popup__close" round @click="handleCloseClick">
-        <template #icon><i-mdi-close /></template>
-      </van-button>
-
-      <!-- 上传图片按钮 -->
-      <van-button
-        class="qr-scan-popup__btn qr-scan-popup__album"
-        :disabled="uploadQrScannerStatus === 'pending'"
-        round
-        @click="handleUploadImageClick"
-      >
-        <template #icon><i-mdi-image /></template>
-      </van-button>
-
-      <!-- 切换摄像头按钮 -->
-      <van-button
-        v-if="isPermissionGranted && (isCameraListUpdating || cameraList.length > 1)"
-        class="qr-scan-popup__btn qr-scan-popup__switch-camera"
-        :loading="isCameraListUpdating"
-        round
-        @click="handleSwitchCameraClick"
-      >
-        <template #icon><i-mdi-camera-flip /></template>
-      </van-button>
-
-      <!-- 扫码错误 -->
-      <div v-if="error" class="qr-scan-popup__error">{{ error.message }}</div>
     </loading-container>
 
     <!-- 摄像头选择弹层 -->
@@ -122,7 +145,8 @@ const emit = defineEmits<{
 /** 视频元素 */
 const videoRef = useTemplateRef("videoRef");
 
-const { setCameraDeviceId, cameraDeviceId } = useLazyFreeCameraStream();
+const { setCameraDeviceId, cameraDeviceId, hasTorch, isTorchOn, turnOnTorch, turnOffTorch } =
+  useLazyFreeCameraStream();
 
 // 摄像头列表
 const {
@@ -245,6 +269,15 @@ const handleSwitchCameraClick = () => {
   }
 };
 
+/** 点击切换手电筒 */
+const handleSwitchTorchClick = () => {
+  if (isTorchOn.value) {
+    turnOffTorch();
+  } else {
+    turnOnTorch();
+  }
+};
+
 /** 生成摄像头备注 */
 const buildCameraSubname = (device: ExtendedCameraInfo) => {
   const list = [];
@@ -257,7 +290,7 @@ const buildCameraSubname = (device: ExtendedCameraInfo) => {
       break;
   }
   if (typeof device.settings.torch === "boolean") {
-    list.push(`闪光灯${device.settings.torch ? "开启" : "关闭"}`);
+    list.push("关联手电筒");
   }
   return list.join(" ");
 };

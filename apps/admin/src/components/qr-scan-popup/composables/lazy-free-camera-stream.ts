@@ -1,6 +1,7 @@
 import { useTimeoutFn, useUserMedia } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, readonly, ref } from "vue";
+import { showFailToast } from "vant";
+import { computed, readonly, ref, watchEffect } from "vue";
 
 import { ADMIN_PINIA_PERSIST_KEY } from "@/constants/pinia-persist-key";
 
@@ -42,6 +43,8 @@ const useLazyFreeCameraStreamComposableStore = defineStore(
 
     /** 摄像头流视频轨道列表 */
     const cameraVideoTracks = computed(() => cameraStream.value?.getVideoTracks());
+    /** 首个视频轨道 */
+    const primaryVideoTrack = computed(() => cameraVideoTracks.value?.at(0));
 
     // 定时关闭摄像头流
     const {
@@ -52,9 +55,21 @@ const useLazyFreeCameraStreamComposableStore = defineStore(
       stopCameraStream();
     }, CAMERA_IDLE_TIMEOUT);
 
+    /** 首个视频轨道是否有关联的手电筒 */
+    const hasTorch = computed(
+      () => typeof primaryVideoTrack.value?.getSettings().torch === "boolean"
+    );
+    /** 手电筒是否已开启 */
+    const isTorchOn = ref(false);
+    // 与手电筒初始状态保持同步
+    watchEffect(() => {
+      isTorchOn.value = Boolean(primaryVideoTrack.value?.getSettings().torch);
+    });
+
     return {
       cameraStream,
       cameraVideoTracks,
+      primaryVideoTrack,
       isCameraSupported,
       isCameraStreamEnabled,
       cameraDeviceId,
@@ -62,7 +77,9 @@ const useLazyFreeCameraStreamComposableStore = defineStore(
       restartCameraStream,
       isCameraStreamStopTimerPending,
       restartDisconnectTimer,
-      killDisconnectTimer
+      killDisconnectTimer,
+      hasTorch,
+      isTorchOn
     };
   },
   {
@@ -79,13 +96,51 @@ export const useLazyFreeCameraStream = () => {
   const {
     cameraStream,
     cameraVideoTracks,
+    primaryVideoTrack,
     isCameraSupported,
     isCameraStreamEnabled,
     isCameraStreamStopTimerPending,
-    cameraDeviceId
+    cameraDeviceId,
+    hasTorch,
+    isTorchOn
   } = storeToRefs(composableStore);
   const { startCameraStream, restartCameraStream, restartDisconnectTimer, killDisconnectTimer } =
     composableStore;
+
+  /** 开启手电筒 */
+  const turnOnTorch = async () => {
+    if (isTorchOn.value) return;
+    if (!primaryVideoTrack.value) {
+      showFailToast("找不到设备");
+      return;
+    }
+    try {
+      await primaryVideoTrack.value.applyConstraints({
+        advanced: [{ torch: true } as MediaTrackConstraintSet]
+      });
+    } catch (err) {
+      console.error(err);
+      showFailToast("浏览器不支持\n开启手电筒");
+    }
+    isTorchOn.value = true;
+  };
+
+  /** 关闭手电筒 */
+  const turnOffTorch = async () => {
+    if (!primaryVideoTrack.value) {
+      showFailToast("找不到摄像头");
+      return;
+    }
+    try {
+      await primaryVideoTrack.value.applyConstraints({
+        advanced: [{ torch: false } as MediaTrackConstraintSet]
+      });
+    } catch (err) {
+      console.error(err);
+      showFailToast("关闭手电筒\n失败");
+    }
+    isTorchOn.value = false;
+  };
 
   /** 请求摄像头流 */
   const requestCameraStream = async () => {
@@ -106,8 +161,12 @@ export const useLazyFreeCameraStream = () => {
   };
 
   /** 禁用摄像头流输出 */
-  const disableStreamTracks = () => {
+  const disableStreamTracks = async () => {
     if (!cameraVideoTracks.value) return;
+    if (isTorchOn.value) {
+      // 尝试关闭手电筒
+      await turnOffTorch();
+    }
     cameraVideoTracks.value.forEach((track) => {
       track.enabled = false;
     });
@@ -135,6 +194,10 @@ export const useLazyFreeCameraStream = () => {
     releaseCameraStream,
     restartCameraStream,
     cameraDeviceId: readonly(cameraDeviceId),
-    setCameraDeviceId
+    setCameraDeviceId,
+    hasTorch,
+    isTorchOn: readonly(isTorchOn),
+    turnOnTorch,
+    turnOffTorch
   };
 };
