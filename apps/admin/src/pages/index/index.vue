@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation } from "@tanstack/vue-query";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { type AdminAPI, AdminQrCodeType } from "api/types/admin";
 import { CanceledError } from "axios";
 import type { PromptDialogFieldConfig } from "shared";
@@ -97,6 +97,7 @@ import type { IndexUrlQuery } from "./types";
 import { checkinQrCodeSchema } from "./utils";
 
 const router = useRouter();
+const queryClient = useQueryClient();
 const { isNavigationPending } = useRouterState();
 const { adminName, adminPointId, resetAdminInfo, hasPermission } = useAdminInfo();
 
@@ -145,6 +146,8 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
     urlQuery.value.isScanning = false;
     isTeamIdDialogVisible.value = false;
     showSuccessToast("登出成功");
+    // 清空所有缓存
+    queryClient.clear();
     // 跳转登录页
     router.push({ name: "login" });
   },
