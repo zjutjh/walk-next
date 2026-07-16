@@ -39,7 +39,7 @@
           type="password"
           enterkeyhint="done"
           clearable
-          @keyup.enter="(loginButtonRef?.$el as HTMLButtonElement | undefined)?.click()"
+          @keyup.enter="handleSubmit"
         />
         <div :class="styles.error">{{ error?.message || "" }}</div>
 
@@ -61,9 +61,9 @@
 
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
-import { isArray } from "lodash-es";
+import { isArray, isNil } from "lodash-es";
 import { LoadingContainer, useRouterState } from "shared";
-import type { FieldRule, FormInstance } from "vant";
+import type { FieldRule, FieldValidateError, FormInstance } from "vant";
 import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -84,8 +84,6 @@ const { updateAdminInfo } = useAdminInfo();
 const formRef = useTemplateRef<FormInstance>("formRef");
 /** 密码输入框组件 */
 const passwordFieldRef = useTemplateRef("passwordFieldRef");
-/** 登录按钮组件 */
-const loginButtonRef = useTemplateRef("loginButtonRef");
 
 /** 登录请求或校验错误 */
 const error = ref<Error | null>(null);
@@ -149,7 +147,8 @@ const handleSubmit = async () => {
     await formRef.value?.validate();
   } catch (err) {
     if (!isArray(err)) return;
-    error.value = err.at(0);
+    if (isNil(err[0]?.message)) return;
+    error.value = new Error((err[0] satisfies FieldValidateError).message);
     return;
   }
 

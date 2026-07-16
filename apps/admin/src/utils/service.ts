@@ -17,9 +17,13 @@ axiosInstance.interceptors.response.use(
 
     if (body.code !== RESP_CODE.OK) {
       switch (body.code) {
-        // 未登录
+        // 未登录或登录过期
         case RESP_CODE.NOT_LOGGED_IN:
-          showToast({ message: "登录过期", position: "bottom" });
+        case RESP_CODE.LOGIN_EXPIRED:
+          showToast({
+            message: body.code === RESP_CODE.NOT_LOGGED_IN ? "未登录" : "登录过期",
+            position: "bottom"
+          });
           useAdminInfo(globalQueryClient).resetAdminInfo();
           routerInstance.push({
             name: "login",

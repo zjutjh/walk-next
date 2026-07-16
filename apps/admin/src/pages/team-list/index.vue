@@ -61,7 +61,7 @@ const { urlQuery } = useStoredUrlQuery<TeamListUrlQuery>({
     keyword: "",
     searchType: "captain_phone",
     segment: "",
-    viewingTeam: ""
+    viewingTeam: NaN
   }
 });
 

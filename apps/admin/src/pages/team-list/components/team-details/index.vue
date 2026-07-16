@@ -2,7 +2,7 @@
 <template>
   <van-popup
     :class="styles.component"
-    :show="viewingTeamId !== ''"
+    :show="!Number.isNaN(viewingTeamId)"
     :overlay="false"
     position="bottom"
     destroy-on-close
@@ -58,7 +58,7 @@
               <!-- 特殊成员信息 -->
               <template
                 v-for="(member, index) in specialMemberList"
-                :key="`${member.name}${index}`"
+                :key="`${member.role}${member.name}${member.phone}${index}`"
               >
                 <van-cell>
                   <template #title>{{ TEAM_MEMBER_ROLE_TEXT[member.role] }}姓名</template>
@@ -125,7 +125,7 @@ const queryClient = useQueryClient();
 
 /** 关闭团队详情浮层 */
 const handleClose = () => {
-  viewingTeamId.value = "";
+  viewingTeamId.value = NaN;
 };
 
 // 获取团队详情
@@ -137,7 +137,7 @@ const {
   error,
   refetch: refetchTeamDetails
 } = useQuery({
-  enabled: () => viewingTeamId.value !== "",
+  enabled: () => !Number.isNaN(viewingTeamId.value),
   queryKey: [ADMIN_QUERY_KEY.TEAM.DETAILS, viewingTeamId] as const,
   queryFn: ({ queryKey }) =>
     walkAdminService.QueryTeamDetails({
@@ -159,7 +159,7 @@ const normalMemberList = computed(() =>
 const { mutate: mutateLost, isPending } = useMutation({
   mutationFn: (targetValue: boolean) =>
     walkAdminService.SetTeamLost({
-      team_id: Number(viewingTeamId.value),
+      team_id: viewingTeamId.value,
       is_lost: targetValue
     }),
   onError: (err) => {

@@ -11,5 +11,5 @@ export interface TeamListUrlQuery {
   /** 行程段筛选 */
   segment: SegmentKey | "";
   /** 正在查看详情的团队的ID */
-  viewingTeam: number | "";
+  viewingTeam: number;
 }
