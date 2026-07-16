@@ -2,7 +2,7 @@
 <template>
   <van-popup
     :class="styles.component"
-    :show="!Number.isNaN(viewingTeamId)"
+    :show="viewingTeamId !== 0"
     :overlay="false"
     position="bottom"
     destroy-on-close
@@ -125,7 +125,7 @@ const queryClient = useQueryClient();
 
 /** 关闭团队详情浮层 */
 const handleClose = () => {
-  viewingTeamId.value = NaN;
+  viewingTeamId.value = 0;
 };
 
 // 获取团队详情
@@ -137,7 +137,7 @@ const {
   error,
   refetch: refetchTeamDetails
 } = useQuery({
-  enabled: () => !Number.isNaN(viewingTeamId.value),
+  enabled: () => viewingTeamId.value !== 0,
   queryKey: [ADMIN_QUERY_KEY.TEAM.DETAILS, viewingTeamId] as const,
   queryFn: ({ queryKey }) =>
     walkAdminService.QueryTeamDetails({
