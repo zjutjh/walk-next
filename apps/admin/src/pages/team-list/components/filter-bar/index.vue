@@ -61,7 +61,8 @@ watch(
   () => urlQuery.value.segment,
   (newValue) => {
     segment.value = [newValue];
-  }
+  },
+  { immediate: true }
 );
 
 /** 行程段选择器的选项 */

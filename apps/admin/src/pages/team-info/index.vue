@@ -108,7 +108,7 @@ import { first, isNil, last } from "lodash-es";
 import { CellGroup, ErrorEmpty } from "shared";
 import { is } from "valibot";
 import { showConfirmDialog, showDialog, showFailToast, showSuccessToast } from "vant";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { useAdminInfo } from "@/composables";
@@ -182,8 +182,8 @@ const isTeamMaybeNotStart = computed(
 /** 是否正在下拉刷新中 */
 const isPullRefreshing = ref(false);
 // refetch结束时关闭下拉刷新态
-watch(isTeamInfoFetching, (newValue) => {
-  if (newValue === false) isPullRefreshing.value = false;
+watchEffect(() => {
+  if (isTeamInfoFetching.value === false) isPullRefreshing.value = false;
 });
 
 /** 下拉刷新 */

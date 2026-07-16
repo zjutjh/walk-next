@@ -114,7 +114,8 @@ export const useScannerCameraList = () => {
       // 更新摄像头列表
       cameraList.value = result;
       isCameraListUpdating.value = false;
-    }
+    },
+    { immediate: true }
   );
 
   onBeforeUnmount(() => {

@@ -103,7 +103,7 @@ import dayjs from "dayjs";
 import { isNil } from "lodash-es";
 import { ErrorEmpty, LoadingContainer, patchInfiniteQueryPages } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watchEffect } from "vue";
 
 import { ADMIN_QUERY_KEY, TEAM_MEMBER_ROLE_TEXT } from "@/constants";
 import { walkAdminService } from "@/utils";
@@ -208,8 +208,8 @@ const handleSwitchLost = (targetValue: boolean) => {
 /** 是否正在下拉刷新中 */
 const isPullRefreshing = ref(false);
 // refetch结束时关闭下拉刷新态
-watch(isRefetching, (newValue) => {
-  if (newValue === false) isPullRefreshing.value = false;
+watchEffect(() => {
+  if (isRefetching.value === false) isPullRefreshing.value = false;
 });
 
 /** 下拉刷新团队详情 */

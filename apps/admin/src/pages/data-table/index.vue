@@ -133,7 +133,7 @@
 import { useQueries, useQuery } from "@tanstack/vue-query";
 import { forEach, fromPairs, isNil, map, zipObject } from "lodash-es";
 import { CellGroup, ErrorEmpty, LoadingContainer, useStoredUrlQuery } from "shared";
-import { computed, reactive, ref, watch } from "vue";
+import { computed, reactive, ref, watch, watchEffect } from "vue";
 
 import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL, WALKER_STATS_METRIC_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
@@ -180,8 +180,8 @@ const {
 /** 总览统计数据是否正在下拉刷新中 */
 const isOverviewStatsPullRefreshing = ref(false);
 // 总览统计数据refetch结束时关闭下拉刷新态
-watch(isOverviewStatsFetching, (newValue) => {
-  if (newValue === false) isOverviewStatsPullRefreshing.value = false;
+watchEffect(() => {
+  if (isOverviewStatsFetching.value === false) isOverviewStatsPullRefreshing.value = false;
 });
 
 /** 下拉刷新总览统计数据 */
@@ -216,7 +216,8 @@ forEach(ROUTE_LIST, (routeId) => {
       if (newValue === false) {
         isRouteStatsPullRefreshingMap[routeId] = false;
       }
-    }
+    },
+    { immediate: true }
   );
 });
 

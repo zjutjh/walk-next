@@ -120,15 +120,19 @@ export const useAdminInfo = (queryClient: QueryClient = useQueryClient()) => {
       staleTime: Infinity
     });
     // 获取成功后更新Store
-    watch(data, (newData) => {
-      if (isNil(newData)) return;
-      updateAdminInfo({
-        adminName: newData.name,
-        pointId: newData.point_name,
-        campusId: newData.campus,
-        permissionLevel: newData.permission
-      });
-    });
+    watch(
+      data,
+      (newData) => {
+        if (isNil(newData)) return;
+        updateAdminInfo({
+          adminName: newData.name,
+          pointId: newData.point_name,
+          campusId: newData.campus,
+          permissionLevel: newData.permission
+        });
+      },
+      { immediate: true }
+    );
   };
 
   return {

@@ -347,6 +347,7 @@ watch(
       // 启动摄像头扫码
       startCameraScanner();
     }
-  }
+  },
+  { immediate: true }
 );
 </script>

@@ -99,31 +99,35 @@ export const useCameraQrScanner = <
   };
 
   // 绑定摄像头流
-  watch([cameraStream, status], async ([cameraStreamVal, statusVal]) => {
-    try {
-      const video = videoRef.value;
-      if (!video) throw new Error("页面加载失败\n请刷新重试");
+  watch(
+    [cameraStream, status],
+    async ([cameraStreamVal, statusVal]) => {
+      try {
+        const video = videoRef.value;
+        if (!video) throw new Error("页面加载失败\n请刷新重试");
 
-      // 摄像头流未改变，忽略
-      if (video.srcObject === cameraStreamVal) return;
-      // 处于关闭状态，中止
-      if (statusVal === "off") return;
+        // 摄像头流未改变，忽略
+        if (video.srcObject === cameraStreamVal) return;
+        // 处于关闭状态，中止
+        if (statusVal === "off") return;
 
-      // 摄像头流为空
-      if (!cameraStreamVal) {
-        releaseVideoResources();
-        return;
+        // 摄像头流为空
+        if (!cameraStreamVal) {
+          releaseVideoResources();
+          return;
+        }
+
+        // 关联视频流
+        video.srcObject = cameraStreamVal;
+        // 播放视频流
+        await video.play();
+        isCameraVideoPlayable.value = true;
+      } catch (err) {
+        handleError(err);
       }
-
-      // 关联视频流
-      video.srcObject = cameraStreamVal;
-      // 播放视频流
-      await video.play();
-      isCameraVideoPlayable.value = true;
-    } catch (err) {
-      handleError(err);
-    }
-  });
+    },
+    { immediate: true }
+  );
 
   /** 从激活状态切换到悬置状态（不会断开摄像头，仍然占用资源 消耗性能） */
   const switchToIdle = () => {
