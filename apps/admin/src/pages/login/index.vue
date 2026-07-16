@@ -1,7 +1,7 @@
 <!-- 登录页 -->
 <template>
   <loading-container :class="styles.page" :loading="isNavigationPending">
-    <img :class="styles.logo" :src="loginPageLogoUrl" alt="logo" />
+    <img :class="styles.logo" :src="loginPageLogoUrl" />
 
     <div :class="styles.topArea">
       <div :class="styles.title">登录</div>
@@ -55,7 +55,7 @@
       </van-form>
     </div>
 
-    <img :class="styles.decoration" :src="loginPageDecorationUrl" alt="decoration" />
+    <img :class="styles.decoration" :src="loginPageDecorationUrl" />
   </loading-container>
 </template>
 
