@@ -118,11 +118,11 @@ export const useLazyFreeCameraStream = () => {
       await primaryVideoTrack.value.applyConstraints({
         advanced: [{ torch: true } as MediaTrackConstraintSet]
       });
+      isTorchOn.value = true;
     } catch (err) {
       console.error(err);
       showFailToast("浏览器不支持\n开启手电筒");
     }
-    isTorchOn.value = true;
   };
 
   /** 关闭手电筒 */
@@ -135,11 +135,11 @@ export const useLazyFreeCameraStream = () => {
       await primaryVideoTrack.value.applyConstraints({
         advanced: [{ torch: false } as MediaTrackConstraintSet]
       });
+      isTorchOn.value = false;
     } catch (err) {
       console.error(err);
       showFailToast("关闭手电筒\n失败");
     }
-    isTorchOn.value = false;
   };
 
   /** 请求摄像头流 */

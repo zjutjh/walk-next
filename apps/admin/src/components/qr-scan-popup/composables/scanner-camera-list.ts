@@ -97,6 +97,8 @@ export const useScannerCameraList = () => {
           // 获取MediaTrackSettings失败，静默
           console.error(err);
         }
+        // 存在比当前任务更晚开始的任务，中止
+        if (latestUpdateTaskSymbol !== currentTaskSymbol) return;
         result.push({
           // MediaDeviceInfo的成员均是不可枚举成员，必须手动提取
           deviceId: device.deviceId,
@@ -105,8 +107,6 @@ export const useScannerCameraList = () => {
           groupId: device.groupId,
           settings: videoTrackSettings
         });
-        // 存在比当前任务更晚开始的任务，中止
-        if (latestUpdateTaskSymbol !== currentTaskSymbol) return;
       }
 
       // 排序

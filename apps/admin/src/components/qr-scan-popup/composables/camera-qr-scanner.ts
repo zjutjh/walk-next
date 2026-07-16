@@ -108,7 +108,7 @@ export const useCameraQrScanner = <
           return console.warn(err);
         }
 
-        emitError(err);
+        emitError(err, { blocking: true });
       }
     },
     { immediate: true }
