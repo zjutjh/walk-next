@@ -219,6 +219,10 @@ const handleCloseClick = () => {
 /** 上传图片扫码 */
 const handleUploadImageClick = async () => {
   try {
+    if (isTorchOn.value) {
+      // 尝试关闭手电筒
+      await turnOffTorch();
+    }
     pauseCameraScanner();
     await requestUploadQrCodeImage();
   } catch (err) {

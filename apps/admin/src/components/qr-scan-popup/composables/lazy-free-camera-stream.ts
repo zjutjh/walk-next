@@ -161,12 +161,8 @@ export const useLazyFreeCameraStream = () => {
   };
 
   /** 禁用摄像头流输出 */
-  const disableStreamTracks = async () => {
+  const disableStreamTracks = () => {
     if (!cameraVideoTracks.value) return;
-    if (isTorchOn.value) {
-      // 尝试关闭手电筒
-      await turnOffTorch();
-    }
     cameraVideoTracks.value.forEach((track) => {
       track.enabled = false;
     });
