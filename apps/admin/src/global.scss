@@ -42,3 +42,9 @@
 body {
   font-size: 16px;
 }
+
+.van-cell__title,
+.van-cell__value {
+  word-wrap: anywhere;
+  overflow-wrap: anywhere;
+}
