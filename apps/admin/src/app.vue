@@ -9,9 +9,6 @@
 <script setup lang="ts">
 import "@vant/touch-emulator";
 
-import { ready } from "qr-scanner-wechat";
-import { showFailToast } from "vant";
-import { onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import ErrorBoundary from "@/components/error-boundary/index.vue";
@@ -23,27 +20,6 @@ const { setupAdminInfoQuery } = useAdminInfo();
 
 // 响应式管理页面标题
 useTitleMeta();
-
-// 预加载扫码模块 这不是必需的，预加载之前调用扫码同样会进行加载
-const isQrScannerPreloaded = ref(false);
-try {
-  const idleCallbackId = requestIdleCallback(async () => {
-    if (isQrScannerPreloaded.value) return;
-    try {
-      await ready();
-      isQrScannerPreloaded.value = true;
-    } catch (err) {
-      showFailToast("扫码模块加载失败");
-      console.error(err);
-    }
-  });
-
-  onUnmounted(() => {
-    cancelIdleCallback(idleCallbackId);
-  });
-} catch {
-  console.warn("'requestIdleCallback' is not supported.");
-}
 
 // 启动获取管理员用户信息的query
 setupAdminInfoQuery();
