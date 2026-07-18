@@ -1,5 +1,2 @@
 /** 二维码类型 */
-export const enum AdminQrCodeType {
-  Team = "team",
-  Checkin = "checkin"
-}
+export type AdminQrCodeType = "team" | "checkin";

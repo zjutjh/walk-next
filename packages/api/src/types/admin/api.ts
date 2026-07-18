@@ -245,7 +245,7 @@ export type BindCheckinCodeResponse = null;
 /** 打卡(指团队到了某个点位后打卡表示已经过) 请求 */
 export interface CheckinTeamRequest {
   /** CodeType */
-  code_type: AdminQrCodeType.Checkin | AdminQrCodeType.Team;
+  code_type: AdminQrCodeType;
   /** Content */
   content: string;
 }

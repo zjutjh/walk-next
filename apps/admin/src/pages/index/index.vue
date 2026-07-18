@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
-import { type AdminAPI, AdminQrCodeType } from "api/types/admin";
+import type { AdminAPI } from "api/types/admin";
 import { CanceledError } from "axios";
 import type { PromptDialogFieldConfig } from "shared";
 import { PromptDialog, RequestError, useRouterState, useStoredUrlQuery } from "shared";
@@ -194,15 +194,15 @@ const { mutate: mutateStartAllThePending, isPending: isStartAllThePendingPending
 /** 扫码成功 */
 const handleScanSuccess = (data: unknown) => {
   if (is(TeamQrCodeSchema, data)) {
-    mutateCheckin({ code_type: AdminQrCodeType.Team, content: String(data.team_id) });
+    mutateCheckin({ code_type: "team", content: String(data.team_id) });
   } else if (is(CheckinQrCodeSchema, data)) {
-    mutateCheckin({ code_type: AdminQrCodeType.Checkin, content: data.code });
+    mutateCheckin({ code_type: "checkin", content: data.code });
   }
 };
 
 /** 团队ID输入弹窗提交 */
 const handleTeamIdDialogSubmit = () => {
-  mutateCheckin({ code_type: AdminQrCodeType.Team, content: teamIdDialogValue.value.teamIdStr });
+  mutateCheckin({ code_type: "team", content: teamIdDialogValue.value.teamIdStr });
 };
 
 /** 团队ID输入弹窗取消 */
