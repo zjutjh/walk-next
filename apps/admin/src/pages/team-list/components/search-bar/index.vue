@@ -69,9 +69,11 @@ const handleSearchCancel = () => {
 };
 
 /** 搜索输入框的内容变化 */
-const handleInputValueChange = () => {
-  /** 取消搜索词 */
-  urlQuery.value.keyword = "";
+const handleInputValueChange = (newValue: string) => {
+  // 若内容不为空，取消搜索词
+  if (newValue.trim()) {
+    urlQuery.value.keyword = "";
+  }
 };
 
 /** 搜索框是否被聚焦 */
