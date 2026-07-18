@@ -116,7 +116,7 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, params }, options);
   }
 
-  /** 获取团队状态 */
+  /** 获取团队状态信息 */
   QueryTeamStatus(
     req: AdminAPI.QueryTeamStatusRequest,
     options?: T
@@ -128,12 +128,24 @@ export default class WalkAdminService<T> extends BaseService<T> {
     return this.request({ url, method, params }, options);
   }
 
-  /** 更改人员状态 */
-  UpdateWalkerStatus(
-    req: AdminAPI.UpdateWalkerStatusRequest,
+  /** 更改人员行进状态 */
+  UpdateMemberWalkStatus(
+    req: AdminAPI.UpdateMemberWalkStatusRequest,
     options?: T
-  ): Promise<AdminAPI.UpdateWalkerStatusResponse> {
+  ): Promise<AdminAPI.UpdateMemberWalkStatusResponse> {
     const url = this.genBaseURL("/admin/user/update");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
+  /** 更改人员违规状态 */
+  UpdateMemberViolated(
+    req: AdminAPI.UpdateMemberViolatedRequest,
+    options?: T
+  ): Promise<AdminAPI.UpdateMemberViolatedResponse> {
+    const url = this.genBaseURL("/admin/user/violation/mark");
     const method = "POST";
     const data = req;
 

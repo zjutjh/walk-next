@@ -18,8 +18,8 @@
         is-link
         @click="openMemberActionSheet(member.id)"
       >
-        <span :style="{ color: MEMBER_STATUS_COLOR_MAP[member.status] }">{{
-          WALKER_STATUS_TEXT[member.status]
+        <span :style="{ color: MEMBER_WALK_STATUS_COLOR_MAP[member.status] }">{{
+          MEMBER_WALK_STATUS_TEXT[member.status]
         }}</span>
       </van-cell>
     </van-cell-group>
@@ -116,7 +116,7 @@ import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
-import { MEMBER_STATUS_COLOR_MAP, WALKER_STATUS_TEXT } from "@/constants";
+import { MEMBER_WALK_STATUS_COLOR_MAP, MEMBER_WALK_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { MemberQrCodeSchema, walkAdminService } from "@/utils";
 import { ROUTE_CONFIG, ROUTE_LIST, type RouteId } from "@/walk-config";

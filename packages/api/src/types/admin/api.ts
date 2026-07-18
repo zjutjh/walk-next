@@ -170,32 +170,41 @@ export interface QueryRouteStatsResponse {
   point_stats: PointStat[];
 }
 
-/** 获取团队状态 请求 */
+/** 获取团队状态信息 请求 */
 export interface QueryTeamStatusRequest {
   /** 团队ID */
   team_id: number;
 }
 
-/** 获取团队状态 响应 */
+/** 获取团队状态信息 响应 */
 export interface QueryTeamStatusResponse {
-  /** 团队成员 */
+  /** 团队成员状态信息 */
   members: TeamStatusMemberInfo[];
   /** 团队状态信息 */
   team: TeamStatusInfo;
 }
 
-/** 更改人员状态 请求 */
-export interface UpdateWalkerStatusRequest {
-  /** 人员状态 */
+/** 更改人员行进状态 请求 */
+export interface UpdateMemberWalkStatusRequest {
+  /** 目标行进状态 */
   status: MemberWalkStatus;
   /** 用户编号 */
   user_id: number;
 }
 
-/** 更改人员状态 响应 */
-export interface UpdateWalkerStatusResponse {
-  team_id: number;
+/** 更改人员行进状态 响应 */
+export type UpdateMemberWalkStatusResponse = null;
+
+/** 更改人员违规状态 请求 */
+export interface UpdateMemberViolatedRequest {
+  /** 用户编号 */
+  user_id: number;
+  /** 是否违规 */
+  is_violated: boolean;
 }
+
+/** 更改人员违规状态 响应 */
+export type UpdateMemberViolatedResponse = null;
 
 /** 重组团队 请求 */
 export interface RebuildTeamRequest {
@@ -221,7 +230,7 @@ export interface QueryMemberInfoRequest {
 export interface QueryMemberInfoResponse {
   /** 姓名 */
   name: string;
-  /** 人员状态 */
+  /** 人员行进状态 */
   status: MemberWalkStatus;
 }
 

@@ -22,7 +22,7 @@
         >
           <van-cell title="团队ID">
             {{ team.team_id }}
-            <van-tag :show="team.is_lost" type="danger" size="large">失联</van-tag>
+            <van-tag :show="Boolean(team.is_lost)" type="danger" size="large">失联</van-tag>
           </van-cell>
           <van-cell title="队长姓名">{{ team.captain_name }}</van-cell>
           <van-cell title="队长联系电话">{{ team.captain_phone }}</van-cell>

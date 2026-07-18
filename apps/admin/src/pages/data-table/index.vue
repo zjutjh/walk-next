@@ -36,7 +36,7 @@
                   <van-cell
                     v-for="key in OVERVIEW_STATS_KEY_LIST"
                     :key="key"
-                    :title="WALKER_STATS_METRIC_TEXT[key]"
+                    :title="MEMBER_STATS_METRIC_TEXT[key]"
                     >{{ routeData.stats[key] ?? "-" }}</van-cell
                   >
                 </cell-group>
@@ -115,7 +115,7 @@
                     <van-cell
                       v-for="key in ROUTE_STATS_KEY_LIST"
                       :key="key"
-                      :title="WALKER_STATS_METRIC_TEXT[key]"
+                      :title="MEMBER_STATS_METRIC_TEXT[key]"
                       >{{ routeStatsQueryMap[routeId].data?.status_stats[key] ?? "-" }}</van-cell
                     >
                   </cell-group>
@@ -135,7 +135,7 @@ import { forEach, fromPairs, isNil, map, zipObject } from "lodash-es";
 import { CellGroup, ErrorEmpty, LoadingContainer, useStoredUrlQuery } from "shared";
 import { computed, reactive, ref, watch } from "vue";
 
-import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL, WALKER_STATS_METRIC_TEXT } from "@/constants";
+import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL, MEMBER_STATS_METRIC_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { walkAdminService } from "@/utils";
 import {
