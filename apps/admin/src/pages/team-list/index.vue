@@ -18,11 +18,11 @@
         :is-query-enabled="isQueryEnabled"
       />
       <suggestion-empty
-        v-else-if="filterBarComponent && searchBarComponent"
+        v-else-if="filterBarRef && searchBarRef"
         v-model:url-query="urlQuery"
-        :is-search-input-focus="searchBarComponent?.isSearchInputFocus"
-        :search-instance="searchBarComponent?.vantSearchComponent"
-        :open-segment-filter="filterBarComponent?.openSegmentFilter"
+        :is-search-input-focus="searchBarRef?.isSearchInputFocus"
+        :search-instance="searchBarRef?.vantSearchRef"
+        :open-segment-filter="filterBarRef?.openSegmentFilter"
       />
       <team-details v-model:team-id="urlQuery.viewingTeam" :campus-id="campusId" />
     </template>
@@ -66,10 +66,10 @@ const { urlQuery } = useStoredUrlQuery<TeamListUrlQuery>({
 });
 
 /** 搜索栏组件 */
-const searchBarComponent = useTemplateRef("searchBarRef");
+const searchBarRef = useTemplateRef("searchBarRef");
 
 /** 筛选栏组件 */
-const filterBarComponent = useTemplateRef("filterBarRef");
+const filterBarRef = useTemplateRef("filterBarRef");
 
 /** 是否可以拉取数据 */
 const isQueryEnabled = computed(

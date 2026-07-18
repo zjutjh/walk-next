@@ -47,7 +47,7 @@ import styles from "./index.module.scss";
 const urlQuery = defineModel<TeamListUrlQuery>("urlQuery", { required: true });
 
 /** vant搜索框组件 */
-const vantSearchComponent = useTemplateRef<SearchInstance>("searchRef");
+const vantSearchRef = useTemplateRef<SearchInstance>("searchRef");
 
 /** 搜索输入框的内容 */
 const searchValue = ref(urlQuery.value.keyword);
@@ -81,7 +81,7 @@ const isSearchInputFocus = ref(false);
 
 defineExpose({
   /** vant搜索框组件 */
-  vantSearchComponent,
+  vantSearchRef,
   /** 搜索框是否被聚焦 */
   isSearchInputFocus
 });
