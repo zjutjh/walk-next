@@ -2,7 +2,9 @@
 <template>
   <default-layout :title="`${CAMPUS_CONFIG[campusId]?.text ?? ''}搜索团队`">
     <template #header>
+      <!-- 搜索栏 -->
       <search-bar ref="searchBarRef" v-model:url-query="urlQuery" />
+      <!-- 筛选器 -->
       <filter-bar
         v-if="campusId"
         ref="filterBarRef"
@@ -11,12 +13,14 @@
       />
     </template>
     <template v-if="campusId">
+      <!-- 搜索结果列表 -->
       <result-list
         v-if="isQueryEnabled"
         :campus-id="campusId"
         :url-query="urlQuery"
         :is-query-enabled="isQueryEnabled"
       />
+      <!-- 搜索空屏 -->
       <suggestion-empty
         v-else-if="filterBarRef && searchBarRef"
         v-model:url-query="urlQuery"
@@ -24,7 +28,9 @@
         :search-instance="searchBarRef?.vantSearchRef"
         :open-segment-filter="filterBarRef?.openSegmentFilter"
       />
-      <team-details v-model:team-id="urlQuery.viewingTeam" :campus-id="campusId" />
+
+      <!-- 团队详情弹层 -->
+      <team-details-popup v-model:team-id="urlQuery.viewingTeam" :campus-id="campusId" />
     </template>
     <error-empty v-else :error="`校区不存在：${props.campusIdParam}`" />
   </default-layout>
@@ -41,7 +47,7 @@ import FilterBar from "./components/filter-bar/index.vue";
 import ResultList from "./components/result-list/index.vue";
 import SearchBar from "./components/search-bar/index.vue";
 import SuggestionEmpty from "./components/suggestion-empty/index.vue";
-import TeamDetails from "./components/team-details/index.vue";
+import TeamDetailsPopup from "./components/team-details-popup/index.vue";
 import type { TeamListUrlQuery } from "./types";
 
 const props = defineProps<{

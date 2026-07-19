@@ -1,4 +1,4 @@
-<!-- 悬浮菜单 -->
+<!-- 悬浮功能菜单 -->
 <template>
   <div :class="styles.component" @touchstart.stop @touchmove.stop @touchend.stop>
     <!-- 地图适应屏幕大小（回到cover尺寸）功能 -->

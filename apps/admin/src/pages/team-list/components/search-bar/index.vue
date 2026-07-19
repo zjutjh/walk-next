@@ -15,6 +15,7 @@
     @blur="isSearchInputFocus = false"
   >
     <template #left>
+      <!-- 搜索类型选择器 -->
       <van-dropdown-menu :class="styles.typeDropdownMenu">
         <van-dropdown-item
           v-model="urlQuery.searchType"
@@ -24,6 +25,7 @@
       </van-dropdown-menu>
     </template>
     <template #action>
+      <!-- 输入框右侧按钮 -->
       <div
         v-if="searchValue !== urlQuery.keyword"
         :class="styles.searchBtn"

@@ -14,12 +14,14 @@
       @load="fetchNextPage"
     >
       <template v-for="page in teamListData?.pages">
+        <!-- 团队卡片 -->
         <van-cell-group
           v-for="team in page.teams"
           :key="team.team_id"
           :class="styles.teamInfoWrapper"
           inset
         >
+          <!-- 团队信息 -->
           <van-cell title="团队ID">
             {{ team.team_id }}
             <van-tag :show="Boolean(team.is_lost)" type="danger" size="large">失联</van-tag>
@@ -31,21 +33,27 @@
           <van-cell title="经过点位时间">{{
             dayjs(team.latest_point_time).format("YYYY/MM/DD HH:mm")
           }}</van-cell>
+          <!-- 打开团队详细信息弹层按钮 -->
           <van-cell title="查看团队详细信息" is-link @click="handleViewTeamDetails(team.team_id)" />
         </van-cell-group>
       </template>
 
+      <!-- 下拉刷新容器的加载态 -->
       <template #loading>
         <span v-if="!isRefetching" :class="styles.loadingText"
           ><van-loading :class="styles.loadingIcon" size="0.2rem" />加载中...</span
         >
       </template>
+      <!-- 下拉刷新容器的错误态 -->
       <template #error>
         <span class="van-haptics-feedback" :class="styles.errorText" @click="handleErrorRefetch"
           ><van-icon :class="styles.errorIcon" name="warning" />加载失败，请点击重试</span
         >
       </template>
+      <!-- 下拉刷新容器的底部提示 -->
       <template #finished>{{ finishedTipText }}</template>
+
+      <!-- 刷新并回到顶部按钮 -->
       <van-back-top :class="styles.refreshBtn" immediate @click="handleRefresh">
         <van-icon size="0.3rem" name="replay" />
       </van-back-top>

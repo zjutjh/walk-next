@@ -2,6 +2,7 @@
 <template>
   <default-layout :class="styles.page">
     <van-cell-group inset>
+      <!-- 路线选择按钮 -->
       <van-cell
         :value="ROUTE_CONFIG[teamRoute]?.text ?? '请选择路线'"
         title="团队路线"
@@ -9,6 +10,7 @@
         @click="openRoutePickerSheet"
       ></van-cell>
     </van-cell-group>
+    <!-- 成员列表 -->
     <van-cell-group inset title="团队成员">
       <div v-if="isEmpty(memberList)" :class="styles.emptyText">点击下方按钮，添加成员</div>
       <van-cell
@@ -23,6 +25,7 @@
         }}</span>
       </van-cell>
     </van-cell-group>
+    <!-- 成员数量提示 -->
     <div :class="styles.memberCountText">
       已添加 {{ memberList.length }} 人，提交需 {{ TEAM_REBUILD_MEMBER_COUNT_LIMIT.MIN }}-{{
         TEAM_REBUILD_MEMBER_COUNT_LIMIT.MAX
@@ -32,6 +35,7 @@
 
     <div :class="styles.middleWhiteSpace"></div>
 
+    <!-- 功能按钮列表 -->
     <div :class="styles.buttonContainer">
       <van-button
         :disabled="isAddMemberButtonDisabled"

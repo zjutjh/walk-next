@@ -17,19 +17,20 @@
           /></div
       ></template>
     </van-checkbox>
-    <!-- 弹出的行程段选择器 -->
-    <van-popup v-model:show="isSegmentPickerVisible" position="bottom" destroy-on-close>
-      <van-picker
-        v-model="segment"
-        :columns="columns"
-        :readonly="!isSegmentPickerVisible"
-        :visible-option-num="8"
-        title="选择路段"
-        @confirm="handleSegmentPickerConfirm"
-        @cancel="handleSegmentPickerCancel"
-      />
-    </van-popup>
   </div>
+
+  <!-- 弹出的行程段选择器 -->
+  <van-popup v-model:show="isSegmentPickerVisible" position="bottom" destroy-on-close>
+    <van-picker
+      v-model="segment"
+      :columns="columns"
+      :readonly="!isSegmentPickerVisible"
+      :visible-option-num="8"
+      title="选择路段"
+      @confirm="handleSegmentPickerConfirm"
+      @cancel="handleSegmentPickerCancel"
+    />
+  </van-popup>
 </template>
 
 <script setup lang="ts">

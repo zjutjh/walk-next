@@ -2,10 +2,12 @@
 <template>
   <default-layout :class="styles.page" :title="`${CAMPUS_CONFIG[campusId]?.text ?? ''}数据大盘`">
     <template #right>
+      <!-- 搜索团队按钮 -->
       <van-icon name="search" size="22" @click="handleSearchClick" />
     </template>
     <template v-if="campusId">
       <div :class="styles.topArea">
+        <!-- 地图 -->
         <pan-zoom-map-view
           ref="panZoomMapViewRef"
           v-model:url-query="urlQuery"
@@ -13,18 +15,23 @@
           :map-url="CAMPUS_CONFIG[campusId]?.mapUrl"
         />
       </div>
+
+      <!-- 数据总览 -->
       <data-overview :class="styles.dataPanel" :url-query="urlQuery" :campus-id="campusId" />
+
       <!-- 展示点位或行程段详情的浮动面板 -->
       <van-floating-panel
         v-model:height="floatingPanelHeight"
         :class="styles.floatingPanel"
         :anchors="floatingPanelAnchors"
       >
+        <!-- 点位详情 -->
         <point-details
           v-if="urlQuery.point !== ''"
           v-model:point="urlQuery.point"
           :campus-id="campusId"
         />
+        <!-- 行程段详情 -->
         <segment-details
           v-else-if="urlQuery.segment !== ''"
           v-model:segment="urlQuery.segment"

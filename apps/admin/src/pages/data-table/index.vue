@@ -26,6 +26,7 @@
               @refresh="handleOverviewStatsRefresh"
             >
               <div :class="styles.dataContainer">
+                <!-- 路线总览卡片 -->
                 <cell-group
                   v-for="routeData in overviewStatsData?.routes"
                   :key="routeData.route_name"
@@ -54,6 +55,7 @@
           :title="ROUTE_CONFIG[routeId]?.text"
           :name="routeId"
         >
+          <!-- 数据拉取失败提示 -->
           <error-tip
             v-if="
               routeStatsQueryMap[routeId]?.error &&
@@ -63,6 +65,7 @@
             :class="styles.errorTip"
             :data-updated-at="routeStatsQueryMap[routeId]?.dataUpdatedAt"
           />
+
           <loading-container
             v-if="routeStatsQueryMap[routeId]"
             :class="styles.loadingContainer"

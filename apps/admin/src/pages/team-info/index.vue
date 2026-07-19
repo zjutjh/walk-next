@@ -14,6 +14,7 @@
         @refresh="handleRefresh"
       >
         <div :class="styles.contentContainer">
+          <!-- 团队总体信息 -->
           <van-cell-group v-if="teamInfoData" :class="styles.overviewCard" inset>
             <van-cell title="团队路线">
               <van-tag
@@ -40,6 +41,7 @@
             </van-cell>
           </van-cell-group>
 
+          <!-- 成员信息 -->
           <cell-group :loading="isTeamInfoFetching" title="成员状态" inset>
             <van-cell
               v-for="member in teamInfoData.members"
@@ -63,6 +65,7 @@
 
           <div :class="styles.middleWhiteSpace"></div>
 
+          <!-- 功能按钮列表 -->
           <div :class="styles.buttonContainer">
             <van-button
               v-if="teamInfoData.team.is_prev_point_invalid"

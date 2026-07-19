@@ -1,4 +1,4 @@
-<!-- 团队详情浮窗 -->
+<!-- 团队详情弹层 -->
 <template>
   <van-popup
     :class="styles.component"
@@ -9,6 +9,7 @@
     closeable
     @close="handleClose"
   >
+    <!-- 弹层的标题栏 -->
     <div :class="styles.title">
       <span v-if="isError && !isFetching" :class="styles.errorTip"
         ><ic-baseline-error-outline :class="styles.errorIcon" />查询失败，请重试</span
@@ -39,6 +40,7 @@
               <van-cell title="经过点位时间">{{
                 dayjs(detailsData.latest_point_time).format("YYYY/MM/DD HH:mm")
               }}</van-cell>
+              <!-- 失联开关 -->
               <van-cell title="标记为失联">
                 <template #right-icon>
                   <van-switch
@@ -86,7 +88,7 @@
                 </van-cell>
               </template>
 
-              <!-- 前往修改成员状态 -->
+              <!-- 前往修改成员状态按钮 -->
               <van-cell :to="`/team/${detailsData.team_id}`" title="修改团队成员状态" is-link />
             </van-cell-group>
           </div>

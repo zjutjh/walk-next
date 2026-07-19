@@ -6,15 +6,19 @@
     :show-back="false"
     title="精弘毅行管理后台"
   >
-    <admin-info
+    <!-- 管理员信息卡片 -->
+    <admin-info-card
       :admin-name="adminName || '-'"
       :walk-point="POINT_CONFIG[adminPointId]?.text ?? '-'"
     />
+
+    <!-- 打卡 -->
     <van-cell-group title="签到">
       <van-cell title="扫码签到" is-link @click="handleScanClick" />
       <van-cell title="输入签到" is-link @click="handleManualInputClick" />
     </van-cell-group>
 
+    <!-- 数据大盘 -->
     <van-cell-group v-if="hasPermission('internal')" title="数据大盘">
       <van-cell
         v-for="campusId in CAMPUS_LIST"
@@ -26,10 +30,12 @@
       <van-cell title="数据表格" is-link to="/data-table" />
     </van-cell-group>
 
+    <!-- 重组队伍 -->
     <van-cell-group v-if="hasPermission('super')" title="人员管理">
       <van-cell title="重组团队" is-link to="/team-rebuild" />
     </van-cell-group>
 
+    <!-- 功能按钮列表 -->
     <div :class="styles.buttonContainer">
       <van-button
         v-if="hasPermission('super')"
@@ -91,7 +97,7 @@ import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
 
-import AdminInfo from "./components/admin-info/index.vue";
+import AdminInfoCard from "./components/admin-info-card/index.vue";
 import styles from "./index.module.scss";
 import type { IndexUrlQuery } from "./types";
 import { checkinQrCodeSchema } from "./utils";

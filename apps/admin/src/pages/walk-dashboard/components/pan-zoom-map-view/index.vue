@@ -9,6 +9,7 @@
     @click="handleNotStoppedClick"
     @contextmenu.prevent
   >
+    <!-- 地图式点位/路线选择器 -->
     <map-picker
       ref="map"
       v-model:url-query="urlQuery"
@@ -18,6 +19,7 @@
       :map-url="props.mapUrl"
       @resize="limitMapScale"
     />
+    <!-- 悬浮功能菜单 -->
     <floating-menu
       v-if="viewportRef"
       v-model:url-query="urlQuery"
