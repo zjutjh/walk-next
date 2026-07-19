@@ -29,9 +29,11 @@
           <van-cell title="队长姓名">{{ team.captain_name }}</van-cell>
           <van-cell title="队长联系电话">{{ team.captain_phone }}</van-cell>
           <van-cell title="团队路线">{{ ROUTE_CONFIG[team.route_name]?.text }}</van-cell>
-          <van-cell title="最新经过点位">{{ POINT_CONFIG[team.latest_point_name]?.text }}</van-cell>
+          <van-cell title="最新经过点位">{{
+            POINT_CONFIG[team.latest_point_name]?.text ?? "-"
+          }}</van-cell>
           <van-cell title="经过点位时间">{{
-            dayjs(team.latest_point_time).format("YYYY/MM/DD HH:mm")
+            team.latest_point_time ? dayjs(team.latest_point_time).format("YYYY/MM/DD HH:mm") : "-"
           }}</van-cell>
           <!-- 打开团队详细信息弹层按钮 -->
           <van-cell title="查看团队详细信息" is-link @click="handleViewTeamDetails(team.team_id)" />
