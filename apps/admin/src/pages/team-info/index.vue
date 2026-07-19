@@ -79,19 +79,19 @@
         </div>
       </van-pull-refresh>
     </error-empty>
-  </default-layout>
 
-  <!-- 成员操作弹层 -->
-  <member-action-sheet
-    v-model:visible="isMemberActionSheetVisible"
-    v-model:member-id="memberActionSheetMemberId"
-    :team-id="teamId"
-    :team-info-data="teamInfoData"
-    :is-start-point-manage-available="isStartPointManageAvailable"
-    :is-end-point-manage-available="isEndPointManageAvailable"
-    :mutate-walk-status="mutateUpdateMemberWalkStatus"
-    :mutate-violated="mutateUpdateMemberViolated"
-  />
+    <!-- 成员操作弹层 -->
+    <member-action-sheet
+      v-model:visible="isMemberActionSheetVisible"
+      v-model:member-id="memberActionSheetMemberId"
+      :team-id="teamId"
+      :team-info-data="teamInfoData"
+      :is-start-point-manage-available="isStartPointManageAvailable"
+      :is-end-point-manage-available="isEndPointManageAvailable"
+      :mutate-walk-status="mutateUpdateMemberWalkStatus"
+      :mutate-violated="mutateUpdateMemberViolated"
+    />
+  </default-layout>
 </template>
 
 <script setup lang="ts">

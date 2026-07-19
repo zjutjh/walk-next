@@ -64,41 +64,41 @@
         >提交团队</van-button
       >
     </div>
+
+    <!-- 路线选择弹层 -->
+    <van-action-sheet
+      v-model:show="isRoutePickerVisible"
+      :actions="routePickerActions"
+      cancel-text="取消"
+      @select="handleSelectRoute"
+    />
+
+    <!-- 成员操作弹层 -->
+    <van-action-sheet
+      v-model:show="isMemberActionSheetVisible"
+      :actions="memberActionSheetActions"
+      :description="memberActionSheetMember?.name"
+      cancel-text="取消"
+    />
+
+    <!-- 人员ID输入弹窗 -->
+    <prompt-dialog
+      v-model:show="isMemberIdDialogVisible"
+      v-model="memberIdDialogValue"
+      title="编号添加"
+      :field-config="MEMBER_ID_DIALOG_CONFIG"
+      :submit-disabled="isAddMemberPending"
+      @submit="handleMemberIdDialogSubmit"
+      @cancel="handleMemberIdDialogCancel"
+    />
+
+    <!-- 扫码弹层 -->
+    <qr-scan-popup
+      v-model:show="isScanPopupVisible"
+      :schema="MemberQrCodeSchema"
+      @success="handleScanSuccess"
+    />
   </default-layout>
-
-  <!-- 路线选择弹层 -->
-  <van-action-sheet
-    v-model:show="isRoutePickerVisible"
-    :actions="routePickerActions"
-    cancel-text="取消"
-    @select="handleSelectRoute"
-  />
-
-  <!-- 成员操作弹层 -->
-  <van-action-sheet
-    v-model:show="isMemberActionSheetVisible"
-    :actions="memberActionSheetActions"
-    :description="memberActionSheetMember?.name"
-    cancel-text="取消"
-  />
-
-  <!-- 人员ID输入弹窗 -->
-  <prompt-dialog
-    v-model:show="isMemberIdDialogVisible"
-    v-model="memberIdDialogValue"
-    title="编号添加"
-    :field-config="MEMBER_ID_DIALOG_CONFIG"
-    :submit-disabled="isAddMemberPending"
-    @submit="handleMemberIdDialogSubmit"
-    @cancel="handleMemberIdDialogCancel"
-  />
-
-  <!-- 扫码弹层 -->
-  <qr-scan-popup
-    v-model:show="isScanPopupVisible"
-    :schema="MemberQrCodeSchema"
-    @success="handleScanSuccess"
-  />
 </template>
 
 <script setup lang="ts">

@@ -58,26 +58,26 @@
         退出登录
       </van-button>
     </div>
+
+    <!-- 扫码弹层 -->
+    <qr-scan-popup
+      v-model:show="urlQuery.isScanning"
+      :loading="isCheckInPending || isNavigationPending"
+      :schema="checkinQrCodeSchema"
+      @success="handleScanSuccess"
+    />
+
+    <!-- 团队ID输入弹窗 -->
+    <prompt-dialog
+      v-model:show="isTeamIdDialogVisible"
+      v-model="teamIdDialogValue"
+      title="输入签到"
+      :field-config="TEAM_ID_DIALOG_CONFIG"
+      :submit-disabled="isCheckInPending"
+      @submit="handleTeamIdDialogSubmit"
+      @cancel="handleTeamIdDialogCancel"
+    />
   </default-layout>
-
-  <!-- 扫码弹层 -->
-  <qr-scan-popup
-    v-model:show="urlQuery.isScanning"
-    :loading="isCheckInPending || isNavigationPending"
-    :schema="checkinQrCodeSchema"
-    @success="handleScanSuccess"
-  />
-
-  <!-- 团队ID输入弹窗 -->
-  <prompt-dialog
-    v-model:show="isTeamIdDialogVisible"
-    v-model="teamIdDialogValue"
-    title="输入签到"
-    :field-config="TEAM_ID_DIALOG_CONFIG"
-    :submit-disabled="isCheckInPending"
-    @submit="handleTeamIdDialogSubmit"
-    @cancel="handleTeamIdDialogCancel"
-  />
 </template>
 
 <script setup lang="ts">
