@@ -102,7 +102,6 @@ const {
   enabled: () => props.isQueryEnabled,
   refetchOnWindowFocus: false,
   refetchOnReconnect: false,
-  refetchOnMount: false,
   queryKey: [
     ADMIN_QUERY_KEY.TEAM.LIST,
     props.campusId,
