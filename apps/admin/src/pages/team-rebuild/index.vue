@@ -44,10 +44,10 @@
       :team-route="teamRoute"
       :is-rebuild-team-pending="isRebuildTeamPending"
       :is-add-member-pending="isAddMemberPending"
-      :guide-select-route-first="guideSelectRouteFirst"
-      :mutate-add-member="mutateAddMember"
-      :add-member-abort-controller="addMemberAbortController"
-      :mutate-rebuild-team="mutateRebuildTeam"
+      @click-add-member-with-route-unelected="guideSelectRouteFirst"
+      @mutate-add-member="mutateAddMember"
+      @cancel-mutate-add-member="cancelMutateAddMember"
+      @mutate-rebuild-team="mutateRebuildTeam"
     />
 
     <!-- 路线选择弹层 -->
@@ -141,10 +141,14 @@ const openMemberActionSheet = (memberId: number) => {
 
 /** 获取成员信息并添加成员到团队 取消控制器 */
 let addMemberAbortController: AbortController | null = null;
+/** 取消添加成员 */
+const cancelMutateAddMember = () => {
+  addMemberAbortController?.abort();
+};
 // 获取成员信息并添加成员到团队
 const { mutate: mutateAddMember, isPending: isAddMemberPending } = useMutation({
   mutationFn: (memberId: number) => {
-    addMemberAbortController?.abort();
+    cancelMutateAddMember();
     addMemberAbortController = new AbortController();
     return walkAdminService.QueryMemberInfo(
       {

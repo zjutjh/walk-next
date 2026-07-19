@@ -88,8 +88,8 @@
       :team-info-data="teamInfoData"
       :is-start-point-manage-available="isStartPointManageAvailable"
       :is-end-point-manage-available="isEndPointManageAvailable"
-      :mutate-walk-status="mutateUpdateMemberWalkStatus"
-      :mutate-violated="mutateUpdateMemberViolated"
+      @mutate-walk-status="mutateUpdateMemberWalkStatus"
+      @mutate-violated="mutateUpdateMemberViolated"
     />
   </default-layout>
 </template>

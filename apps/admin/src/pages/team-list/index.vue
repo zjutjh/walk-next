@@ -26,7 +26,7 @@
         v-model:url-query="urlQuery"
         :is-search-input-focus="searchBarRef?.isSearchInputFocus"
         :search-instance="searchBarRef?.vantSearchRef"
-        :open-segment-filter="filterBarRef?.openSegmentFilter"
+        @open-segment-filter="filterBarRef?.openSegmentFilter"
       />
 
       <!-- 团队详情弹层 -->

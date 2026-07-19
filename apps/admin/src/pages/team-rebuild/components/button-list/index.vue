@@ -70,14 +70,17 @@ const props = defineProps<{
   isRebuildTeamPending: boolean;
   /** 获取成员信息并添加成员到团队请求是否正在进行 */
   isAddMemberPending: boolean;
-  /** 引导用户先选择路线的函数 */
-  guideSelectRouteFirst: () => void;
-  /** 获取成员信息并添加成员到团队的请求函数 */
-  mutateAddMember: (memberId: number) => void;
-  /** 获取成员信息并添加成员到团队 取消控制器 */
-  addMemberAbortController: AbortController | null;
-  /** 重组团队的请求函数 */
-  mutateRebuildTeam: () => void;
+}>();
+
+const emit = defineEmits<{
+  /** 未选择路线时点击添加成员 */
+  clickAddMemberWithRouteUnelected: [];
+  /** 添加成员到团队 */
+  mutateAddMember: [memberId: number];
+  /** 取消添加成员 */
+  cancelMutateAddMember: [];
+  /** 提交重组的团队 */
+  mutateRebuildTeam: [];
 }>();
 
 /** 重组的团队的成员列表 */
@@ -130,18 +133,18 @@ const MEMBER_ID_DIALOG_CONFIG: Record<
 /** 人员ID输入弹窗提交 */
 const handleMemberIdDialogSubmit = () => {
   const userId = parseInt(memberIdDialogValue.value.memberIdStr);
-  props.mutateAddMember(userId);
+  emit("mutateAddMember", userId);
 };
 /** 人员ID输入弹窗取消 */
 const handleMemberIdDialogCancel = () => {
-  props.addMemberAbortController?.abort();
+  emit("cancelMutateAddMember");
 };
 
 /** 点击编号添加 */
 const handleAddMemberWithIdClick = () => {
   // 未选择路线
   if (!props.teamRoute) {
-    props.guideSelectRouteFirst();
+    emit("clickAddMemberWithRouteUnelected");
     return;
   }
   memberIdDialogValue.value.memberIdStr = "";
@@ -154,7 +157,7 @@ const isScanPopupVisible = ref(false);
 const handleAddMemberScanClick = () => {
   // 未选择路线
   if (!props.teamRoute) {
-    props.guideSelectRouteFirst();
+    emit("clickAddMemberWithRouteUnelected");
     return;
   }
   isScanPopupVisible.value = true;
@@ -169,7 +172,7 @@ const handleScanSuccess = (data: unknown) => {
     showFailToast("该成员已添加\n不可重复添加");
     return;
   }
-  props.mutateAddMember(data.user_id);
+  emit("mutateAddMember", data.user_id);
 };
 
 /** 点击提交团队 */
@@ -182,6 +185,6 @@ const handleSubmitClick = async () => {
   } catch {
     return;
   }
-  props.mutateRebuildTeam();
+  emit("mutateRebuildTeam");
 };
 </script>

@@ -29,10 +29,13 @@ const props = defineProps<{
   isStartPointManageAvailable: boolean;
   /** 终点管理功能是否可用 */
   isEndPointManageAvailable: boolean;
-  /** 更新成员行进状态的请求函数 */
-  mutateWalkStatus: (params: { memberId: number; status: MemberWalkStatus }) => void;
-  /** 更新成员违规状态的请求函数 */
-  mutateViolated: (params: { memberId: number; isViolated: boolean }) => void;
+}>();
+
+const emit = defineEmits<{
+  /** 更新成员行进状态 */
+  mutateWalkStatus: [params: { memberId: number; status: MemberWalkStatus }];
+  /** 更新成员违规状态 */
+  mutateViolated: [params: { memberId: number; isViolated: boolean }];
 }>();
 
 /** 成员操作弹层是否可见 */
@@ -97,7 +100,7 @@ const memberActionSheetActions = computed<ActionSheetAction[]>(() => {
 /** 更改成员行进状态 */
 const handleUpdateMemberWalkStatus = (targetStatus: MemberWalkStatus) => {
   if (isNil(actionMemberId.value)) return;
-  props.mutateWalkStatus({
+  emit("mutateWalkStatus", {
     memberId: actionMemberId.value,
     status: targetStatus
   });
@@ -106,7 +109,7 @@ const handleUpdateMemberWalkStatus = (targetStatus: MemberWalkStatus) => {
 /** 更改成员违规状态 */
 const handleUpdateMemberViolated = (isViolated: boolean) => {
   if (isNil(actionMemberId.value)) return;
-  props.mutateViolated({
+  emit("mutateViolated", {
     memberId: actionMemberId.value,
     isViolated
   });

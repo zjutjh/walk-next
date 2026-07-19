@@ -52,12 +52,15 @@ const props = defineProps<{
   isStartPointManageAvailable: boolean;
   /** 终点管理功能是否可用 */
   isEndPointManageAvailable: boolean;
-  /** 标记团队违规的请求函数 */
-  mutateTeamViolated: () => void;
-  /** 确认到达终点的请求函数 */
-  mutateConfirmDestination: () => void;
-  /** 绑定签到码的请求函数 */
-  mutateBindCheckinCode: (params: { teamId: number; content: string }) => void;
+}>();
+
+const emit = defineEmits<{
+  /** 标记团队违规 */
+  mutateTeamViolated: [];
+  /** 确认到达终点 */
+  mutateConfirmDestination: [];
+  /** 绑定签到码 */
+  mutateBindCheckinCode: [params: { teamId: number; content: string }];
 }>();
 
 /** 扫码弹层是否可见 */
@@ -71,7 +74,7 @@ const handleScanSuccess = (data: unknown) => {
   if (!is(CheckinQrCodeSchema, data)) return;
   // 关闭扫码弹层
   isScanPopupVisible.value = false;
-  props.mutateBindCheckinCode({
+  emit("mutateBindCheckinCode", {
     teamId: props.teamId,
     content: data.code
   });
@@ -88,7 +91,7 @@ const handleMarkViolatedClick = async () => {
   } catch {
     return;
   }
-  props.mutateTeamViolated();
+  emit("mutateTeamViolated");
 };
 
 /** 点击确认到达终点 */
@@ -100,6 +103,6 @@ const handleConfirmDestinationClick = async () => {
   } catch {
     return;
   }
-  props.mutateConfirmDestination();
+  emit("mutateConfirmDestination");
 };
 </script>

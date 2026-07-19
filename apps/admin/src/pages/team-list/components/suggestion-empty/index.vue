@@ -19,7 +19,7 @@
         :class="styles.gridBtn"
         text="路段团队列表"
         icon="filter-o"
-        @click="props.openSegmentFilter"
+        @click="handleOpenSegmentFilter"
       />
     </van-grid>
   </div>
@@ -38,8 +38,11 @@ const props = defineProps<{
   searchInstance: SearchInstance | null | undefined;
   /** 搜索框是否被聚焦 */
   isSearchInputFocus: boolean;
-  /** 打开行程段筛选器的函数 */
-  openSegmentFilter: () => void;
+}>();
+
+const emit = defineEmits<{
+  /** 打开行程段筛选器 */
+  openSegmentFilter: [];
 }>();
 
 const urlQuery = defineModel<TeamListUrlQuery>("urlQuery", { required: true });
@@ -50,5 +53,10 @@ const handleSearchTypeClick = (typeValue: SearchType) => {
   urlQuery.value.searchType = typeValue;
   // 聚焦输入框
   props.searchInstance?.focus();
+};
+
+/** 点击建议中的路段团队列表 */
+const handleOpenSegmentFilter = () => {
+  emit("openSegmentFilter");
 };
 </script>
