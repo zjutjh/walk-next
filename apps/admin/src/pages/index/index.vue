@@ -75,7 +75,7 @@
       :field-config="TEAM_ID_DIALOG_CONFIG"
       :submit-disabled="isCheckInPending"
       @submit="handleTeamIdDialogSubmit"
-      @cancel="handleTeamIdDialogCancel"
+      @cancel="cancelMutateCheckin"
     />
   </default-layout>
 </template>
@@ -164,10 +164,14 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
 
 /** 打卡 取消控制器 */
 let checkinAbortController: AbortController | null = null;
+/** 取消打卡请求 */
+const cancelMutateCheckin = () => {
+  checkinAbortController?.abort();
+};
 // 打卡
 const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
   mutationFn: (params: AdminAPI.CheckinTeamRequest) => {
-    checkinAbortController?.abort();
+    cancelMutateCheckin();
     checkinAbortController = new AbortController();
     return walkAdminService.CheckinTeam(params, { signal: checkinAbortController.signal });
   },
@@ -209,11 +213,6 @@ const handleScanSuccess = (data: unknown) => {
 /** 团队ID输入弹窗提交 */
 const handleTeamIdDialogSubmit = () => {
   mutateCheckin({ code_type: "team", content: teamIdDialogValue.value.teamIdStr });
-};
-
-/** 团队ID输入弹窗取消 */
-const handleTeamIdDialogCancel = () => {
-  checkinAbortController?.abort();
 };
 
 /** 点击登出按钮 */

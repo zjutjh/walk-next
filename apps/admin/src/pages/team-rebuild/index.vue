@@ -141,7 +141,7 @@ const openMemberActionSheet = (memberId: number) => {
 
 /** 获取成员信息并添加成员到团队 取消控制器 */
 let addMemberAbortController: AbortController | null = null;
-/** 取消添加成员 */
+/** 取消添加成员请求 */
 const cancelMutateAddMember = () => {
   addMemberAbortController?.abort();
 };
