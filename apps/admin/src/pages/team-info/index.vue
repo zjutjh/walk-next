@@ -121,7 +121,7 @@ const props = defineProps<{
   teamIdParam: string;
 }>();
 /** 团队ID */
-const teamId = computed(() => Number(props.teamIdParam));
+const teamId = computed(() => parseInt(props.teamIdParam));
 
 const queryClient = useQueryClient();
 const { adminPointId } = useAdminInfo();

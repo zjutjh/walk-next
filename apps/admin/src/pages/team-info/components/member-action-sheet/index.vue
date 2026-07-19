@@ -1,4 +1,4 @@
-<!-- 成员操作弹层 -->
+<!-- 团队信息页成员操作弹层 -->
 <template>
   <van-action-sheet
     v-model:show="isActionSheetVisible"

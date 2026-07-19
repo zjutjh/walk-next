@@ -36,34 +36,19 @@
     <div :class="styles.middleWhiteSpace"></div>
 
     <!-- 功能按钮列表 -->
-    <div :class="styles.buttonContainer">
-      <van-button
-        :disabled="isAddMemberButtonDisabled"
-        :loading="isAddMemberPending"
-        type="primary"
-        block
-        plain
-        @click="handleAddMemberScanClick"
-        >扫码添加</van-button
-      >
-      <van-button
-        :disabled="isAddMemberButtonDisabled"
-        :loading="isAddMemberPending"
-        type="primary"
-        block
-        plain
-        @click="handleAddMemberWithIdClick"
-        >编号添加</van-button
-      >
-      <van-button
-        type="primary"
-        :loading="isRebuildTeamPending"
-        :disabled="isSubmitButtonDisabled"
-        block
-        @click="handleSubmitClick"
-        >提交团队</van-button
-      >
-    </div>
+    <button-list
+      v-model:member-list="memberList"
+      v-model:is-member-id-dialog-visible="isMemberIdDialogVisible"
+      v-model:member-id-dialog-value="memberIdDialogValue"
+      :class="styles.buttonContainer"
+      :team-route="teamRoute"
+      :is-rebuild-team-pending="isRebuildTeamPending"
+      :is-add-member-pending="isAddMemberPending"
+      :guide-select-route-first="guideSelectRouteFirst"
+      :mutate-add-member="mutateAddMember"
+      :add-member-abort-controller="addMemberAbortController"
+      :mutate-rebuild-team="mutateRebuildTeam"
+    />
 
     <!-- 路线选择弹层 -->
     <van-action-sheet
@@ -74,29 +59,10 @@
     />
 
     <!-- 成员操作弹层 -->
-    <van-action-sheet
-      v-model:show="isMemberActionSheetVisible"
-      :actions="memberActionSheetActions"
-      :description="memberActionSheetMember?.name"
-      cancel-text="取消"
-    />
-
-    <!-- 人员ID输入弹窗 -->
-    <prompt-dialog
-      v-model:show="isMemberIdDialogVisible"
-      v-model="memberIdDialogValue"
-      title="编号添加"
-      :field-config="MEMBER_ID_DIALOG_CONFIG"
-      :submit-disabled="isAddMemberPending"
-      @submit="handleMemberIdDialogSubmit"
-      @cancel="handleMemberIdDialogCancel"
-    />
-
-    <!-- 扫码弹层 -->
-    <qr-scan-popup
-      v-model:show="isScanPopupVisible"
-      :schema="MemberQrCodeSchema"
-      @success="handleScanSuccess"
+    <member-action-sheet
+      v-model:visible="isMemberActionSheetVisible"
+      v-model:member-id="memberActionSheetMemberId"
+      v-model:member-list="memberList"
     />
   </default-layout>
 </template>
@@ -105,26 +71,19 @@
 import { useMutation } from "@tanstack/vue-query";
 import type { TeamRebuildMember } from "api/types/admin";
 import { CanceledError } from "axios";
-import { find, isEmpty, isNil } from "lodash-es";
-import type { PromptDialogFieldConfig } from "shared";
-import { PromptDialog, RequestError } from "shared";
-import { is } from "valibot";
-import {
-  type ActionSheetAction,
-  showConfirmDialog,
-  showFailToast,
-  showSuccessToast,
-  showToast
-} from "vant";
-import { computed, ref } from "vue";
+import { isEmpty } from "lodash-es";
+import { RequestError } from "shared";
+import { showFailToast, showSuccessToast, showToast } from "vant";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { MEMBER_WALK_STATUS_COLOR_MAP, MEMBER_WALK_STATUS_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { MemberQrCodeSchema, walkAdminService } from "@/utils";
+import { walkAdminService } from "@/utils";
 import { ROUTE_CONFIG, ROUTE_LIST, type RouteId } from "@/walk-config";
 
+import ButtonList from "./components/button-list/index.vue";
+import MemberActionSheet from "./components/member-action-sheet/index.vue";
 import { TEAM_REBUILD_MEMBER_COUNT_LIMIT } from "./constants";
 import styles from "./index.module.scss";
 import type { RoutePickerAction } from "./types";
@@ -136,35 +95,10 @@ const memberList = ref<TeamRebuildMember[]>([]);
 /** 重组的团队的路线 */
 const teamRoute = ref<RouteId | "">("");
 
-/** 提交团队按钮是否禁用 */
-const isSubmitButtonDisabled = computed(
-  () =>
-    // 人数超限
-    memberList.value.length < TEAM_REBUILD_MEMBER_COUNT_LIMIT.MIN ||
-    memberList.value.length > TEAM_REBUILD_MEMBER_COUNT_LIMIT.MAX ||
-    // 未选择路线
-    !teamRoute.value ||
-    // 正在请求
-    isRebuildTeamPending.value
-);
-
-/** 添加新成员按钮是否禁用 */
-const isAddMemberButtonDisabled = computed(
-  () =>
-    // 人数达上限
-    memberList.value.length >= TEAM_REBUILD_MEMBER_COUNT_LIMIT.MAX
-);
-
-/** 人员ID输入弹窗提交 */
-const handleMemberIdDialogSubmit = () => {
-  const userId = Number(memberIdDialogValue.value.memberIdStr);
-  mutateAddMember(userId);
-};
-
-/** 人员ID输入弹窗取消 */
-const handleMemberIdDialogCancel = () => {
-  addMemberAbortController?.abort();
-};
+/** 人员ID输入弹窗是否显示 */
+const isMemberIdDialogVisible = ref(false);
+/** 人员ID输入弹窗 表单值 */
+const memberIdDialogValue = ref({ memberIdStr: "" });
 
 /** 引导用户先选择路线 */
 const guideSelectRouteFirst = () => {
@@ -173,56 +107,6 @@ const guideSelectRouteFirst = () => {
     zIndex: 3000
   });
   openRoutePickerSheet();
-};
-
-/** 点击编号添加 */
-const handleAddMemberWithIdClick = () => {
-  // 未选择路线
-  if (!teamRoute.value) {
-    guideSelectRouteFirst();
-    return;
-  }
-  memberIdDialogValue.value.memberIdStr = "";
-  isMemberIdDialogVisible.value = true;
-};
-
-/** 扫码弹层是否可见 */
-const isScanPopupVisible = ref(false);
-
-/** 点击扫码添加 */
-const handleAddMemberScanClick = () => {
-  // 未选择路线
-  if (!teamRoute.value) {
-    guideSelectRouteFirst();
-    return;
-  }
-  isScanPopupVisible.value = true;
-};
-
-/** 扫码成功 */
-const handleScanSuccess = (data: unknown) => {
-  if (!is(MemberQrCodeSchema, data)) return;
-  // 关闭扫码弹层
-  isScanPopupVisible.value = false;
-  // 查重验证
-  if (memberList.value.some((member) => member.id === data.user_id)) {
-    showFailToast("该成员已添加\n不可重复添加");
-    return;
-  }
-  mutateAddMember(data.user_id);
-};
-
-/** 点击提交团队 */
-const handleSubmitClick = async () => {
-  try {
-    await showConfirmDialog({
-      title: "重组团队",
-      message: "列表中的成员将移至新团队，\n是否确认？（操作不可撤销！）"
-    });
-  } catch {
-    return;
-  }
-  mutateRebuildTeam();
 };
 
 /** 路线选择弹层是否可见 */
@@ -246,65 +130,8 @@ const handleSelectRoute = (action: RoutePickerAction) => {
 
 /** 成员操作弹层当前操作的成员ID */
 const memberActionSheetMemberId = ref<number>();
-/** 成员操作弹层当前操作的成员 */
-const memberActionSheetMember = computed(() =>
-  find(memberList.value, (member) => member.id === memberActionSheetMemberId.value)
-);
 /** 成员操作弹层是否可见 */
 const isMemberActionSheetVisible = ref(false);
-
-/** 将成员设为队长 */
-const handleSetCaptain = () => {
-  if (isNil(memberActionSheetMember.value)) return;
-  memberList.value = [
-    memberActionSheetMember.value,
-    ...memberList.value.filter((member) => member.id !== memberActionSheetMemberId.value)
-  ];
-  showSuccessToast("设置成功");
-  isMemberActionSheetVisible.value = false;
-};
-
-/** 删除成员 */
-const handleDeleteMember = () => {
-  memberList.value = memberList.value.filter(
-    (item) => Number(item.id) !== memberActionSheetMemberId.value
-  );
-  isMemberActionSheetVisible.value = false;
-};
-
-/** 成员操作弹层选项列表 */
-const memberActionSheetActions = computed<ActionSheetAction[]>(() => [
-  {
-    name: "设为队长",
-    disabled: memberActionSheetMemberId.value === memberList.value.at(0)?.id,
-    callback: handleSetCaptain
-  },
-  { name: "删除", color: "var(--van-danger-color)", callback: handleDeleteMember }
-]);
-
-/** 人员ID输入弹窗是否显示 */
-const isMemberIdDialogVisible = ref(false);
-/** 人员ID输入弹窗 表单值 */
-const memberIdDialogValue = ref({ memberIdStr: "" });
-/** 人员ID输入弹窗 表单字段配置 */
-const MEMBER_ID_DIALOG_CONFIG: Record<
-  keyof typeof memberIdDialogValue.value,
-  PromptDialogFieldConfig
-> = {
-  memberIdStr: {
-    label: "人员ID",
-    placeholder: "请输入毅行人员ID",
-    type: "digit",
-    rules: [
-      { required: true, message: "请输入毅行人员ID" },
-      // 查重验证
-      {
-        validator: (val) => !memberList.value.some((member) => member.id === Number(val)),
-        message: "该成员已添加，不可重复添加"
-      }
-    ]
-  }
-};
 
 /** 打开成员操作弹层 */
 const openMemberActionSheet = (memberId: number) => {
@@ -316,27 +143,27 @@ const openMemberActionSheet = (memberId: number) => {
 let addMemberAbortController: AbortController | null = null;
 // 获取成员信息并添加成员到团队
 const { mutate: mutateAddMember, isPending: isAddMemberPending } = useMutation({
-  mutationFn: (userId: number) => {
+  mutationFn: (memberId: number) => {
     addMemberAbortController?.abort();
     addMemberAbortController = new AbortController();
     return walkAdminService.QueryMemberInfo(
       {
-        user_id: userId
+        user_id: memberId
       },
       { signal: addMemberAbortController.signal }
     );
   },
-  onSuccess: (userInfo, userId) => {
+  onSuccess: (memberInfo, userId) => {
     // 人员状态验证
-    if (userInfo.status !== "not_start" && userInfo.status !== "pending") {
+    if (memberInfo.status !== "not_start" && memberInfo.status !== "pending") {
       showFailToast("须为未开始或待出发人员");
       return;
     }
     isMemberIdDialogVisible.value = false;
     memberList.value.push({
       id: userId,
-      name: userInfo.name,
-      status: userInfo.status
+      name: memberInfo.name,
+      status: memberInfo.status
     });
     memberIdDialogValue.value.memberIdStr = "";
   },

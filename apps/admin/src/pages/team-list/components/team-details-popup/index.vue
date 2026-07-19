@@ -143,7 +143,7 @@ const {
   queryKey: [ADMIN_QUERY_KEY.TEAM.DETAILS, viewingTeamId] as const,
   queryFn: ({ queryKey }) =>
     walkAdminService.QueryTeamDetails({
-      team_id: Number(queryKey[1])
+      team_id: queryKey[1]
     })
 });
 

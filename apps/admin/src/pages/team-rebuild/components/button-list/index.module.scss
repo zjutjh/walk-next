@@ -1,0 +1,11 @@
+// 团队重组页功能按钮列表
+.component {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: var(--van-cell-group-inset-padding);
+
+  :global(.van-button__text) {
+    font-size: 18px;
+  }
+}
