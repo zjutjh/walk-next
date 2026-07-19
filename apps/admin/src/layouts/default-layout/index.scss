@@ -5,7 +5,7 @@
   overflow: hidden;
   background-color: var(--van-background);
 
-  .loading-container {
+  &__loading-container {
     flex-grow: 1;
     height: 0;
   }

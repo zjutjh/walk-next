@@ -17,7 +17,10 @@
     </van-nav-bar>
     <slot name="header" />
     <!-- 主内容区域 -->
-    <loading-container :loading="props.loading || isNavigationPending">
+    <loading-container
+      class="default-layout__loading-container"
+      :loading="props.loading || isNavigationPending"
+    >
       <main class="default-layout__main">
         <slot />
       </main>
