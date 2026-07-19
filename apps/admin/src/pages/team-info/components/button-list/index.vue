@@ -2,7 +2,7 @@
 <template>
   <div :class="styles.component">
     <van-button
-      v-if="props.teamInfoData?.team?.is_prev_point_invalid"
+      v-if="props.teamInfoData?.team?.is_prev_point_invalid && hasNotViolatedWalkingMember"
       type="danger"
       block
       @click="handleMarkViolatedClick"
@@ -16,7 +16,7 @@
       >绑定签到码</van-button
     >
     <van-button
-      v-if="isEndPointManageAvailable"
+      v-if="isEndPointManageAvailable && hasInProgressMember"
       type="primary"
       block
       @click="handleConfirmDestinationClick"
@@ -36,7 +36,7 @@
 import type { AdminAPI } from "api/types/admin";
 import { is } from "valibot";
 import { showConfirmDialog } from "vant";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { CheckinQrCodeSchema } from "@/utils";
@@ -62,6 +62,20 @@ const emit = defineEmits<{
   /** 绑定签到码 */
   mutateBindCheckinCode: [params: { teamId: number; content: string }];
 }>();
+
+/** 团队中是否有未违规且未离开的成员 */
+const hasNotViolatedWalkingMember = computed(() =>
+  props.teamInfoData?.members.some(
+    (member) =>
+      !member.is_violated &&
+      member.walk_status !== "abandoned" &&
+      member.walk_status !== "withdrawn"
+  )
+);
+/** 团队中是否有进行中成员 */
+const hasInProgressMember = computed(() =>
+  props.teamInfoData?.members.some((member) => member.walk_status === "in_progress")
+);
 
 /** 扫码弹层是否可见 */
 const isScanPopupVisible = ref(false);
