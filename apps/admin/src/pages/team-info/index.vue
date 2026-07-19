@@ -6,7 +6,7 @@
     :back-disabled="isAnyMutationPending"
     :loading="isTeamInfoLoading || isAnyMutationPending"
   >
-    <error-empty :error="teamInfoError" :disabled="isTeamInfoFetching">
+    <error-empty :error="teamInfoError" :disabled="isTeamInfoFetching" @btn-click="refetchTeamInfo">
       <van-pull-refresh
         v-if="teamInfoData"
         :model-value="isPullRefreshing"
@@ -177,7 +177,7 @@ const isEndPointManageAvailable = computed(() =>
 /** 获取团队状态信息 */
 const {
   data: teamInfoData,
-  refetch: refetchTeamData,
+  refetch: refetchTeamInfo,
   isLoading: isTeamInfoLoading,
   isFetching: isTeamInfoFetching,
   error: teamInfoError
@@ -202,7 +202,7 @@ const handleRefresh = () => {
   // 展示下拉刷新态
   isPullRefreshing.value = true;
 
-  refetchTeamData();
+  refetchTeamInfo();
 };
 
 // 团队在最近的打卡中进入错误路线时，显示一次提示
@@ -252,7 +252,7 @@ const { mutate: mutateUpdateMemberWalkStatus, isPending: isUpdateMemberWalkStatu
     },
     onSettled: () => {
       // 刷新团队数据
-      refetchTeamData();
+      refetchTeamInfo();
     }
   });
 
@@ -287,7 +287,7 @@ const { mutate: mutateUpdateMemberViolated, isPending: isUpdateMemberViolatedPen
     },
     onSettled: () => {
       // 刷新团队数据
-      refetchTeamData();
+      refetchTeamInfo();
     }
   });
 
@@ -316,7 +316,7 @@ const { mutate: mutateMarkTeamViolated, isPending: isMarkTeamViolatedPending } =
   },
   onSettled: () => {
     // 刷新团队数据
-    refetchTeamData();
+    refetchTeamInfo();
   }
 });
 
@@ -329,7 +329,7 @@ const { mutate: mutateBindCheckinCode, isPending: isBindCheckinCodePending } = u
     }),
   onSuccess: () => {
     showSuccessToast("绑定成功");
-    refetchTeamData();
+    refetchTeamInfo();
   },
   onError: (error) => {
     showFailToast(error.message || "绑定失败");
@@ -344,7 +344,7 @@ const { mutate: mutateConfirmDestination, isPending: isConfirmDestinationPending
     }),
   onSuccess: () => {
     showSuccessToast("已确认");
-    refetchTeamData();
+    refetchTeamInfo();
   },
   onError: (error) => {
     showFailToast(error.message || "操作失败");
