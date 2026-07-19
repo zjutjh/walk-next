@@ -4,7 +4,7 @@
     ref="searchRef"
     v-model.trim="searchValue"
     :class="styles.component"
-    :show-action="Boolean(searchValue.trim())"
+    :show-action="Boolean(searchValue.trim() || urlQuery.keyword)"
     :placeholder="`搜索${TEAM_SEARCH_TYPE[urlQuery.searchType]?.text}`"
     clear-trigger="always"
     input-align="center"
@@ -27,7 +27,7 @@
     <template #action>
       <!-- 输入框右侧按钮 -->
       <div
-        v-if="searchValue !== urlQuery.keyword"
+        v-if="searchValue !== urlQuery.keyword && searchValue.trim()"
         :class="styles.searchBtn"
         @click="handleSearchApply"
       >
