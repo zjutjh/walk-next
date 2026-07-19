@@ -277,10 +277,10 @@ export interface ConfirmDestinationRequest {
 export type ConfirmDestinationResponse = null;
 
 /** 标记团队违规 请求 */
-export interface MarkTeamViolationRequest {
+export interface MarkTeamViolatedRequest {
   /** 团队编号 */
   team_id: number;
 }
 
 /** 标记团队违规 响应 */
-export type MarkTeamViolationResponse = null;
+export type MarkTeamViolatedResponse = null;

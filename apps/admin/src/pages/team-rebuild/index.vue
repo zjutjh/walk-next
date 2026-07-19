@@ -93,7 +93,7 @@
     @cancel="handleMemberIdDialogCancel"
   />
 
-  <!-- 扫码弹窗 -->
+  <!-- 扫码弹层 -->
   <qr-scan-popup
     v-model:show="isScanPopupVisible"
     :schema="MemberQrCodeSchema"
@@ -186,7 +186,7 @@ const handleAddMemberWithIdClick = () => {
   isMemberIdDialogVisible.value = true;
 };
 
-/** 扫码弹窗是否可见 */
+/** 扫码弹层是否可见 */
 const isScanPopupVisible = ref(false);
 
 /** 点击扫码添加 */

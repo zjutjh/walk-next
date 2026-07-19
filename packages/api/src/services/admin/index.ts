@@ -237,10 +237,10 @@ export default class WalkAdminService<T> extends BaseService<T> {
   }
 
   /** 标记团队违规 */
-  MarkTeamViolation(
-    req: AdminAPI.MarkTeamViolationRequest,
+  MarkTeamViolated(
+    req: AdminAPI.MarkTeamViolatedRequest,
     options?: T
-  ): Promise<AdminAPI.MarkTeamViolationResponse> {
+  ): Promise<AdminAPI.MarkTeamViolatedResponse> {
     const url = this.genBaseURL("/admin/team/violation/mark");
     const method = "POST";
     const data = req;
