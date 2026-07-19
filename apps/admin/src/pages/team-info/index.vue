@@ -72,9 +72,9 @@
             :team-info-data="teamInfoData"
             :is-start-point-manage-available="isStartPointManageAvailable"
             :is-end-point-manage-available="isEndPointManageAvailable"
-            :mutate-team-violated="mutateMarkTeamViolated"
-            :mutate-confirm-destination="mutateConfirmDestination"
-            :mutate-bind-checkin-code="mutateBindCheckinCode"
+            @mutate-team-violated="mutateMarkTeamViolated"
+            @mutate-confirm-destination="mutateConfirmDestination"
+            @mutate-bind-checkin-code="mutateBindCheckinCode"
           />
         </div>
       </van-pull-refresh>
