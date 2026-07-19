@@ -72,7 +72,7 @@ const { urlQuery } = useStoredUrlQuery<DashboardUrlQuery>({
     point: "",
     segment: ""
   },
-  persist: "memory"
+  persist: sessionStorage
 });
 
 /** 浮动面板锚点位置 */

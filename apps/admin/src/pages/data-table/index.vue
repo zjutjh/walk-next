@@ -158,7 +158,7 @@ const { urlQuery } = useStoredUrlQuery<DataTableUrlQuery>({
   defaultValue: {
     tab: OVERVIEW_TAB_NAME
   },
-  persist: "memory"
+  persist: sessionStorage
 });
 
 // 获取总览统计数据

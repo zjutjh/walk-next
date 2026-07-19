@@ -1,4 +1,4 @@
-import { useLocalStorage } from "@vueuse/core";
+import { type RemovableRef, useStorage } from "@vueuse/core";
 import { cloneDeep, get, isNil, isObject, isUndefined, mapValues, set, unset } from "lodash-es";
 import { defineStore } from "pinia";
 import { type Ref, ref, shallowRef, watch } from "vue";
@@ -60,12 +60,12 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
 /** @see {useStoredUrlQuery} 选项 */
 type Options<UrlQuery> = {
   /** URL Query持久化策略
-   * @enum undefined 不持久化
-   * @enum "memory" 内存中持久化，不抗reload
-   * @enum "persistent" 在localStorage中持久化
-   * @default "none"
+   * @description undefined 不持久化
+   * @description "memory" 内存中持久化，不抗reload
+   * @description Storage 将通过该Storage进行持久化
+   * @default undefined
    */
-  persist?: "memory" | "persistent";
+  persist?: "memory" | Storage;
   /** 初始值 */
   defaultValue: Readonly<UrlQuery>;
 };
@@ -105,12 +105,15 @@ export const useStoredUrlQuery = <
    * 初始化URL Query
    */
 
-  /** path对应的localStorage */
-  const localStorageState = useLocalStorage(
-    `stored-url-query-${currentPath}`,
-    {},
-    { writeDefaults: false }
-  );
+  /** path对应的Storage */
+  const storageState: RemovableRef<UrlQuery> | undefined =
+    persist instanceof Storage
+      ? useStorage(`stored-url-query-${currentPath}`, defaultValue, persist, {
+          // 不写入默认值，初始化时会执行合并写入
+          writeDefaults: false
+        })
+      : undefined;
+
   // 获取当前页面的URL Query
   const currentUrlQuery = cloneDeep(route.query);
   // 滤除不在默认值类型中的成员
@@ -124,9 +127,9 @@ export const useStoredUrlQuery = <
   if (persist === "memory") {
     // 合并内存中Store的URL Query
     Object.assign(initialValue, urlQuery.value);
-  } else if (persist === "persistent") {
-    // 合并localStorage中的URL Query
-    Object.assign(initialValue, localStorageState.value);
+  } else if (!isUndefined(storageState)) {
+    // 合并Storage中的URL Query
+    Object.assign(initialValue, storageState.value);
   }
   // 合并当前的URL Query
   Object.assign(initialValue, currentUrlQuery);
@@ -150,9 +153,9 @@ export const useStoredUrlQuery = <
           ...stringifyUrlQueryObj<UrlQuery>(newObj)
         }
       });
-      // 更新localStorage
-      if (persist === "persistent") {
-        localStorageState.value = newObj;
+      // 更新Storage
+      if (!isUndefined(storageState)) {
+        storageState.value = newObj;
       }
     },
     {
