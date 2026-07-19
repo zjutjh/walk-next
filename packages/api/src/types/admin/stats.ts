@@ -46,4 +46,8 @@ export interface PointStat {
   point_name: string;
   /** 经过该点位的总人数 */
   passed_count: number;
+  /** 点位在路线中的顺序 */
+  seq_order: number;
+  /** 该点位前一个行程段上的人数 */
+  count_on_prev_segment?: number;
 }

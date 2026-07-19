@@ -255,7 +255,7 @@ const segmentStatsMap = fromPairs(
         acc.push({
           segmentKey: segmentKey,
           text: SEGMENT_DERIVATIVE[segmentKey]?.text ?? "",
-          countOnSegment: pointData.passed_count - nextPointData.passed_count
+          countOnSegment: nextPointData.count_on_prev_segment ?? 0
         });
         return acc;
       }, [] as SegmentStat[]);
