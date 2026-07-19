@@ -2,7 +2,7 @@ import { isNil } from "lodash-es";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
-import { useMapPanZoomStore } from "@/stores/map-pan-zoom-store";
+import { useMapPanZoomStore } from "@/pages/walk-dashboard/composables/map-pan-zoom-store";
 import type { CampusId } from "@/walk-config";
 
 /** 计算两点间距离 */

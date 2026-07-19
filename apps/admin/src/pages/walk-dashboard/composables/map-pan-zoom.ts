@@ -2,7 +2,7 @@ import { useElementSize, useEventListener, useThrottleFn } from "@vueuse/core";
 import { clamp, cloneDeep } from "lodash-es";
 import { computed, type ShallowRef } from "vue";
 
-import { useMapPanZoomStore } from "@/stores/map-pan-zoom-store";
+import { useMapPanZoomStore } from "@/pages/walk-dashboard/composables/map-pan-zoom-store";
 import type { CampusId } from "@/walk-config";
 
 import { useMapPanZoomState } from "./map-pan-zoom-state";

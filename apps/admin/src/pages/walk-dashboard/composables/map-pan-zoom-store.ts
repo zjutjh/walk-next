@@ -14,7 +14,9 @@ export interface MapTransform {
   scale: number;
 }
 
-/** 地图的变换状态Store */
+/** 地图的变换状态Store
+ * 不要在组件中直接使用，应使用封装后的useMapPanZoomState
+ */
 export const useMapPanZoomStore = defineStore(
   "mapPanZoom",
   () => {
