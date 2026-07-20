@@ -12,17 +12,6 @@
     text-align: center;
     user-select: none;
     pointer-events: none;
-
-    &:has(:global(.van-image__loading)),
-    &:has(:global(.van-image__error)) {
-      width: 100%;
-      height: 100%;
-
-      :global(.error-empty__btn) {
-        pointer-events: auto;
-        z-index: 2;
-      }
-    }
   }
 
   .hotRect {
@@ -46,4 +35,18 @@
         );
     }
   }
+}
+
+// 加载态和错误态的容器，将会被Teleport到父组件
+.statePlaceholder {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--van-image-placeholder-background);
+  z-index: 2;
 }

@@ -17,8 +17,10 @@
       :style="mapTransformCss"
       :campus-id="props.campusId"
       :map-url="props.mapUrl"
+      :transform-escape-teleport="viewportRef"
       @resize="limitMapScale"
     />
+
     <!-- 悬浮功能菜单 -->
     <floating-menu
       v-if="viewportRef"

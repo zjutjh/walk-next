@@ -9,14 +9,26 @@
   >
     <!-- 地图 -->
     <van-image
+      v-if="props.transformEscapeTeleport"
       :key="imageComponentKey"
       :class="styles.mapImage"
       :src="props.mapUrl"
       @load="handleImageLoad"
     >
-      <template #loading><van-loading size="0.5rem" /></template>
+      <!-- 地图的加载态和错误态 会被Teleport到父组件以避免这些内容被平移缩放 -->
+      <template #loading>
+        <teleport :to="props.transformEscapeTeleport" defer>
+          <div :class="styles.statePlaceholder">
+            <van-loading size="0.5rem" />
+          </div>
+        </teleport>
+      </template>
       <template #error>
-        <error-empty error="地图加载失败，请重试" @btn-click="handleRerenderImage" />
+        <teleport :to="props.transformEscapeTeleport" defer>
+          <div :class="styles.statePlaceholder">
+            <error-empty error="地图加载失败，请重试" @btn-click="handleRerenderImage" />
+          </div>
+        </teleport>
       </template>
     </van-image>
 
@@ -25,9 +37,9 @@
       <div
         v-for="(hotRectCss, index) in SEGMENT_CONFIG[segmentKey]?.hotRectList"
         :key="`${segmentKey}${index}`"
-        :jh-walk-hot-rect-tip="SEGMENT_DERIVATIVE[segmentKey].text"
         :class="[styles.hotRect, urlQuery.segment === segmentKey ? styles.chosen : '']"
         :style="isEmpty(hotRectCss) ? hotRectDefaultStyle : hotRectCss"
+        :arial-label="SEGMENT_DERIVATIVE[segmentKey].text"
         @click.stop.prevent="handleSegmentChosen(segmentKey)"
       ></div>
     </template>
@@ -36,9 +48,9 @@
       <div
         v-for="(hotRectCss, index) in POINT_CONFIG[pointId].hotRectList"
         :key="`${pointId}${index}`"
-        :jh-walk-hot-rect-tip="POINT_CONFIG[pointId].text"
         :class="[styles.hotRect, urlQuery.point === pointId ? styles.chosen : '']"
         :style="isEmpty(hotRectCss) ? hotRectDefaultStyle : hotRectCss"
+        :arial-label="POINT_CONFIG[pointId].text"
         @click.stop.prevent="handlePointChosen(pointId)"
       ></div>
     </template>
@@ -70,6 +82,8 @@ const props = defineProps<{
   mapUrl: string;
   /** 校区ID */
   campusId: CampusId;
+  /** 加载态与错误态的Teleport目标DOM */
+  transformEscapeTeleport: HTMLDivElement | null;
 }>();
 
 const emit = defineEmits<{
