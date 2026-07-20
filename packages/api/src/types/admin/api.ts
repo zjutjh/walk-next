@@ -1,6 +1,6 @@
+import type { CheckInException, CheckinQrCodeType } from "./check-in";
 import type { DashboardRoutesOverviewData } from "./dashboard";
 import type { MemberWalkStatus, TeamStatusMemberInfo } from "./member";
-import type { AdminQrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
 import type { SearchType, TeamsMemberInfo, TeamStatusInfo, TeamsTeamBriefInfo } from "./team";
 import type { PermissionLevel } from "./user";
@@ -251,20 +251,20 @@ export interface BindCheckinCodeRequest {
 /** 绑定签到码 响应 */
 export type BindCheckinCodeResponse = null;
 
-/** 打卡(指团队到了某个点位后打卡表示已经过) 请求 */
+/** 打卡 请求 */
 export interface CheckinTeamRequest {
   /** CodeType */
-  code_type: AdminQrCodeType;
+  code_type: CheckinQrCodeType;
   /** Content */
   content: string;
 }
 
-/** 打卡(指团队到了某个点位后打卡表示已经过) 响应 */
+/** 打卡 响应 */
 export interface CheckinTeamResponse {
   /** 团队编号 */
   team_id: number;
-  /** 是否重复打卡 */
-  is_duplicate_check_in: boolean;
+  /** 非阻断性错误 */
+  exception: CheckInException;
 }
 
 /** 终点确认 请求 */

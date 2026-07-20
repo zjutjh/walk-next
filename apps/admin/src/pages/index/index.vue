@@ -75,7 +75,7 @@
       :field-config="TEAM_ID_DIALOG_CONFIG"
       :submit-disabled="isCheckInPending"
       @submit="handleTeamIdDialogSubmit"
-      @cancel="cancelMutateCheckin"
+      @cancel="cancelMutateCheckIn"
     />
   </default-layout>
 </template>
@@ -94,7 +94,7 @@ import { useRouter } from "vue-router";
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { useAdminInfo } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
+import { CheckInQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
 
 import AdminInfoCard from "./components/admin-info-card/index.vue";
@@ -165,22 +165,30 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
 /** 打卡 取消控制器 */
 let checkinAbortController: AbortController | null = null;
 /** 取消打卡请求 */
-const cancelMutateCheckin = () => {
+const cancelMutateCheckIn = () => {
   checkinAbortController?.abort();
 };
 // 打卡
-const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
-  mutationFn: (params: AdminAPI.CheckinTeamRequest) => {
-    cancelMutateCheckin();
+const { mutate: mutateCheckIn, isPending: isCheckInPending } = useMutation({
+  mutationFn: (params: AdminAPI.CheckInTeamRequest) => {
+    cancelMutateCheckIn();
     checkinAbortController = new AbortController();
-    return walkAdminService.CheckinTeam(params, { signal: checkinAbortController.signal });
+    return walkAdminService.CheckInTeam(params, { signal: checkinAbortController.signal });
   },
   onSuccess: (data) => {
     isTeamIdDialogVisible.value = false;
-    if (data.is_duplicate_check_in) {
-      showFailToast("团队重复打卡");
-    } else {
-      showSuccessToast("打卡成功");
+    switch (data.exception) {
+      case "duplicate":
+        showFailToast("团队重复打卡");
+        break;
+      case "wrong_direction":
+        showFailToast("团队行进方向错误");
+        break;
+      case "":
+        showSuccessToast("打卡成功");
+        break;
+      default:
+        showFailToast("状态异常");
     }
     router.push({ name: "team-info", params: { teamIdParam: data.team_id } });
   },
@@ -204,15 +212,15 @@ const { mutate: mutateStartAllThePending, isPending: isStartAllThePendingPending
 /** 扫码成功 */
 const handleScanSuccess = (data: unknown) => {
   if (is(TeamQrCodeSchema, data)) {
-    mutateCheckin({ code_type: "team", content: String(data.team_id) });
-  } else if (is(CheckinQrCodeSchema, data)) {
-    mutateCheckin({ code_type: "checkin", content: data.code });
+    mutateCheckIn({ code_type: "team", content: String(data.team_id) });
+  } else if (is(CheckInQrCodeSchema, data)) {
+    mutateCheckIn({ code_type: "checkin", content: data.code });
   }
 };
 
 /** 团队ID输入弹窗提交 */
 const handleTeamIdDialogSubmit = () => {
-  mutateCheckin({ code_type: "team", content: teamIdDialogValue.value.teamIdStr });
+  mutateCheckIn({ code_type: "team", content: teamIdDialogValue.value.teamIdStr });
 };
 
 /** 点击登出按钮 */
