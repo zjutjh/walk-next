@@ -62,7 +62,7 @@
     <!-- 扫码弹层 -->
     <qr-scan-popup
       v-model:show="urlQuery.isScanning"
-      :loading="isCheckInPending || isNavigationPending"
+      :loading="isCheckinPending || isNavigationPending"
       :schema="checkinQrCodeSchema"
       @success="handleScanSuccess"
     />
@@ -73,9 +73,9 @@
       v-model="teamIdDialogValue"
       title="输入签到"
       :field-config="TEAM_ID_DIALOG_CONFIG"
-      :submit-disabled="isCheckInPending"
+      :submit-disabled="isCheckinPending"
       @submit="handleTeamIdDialogSubmit"
-      @cancel="cancelMutateCheckIn"
+      @cancel="cancelMutateCheckin"
     />
   </default-layout>
 </template>
@@ -94,7 +94,7 @@ import { useRouter } from "vue-router";
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { useAdminInfo } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { CheckInQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
+import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
 
 import AdminInfoCard from "./components/admin-info-card/index.vue";
@@ -131,7 +131,7 @@ const isTeamIdDialogVisible = ref(false);
 
 /** 点击扫码签到按钮 */
 const handleScanClick = () => {
-  if (isCheckInPending.value) {
+  if (isCheckinPending.value) {
     showFailToast("正在打卡\n请稍后再试");
     return;
   }
@@ -165,15 +165,15 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
 /** 打卡 取消控制器 */
 let checkinAbortController: AbortController | null = null;
 /** 取消打卡请求 */
-const cancelMutateCheckIn = () => {
+const cancelMutateCheckin = () => {
   checkinAbortController?.abort();
 };
 // 打卡
-const { mutate: mutateCheckIn, isPending: isCheckInPending } = useMutation({
-  mutationFn: (params: AdminAPI.CheckInTeamRequest) => {
-    cancelMutateCheckIn();
+const { mutate: mutateCheckin, isPending: isCheckinPending } = useMutation({
+  mutationFn: (params: AdminAPI.CheckinTeamRequest) => {
+    cancelMutateCheckin();
     checkinAbortController = new AbortController();
-    return walkAdminService.CheckInTeam(params, { signal: checkinAbortController.signal });
+    return walkAdminService.CheckinTeam(params, { signal: checkinAbortController.signal });
   },
   onSuccess: (data) => {
     isTeamIdDialogVisible.value = false;
@@ -212,15 +212,15 @@ const { mutate: mutateStartAllThePending, isPending: isStartAllThePendingPending
 /** 扫码成功 */
 const handleScanSuccess = (data: unknown) => {
   if (is(TeamQrCodeSchema, data)) {
-    mutateCheckIn({ code_type: "team", content: String(data.team_id) });
-  } else if (is(CheckInQrCodeSchema, data)) {
-    mutateCheckIn({ code_type: "checkin", content: data.code });
+    mutateCheckin({ code_type: "team", content: String(data.team_id) });
+  } else if (is(CheckinQrCodeSchema, data)) {
+    mutateCheckin({ code_type: "checkin", content: data.code });
   }
 };
 
 /** 团队ID输入弹窗提交 */
 const handleTeamIdDialogSubmit = () => {
-  mutateCheckIn({ code_type: "team", content: teamIdDialogValue.value.teamIdStr });
+  mutateCheckin({ code_type: "team", content: teamIdDialogValue.value.teamIdStr });
 };
 
 /** 点击登出按钮 */
@@ -252,6 +252,6 @@ const handleStartAllThePendingClick = async () => {
 
 /** 任意mutation请求中 */
 const isAnyMutationPending = computed(
-  () => isLogoutPending.value || isCheckInPending.value || isStartAllThePendingPending.value
+  () => isLogoutPending.value || isCheckinPending.value || isStartAllThePendingPending.value
 );
 </script>

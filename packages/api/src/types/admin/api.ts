@@ -1,4 +1,4 @@
-import type { CheckInException, CheckinQrCodeType } from "./check-in";
+import type { CheckinException, CheckinQrCodeType } from "./check-in";
 import type { DashboardRoutesOverviewData } from "./dashboard";
 import type { MemberWalkStatus, TeamStatusMemberInfo } from "./member";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
@@ -264,7 +264,7 @@ export interface CheckinTeamResponse {
   /** 团队编号 */
   team_id: number;
   /** 非阻断性错误 */
-  exception: CheckInException;
+  exception: CheckinException;
 }
 
 /** 终点确认 请求 */
