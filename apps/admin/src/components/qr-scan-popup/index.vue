@@ -118,11 +118,12 @@
 <script setup lang="ts">
 import "./index.scss";
 
+import { watchImmediate } from "@vueuse/core";
 import { find, isEmpty } from "lodash-es";
 import { ErrorEmpty, LoadingContainer, unknownToError } from "shared";
 import type { BaseIssue, BaseSchema } from "valibot";
 import { showFailToast } from "vant";
-import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, useTemplateRef } from "vue";
 
 import { humanizeScannerErr, type UseQrScannerErrorOptions } from "@/utils";
 
@@ -367,7 +368,7 @@ const handleReloadWindow = () => {
 };
 
 // 监听状态，完成摄像头扫码初始化与启动
-watch(
+watchImmediate(
   [cameraList, isCameraListUpdating, isVisible],
   ([cameraListVal, isCameraListUpdatingVal, isVisibleVal]) => {
     if (!isVisibleVal) return;
@@ -392,7 +393,6 @@ watch(
 
     // 启动摄像头扫码
     startCameraScanner();
-  },
-  { immediate: true }
+  }
 );
 </script>

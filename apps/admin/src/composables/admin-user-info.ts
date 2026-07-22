@@ -1,8 +1,9 @@
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { watchImmediate } from "@vueuse/core";
 import type { AdminAPI, PermissionLevel } from "api/types/admin";
 import { assign, isNil } from "lodash-es";
 import { defineStore } from "pinia";
-import { getCurrentScope, onScopeDispose, ref, toRef, watch } from "vue";
+import { getCurrentScope, onScopeDispose, ref, toRef } from "vue";
 
 import { ADMIN_QUERY_KEY } from "@/constants";
 import { ADMIN_PINIA_PERSIST_KEY } from "@/constants/pinia-persist-key";
@@ -120,19 +121,15 @@ export const useAdminInfo = (queryClient: QueryClient = useQueryClient()) => {
       staleTime: Infinity
     });
     // 获取成功后更新Store
-    watch(
-      data,
-      (newData) => {
-        if (isNil(newData)) return;
-        updateAdminInfo({
-          adminName: newData.name,
-          pointId: newData.point_name,
-          campusId: newData.campus,
-          permissionLevel: newData.permission
-        });
-      },
-      { immediate: true }
-    );
+    watchImmediate(data, (newData) => {
+      if (isNil(newData)) return;
+      updateAdminInfo({
+        adminName: newData.name,
+        pointId: newData.point_name,
+        campusId: newData.campus,
+        permissionLevel: newData.permission
+      });
+    });
   };
 
   return {

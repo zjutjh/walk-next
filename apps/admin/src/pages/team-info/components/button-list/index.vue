@@ -33,10 +33,11 @@
 </template>
 
 <script setup lang="ts">
+import { useArraySome } from "@vueuse/core";
 import type { AdminAPI } from "api/types/admin";
 import { is } from "valibot";
 import { showConfirmDialog } from "vant";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { CheckinQrCodeSchema } from "@/utils";
@@ -64,17 +65,15 @@ const emit = defineEmits<{
 }>();
 
 /** 团队中是否有未违规且未离开的成员 */
-const hasNotViolatedWalkingMember = computed(() =>
-  props.teamInfoData?.members.some(
-    (member) =>
-      !member.is_violated &&
-      member.walk_status !== "abandoned" &&
-      member.walk_status !== "withdrawn"
-  )
+const hasNotViolatedWalkingMember = useArraySome(
+  () => props.teamInfoData?.members ?? [],
+  (member) =>
+    !member.is_violated && member.walk_status !== "abandoned" && member.walk_status !== "withdrawn"
 );
 /** 团队中是否有进行中成员 */
-const hasInProgressMember = computed(() =>
-  props.teamInfoData?.members.some((member) => member.walk_status === "in_progress")
+const hasInProgressMember = useArraySome(
+  () => props.teamInfoData?.members ?? [],
+  (member) => member.walk_status === "in_progress"
 );
 
 /** 扫码弹层是否可见 */

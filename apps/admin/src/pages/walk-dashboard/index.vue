@@ -44,9 +44,9 @@
 </template>
 
 <script setup lang="ts">
-import { useWindowSize } from "@vueuse/core";
+import { useWindowSize, watchImmediate } from "@vueuse/core";
 import { ErrorEmpty, useStoredUrlQuery } from "shared";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import DefaultLayout from "@/layouts/default-layout/index.vue";
@@ -86,14 +86,10 @@ const { urlQuery } = useStoredUrlQuery<DashboardUrlQuery>({
 const floatingPanelAnchors = ref<number[]>([]);
 // 根据视口宽度计算锚点位置
 const { width } = useWindowSize();
-watch(
-  width,
-  () => {
-    // 关闭位置不能恰好为0，需留余量，因为浮动面板有向外阴影
-    floatingPanelAnchors.value = [-pxToSize(10), pxToSize(240)];
-  },
-  { immediate: true }
-);
+watchImmediate(width, () => {
+  // 关闭位置不能恰好为0，需留余量，因为浮动面板有向外阴影
+  floatingPanelAnchors.value = [-pxToSize(10), pxToSize(240)];
+});
 
 /** 浮动面板高度 */
 const floatingPanelHeight = computed({
@@ -103,7 +99,7 @@ const floatingPanelHeight = computed({
       ? floatingPanelAnchors.value.at(1)
       : floatingPanelAnchors.value.at(0),
   set: (newHeight) => {
-    // 手动关闭浮动面板时清空选中项
+    // 浮动面板被下拉关闭时清空选中项
     if (newHeight === floatingPanelAnchors.value.at(0)) {
       urlQuery.value.segment = "";
       urlQuery.value.point = "";

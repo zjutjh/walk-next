@@ -89,7 +89,7 @@ export const routerInstance = createRouter({
 // 前置路由守卫
 routerInstance.beforeEach((to, from) => {
   const { hasPermission, isLoggedIn } = useAdminInfo(globalQueryClient);
-  const { pendingNavigationCount } = useRouterState();
+  const { incPendingNavigationCount } = useRouterState();
 
   // 拦截无效路由
   if (to.matched.length === 0) {
@@ -117,27 +117,27 @@ routerInstance.beforeEach((to, from) => {
     }
   }
 
-  // 更新路由状态
-  pendingNavigationCount.value += 1;
+  // 更新全局路由状态
+  incPendingNavigationCount();
 });
 
 // 后置路由守卫
 routerInstance.afterEach((_to, _from, failure) => {
-  const { pendingNavigationCount } = useRouterState();
+  const { decPendingNavigationCount } = useRouterState();
 
   /**
    * Vue Router 5.x中，duplicated会跳过navigate，也就不会执行beforeEach，需要过滤，以免计数器泄露
    *  @see https://github.com/vuejs/router/blob/main/packages/router/src/router.ts */
   if (!isNavigationFailure(failure, NavigationFailureType.duplicated)) {
-    // 更新路由状态
-    pendingNavigationCount.value -= 1;
+    // 更新全局路由状态
+    decPendingNavigationCount();
   }
 });
 
 // 路由内部逻辑错误处理
 routerInstance.onError((error) => {
   console.error(error);
-  // 重置路由状态
-  const { pendingNavigationCount } = useRouterState();
-  pendingNavigationCount.value = 0;
+  // 重置全局路由状态
+  const { resetPendingNavigationCount } = useRouterState();
+  resetPendingNavigationCount();
 });

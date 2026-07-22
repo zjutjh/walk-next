@@ -1,6 +1,6 @@
-import { useDevicesList } from "@vueuse/core";
+import { useDevicesList, watchImmediate } from "@vueuse/core";
 import { isEmpty, orderBy } from "lodash-es";
-import { onBeforeUnmount, readonly, ref, watch } from "vue";
+import { onBeforeUnmount, readonly, ref } from "vue";
 
 import type { ExtendedCameraInfo } from "../types";
 
@@ -70,7 +70,7 @@ export const useScannerCameraList = () => {
   /** 最晚开始的摄像头列表更新任务的Symbol，用于确保只有最晚任务的结果被接受 */
   let latestUpdateTaskSymbol: symbol | null = null;
   // 监听状态，执行异步任务更新摄像头列表
-  watch(
+  watchImmediate(
     [videoDeviceList, isCameraApiSupported, isPermissionGranted],
     async ([videoDeviceListVal, isCameraApiSupportedVal, isPermissionGrantedVal]) => {
       // 无权限/API不支持/设备列表为空
@@ -114,8 +114,7 @@ export const useScannerCameraList = () => {
       // 更新摄像头列表
       cameraList.value = result;
       isCameraListUpdating.value = false;
-    },
-    { immediate: true }
+    }
   );
 
   onBeforeUnmount(() => {

@@ -1,7 +1,7 @@
-import { type RemovableRef, useStorage } from "@vueuse/core";
+import { type RemovableRef, useStorage, watchImmediate } from "@vueuse/core";
 import { cloneDeep, get, isNil, isObject, isUndefined, mapValues, set, unset } from "lodash-es";
 import { defineStore } from "pinia";
-import { type Ref, ref, shallowRef, watch } from "vue";
+import { type Ref, ref, shallowRef } from "vue";
 import { type LocationQueryRaw, useRoute, useRouter } from "vue-router";
 
 /** Stored URL Query 状态Store */
@@ -142,7 +142,7 @@ export const useStoredUrlQuery = <
    */
 
   // 侦听URL Query响应式对象变化
-  watch(
+  watchImmediate(
     urlQuery,
     (newObj) => {
       if (isUndefined(newObj)) return;
@@ -159,9 +159,7 @@ export const useStoredUrlQuery = <
       }
     },
     {
-      deep: true,
-      // 立即同步一次
-      immediate: true
+      deep: true
     }
   );
 

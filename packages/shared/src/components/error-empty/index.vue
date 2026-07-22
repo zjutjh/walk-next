@@ -57,7 +57,7 @@ const emit = defineEmits<{
 /** 显示的错误文本 */
 const errorText = computed(() => {
   if (props.error instanceof Error) return props.error.message;
-  return props.error;
+  return props.error ?? "";
 });
 
 /** 点击错误态中的按钮 */

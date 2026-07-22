@@ -102,12 +102,13 @@
 
 <script setup lang="ts">
 import { type InfiniteData, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useArrayFilter, whenever } from "@vueuse/core";
 import type { AdminAPI } from "api/types/admin";
 import dayjs from "dayjs";
 import { isNil } from "lodash-es";
 import { ErrorEmpty, LoadingContainer, patchInfiniteQueryPages } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
-import { computed, ref, watch } from "vue";
+import { ref } from "vue";
 
 import { ADMIN_QUERY_KEY, TEAM_MEMBER_ROLE_TEXT } from "@/constants";
 import { walkAdminService } from "@/utils";
@@ -150,13 +151,15 @@ const {
 });
 
 /** 特殊成员列表 */
-const specialMemberList = computed(() =>
-  detailsData.value ? detailsData.value.members.filter((member) => member.role === "captain") : []
+const specialMemberList = useArrayFilter(
+  () => detailsData.value?.members ?? [],
+  (member) => member.role !== "member"
 );
 
 /** 普通成员列表 */
-const normalMemberList = computed(() =>
-  detailsData.value ? detailsData.value.members.filter((member) => member.role === "member") : []
+const normalMemberList = useArrayFilter(
+  () => detailsData.value?.members ?? [],
+  (member) => member.role === "member"
 );
 
 // 设置团队失联状态
@@ -212,12 +215,11 @@ const handleSwitchLost = (targetValue: boolean) => {
 /** 是否正在下拉刷新中 */
 const isPullRefreshing = ref(false);
 // refetch结束时关闭下拉刷新态
-watch(
-  () => isRefetching.value,
-  (newValue) => {
-    if (newValue === false) isPullRefreshing.value = false;
-  },
-  { immediate: true }
+whenever(
+  () => !isRefetching.value,
+  () => {
+    isPullRefreshing.value = false;
+  }
 );
 
 /** 下拉刷新团队详情 */

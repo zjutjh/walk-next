@@ -65,6 +65,7 @@
 
 <script setup lang="ts">
 import { type InfiniteData, useInfiniteQuery, useQueryClient } from "@tanstack/vue-query";
+import { useArrayEvery } from "@vueuse/core";
 import type { AdminAPI } from "api/types/admin";
 import dayjs from "dayjs";
 import { computed, toRef } from "vue";
@@ -124,7 +125,7 @@ const {
 });
 
 /** 是否已经全部拉取完成 */
-const isFinished = computed(() => !(hasMore.value || isFetching.value || isError.value));
+const isFinished = useArrayEvery([hasMore, isFetching, isError], (val) => !val);
 
 /** 全部拉取完成后的提示文本 */
 const finishedTipText = computed(() => {

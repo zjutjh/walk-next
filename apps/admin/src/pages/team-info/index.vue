@@ -96,11 +96,12 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useArraySome, useToNumber, whenever } from "@vueuse/core";
 import type { AdminAPI, MemberWalkStatus } from "api/types/admin";
 import { first, isNil, last } from "lodash-es";
 import { CellGroup, ErrorEmpty } from "shared";
 import { showDialog, showFailToast, showSuccessToast } from "vant";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 
 import { useAdminInfo } from "@/composables";
 import {
@@ -121,13 +122,10 @@ const props = defineProps<{
   teamIdParam: string;
 }>();
 /** 团队ID */
-const teamId = computed(() => parseInt(props.teamIdParam));
+const teamId = useToNumber(props.teamIdParam, { method: "parseInt" });
 
 const queryClient = useQueryClient();
 const { adminPointId } = useAdminInfo();
-
-/** 是否已经弹出过走错路线提示 */
-const isWrongRouteAlertTriggered = ref(false);
 
 /** 团队剩余人数 */
 const remainingCount = computed(
@@ -189,12 +187,11 @@ const {
 /** 是否正在下拉刷新中 */
 const isPullRefreshing = ref(false);
 // refetch结束时关闭下拉刷新态
-watch(
-  () => isTeamInfoFetching.value,
-  (newValue) => {
-    if (newValue === false) isPullRefreshing.value = false;
-  },
-  { immediate: true }
+whenever(
+  () => !isTeamInfoFetching.value,
+  () => {
+    isPullRefreshing.value = false;
+  }
 );
 
 /** 下拉刷新 */
@@ -206,19 +203,15 @@ const handleRefresh = () => {
 };
 
 // 团队在最近的打卡中进入错误路线时，显示一次提示
-watch(
+whenever(
   () => teamInfoData.value?.team.is_just_enter_wrong_route,
-  (isJustEnterWrongRouteVal) => {
-    if (isNil(teamInfoData.value)) return;
-    if (!isWrongRouteAlertTriggered.value && isJustEnterWrongRouteVal) {
-      isWrongRouteAlertTriggered.value = true;
-      showDialog({
-        title: "走错路线",
-        message: "该团队走错路线，请及时提醒！"
-      });
-    }
+  () => {
+    showDialog({
+      title: "走错路线",
+      message: "该团队走错路线，请及时提醒！"
+    });
   },
-  { immediate: true }
+  { once: true }
 );
 
 // 更改成员行进状态
@@ -352,12 +345,14 @@ const { mutate: mutateConfirmDestination, isPending: isConfirmDestinationPending
 });
 
 /** 任意mutation请求中 */
-const isAnyMutationPending = computed(
-  () =>
-    isUpdateMemberWalkStatusPending.value ||
-    isUpdateMemberViolatedPending.value ||
-    isBindCheckinCodePending.value ||
-    isConfirmDestinationPending.value ||
-    isMarkTeamViolatedPending.value
+const isAnyMutationPending = useArraySome(
+  [
+    isUpdateMemberWalkStatusPending,
+    isUpdateMemberViolatedPending,
+    isBindCheckinCodePending,
+    isConfirmDestinationPending,
+    isMarkTeamViolatedPending
+  ],
+  Boolean
 );
 </script>

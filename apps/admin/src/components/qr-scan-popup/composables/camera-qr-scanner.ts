@@ -1,7 +1,7 @@
-import { useIntervalFn } from "@vueuse/core";
+import { useLastChanged, useTimeoutPoll, watchImmediate } from "@vueuse/core";
 import { scan } from "qr-scanner-wechat";
 import { type BaseIssue, type BaseSchema, type InferInput, ValiError } from "valibot";
-import { onBeforeUnmount, readonly, type Ref, ref, watch } from "vue";
+import { onBeforeUnmount, readonly, type Ref, ref } from "vue";
 
 import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 
@@ -53,9 +53,9 @@ export const useCameraQrScanner = <
 
   /** 最近一次识别到的扫描结果原始文本
    * 扫描不到二维码时，qr-scanner-wechat的scan实际会返回undefined（与类型推断不符），undefined不可去除 */
-  let lastScannedRawText: string | null | undefined = null;
-  /** 最近一次识别到二维码的时间戳 */
-  let lastScannedTimestamp = 0;
+  const lastScannedRawText = ref<string | null | undefined>(null);
+  /** lastScannedRawText最近一次改变的时间戳 */
+  const lastScannedRawTextChangedAt = useLastChanged(lastScannedRawText);
 
   // 惰性关闭的摄像头流
   const {
@@ -78,41 +78,37 @@ export const useCameraQrScanner = <
   };
 
   // 绑定摄像头流
-  watch(
-    [cameraStream, status, videoRef],
-    async ([cameraStreamVal, statusVal, video]) => {
-      try {
-        if (!video) return;
+  watchImmediate([cameraStream, status, videoRef], async ([cameraStreamVal, statusVal, video]) => {
+    try {
+      if (!video) return;
 
-        // 摄像头流未改变，忽略
-        if (video.srcObject === cameraStreamVal) return;
-        // 处于关闭状态，中止
-        if (statusVal === "off") return;
+      // 摄像头流未改变，忽略
+      if (video.srcObject === cameraStreamVal) return;
+      // 处于关闭状态，中止
+      if (statusVal === "off") return;
 
-        // 摄像头流为空
-        if (!cameraStreamVal) {
-          releaseVideoResources();
-          return;
-        }
-
-        // 关联视频流
-        video.srcObject = cameraStreamVal;
-        // 播放视频流
-        await video.play();
-        // @ts-expect-error: 2367
-        if (statusVal === "off") return;
-        isCameraVideoPlayable.value = true;
-      } catch (err) {
-        // play完成前被pause中断，静默忽略
-        if (err instanceof DOMException && err.name === "AbortError") {
-          return console.warn(err);
-        }
-
-        emitError(err, { blocking: true });
+      // 摄像头流为空
+      if (!cameraStreamVal) {
+        releaseVideoResources();
+        return;
       }
-    },
-    { immediate: true }
-  );
+
+      // 关联视频流
+      video.srcObject = cameraStreamVal;
+      // 播放视频流
+      await video.play();
+      // @ts-expect-error: 2367
+      if (statusVal === "off") return;
+      isCameraVideoPlayable.value = true;
+    } catch (err) {
+      // play完成前被pause中断，静默忽略
+      if (err instanceof DOMException && err.name === "AbortError") {
+        return console.warn(err);
+      }
+
+      emitError(err, { blocking: true });
+    }
+  });
 
   /** 从激活状态切换到悬置状态（不会断开摄像头，仍然占用资源 消耗性能） */
   const switchToIdle = () => {
@@ -134,13 +130,8 @@ export const useCameraQrScanner = <
     status.value = "active";
   };
 
-  /** 是否正在尝试从视频帧中扫描二维码 */
-  const isScanFramePending = ref(false);
   /** 尝试扫描当前视频帧中的二维码 */
   const scanVideoFrame = async () => {
-    // 上次扫描未结束
-    if (isScanFramePending.value) return;
-
     // 摄像头扫码Composable不在激活状态
     if (status.value !== "active") return;
 
@@ -180,43 +171,36 @@ export const useCameraQrScanner = <
       return emitError(err, { blocking: true });
     }
 
-    // 扫描当前视频帧
-    try {
-      isScanFramePending.value = true;
-      // 从绘制当前视频帧到Canvas
-      canvasCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      // 尝试扫描二维码
-      const result = await scan(canvas);
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (status.value !== "active") return;
+    // 从绘制当前视频帧到Canvas
+    canvasCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // 尝试扫描二维码
+    const result = await scan(canvas);
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (status.value !== "active") return;
 
-      // 未识别到二维码，忽略
-      if (!result.text) return;
+    // 未识别到二维码，忽略
+    if (!result.text) return;
 
-      // 短时间内重复识别，忽略
-      if (
-        result.text === lastScannedRawText &&
-        Date.now() - lastScannedTimestamp < DUPLICATE_SCAN_INTERVAL
-      ) {
-        return;
-      }
-      lastScannedRawText = result.text;
-      lastScannedTimestamp = Date.now();
+    // 短时间内重复识别，忽略
+    if (
+      result.text === lastScannedRawText.value &&
+      Date.now() - (lastScannedRawTextChangedAt.value ?? 0) < DUPLICATE_SCAN_INTERVAL
+    ) {
+      return;
+    }
+    lastScannedRawText.value = result.text;
 
-      // 处理扫描结果原始文本
-      const parseResult = parseQrCodeRawText(result.text, schema);
-      if (parseResult.success) {
-        emitSuccess(parseResult.output);
-      } else {
-        emitError(new ValiError(parseResult.issues));
-      }
-    } finally {
-      isScanFramePending.value = false;
+    // 处理扫描结果原始文本
+    const parseResult = parseQrCodeRawText(result.text, schema);
+    if (parseResult.success) {
+      emitSuccess(parseResult.output);
+    } else {
+      emitError(new ValiError(parseResult.issues));
     }
   };
 
   // 定时扫描视频帧
-  const { pause: pauseScanInterval, resume: resumeScanInterval } = useIntervalFn(
+  const { pause: pauseScanInterval, resume: resumeScanInterval } = useTimeoutPoll(
     async () => {
       try {
         await scanVideoFrame();
@@ -243,8 +227,7 @@ export const useCameraQrScanner = <
       }
 
       // 重置状态，进入启动中状态
-      lastScannedRawText = null;
-      lastScannedTimestamp = 0;
+      lastScannedRawText.value = null;
       status.value = "starting";
 
       // 请求摄像头流
@@ -279,9 +262,7 @@ export const useCameraQrScanner = <
     canvasCtx = null;
 
     // 重置状态
-    lastScannedRawText = null;
-    lastScannedTimestamp = 0;
-    isScanFramePending.value = false;
+    lastScannedRawText.value = null;
     status.value = "off";
   };
 

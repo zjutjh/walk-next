@@ -83,7 +83,7 @@ const handleNotStoppedClick = () => {
   urlQuery.value.segment = "";
 };
 
-/** 地图是否与视口不吻合 (地图与视口的高度不相同，宽度也不相同)*/
+/** 地图是否与视口不吻合 (地图与视口的高度不相近，宽度也不相近)*/
 const isMapNotFit = computed(
   () =>
     Math.abs(transformValue.pending.value.scale - 1) > 0.005 &&

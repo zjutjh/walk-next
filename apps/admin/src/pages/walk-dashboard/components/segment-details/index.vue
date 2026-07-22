@@ -23,7 +23,7 @@
               <div :class="styles.dataKey">路段人数</div>
             </div>
             <div :class="styles.data">
-              <div :class="styles.dataValue">{{ segmentBelongsTo }}</div>
+              <div :class="styles.dataValue">{{ segmentBelongsToText }}</div>
               <div :class="styles.dataKey">所属路线</div>
             </div>
           </div>
@@ -72,8 +72,8 @@ const router = useRouter();
 /** URL Query 当前选中的行程段key */
 const chosenSegmentKey = defineModel<DashboardUrlQuery["segment"]>("segment", { required: true });
 
-/** 行程段所归属的路线 */
-const segmentBelongsTo = computed(() => {
+/** 行程段所归属的路线 显示文本 */
+const segmentBelongsToText = computed(() => {
   if (chosenSegmentKey.value === "") return "";
   // 遍历当前校区所有路线 筛选出所有含有此行程段的路线
   const belongingList = CAMPUS_ROUTE_LIST_MAP[props.campusId].filter((routeId) =>

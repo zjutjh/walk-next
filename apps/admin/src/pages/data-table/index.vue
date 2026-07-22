@@ -134,9 +134,10 @@
 
 <script setup lang="ts">
 import { useQueries, useQuery } from "@tanstack/vue-query";
+import { whenever } from "@vueuse/core";
 import { forEach, fromPairs, isNil, map, zipObject } from "lodash-es";
 import { CellGroup, ErrorEmpty, LoadingContainer, useStoredUrlQuery } from "shared";
-import { computed, reactive, ref, watch } from "vue";
+import { computed, reactive, ref } from "vue";
 
 import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL, MEMBER_STATS_METRIC_TEXT } from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
@@ -183,12 +184,11 @@ const {
 /** 总览统计数据是否正在下拉刷新中 */
 const isOverviewStatsPullRefreshing = ref(false);
 // 总览统计数据refetch结束时关闭下拉刷新态
-watch(
-  () => isOverviewStatsFetching.value,
-  (newValue) => {
-    if (newValue === false) isOverviewStatsPullRefreshing.value = false;
-  },
-  { immediate: true }
+whenever(
+  () => !isOverviewStatsFetching.value,
+  () => {
+    isOverviewStatsPullRefreshing.value = false;
+  }
 );
 
 /** 下拉刷新总览统计数据 */
@@ -217,14 +217,11 @@ const isRouteStatsPullRefreshingMap = reactive(
 );
 // 路线统计数据refetch结束时关闭下拉刷新态
 forEach(ROUTE_LIST, (routeId) => {
-  watch(
-    () => routeStatsQueryMap.value[routeId]?.isFetching,
-    (newValue) => {
-      if (newValue === false) {
-        isRouteStatsPullRefreshingMap[routeId] = false;
-      }
-    },
-    { immediate: true }
+  whenever(
+    () => !routeStatsQueryMap.value[routeId]?.isFetching,
+    () => {
+      isRouteStatsPullRefreshingMap[routeId] = false;
+    }
   );
 });
 
@@ -242,8 +239,7 @@ const segmentStatsMap = fromPairs(
     routeId,
     computed(() => {
       /** 点位数据数组 */
-      const pointDataArr = routeStatsQueryMap.value[routeId]?.data?.point_stats;
-      if (isNil(pointDataArr)) return [];
+      const pointDataArr = routeStatsQueryMap.value[routeId]?.data?.point_stats ?? [];
       return pointDataArr.reduce((acc, pointData, index) => {
         /** 下一个点位的数据 */
         const nextPointData = pointDataArr.at(index + 1);

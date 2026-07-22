@@ -55,6 +55,7 @@ const props = withDefaults(defineProps<LoadingContainerProps>(), {
 /** 遮罩是否视觉上可见 */
 const isOverlayVisible = refDebounced(
   toRef(() => props.loading),
+  // 进入加载中状态时，会延迟一段时间再变为true；退出加载中状态时，立即变为false
   computed(() => (props.loading ? props.delay : 0))
 );
 </script>

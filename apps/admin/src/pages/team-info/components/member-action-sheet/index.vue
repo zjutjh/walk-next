@@ -3,7 +3,7 @@
   <van-action-sheet
     v-model:show="isActionSheetVisible"
     :class="styles.component"
-    :actions="memberActionSheetActions"
+    :actions="actionSheetActions"
     :description="actionMember?.name"
     cancel-text="取消"
     close-on-click-action
@@ -11,8 +11,9 @@
 </template>
 
 <script setup lang="ts">
+import { useArrayFind } from "@vueuse/core";
 import type { AdminAPI, MemberWalkStatus } from "api/types/admin";
-import { find, isNil } from "lodash-es";
+import { isNil } from "lodash-es";
 import type { ActionSheetAction } from "vant/es";
 import { computed } from "vue";
 
@@ -44,12 +45,13 @@ const isActionSheetVisible = defineModel<boolean>("visible", { required: true })
 const actionMemberId = defineModel<number | undefined>("memberId", { required: true });
 
 /** 成员操作弹层当前操作的成员 */
-const actionMember = computed(() =>
-  find(props.teamInfoData?.members, (member) => member.user_id === actionMemberId.value)
+const actionMember = useArrayFind(
+  () => props.teamInfoData?.members ?? [],
+  (member) => member.user_id === actionMemberId.value
 );
 
 /** 成员操作弹层的可用选项列表 */
-const memberActionSheetActions = computed<ActionSheetAction[]>(() => {
+const actionSheetActions = computed<ActionSheetAction[]>(() => {
   const availableStatusSet: Set<MemberWalkStatus> = new Set();
 
   // 用户为起点管理员，且起点相关功能适用于团队

@@ -82,13 +82,14 @@
 
 <script setup lang="ts">
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { useArraySome } from "@vueuse/core";
 import type { AdminAPI } from "api/types/admin";
 import { CanceledError } from "axios";
 import type { PromptDialogFieldConfig } from "shared";
 import { PromptDialog, RequestError, useRouterState, useStoredUrlQuery } from "shared";
 import { is } from "valibot";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
@@ -251,7 +252,8 @@ const handleStartAllThePendingClick = async () => {
 };
 
 /** 任意mutation请求中 */
-const isAnyMutationPending = computed(
-  () => isLogoutPending.value || isCheckinPending.value || isStartAllThePendingPending.value
+const isAnyMutationPending = useArraySome(
+  [isLogoutPending, isCheckinPending, isStartAllThePendingPending],
+  Boolean
 );
 </script>
