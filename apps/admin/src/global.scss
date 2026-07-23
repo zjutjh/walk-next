@@ -3,17 +3,20 @@
 @font-face {
   font-family: "DingTalk JinBuTi";
   src: url("@/assets/fonts/dingtalk-jin-bu-ti.ttf");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "DingTalk Sans";
   src: url("@/assets/fonts/dingtalk-sans.ttf");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Barlow";
   src: url("@/assets/fonts/barlow-medium.ttf");
   font-weight: "medium";
+  font-display: swap;
 }
 
 @font-face {
@@ -21,6 +24,7 @@
   src: url("@/assets/fonts/barlow-medium-italic.ttf");
   font-weight: "medium";
   font-style: italic;
+  font-display: swap;
 }
 
 :root {
