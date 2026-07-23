@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
-import { isArray, isNil } from "lodash-es";
+import { isNil } from "lodash-es";
 import type { FieldRule, FieldValidateError, FormInstance } from "vant";
 import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
@@ -131,7 +131,7 @@ const handleSubmit = async () => {
   try {
     await formRef.value?.validate();
   } catch (err) {
-    if (!isArray(err)) return;
+    if (!Array.isArray(err)) return;
     if (isNil(err[0]?.message)) return;
     error.value = new Error((err[0] satisfies FieldValidateError).message);
     return;

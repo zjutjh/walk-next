@@ -119,7 +119,7 @@
 import "./index.scss";
 
 import { watchImmediate } from "@vueuse/core";
-import { find, isEmpty } from "lodash-es";
+import { isEmpty } from "lodash-es";
 import { ErrorEmpty, LoadingContainer, unknownToError } from "shared";
 import type { BaseIssue, BaseSchema } from "valibot";
 import { showFailToast } from "vant";
@@ -295,8 +295,7 @@ const handleScanPopupClosed = () => {
 const handleSwitchCameraClick = () => {
   if (cameraList.value.length <= 2) {
     /** 另一个摄像头 */
-    const anotherCamera = find(
-      cameraList.value,
+    const anotherCamera = cameraList.value.find(
       (camera) => camera.deviceId !== cameraDeviceId.value
     );
     // 无其他摄像头

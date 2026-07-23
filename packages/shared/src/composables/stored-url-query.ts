@@ -1,5 +1,5 @@
 import { type RemovableRef, useStorage, watchImmediate } from "@vueuse/core";
-import { cloneDeep, get, isNil, isObject, isUndefined, mapValues, set, unset } from "lodash-es";
+import { cloneDeep, get, isNil, isObject, mapValues, set, unset } from "lodash-es";
 import { defineStore } from "pinia";
 import { type Ref, ref, shallowRef } from "vue";
 import { type LocationQueryRaw, useRoute, useRouter } from "vue-router";
@@ -94,7 +94,7 @@ export const useStoredUrlQuery = <
   let urlQuery = get(urlQueryStore.refObj, currentPath) as Ref<UrlQuery | undefined> | undefined;
 
   // 当前页面对应的响应式对象不存在？
-  if (isUndefined(urlQuery)) {
+  if (isNil(urlQuery)) {
     // 构造响应式对象
     urlQuery = ref<UrlQuery>();
     // 存入响应式对象
@@ -127,7 +127,7 @@ export const useStoredUrlQuery = <
   if (persist === "memory") {
     // 合并内存中Store的URL Query
     Object.assign(initialValue, urlQuery.value);
-  } else if (!isUndefined(storageState)) {
+  } else if (!isNil(storageState)) {
     // 合并Storage中的URL Query
     Object.assign(initialValue, storageState.value);
   }
@@ -145,7 +145,7 @@ export const useStoredUrlQuery = <
   watchImmediate(
     urlQuery,
     (newObj) => {
-      if (isUndefined(newObj)) return;
+      if (isNil(newObj)) return;
       // 更新地址栏URL Query
       router.replace({
         query: {
@@ -154,7 +154,7 @@ export const useStoredUrlQuery = <
         }
       });
       // 更新Storage
-      if (!isUndefined(storageState)) {
+      if (!isNil(storageState)) {
         storageState.value = newObj;
       }
     },

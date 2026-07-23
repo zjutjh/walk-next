@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import { useDebounceFn, useResizeObserver } from "@vueuse/core";
-import { isEmpty, isNull } from "lodash-es";
+import { isEmpty, isNil } from "lodash-es";
 import { ErrorEmpty } from "shared";
 import { ref, type StyleValue, toRef, useTemplateRef } from "vue";
 
@@ -115,7 +115,7 @@ const hotRectDefaultStyle: StyleValue = {
 
 /** 使图片cover组件 */
 const coverImage = (imgDOM: HTMLImageElement) => {
-  if (isNull(componentRef.value)) return;
+  if (isNil(componentRef.value)) return;
   if (imgDOM.naturalWidth === 0 || imgDOM.naturalHeight === 0) return;
   // 使“图片尺寸:组件尺寸”更小的边伸缩，填满组件，另一条边按比例自然变化
   if (
@@ -143,7 +143,7 @@ const handleImageLoad = (e: Event) => {
 useResizeObserver(
   toRef(() => componentRef.value?.parentElement),
   useDebounceFn(() => {
-    if (isNull(componentRef.value)) return;
+    if (isNil(componentRef.value)) return;
     const imgDOM = componentRef.value.querySelector(
       `.${styles.mapImage} img[src="${props.mapUrl}"]`
     );

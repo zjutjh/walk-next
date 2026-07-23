@@ -1,7 +1,7 @@
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { watchImmediate } from "@vueuse/core";
 import type { AdminAPI, PermissionLevel } from "api/types/admin";
-import { assign, isNil } from "lodash-es";
+import { isNil } from "lodash-es";
 import { defineStore } from "pinia";
 import { getCurrentScope, onScopeDispose, ref, toRef } from "vue";
 
@@ -82,7 +82,7 @@ export const useAdminInfo = (queryClient: QueryClient = useQueryClient()) => {
 
   /** 以patch方式更新当前用户信息 */
   const updateAdminInfo = (patch: Partial<AdminUserInfo>) => {
-    assign(adminStore.data, patch);
+    Object.assign(adminStore.data, patch);
     // 更新query缓存
     queryClient.setQueryData<AdminAPI.QueryAdminUserInfoResponse>(
       [ADMIN_QUERY_KEY.USER.SELF],

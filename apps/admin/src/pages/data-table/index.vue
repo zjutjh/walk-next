@@ -135,7 +135,7 @@
 <script setup lang="ts">
 import { useQueries, useQuery } from "@tanstack/vue-query";
 import { whenever } from "@vueuse/core";
-import { forEach, fromPairs, isNil, map, zipObject } from "lodash-es";
+import { fromPairs, isNil, zipObject } from "lodash-es";
 import { CellGroup, ErrorEmpty, LoadingContainer, useStoredUrlQuery } from "shared";
 import { computed, reactive, ref } from "vue";
 
@@ -213,10 +213,10 @@ const routeStatsQueryMap = useQueries({
 
 /** 路线统计数据是否正在下拉刷新中 */
 const isRouteStatsPullRefreshingMap = reactive(
-  fromPairs(map(ROUTE_LIST, (routeId) => [routeId, false]))
+  fromPairs(ROUTE_LIST.map((routeId) => [routeId, false]))
 );
 // 路线统计数据refetch结束时关闭下拉刷新态
-forEach(ROUTE_LIST, (routeId) => {
+ROUTE_LIST.forEach((routeId) => {
   whenever(
     () => !routeStatsQueryMap.value[routeId]?.isFetching,
     () => {
@@ -235,7 +235,7 @@ const handleRouteStatsRefresh = (routeId: RouteId) => {
 
 /** 行程段统计数据 */
 const segmentStatsMap = fromPairs(
-  map(ROUTE_LIST, (routeId) => [
+  ROUTE_LIST.map((routeId) => [
     routeId,
     computed(() => {
       /** 点位数据数组 */
