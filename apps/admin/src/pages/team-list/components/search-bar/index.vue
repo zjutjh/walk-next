@@ -1,7 +1,7 @@
 <!-- 团队搜索栏 -->
 <template>
   <van-search
-    ref="searchRef"
+    ref="vantSearchRef"
     v-model.trim="searchValue"
     :class="styles.component"
     :show-action="Boolean(searchValue.trim() || urlQuery.keyword)"
@@ -49,7 +49,7 @@ import styles from "./index.module.scss";
 const urlQuery = defineModel<TeamListUrlQuery>("urlQuery", { required: true });
 
 /** vant搜索框组件 */
-const vantSearchRef = useTemplateRef<SearchInstance>("searchRef");
+const vantSearchRef = useTemplateRef<SearchInstance>("vantSearchRef");
 
 /** 搜索输入框的内容 */
 const searchValue = ref(urlQuery.value.keyword);
