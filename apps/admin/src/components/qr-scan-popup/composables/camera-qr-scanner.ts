@@ -219,7 +219,7 @@ export const useCameraQrScanner = <
 
       // 非安全上下文，不支持调用摄像头
       if (typeof window !== "undefined" && !window.isSecureContext) {
-        throw new Error("地址不安全，请使用HTTPS或拍照上传");
+        throw new Error("地址不安全，请联系技术人员");
       }
       // 不支持摄像头媒体
       if (!isCameraSupported.value) {
