@@ -43,6 +43,11 @@ export const useCameraQrScanner = <
 
   /** 摄像头扫码Composable的状态 */
   const status = ref<UseCameraQrScannerStatus>("off");
+  /** 获取摄像头扫码Composable的状态 */
+  const getStatus = () => status.value;
+  /** 设置摄像头扫码Composable的状态 */
+  const setStatus = (newStatus: UseCameraQrScannerStatus) => (status.value = newStatus);
+
   /** 视频元素能否播放摄像头画面 */
   const isCameraVideoPlayable = ref(false);
 
@@ -78,14 +83,14 @@ export const useCameraQrScanner = <
   };
 
   // 绑定摄像头流
-  watchImmediate([cameraStream, status, videoRef], async ([cameraStreamVal, statusVal, video]) => {
+  watchImmediate([cameraStream, status, videoRef], async ([cameraStreamVal, _statusVal, video]) => {
     try {
       if (!video) return;
 
       // 摄像头流未改变，忽略
       if (video.srcObject === cameraStreamVal) return;
       // 处于关闭状态，中止
-      if (statusVal === "off") return;
+      if (getStatus() === "off") return;
 
       // 摄像头流为空
       if (!cameraStreamVal) {
@@ -97,8 +102,7 @@ export const useCameraQrScanner = <
       video.srcObject = cameraStreamVal;
       // 播放视频流
       await video.play();
-      // @ts-expect-error: 2367
-      if (statusVal === "off") return;
+      if (getStatus() === "off") return;
       isCameraVideoPlayable.value = true;
     } catch (err) {
       // play完成前被pause中断，静默忽略
@@ -112,28 +116,28 @@ export const useCameraQrScanner = <
 
   /** 从激活状态切换到悬置状态（不会断开摄像头，仍然占用资源 消耗性能） */
   const switchToIdle = () => {
-    if (status.value !== "active") return;
+    if (getStatus() !== "active") return;
     // 暂停定时扫描视频帧
     pauseScanInterval();
     // 禁用摄像头流输出
     disableStreamTracks();
-    status.value = "idle";
+    setStatus("idle");
   };
 
   /** 从悬置状态切换到激活状态 */
   const switchToActive = () => {
-    if (status.value !== "idle") return;
+    if (getStatus() !== "idle") return;
     // 启用摄像头流输出
     enableStreamTracks();
     // 恢复定时扫描视频帧
     resumeScanInterval();
-    status.value = "active";
+    setStatus("active");
   };
 
   /** 尝试扫描当前视频帧中的二维码 */
   const scanVideoFrame = async () => {
     // 摄像头扫码Composable不在激活状态
-    if (status.value !== "active") return;
+    if (getStatus() !== "active") return;
 
     const video = videoRef.value;
 
@@ -148,8 +152,7 @@ export const useCameraQrScanner = <
       if (!cameraStream.value?.active) {
         pauseScanInterval();
         await restartCameraStream();
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (status.value !== "active") return;
+        if (getStatus() !== "active") return;
         resumeScanInterval();
         return;
       }
@@ -175,8 +178,7 @@ export const useCameraQrScanner = <
     canvasCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
     // 尝试扫描二维码
     const result = await scan(canvas);
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (status.value !== "active") return;
+    if (getStatus() !== "active") return;
 
     // 未识别到二维码，忽略
     if (!result.text) return;
@@ -215,7 +217,7 @@ export const useCameraQrScanner = <
   /** 开始扫码 */
   const start = async () => {
     try {
-      if (status.value !== "off") return;
+      if (getStatus() !== "off") return;
 
       // 非安全上下文，不支持调用摄像头
       if (typeof window !== "undefined" && !window.isSecureContext) {
@@ -228,20 +230,19 @@ export const useCameraQrScanner = <
 
       // 重置状态，进入启动中状态
       lastScannedRawText.value = null;
-      status.value = "starting";
+      setStatus("starting");
 
       // 请求摄像头流
       await requestCameraStream();
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (status.value !== "starting") throw new Error("状态异常，扫码启动失败");
+      if (getStatus() !== "starting") throw new Error("状态异常，扫码启动失败");
       if (!cameraStream.value) throw new Error("连接摄像头失败，请刷新重试");
 
       // 进入激活状态
-      status.value = "active";
+      setStatus("active");
       // 开始定时扫描视频帧
       resumeScanInterval();
     } catch (err) {
-      if (status.value !== "off") {
+      if (getStatus() !== "off") {
         stop();
       }
 
@@ -263,7 +264,7 @@ export const useCameraQrScanner = <
 
     // 重置状态
     lastScannedRawText.value = null;
-    status.value = "off";
+    setStatus("off");
   };
 
   // 组件卸载前停止扫码并释放资源
@@ -274,7 +275,7 @@ export const useCameraQrScanner = <
   return {
     start,
     stop,
-    status: readonly(status),
+    getStatus,
     isCameraVideoPlayable: readonly(isCameraVideoPlayable),
     switchToIdle,
     switchToActive

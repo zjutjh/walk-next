@@ -1,13 +1,13 @@
 import { useFileDialog } from "@vueuse/core";
 import { scan } from "qr-scanner-wechat";
 import { type BaseIssue, type BaseSchema, type InferInput, ValiError } from "valibot";
-import { readonly, ref } from "vue";
+import { ref } from "vue";
 
 import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 
 export type UseUploadQrScannerOptions<TData> = UseQrScannerOptions<TData>;
 
-/** 图片上传扫码钩子的状态
+/** 图片上传扫码Composable的状态
  * @enum idle 闲置
  * @enum pending 等待用户选择文件，此时重复调用会被忽略 */
 export type UseUploadQrScannerStatus = "idle" | "pending";
@@ -23,8 +23,12 @@ export const useUploadQrScanner = <
   const { onSuccess: emitSuccess = (_) => undefined, onError: emitError = (_) => undefined } =
     options;
 
-  /** 图片上传扫码钩子的状态 */
+  /** 图片上传扫码Composable的状态 */
   const status = ref<UseUploadQrScannerStatus>("idle");
+  /** 获取图片上传扫码Composable的状态 */
+  const getStatus = () => status.value;
+  /** 设置图片上传扫码Composable的状态 */
+  const setStatus = (newStatus: UseUploadQrScannerStatus) => (status.value = newStatus);
 
   /** 尝试扫描图片文件中的二维码 */
   const scanImageFile = async (file: File) => {
@@ -50,8 +54,6 @@ export const useUploadQrScanner = <
       } else {
         throw new ValiError(parseResult.issues);
       }
-    } catch (err) {
-      emitError(err);
     } finally {
       URL.revokeObjectURL(url);
     }
@@ -75,33 +77,35 @@ export const useUploadQrScanner = <
       if (!file) return;
       // 尝试扫描文件中的二维码
       await scanImageFile(file);
-      resetFileDialog();
-      status.value = "idle";
     } catch (err) {
       emitError(err);
+    } finally {
+      resetFileDialog();
+      setStatus("idle");
     }
   });
 
   // 监听取消选择文件
   onFileCancel(() => {
-    status.value = "idle";
+    setStatus("idle");
   });
 
   /** 请求用户上传二维码图片 */
   const requestUploadQrCodeImage = () => {
     try {
-      if (status.value !== "idle") return;
-      status.value = "pending";
+      if (getStatus() !== "idle") return;
+      setStatus("pending");
 
       // 打开文件选择器
       openFileDialog();
     } catch (err) {
+      setStatus("idle");
       emitError(err);
     }
   };
 
   return {
-    status: readonly(status),
+    getStatus,
     requestUploadQrCodeImage
   };
 };

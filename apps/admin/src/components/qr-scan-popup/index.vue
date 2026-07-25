@@ -59,7 +59,7 @@
         <!-- 上传图片按钮 -->
         <van-button
           class="qr-scan-popup__btn"
-          :loading="uploadQrScannerStatus === 'pending'"
+          :loading="getUploadQrScannerStatus() === 'pending'"
           round
           @click="handleUploadImageClick"
         >
@@ -97,7 +97,7 @@
       <error-empty v-else-if="blockingError" :error="blockingError" :show-btn="false" />
       <!-- 准备中提示 -->
       <div
-        v-else-if="!isCameraVideoPlayable && cameraScannerStatus !== 'off'"
+        v-else-if="!isCameraVideoPlayable && getCameraScannerStatus() !== 'off'"
         class="qr-scan-popup__loading"
       >
         正在连接摄像头...
@@ -223,7 +223,7 @@ const handleError = (err: unknown, errOptions?: UseQrScannerErrorOptions) => {
 
 // 摄像头扫码
 const {
-  status: cameraScannerStatus,
+  getStatus: getCameraScannerStatus,
   start: startCameraScanner,
   stop: stopCameraScanner,
   isCameraVideoPlayable,
@@ -240,7 +240,7 @@ const {
 );
 
 // 上传图片扫码
-const { requestUploadQrCodeImage, status: uploadQrScannerStatus } = useUploadQrScanner(
+const { requestUploadQrCodeImage, getStatus: getUploadQrScannerStatus } = useUploadQrScanner(
   {
     onSuccess: handleScanSuccess,
     onError: handleError
@@ -388,7 +388,7 @@ watchImmediate(
     if (isCameraListUpdatingVal) return;
 
     // 重复启动
-    if (cameraScannerStatus.value !== "off") return;
+    if (getCameraScannerStatus() !== "off") return;
 
     // 启动摄像头扫码
     startCameraScanner();
