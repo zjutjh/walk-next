@@ -129,8 +129,8 @@ const isFinished = useArrayEvery([hasMore, isFetching, isError], (val) => !val);
 
 /** 全部拉取完成后的提示文本 */
 const finishedTipText = computed(() => {
-  // 搜到了内容
-  if (teamListData.value?.pages.length && teamListData.value.pages[0]?.teams.length !== 0) {
+  // 搜到了内容？
+  if (teamListData.value?.pages.at(0)?.teams.length) {
     return "没有更多啦";
   }
   return "暂无符合条件的团队";
