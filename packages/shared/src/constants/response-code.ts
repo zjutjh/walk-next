@@ -23,7 +23,7 @@ export const RESP_CODE = {
   /** 操作过于频繁 */
   TOO_FREQUENTLY: 200209,
 
-  /** 该身份信息已报名 */
+  /** 该身份信息已注册 */
   ALREADY_REGISTERED: 200301,
   /** 统一身份验证失败 */
   OAUTH_FAILED: 200302,
@@ -65,8 +65,38 @@ export const RESP_CODE = {
   CAMPUS_MISMATCH: 200320,
   /** 登录失败次数过多，请稍后再试 */
   ADMIN_LOGIN_TOO_FREQUENTLY: 200322,
-  /** 团队行进方向错误 */
-  TEAM_DIRECTION_INVALID: 200323,
   /** 团队刚打过卡，不可标记失联 */
-  TEAM_LOST_LOCKED: 200324
+  TEAM_LOST_LOCKED: 200324,
+  /** 非学生不可注册学生账号 */
+  NON_STUDENT_REGISTER: 200325,
+  /** 非教职工不可注册教职工账号 */
+  NON_TEACHER_REGISTER: 200326,
+  /** 信息错误，无法登录 */
+  PEOPLE_INFO_WRONG: 200327,
+  /** 不能添加自己 */
+  CANNOT_ADD_SELF: 200328,
+  /** 教师不可加入学生团队 */
+  TEACHER_CANNOT_JOIN_STUDENT_TEAM: 200329,
+  /** 非学生队不可将队长转让给学生 */
+  CANNOT_CHANGE_CAPTAIN: 200330,
+  /** 加入团队失败 */
+  JOIN_TEAM_FAILED: 200331,
+  /** 队长不可离开团队 */
+  CANNOT_LEAVE_TEAM: 200332,
+  /** 离开团队失败 */
+  LEAVE_TEAM_FAILED: 200333,
+  /** 团队不允许匹配 */
+  TEAM_NOT_ALLOW_MATCH: 200334,
+  /** 未找到符合要求的团队 */
+  NOT_FIND_TEAMS: 200335,
+  /** 不能移除自己 */
+  CANNOT_REMOVE_SELF: 200336,
+  /** 移除成员失败 */
+  REMOVE_FAILED: 200337,
+  /** 团队未提交，无法回滚 */
+  TEAM_NOT_SUBMITTED: 200338,
+  /** 当前时间不在报名时间内 */
+  NOT_IN_REGISTER_TIME: 200339,
+  /** 签到码已被绑定 */
+  BIND_CODE_DUPLICATED: 200340
 } as const;
