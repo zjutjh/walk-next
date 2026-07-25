@@ -59,6 +59,8 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
 
 /** @see {useStoredUrlQuery} 选项 */
 type Options<UrlQuery> = {
+  /** 默认值 */
+  defaultValue: Readonly<UrlQuery>;
   /** URL Query持久化策略
    * @description undefined 不持久化
    * @description "memory" 内存中持久化，不抗reload
@@ -66,8 +68,6 @@ type Options<UrlQuery> = {
    * @default undefined
    */
   persist?: "memory" | Storage;
-  /** 初始值 */
-  defaultValue: Readonly<UrlQuery>;
 };
 
 /** 加载Stored URL Query */
@@ -77,7 +77,7 @@ export const useStoredUrlQuery = <
 >(
   options: Options<UrlQuery>
 ) => {
-  // 解包传入的参数，设置默认值
+  // 解包传入的参数
   const { defaultValue, persist } = options;
 
   /**
