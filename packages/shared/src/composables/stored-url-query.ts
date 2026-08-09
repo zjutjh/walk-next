@@ -12,8 +12,9 @@ const useUrlQueryStore = defineStore("urlQuery", () => {
 });
 
 /** 将URL Query对象的所有成员编码为字符串形式 */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const stringifyUrlQueryObj = <UrlQuery extends Record<string, any>>(urlQueryObj: UrlQuery) => {
+const stringifyUrlQueryObj = <UrlQueryToStringify extends Record<string, unknown>>(
+  urlQueryObj: UrlQueryToStringify
+) => {
   return mapValues(urlQueryObj, (value) => {
     // 分类型转换
     if (isNil(value)) return "";
@@ -23,15 +24,17 @@ const stringifyUrlQueryObj = <UrlQuery extends Record<string, any>>(urlQueryObj:
 };
 
 /** （初始化时）将URL Query对象中的字符串成员解析为默认值类型 */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
-  urlQueryObj: UrlQuery,
+const parseUrlQueryObj = <UrlQueryToParse extends Record<string, unknown>>(
+  urlQueryObj: UrlQueryToParse,
   /** 传入类型与URL Query默认值类型完全相符的对象作为Schema */
-  schemaExample: Readonly<UrlQuery>
+  schemaExample: Readonly<UrlQueryToParse>
 ) => {
   return mapValues(urlQueryObj, (value, key) => {
+    if (!(typeof value === "string")) {
+      return value;
+    }
     // 分类型转换
-    if (value === null) return null;
+    if (schemaExample[key] === null) return null;
     if (isObject(schemaExample[key])) {
       try {
         return JSON.parse(decodeURIComponent(value));
@@ -54,11 +57,11 @@ const parseUrlQueryObj = <UrlQuery extends Record<string, any>>(
       default:
         throw new TypeError(`Unsupported URL Query member type: ${typeof schemaExample[key]}.`);
     }
-  }) as UrlQuery;
+  }) as UrlQueryToParse;
 };
 
-/** @see {useStoredUrlQuery} 选项 */
-type Options<UrlQuery> = {
+/** Stored URL Query Composable 选项 */
+type UseStoredUrlQueryOptions<UrlQuery> = {
   /** 默认值 */
   defaultValue: Readonly<UrlQuery>;
   /** URL Query持久化策略
@@ -72,10 +75,9 @@ type Options<UrlQuery> = {
 
 /** 加载Stored URL Query */
 export const useStoredUrlQuery = <
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  UrlQuery extends Record<string, any> = Record<string, string | string[]>
+  UrlQuery extends Record<string, unknown> = Record<string, string | string[]>
 >(
-  options: Options<UrlQuery>
+  options: UseStoredUrlQueryOptions<UrlQuery>
 ) => {
   // 解包传入的参数
   const { defaultValue, persist } = options;
