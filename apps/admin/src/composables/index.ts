@@ -1,2 +1,2 @@
-export * from "./admin-user-info";
+export * from "./admin-user-data";
 export * from "./title-meta";
