@@ -6,7 +6,7 @@ import { type LocationQueryRaw, useRoute, useRouter } from "vue-router";
 
 /** Stored URL Query 状态Store */
 const useUrlQueryStore = defineStore("urlQuery", () => {
-  /** path-响应式对象 关联表 */
+  /** storeKey-响应式对象 关联表 */
   const refObj = shallowRef<Record<string, Ref>>({});
   return { refObj };
 });
@@ -71,6 +71,10 @@ type UseStoredUrlQueryOptions<UrlQuery> = {
    * @default undefined
    */
   persist?: "memory" | Storage;
+  /** Store中使用的Map Key，影响数据存储位置
+   * @default (VueRouter中的)route.path
+   */
+  storeKey?: string;
 };
 
 /** 加载Stored URL Query */
@@ -79,44 +83,42 @@ export const useStoredUrlQuery = <
 >(
   options: UseStoredUrlQueryOptions<UrlQuery>
 ) => {
+  const urlQueryStore = useUrlQueryStore();
+  const route = useRoute();
+  const router = useRouter();
+
   // 解包传入的参数
-  const { defaultValue, persist } = options;
+  const { defaultValue, persist, storeKey = route.path } = options;
 
   /**
    * 获取响应式对象
    */
 
-  const urlQueryStore = useUrlQueryStore();
-  const route = useRoute();
-  const router = useRouter();
-  // 获取当前页面的path
-  const currentPath = route.path;
+  /** storeKey对应的URL Query响应式对象 */
+  let urlQuery = get(urlQueryStore.refObj, storeKey) as Ref<UrlQuery | undefined> | undefined;
 
-  /** 当前页面对应的URL Query响应式对象 */
-  let urlQuery = get(urlQueryStore.refObj, currentPath) as Ref<UrlQuery | undefined> | undefined;
-
-  // 当前页面对应的响应式对象不存在？
+  // storeKey对应的响应式对象不存在？
   if (isNil(urlQuery)) {
     // 构造响应式对象
     urlQuery = ref<UrlQuery>();
     // 存入响应式对象
-    set(urlQueryStore.refObj, currentPath, urlQuery);
+    set(urlQueryStore.refObj, storeKey, urlQuery);
   }
 
   /**
    * 初始化URL Query
    */
 
-  /** path对应的Storage */
+  /** storeKey对应的Storage */
   const storageState: RemovableRef<UrlQuery> | undefined =
     persist instanceof Storage
-      ? useStorage(`stored-url-query-${currentPath}`, defaultValue, persist, {
+      ? useStorage(`stored-url-query:${storeKey}`, defaultValue, persist, {
           // 不写入默认值，初始化时会执行合并写入
           writeDefaults: false
         })
       : undefined;
 
-  // 获取当前页面的URL Query
+  // 获取storeKey对应的URL Query
   const currentUrlQuery = cloneDeep(route.query);
   // 滤除不在默认值类型中的成员
   for (const key of Object.keys(currentUrlQuery)) {
@@ -127,7 +129,7 @@ export const useStoredUrlQuery = <
   // 计算初始值
   const initialValue = cloneDeep(defaultValue);
   if (persist === "memory") {
-    // 合并内存中Store的URL Query
+    // 合并内存Store中的URL Query
     Object.assign(initialValue, urlQuery.value);
   } else if (!isNil(storageState)) {
     // 合并Storage中的URL Query
