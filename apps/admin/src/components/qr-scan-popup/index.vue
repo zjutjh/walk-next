@@ -367,31 +367,28 @@ const handleReloadWindow = () => {
 };
 
 // 监听状态，完成摄像头扫码初始化与启动
-watchImmediate(
-  [cameraList, isCameraListUpdating, isVisible],
-  ([cameraListVal, isCameraListUpdatingVal, isVisibleVal]) => {
-    if (!isVisibleVal) return;
+watchImmediate([cameraList, isCameraListUpdating, isVisible], () => {
+  if (!isVisible.value) return;
 
-    if (!cameraListVal[0])
-      // 摄像头列表为空
-      return;
+  if (!cameraList.value[0])
+    // 摄像头列表为空
+    return;
 
-    // 未指定摄像头或指定的摄像头不在列表中，则设置为第一个摄像头
-    if (
-      !cameraDeviceId.value ||
-      !cameraListVal.some((camera) => camera.deviceId === cameraDeviceId.value)
-    ) {
-      setCameraDeviceId(cameraListVal[0].deviceId);
-    }
-
-    // 摄像头列表更新未结束，不启动扫码，以免竞争摄像头流
-    if (isCameraListUpdatingVal) return;
-
-    // 重复启动
-    if (getCameraScannerStatus() !== "off") return;
-
-    // 启动摄像头扫码
-    startCameraScanner();
+  // 未指定摄像头或指定的摄像头不在列表中，则设置为第一个摄像头
+  if (
+    !cameraDeviceId.value ||
+    !cameraList.value.some((camera) => camera.deviceId === cameraDeviceId.value)
+  ) {
+    setCameraDeviceId(cameraList.value[0].deviceId);
   }
-);
+
+  // 摄像头列表更新未结束，不启动扫码，以免竞争摄像头流
+  if (isCameraListUpdating.value) return;
+
+  // 重复启动
+  if (getCameraScannerStatus() !== "off") return;
+
+  // 启动摄像头扫码
+  startCameraScanner();
+});
 </script>

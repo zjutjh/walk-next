@@ -87,39 +87,36 @@ export const useCameraQrScanner = <
   };
 
   // 绑定摄像头流
-  watchImmediate(
-    [cameraStream, () => status.get(), videoRef],
-    async ([cameraStreamVal, _statusVal, video]) => {
-      try {
-        if (!video) return;
+  watchImmediate([cameraStream, () => status.get(), videoRef], async () => {
+    try {
+      if (!videoRef.value) return;
 
-        // 摄像头流未改变，忽略
-        if (video.srcObject === cameraStreamVal) return;
-        // 处于关闭状态，中止
-        if (status.get() === "off") return;
+      // 摄像头流未改变，忽略
+      if (videoRef.value.srcObject === cameraStream.value) return;
+      // 处于关闭状态，中止
+      if (status.get() === "off") return;
 
-        // 摄像头流为空
-        if (!cameraStreamVal) {
-          releaseVideoResources();
-          return;
-        }
-
-        // 关联视频流
-        video.srcObject = cameraStreamVal;
-        // 播放视频流
-        await video.play();
-        if (status.get() === "off") return;
-        isCameraVideoPlayable.value = true;
-      } catch (err) {
-        // play完成前被pause中断，静默忽略
-        if (err instanceof DOMException && err.name === "AbortError") {
-          return console.warn(err);
-        }
-
-        emitError(err, { blocking: true });
+      // 摄像头流为空
+      if (!cameraStream.value) {
+        releaseVideoResources();
+        return;
       }
+
+      // 关联视频流
+      videoRef.value.srcObject = cameraStream.value;
+      // 播放视频流
+      await videoRef.value.play();
+      if (status.get() === "off") return;
+      isCameraVideoPlayable.value = true;
+    } catch (err) {
+      // play完成前被pause中断，静默忽略
+      if (err instanceof DOMException && err.name === "AbortError") {
+        return console.warn(err);
+      }
+
+      emitError(err, { blocking: true });
     }
-  );
+  });
 
   /** 从激活状态切换到悬置状态（不会断开摄像头，仍然占用资源 消耗性能） */
   const switchToIdle = () => {

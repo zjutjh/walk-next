@@ -70,52 +70,53 @@ export const useScannerCameraList = () => {
   /** 最晚开始的摄像头列表更新任务的Symbol，用于确保只有最晚任务的结果被接受 */
   let latestUpdateTaskSymbol: symbol | null = null;
   // 监听状态，执行异步任务更新摄像头列表
-  watchImmediate(
-    [videoDeviceList, isCameraApiSupported, isPermissionGranted],
-    async ([videoDeviceListVal, isCameraApiSupportedVal, isPermissionGrantedVal]) => {
-      // 无权限/API不支持/设备列表为空
-      if (!isPermissionGrantedVal || !isCameraApiSupportedVal || isEmpty(videoDeviceListVal)) {
-        cameraList.value = [];
-        isCameraListUpdating.value = false;
-        return;
-      }
-
-      isCameraListUpdating.value = true;
-      /** 当前任务的Symbol */
-      const currentTaskSymbol = Symbol();
-      latestUpdateTaskSymbol = currentTaskSymbol;
-
-      let result: ExtendedCameraInfo[] = [];
-
-      // 由于设备可能不支持同时打开多个摄像头流，必须串行
-      for (const device of videoDeviceListVal) {
-        let videoTrackSettings: MediaTrackSettings = {};
-        try {
-          // 获取MediaTrackSettings
-          videoTrackSettings = await getVideoTrackSettings(device);
-        } catch (err) {
-          // 获取MediaTrackSettings失败，静默
-          console.error(err);
-        }
-        // 存在比当前任务更晚开始的任务，中止
-        if (latestUpdateTaskSymbol !== currentTaskSymbol) return;
-        result.push({
-          // MediaDeviceInfo的成员均是不可枚举成员，必须手动提取
-          deviceId: device.deviceId,
-          label: device.label,
-          kind: device.kind,
-          groupId: device.groupId,
-          settings: videoTrackSettings
-        });
-      }
-
-      // 排序
-      result = orderBy(result, [cameraListSorter], ["desc"]);
-      // 更新摄像头列表
-      cameraList.value = result;
+  watchImmediate([videoDeviceList, isCameraApiSupported, isPermissionGranted], async () => {
+    // 无权限/API不支持/设备列表为空
+    if (
+      !isPermissionGranted.value ||
+      !isCameraApiSupported.value ||
+      isEmpty(videoDeviceList.value)
+    ) {
+      cameraList.value = [];
       isCameraListUpdating.value = false;
+      return;
     }
-  );
+
+    isCameraListUpdating.value = true;
+    /** 当前任务的Symbol */
+    const currentTaskSymbol = Symbol();
+    latestUpdateTaskSymbol = currentTaskSymbol;
+
+    let result: ExtendedCameraInfo[] = [];
+
+    // 由于设备可能不支持同时打开多个摄像头流，必须串行
+    for (const device of videoDeviceList.value) {
+      let videoTrackSettings: MediaTrackSettings = {};
+      try {
+        // 获取MediaTrackSettings
+        videoTrackSettings = await getVideoTrackSettings(device);
+      } catch (err) {
+        // 获取MediaTrackSettings失败，静默
+        console.error(err);
+      }
+      // 存在比当前任务更晚开始的任务，中止
+      if (latestUpdateTaskSymbol !== currentTaskSymbol) return;
+      result.push({
+        // MediaDeviceInfo的成员均是不可枚举成员，必须手动提取
+        deviceId: device.deviceId,
+        label: device.label,
+        kind: device.kind,
+        groupId: device.groupId,
+        settings: videoTrackSettings
+      });
+    }
+
+    // 排序
+    result = orderBy(result, [cameraListSorter], ["desc"]);
+    // 更新摄像头列表
+    cameraList.value = result;
+    isCameraListUpdating.value = false;
+  });
 
   onBeforeUnmount(() => {
     latestUpdateTaskSymbol = null;
