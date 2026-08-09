@@ -42,11 +42,15 @@ export const useCameraQrScanner = <
   } = options;
 
   /** 摄像头扫码Composable的状态 */
-  const status = ref<UseCameraQrScannerStatus>("off");
-  /** 获取摄像头扫码Composable的状态 */
-  const getStatus = () => status.value;
-  /** 设置摄像头扫码Composable的状态 */
-  const setStatus = (newStatus: UseCameraQrScannerStatus) => (status.value = newStatus);
+  const status = (() => {
+    const statusValue = ref<UseCameraQrScannerStatus>("off");
+    return {
+      /** 获取摄像头扫码Composable的状态 */
+      get: () => statusValue.value,
+      /** 设置摄像头扫码Composable的状态 */
+      set: (newStatus: UseCameraQrScannerStatus) => (statusValue.value = newStatus)
+    } as const;
+  })();
 
   /** 视频元素能否播放摄像头画面 */
   const isCameraVideoPlayable = ref(false);
@@ -83,61 +87,64 @@ export const useCameraQrScanner = <
   };
 
   // 绑定摄像头流
-  watchImmediate([cameraStream, status, videoRef], async ([cameraStreamVal, _statusVal, video]) => {
-    try {
-      if (!video) return;
+  watchImmediate(
+    [cameraStream, () => status.get(), videoRef],
+    async ([cameraStreamVal, _statusVal, video]) => {
+      try {
+        if (!video) return;
 
-      // 摄像头流未改变，忽略
-      if (video.srcObject === cameraStreamVal) return;
-      // 处于关闭状态，中止
-      if (getStatus() === "off") return;
+        // 摄像头流未改变，忽略
+        if (video.srcObject === cameraStreamVal) return;
+        // 处于关闭状态，中止
+        if (status.get() === "off") return;
 
-      // 摄像头流为空
-      if (!cameraStreamVal) {
-        releaseVideoResources();
-        return;
+        // 摄像头流为空
+        if (!cameraStreamVal) {
+          releaseVideoResources();
+          return;
+        }
+
+        // 关联视频流
+        video.srcObject = cameraStreamVal;
+        // 播放视频流
+        await video.play();
+        if (status.get() === "off") return;
+        isCameraVideoPlayable.value = true;
+      } catch (err) {
+        // play完成前被pause中断，静默忽略
+        if (err instanceof DOMException && err.name === "AbortError") {
+          return console.warn(err);
+        }
+
+        emitError(err, { blocking: true });
       }
-
-      // 关联视频流
-      video.srcObject = cameraStreamVal;
-      // 播放视频流
-      await video.play();
-      if (getStatus() === "off") return;
-      isCameraVideoPlayable.value = true;
-    } catch (err) {
-      // play完成前被pause中断，静默忽略
-      if (err instanceof DOMException && err.name === "AbortError") {
-        return console.warn(err);
-      }
-
-      emitError(err, { blocking: true });
     }
-  });
+  );
 
   /** 从激活状态切换到悬置状态（不会断开摄像头，仍然占用资源 消耗性能） */
   const switchToIdle = () => {
-    if (getStatus() !== "active") return;
+    if (status.get() !== "active") return;
     // 暂停定时扫描视频帧
     pauseScanInterval();
     // 禁用摄像头流输出
     disableStreamTracks();
-    setStatus("idle");
+    status.set("idle");
   };
 
   /** 从悬置状态切换到激活状态 */
   const switchToActive = () => {
-    if (getStatus() !== "idle") return;
+    if (status.get() !== "idle") return;
     // 启用摄像头流输出
     enableStreamTracks();
     // 恢复定时扫描视频帧
     resumeScanInterval();
-    setStatus("active");
+    status.set("active");
   };
 
   /** 尝试扫描当前视频帧中的二维码 */
   const scanVideoFrame = async () => {
     // 摄像头扫码Composable不在激活状态
-    if (getStatus() !== "active") return;
+    if (status.get() !== "active") return;
 
     const video = videoRef.value;
 
@@ -152,7 +159,7 @@ export const useCameraQrScanner = <
       if (!cameraStream.value?.active) {
         pauseScanInterval();
         await restartCameraStream();
-        if (getStatus() !== "active") return;
+        if (status.get() !== "active") return;
         resumeScanInterval();
         return;
       }
@@ -178,7 +185,7 @@ export const useCameraQrScanner = <
     canvasCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
     // 尝试扫描二维码
     const result = await scan(canvas);
-    if (getStatus() !== "active") return;
+    if (status.get() !== "active") return;
 
     // 未识别到二维码，忽略
     if (!result.text) return;
@@ -217,7 +224,7 @@ export const useCameraQrScanner = <
   /** 开始扫码 */
   const start = async () => {
     try {
-      if (getStatus() !== "off") return;
+      if (status.get() !== "off") return;
 
       // 非安全上下文，不支持调用摄像头
       if (typeof window !== "undefined" && !window.isSecureContext) {
@@ -230,19 +237,19 @@ export const useCameraQrScanner = <
 
       // 重置状态，进入启动中状态
       lastScannedRawText.value = null;
-      setStatus("starting");
+      status.set("starting");
 
       // 请求摄像头流
       await requestCameraStream();
-      if (getStatus() !== "starting") throw new Error("状态异常，扫码启动失败");
+      if (status.get() !== "starting") throw new Error("状态异常，扫码启动失败");
       if (!cameraStream.value) throw new Error("连接摄像头失败，请刷新重试");
 
       // 进入激活状态
-      setStatus("active");
+      status.set("active");
       // 开始定时扫描视频帧
       resumeScanInterval();
     } catch (err) {
-      if (getStatus() !== "off") {
+      if (status.get() !== "off") {
         stop();
       }
 
@@ -264,7 +271,7 @@ export const useCameraQrScanner = <
 
     // 重置状态
     lastScannedRawText.value = null;
-    setStatus("off");
+    status.set("off");
   };
 
   // 组件卸载前停止扫码并释放资源
@@ -275,7 +282,7 @@ export const useCameraQrScanner = <
   return {
     start,
     stop,
-    getStatus,
+    getStatus: status.get,
     isCameraVideoPlayable: readonly(isCameraVideoPlayable),
     switchToIdle,
     switchToActive

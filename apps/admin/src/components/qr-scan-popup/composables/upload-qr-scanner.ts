@@ -24,11 +24,15 @@ export const useUploadQrScanner = <
     options;
 
   /** 图片上传扫码Composable的状态 */
-  const status = ref<UseUploadQrScannerStatus>("idle");
-  /** 获取图片上传扫码Composable的状态 */
-  const getStatus = () => status.value;
-  /** 设置图片上传扫码Composable的状态 */
-  const setStatus = (newStatus: UseUploadQrScannerStatus) => (status.value = newStatus);
+  const status = (() => {
+    const statusValue = ref<UseUploadQrScannerStatus>("idle");
+    return {
+      /** 获取图片上传扫码Composable的状态 */
+      get: () => statusValue.value,
+      /** 设置图片上传扫码Composable的状态 */
+      set: (newStatus: UseUploadQrScannerStatus) => (statusValue.value = newStatus)
+    } as const;
+  })();
 
   /** 尝试扫描图片文件中的二维码 */
   const scanImageFile = async (file: File) => {
@@ -81,31 +85,31 @@ export const useUploadQrScanner = <
       emitError(err);
     } finally {
       resetFileDialog();
-      setStatus("idle");
+      status.set("idle");
     }
   });
 
   // 监听取消选择文件
   onFileCancel(() => {
-    setStatus("idle");
+    status.set("idle");
   });
 
   /** 请求用户上传二维码图片 */
   const requestUploadQrCodeImage = () => {
     try {
-      if (getStatus() !== "idle") return;
-      setStatus("pending");
+      if (status.get() !== "idle") return;
+      status.set("pending");
 
       // 打开文件选择器
       openFileDialog();
     } catch (err) {
-      setStatus("idle");
+      status.set("idle");
       emitError(err);
     }
   };
 
   return {
-    getStatus,
+    getStatus: status.get,
     requestUploadQrCodeImage
   };
 };
