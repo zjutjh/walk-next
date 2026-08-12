@@ -291,6 +291,52 @@ importers:
         specifier: catalog:infra
         version: 3.2.5(typescript@5.9.3)
 
+  apps/client:
+    dependencies:
+      '@vueuse/core':
+        specifier: catalog:frontend
+        version: 14.2.1(vue@3.5.28(typescript@5.9.3))
+      api:
+        specifier: workspace:*
+        version: link:../../packages/api
+      axios:
+        specifier: catalog:frontend
+        version: 1.13.5
+      pinia:
+        specifier: catalog:frontend
+        version: 3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3))
+      pinia-plugin-persistedstate:
+        specifier: catalog:frontend
+        version: 4.7.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))
+      shared:
+        specifier: workspace:*
+        version: link:../../packages/shared
+      vue:
+        specifier: catalog:frontend
+        version: 3.5.28(typescript@5.9.3)
+      vue-router:
+        specifier: catalog:frontend
+        version: 5.0.3(@vue/compiler-sfc@3.5.28)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
+    devDependencies:
+      '@types/node':
+        specifier: catalog:types
+        version: 24.10.13
+      '@vitejs/plugin-vue':
+        specifier: catalog:infra
+        version: 6.0.4(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(yaml@2.8.2))(vue@3.5.28(typescript@5.9.3))
+      '@vue/tsconfig':
+        specifier: catalog:infra
+        version: 0.8.1(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3))
+      typescript:
+        specifier: catalog:infra
+        version: 5.9.3
+      vite:
+        specifier: catalog:infra
+        version: 7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(yaml@2.8.2)
+      vue-tsc:
+        specifier: catalog:infra
+        version: 3.2.5(typescript@5.9.3)
+
   packages/api:
     devDependencies:
       typescript:
