@@ -18,7 +18,8 @@
     "pinia-plugin-persistedstate": "catalog:frontend",
     "shared": "workspace:*",
     "vue": "catalog:frontend",
-    "vue-router": "catalog:frontend"
+    "vue-router": "catalog:frontend",
+    "lodash-es": "catalog:frontend"
   },
   "devDependencies": {
     "@types/node": "catalog:types",
@@ -26,6 +27,9 @@
     "@vue/tsconfig": "catalog:infra",
     "typescript": "catalog:infra",
     "vite": "catalog:infra",
-    "vue-tsc": "catalog:infra"
+    "vue-tsc": "catalog:infra",
+    "@types/lodash-es": "catalog:types",
+    "postcss-pxtorem": "catalog:infra",
+    "@types/postcss-pxtorem": "catalog:types"
   }
 }
