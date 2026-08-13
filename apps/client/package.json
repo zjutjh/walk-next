@@ -9,14 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "catalog:frontend",
-    "vue-router": "catalog:frontend",
+    "@intlify/unplugin-vue-i18n": "^11.2.4",
+    "@vueuse/core": "catalog:frontend",
+    "api": "workspace:*",
+    "axios": "catalog:frontend",
+    "petite-vue-i18n": "^11.4.8",
     "pinia": "catalog:frontend",
     "pinia-plugin-persistedstate": "catalog:frontend",
-    "@vueuse/core": "catalog:frontend",
-    "axios": "catalog:frontend",
-    "api": "workspace:*",
-    "shared": "workspace:*"
+    "shared": "workspace:*",
+    "vue": "catalog:frontend",
+    "vue-router": "catalog:frontend"
   },
   "devDependencies": {
     "@types/node": "catalog:types",
