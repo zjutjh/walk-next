@@ -19,10 +19,10 @@ export interface UseCameraQrScannerOptions<TData> extends UseQrScannerOptions<TD
 }
 
 /** 摄像头扫码Composable的状态
- * @enum off 关闭，所有媒体资源均被释放
- * @enum starting 启动中，正在准备媒体资源，尚未开始扫描
- * @enum active 激活，占用媒体资源，定时扫描视频帧
- * @enum idle 悬置，占用媒体资源，但不输出画面也不扫描 */
+ * - off 关闭，所有媒体资源均被释放
+ * - starting 启动中，正在准备媒体资源，尚未开始扫描
+ * - active 激活，占用媒体资源，定时扫描视频帧
+ * - idle 悬置，占用媒体资源，但不输出画面也不扫描 */
 export type UseCameraQrScannerStatus = "off" | "starting" | "active" | "idle";
 
 /** 摄像头扫码 */

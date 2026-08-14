@@ -8,8 +8,8 @@ import { parseQrCodeRawText, type UseQrScannerOptions } from "@/utils";
 export type UseUploadQrScannerOptions<TData> = UseQrScannerOptions<TData>;
 
 /** 图片上传扫码Composable的状态
- * @enum idle 闲置
- * @enum pending 等待用户选择文件，此时重复调用会被忽略 */
+ * - idle 闲置
+ * - pending 等待用户选择文件，此时重复调用会被忽略 */
 export type UseUploadQrScannerStatus = "idle" | "pending";
 
 /** 图片上传扫码 */
