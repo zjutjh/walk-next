@@ -49,7 +49,6 @@
 </template>
 
 <script setup lang="ts">
-import { useQueryClient } from "@tanstack/vue-query";
 import type { TeamRebuildMember } from "api/types/admin";
 import type { PromptDialogFieldConfig } from "shared";
 import { PromptDialog } from "shared";
@@ -58,7 +57,6 @@ import { showConfirmDialog, showFailToast } from "vant";
 import { computed, ref } from "vue";
 
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
-import { ADMIN_QUERY_KEY } from "@/constants";
 import { MemberQrCodeSchema } from "@/utils";
 import { type RouteId } from "@/walk-config";
 
@@ -86,8 +84,6 @@ const emit = defineEmits<{
   /** 提交重组的团队 */
   mutateRebuildTeam: [];
 }>();
-
-const queryClient = useQueryClient();
 
 /** 重组的团队的成员ID列表 */
 const memberIdList = defineModel<number[]>("memberIdList", { required: true });
@@ -183,17 +179,6 @@ const handleScanSuccess = (data: unknown) => {
 
 /** 点击提交团队 */
 const handleSubmitClick = async () => {
-  if (
-    props.memberList.some((member) => member.status !== "not_start" && member.status !== "pending")
-  ) {
-    showFailToast("成员须为未开始或待出发");
-    // 刷新数据
-    queryClient.refetchQueries({
-      queryKey: [ADMIN_QUERY_KEY.MEMBER.INFO],
-      type: "active"
-    });
-    return;
-  }
   try {
     await showConfirmDialog({
       title: "重组团队",
