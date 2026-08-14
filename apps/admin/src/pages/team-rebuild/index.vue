@@ -11,7 +11,13 @@
       ></van-cell>
     </van-cell-group>
     <!-- 成员列表 -->
-    <van-cell-group inset title="团队成员">
+    <cell-group
+      :loading="isMemberInfoFetching"
+      :error="memberInfoError"
+      inset
+      title="团队成员"
+      @retry-click="refetchMemberInfo"
+    >
       <div v-if="isEmpty(memberList)" :class="styles.emptyText">点击下方按钮，添加成员</div>
       <van-cell
         v-for="member in memberList"
@@ -24,7 +30,7 @@
           MEMBER_WALK_STATUS_TEXT[member.status]
         }}</span>
       </van-cell>
-    </van-cell-group>
+    </cell-group>
     <!-- 成员数量提示 -->
     <div :class="styles.memberCountText">
       已添加 {{ memberList.length }} 人，提交需 {{ TEAM_REBUILD_MEMBER_COUNT_LIMIT.MIN }}-{{
@@ -37,11 +43,12 @@
 
     <!-- 功能按钮列表 -->
     <button-list
-      v-model:member-list="memberList"
       v-model:is-member-id-dialog-visible="isMemberIdDialogVisible"
       v-model:member-id-dialog-value="memberIdDialogValue"
+      v-model:member-id-list="memberIdList"
       :class="styles.buttonContainer"
       :team-route="teamRoute"
+      :member-list="memberList"
       :is-rebuild-team-pending="isRebuildTeamPending"
       :is-add-member-pending="isAddMemberPending"
       @click-add-member-with-route-unelected="guideSelectRouteFirst"
@@ -62,22 +69,28 @@
     <member-action-sheet
       v-model:visible="isMemberActionSheetVisible"
       v-model:member-id="memberActionSheetMemberId"
-      v-model:member-list="memberList"
+      v-model:member-id-list="memberIdList"
+      :member-list="memberList"
     />
   </default-layout>
 </template>
 
 <script setup lang="ts">
-import { useMutation } from "@tanstack/vue-query";
-import type { TeamRebuildMember } from "api/types/admin";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/vue-query";
+import { useArraySome } from "@vueuse/core";
+import type { AdminAPI, TeamRebuildMember } from "api/types/admin";
 import { CanceledError } from "axios";
-import { isEmpty } from "lodash-es";
-import { RequestError } from "shared";
+import { compact, isEmpty, isNil, zipObject } from "lodash-es";
+import { CellGroup, RequestError } from "shared";
 import { showFailToast, showSuccessToast, showToast } from "vant";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import { MEMBER_WALK_STATUS_COLOR_MAP, MEMBER_WALK_STATUS_TEXT } from "@/constants";
+import {
+  ADMIN_QUERY_KEY,
+  MEMBER_WALK_STATUS_COLOR_MAP,
+  MEMBER_WALK_STATUS_TEXT
+} from "@/constants";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { walkAdminService } from "@/utils";
 import { ROUTE_CONFIG, ROUTE_LIST, type RouteId } from "@/walk-config";
@@ -89,11 +102,61 @@ import styles from "./index.module.scss";
 import type { RoutePickerAction } from "./types";
 
 const router = useRouter();
+const queryClient = useQueryClient();
 
-/** 重组的团队的成员列表 */
-const memberList = ref<TeamRebuildMember[]>([]);
+/** 重组的团队的成员ID列表 */
+const memberIdList = ref<number[]>([]);
 /** 重组的团队的路线 */
 const teamRoute = ref<RouteId | "">("");
+
+// 获取重组的团队的成员信息
+const memberInfoQueryMap = useQueries({
+  queries: () =>
+    memberIdList.value.map((memberId) => ({
+      staleTime: Infinity,
+      queryKey: [ADMIN_QUERY_KEY.MEMBER.INFO, memberId] as const,
+      queryFn: () =>
+        walkAdminService.QueryMemberInfo({
+          user_id: memberId
+        })
+    })),
+  combine: (results) => zipObject(memberIdList.value, results)
+});
+/** 重组的团队成员列表 */
+const memberList = computed<TeamRebuildMember[]>(() =>
+  compact(
+    memberIdList.value.map((memberId) => {
+      const queryData = memberInfoQueryMap.value[memberId]?.data;
+      return queryData
+        ? {
+            id: memberId,
+            ...queryData
+          }
+        : undefined;
+    })
+  )
+);
+/** 是否正在拉取任意成员信息 */
+const isMemberInfoFetching = useArraySome(
+  memberIdList,
+  (memberId) => memberInfoQueryMap.value[memberId]?.isFetching
+);
+/** 拉取成员信息的其中一个错误 */
+const memberInfoError = computed(() => {
+  for (const memberId of memberIdList.value) {
+    if (!isNil(memberInfoQueryMap.value[memberId]?.error)) {
+      return memberInfoQueryMap.value[memberId].error;
+    }
+  }
+  return null;
+});
+/** 重新拉取成员信息 */
+const refetchMemberInfo = () => {
+  queryClient.refetchQueries({
+    queryKey: [ADMIN_QUERY_KEY.MEMBER.INFO],
+    type: "active"
+  });
+};
 
 /** 人员ID输入弹窗是否显示 */
 const isMemberIdDialogVisible = ref(false);
@@ -157,18 +220,25 @@ const { mutate: mutateAddMember, isPending: isAddMemberPending } = useMutation({
       { signal: addMemberAbortController.signal }
     );
   },
-  onSuccess: (memberInfo, userId) => {
+  onSuccess: (memberInfo, memberId) => {
     // 人员状态验证
     if (memberInfo.status !== "not_start" && memberInfo.status !== "pending") {
       showFailToast("须为未开始或待出发人员");
       return;
     }
-    isMemberIdDialogVisible.value = false;
-    memberList.value.push({
-      id: userId,
-      name: memberInfo.name,
-      status: memberInfo.status
+    memberIdList.value.push(memberId);
+    // 写入缓存
+    queryClient.setQueryData<AdminAPI.QueryMemberInfoResponse>(
+      [ADMIN_QUERY_KEY.MEMBER.INFO, memberId],
+      memberInfo
+    );
+    // 刷新其他成员数据
+    queryClient.refetchQueries({
+      queryKey: [ADMIN_QUERY_KEY.MEMBER.INFO],
+      type: "active",
+      predicate: (query) => query.queryKey[1] !== memberId
     });
+    isMemberIdDialogVisible.value = false;
     memberIdDialogValue.value.memberIdStr = "";
   },
   onError: (err) => {
@@ -181,17 +251,22 @@ const { mutate: mutateAddMember, isPending: isAddMemberPending } = useMutation({
 const { mutate: mutateRebuildTeam, isPending: isRebuildTeamPending } = useMutation({
   mutationFn: () =>
     walkAdminService.RebuildTeam({
-      members: memberList.value.map((member) => member.id),
+      members: memberIdList.value,
       route_name: teamRoute.value
     }),
   onSuccess: (res) => {
-    memberList.value = [];
+    memberIdList.value = [];
     teamRoute.value = "";
     showSuccessToast("重组成功");
     router.push({ name: "team-info", params: { teamIdParam: res.team_id } });
   },
   onError: (err) => {
     showFailToast(err.message || "重组团队失败");
+    // 刷新数据
+    queryClient.refetchQueries({
+      queryKey: [ADMIN_QUERY_KEY.MEMBER.INFO],
+      type: "active"
+    });
   }
 });
 </script>
