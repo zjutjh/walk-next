@@ -324,7 +324,7 @@ importers:
         specifier: catalog:infra
         version: 5.9.3
       unplugin-icons:
-        specifier: ^23.0.1
+        specifier: catalog:infra
         version: 23.0.1(@vue/compiler-sfc@3.5.28)
       vant:
         specifier: catalog:frontend
