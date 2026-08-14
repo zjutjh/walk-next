@@ -14,16 +14,7 @@ export interface LoginRequest {
 }
 
 /** 管理员登录 响应 */
-export interface LoginResponse {
-  /** 管理员姓名 */
-  name: string;
-  /** 管理员所在点位ID */
-  point_name: string;
-  /** 管理员所在校区ID */
-  campus: string;
-  /** 管理员权限等级 */
-  permission: PermissionLevel;
-}
+export type LoginResponse = QueryAdminUserInfoResponse;
 
 /** 管理员退出登录 请求 */
 export type LogoutRequest = undefined;

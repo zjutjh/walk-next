@@ -9,7 +9,7 @@ import {
   type RouteRecordRaw
 } from "vue-router";
 
-import { useAdminInfo } from "@/composables";
+import { useAdminUserData } from "@/composables";
 import IndexPage from "@/pages/index/index.vue";
 
 import { globalQueryClient } from "./vue-query";
@@ -88,7 +88,7 @@ export const routerInstance = createRouter({
 
 // 前置路由守卫
 routerInstance.beforeEach((to, from) => {
-  const { hasPermission, isLoggedIn } = useAdminInfo(globalQueryClient);
+  const { hasPermission, isLoggedIn } = useAdminUserData(globalQueryClient);
   const { incPendingNavigationCount } = useRouterState();
 
   // 拦截无效路由

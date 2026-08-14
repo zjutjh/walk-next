@@ -7,10 +7,7 @@
     title="精弘毅行管理后台"
   >
     <!-- 管理员信息卡片 -->
-    <admin-info-card
-      :admin-name="adminName || '-'"
-      :walk-point="POINT_CONFIG[adminPointId]?.text ?? '-'"
-    />
+    <admin-info-card />
 
     <!-- 打卡 -->
     <van-cell-group title="签到">
@@ -93,10 +90,10 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
-import { useAdminInfo } from "@/composables";
+import { useAdminUserData } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
-import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
+import { CAMPUS_CONFIG, CAMPUS_LIST } from "@/walk-config";
 
 import AdminInfoCard from "./components/admin-info-card/index.vue";
 import styles from "./index.module.scss";
@@ -106,7 +103,7 @@ import { checkinQrCodeSchema } from "./utils";
 const router = useRouter();
 const queryClient = useQueryClient();
 const { isNavigationPending } = useRouterState();
-const { adminName, adminPointId, resetAdminInfo, hasPermission } = useAdminInfo();
+const { hasPermission, resetAdminUserData } = useAdminUserData();
 
 const { urlQuery } = useStoredUrlQuery<IndexUrlQuery>({
   defaultValue: {
@@ -149,7 +146,7 @@ const handleManualInputClick = () => {
 const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   mutationFn: () => walkAdminService.Logout(undefined),
   onSuccess: () => {
-    resetAdminInfo();
+    resetAdminUserData();
     urlQuery.value.isScanning = false;
     isTeamIdDialogVisible.value = false;
     showSuccessToast("登出成功");

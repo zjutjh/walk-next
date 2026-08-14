@@ -1,4 +1,4 @@
-import type { MemberWalkStatus } from "./member";
+import { AdminAPI } from ".";
 
 /** 搜索类型 */
 export type SearchType = "team_id" | "captain_phone" | "captain_name";
@@ -58,11 +58,7 @@ export interface TeamStatusInfo {
 }
 
 /** 重组团队人员信息 */
-export interface TeamRebuildMember {
+export interface TeamRebuildMember extends AdminAPI.QueryMemberInfoResponse {
   /** 用户编号 */
   id: number;
-  /** 姓名 */
-  name: string;
-  /** 当前行进状态 */
-  status: MemberWalkStatus;
 }

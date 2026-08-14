@@ -387,6 +387,9 @@ importers:
       typescript:
         specifier: catalog:infra
         version: 5.9.3
+      unplugin-icons:
+        specifier: catalog:infra
+        version: 23.0.1(@vue/compiler-sfc@3.5.28)
       vant:
         specifier: catalog:frontend
         version: 4.9.22(vue@3.5.28(typescript@5.9.3))

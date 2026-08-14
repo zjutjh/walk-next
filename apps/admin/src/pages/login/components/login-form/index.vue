@@ -56,14 +56,14 @@ import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { useAdminInfo } from "@/composables";
+import { useAdminUserData } from "@/composables";
 import { walkAdminService } from "@/utils";
 
 import styles from "./index.module.scss";
 
 const router = useRouter();
 const route = useRoute();
-const { updateAdminInfo } = useAdminInfo();
+const { updateAdminUserData } = useAdminUserData();
 
 /** 表单组件 */
 const formRef = useTemplateRef<FormInstance>("formRef");
@@ -99,12 +99,9 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
     // 显示提示
     showSuccessToast("登录成功");
     // 保存身份信息
-    updateAdminInfo({
+    updateAdminUserData({
       isLoggedIn: true,
-      adminName: data.name,
-      pointId: data.point_name,
-      campusId: data.campus,
-      permissionLevel: data.permission
+      userInfo: data
     });
 
     // 路由跳转

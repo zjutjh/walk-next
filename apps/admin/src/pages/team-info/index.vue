@@ -103,7 +103,7 @@ import { CellGroup, ErrorEmpty } from "shared";
 import { showDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 
-import { useAdminInfo } from "@/composables";
+import { useAdminUserData } from "@/composables";
 import {
   ADMIN_QUERY_KEY,
   MEMBER_WALK_STATUS_COLOR_MAP,
@@ -125,7 +125,7 @@ const props = defineProps<{
 const teamId = useToNumber(props.teamIdParam, { method: "parseInt" });
 
 const queryClient = useQueryClient();
-const { adminPointId } = useAdminInfo();
+const { adminUserInfo } = useAdminUserData();
 
 /** 团队剩余人数 */
 const remainingCount = computed(
@@ -150,7 +150,8 @@ const isStartPointManageAvailable = computed(() =>
   Boolean(
     teamInfoData.value &&
     // 当前管理员用户在团队所属路线的起点
-    adminPointId.value === first(ROUTE_POINT_LIST_MAP[teamInfoData.value.team.route_name]) &&
+    adminUserInfo.value?.pointId ===
+      first(ROUTE_POINT_LIST_MAP[teamInfoData.value.team.route_name]) &&
     // 团队最近一次打卡在起点且上个打卡点位为空/最近一次打卡点位为空
     ((teamInfoData.value.team.latest_point_name ===
       first(ROUTE_POINT_LIST_MAP[teamInfoData.value.team.route_name]) &&
@@ -164,7 +165,8 @@ const isEndPointManageAvailable = computed(() =>
   Boolean(
     teamInfoData.value &&
     // 当前管理员用户在团队所属路线的终点
-    adminPointId.value === last(ROUTE_POINT_LIST_MAP[teamInfoData.value.team.route_name]) &&
+    adminUserInfo.value?.pointId ===
+      last(ROUTE_POINT_LIST_MAP[teamInfoData.value.team.route_name]) &&
     // 团队最近一次打卡在终点且上个打卡点位不为空
     teamInfoData.value.team.latest_point_name ===
       last(ROUTE_POINT_LIST_MAP[teamInfoData.value.team.route_name]) &&

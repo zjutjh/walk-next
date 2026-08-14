@@ -13,29 +13,30 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "peerDependencies": {
-    "@vueuse/core": "catalog:frontend",
     "@tanstack/vue-query": "catalog:frontend",
-    "pinia": "catalog:frontend",
-    "lodash-es": "catalog:frontend",
+    "@vueuse/core": "catalog:frontend",
     "axios": "catalog:frontend",
+    "lodash-es": "catalog:frontend",
+    "pinia": "catalog:frontend",
     "vant": "catalog:frontend",
+    "vite": "catalog:infra",
     "vue": "catalog:frontend",
-    "vue-router": "catalog:frontend",
-    "vite": "catalog:infra"
+    "vue-router": "catalog:frontend"
   },
   "devDependencies": {
-    "@types/lodash-es": "catalog:types",
     "@tanstack/vue-query": "catalog:frontend",
+    "@types/lodash-es": "catalog:types",
     "@vue/tsconfig": "catalog:infra",
     "@vueuse/core": "catalog:frontend",
     "axios": "catalog:frontend",
     "lodash-es": "catalog:frontend",
     "pinia": "catalog:frontend",
     "typescript": "catalog:infra",
+    "unplugin-icons": "catalog:infra",
     "vant": "catalog:frontend",
+    "vite": "catalog:infra",
     "vue": "catalog:frontend",
     "vue-router": "catalog:frontend",
-    "vue-tsc": "catalog:infra",
-    "vite": "catalog:infra"
+    "vue-tsc": "catalog:infra"
   }
 }

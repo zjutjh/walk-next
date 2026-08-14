@@ -66,6 +66,8 @@ import styles from "./index.module.scss";
 const props = defineProps<{
   /** 重组的团队的路线 */
   teamRoute: RouteId | "";
+  /** 重组的团队的成员列表 */
+  memberList: TeamRebuildMember[];
   /** 重组团队请求是否正在进行 */
   isRebuildTeamPending: boolean;
   /** 获取成员信息并添加成员到团队请求是否正在进行 */
@@ -83,8 +85,8 @@ const emit = defineEmits<{
   mutateRebuildTeam: [];
 }>();
 
-/** 重组的团队的成员列表 */
-const memberList = defineModel<TeamRebuildMember[]>("memberList", { required: true });
+/** 重组的团队的成员ID列表 */
+const memberIdList = defineModel<number[]>("memberIdList", { required: true });
 /** 人员ID输入弹窗是否显示 */
 const isMemberIdDialogVisible = defineModel<boolean>("isMemberIdDialogVisible", { required: true });
 /** 人员ID输入弹窗 表单值 */
@@ -96,15 +98,15 @@ const memberIdDialogValue = defineModel<{ memberIdStr: string }>("memberIdDialog
 const isAddMemberButtonDisabled = computed(
   () =>
     // 人数达上限
-    memberList.value.length >= TEAM_REBUILD_MEMBER_COUNT_LIMIT.MAX
+    memberIdList.value.length >= TEAM_REBUILD_MEMBER_COUNT_LIMIT.MAX
 );
 
 /** 提交团队按钮是否禁用 */
 const isSubmitButtonDisabled = computed(
   () =>
     // 人数超限
-    memberList.value.length < TEAM_REBUILD_MEMBER_COUNT_LIMIT.MIN ||
-    memberList.value.length > TEAM_REBUILD_MEMBER_COUNT_LIMIT.MAX ||
+    memberIdList.value.length < TEAM_REBUILD_MEMBER_COUNT_LIMIT.MIN ||
+    memberIdList.value.length > TEAM_REBUILD_MEMBER_COUNT_LIMIT.MAX ||
     // 未选择路线
     !props.teamRoute ||
     // 正在请求
@@ -124,7 +126,7 @@ const MEMBER_ID_DIALOG_CONFIG: Record<
       { required: true, message: "请输入毅行人员ID" },
       // 查重验证
       {
-        validator: (val) => !memberList.value.some((member) => member.id === parseInt(val)),
+        validator: (val) => !memberIdList.value.some((memberId) => memberId === parseInt(val)),
         message: "该成员已添加，不可重复添加"
       }
     ]
@@ -168,7 +170,7 @@ const handleScanSuccess = (data: unknown) => {
   // 关闭扫码弹层
   isScanPopupVisible.value = false;
   // 查重验证
-  if (memberList.value.some((member) => member.id === data.user_id)) {
+  if (memberIdList.value.some((memberId) => memberId === data.user_id)) {
     showFailToast("该成员已添加\n不可重复添加");
     return;
   }
