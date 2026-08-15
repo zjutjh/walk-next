@@ -1,6 +1,12 @@
-import type { MemberWalkStatus } from "../admin";
 import type { TeamRandomListItem, TeamSummary } from "./team";
-import type { UserContact, UserGender, UserInfo, UserRegisterBasic, UserSummary } from "./user";
+import type {
+  UserContact,
+  UserGender,
+  UserInfo,
+  UserRegisterBasic,
+  UserSummary,
+  UserWalkStatus
+} from "./user";
 
 /** 用户登录 请求 */
 export interface LoginRequest {
@@ -99,7 +105,7 @@ export type QueryTeamDetailRequest = undefined;
 export interface QueryTeamDetailResponse extends TeamSummary {
   /** 是否允许随机匹配 */
   allow_match: boolean;
-  // TODO: 这是什么？文档翻烂了也没找到
+  // TODO: 这是什么？文档翻烂了也没找到😡
   code: string;
   /** 最新经过点位名称 */
   latest_point_name: string;
@@ -149,7 +155,7 @@ export interface QueryTeamMemberResponse extends UserSummary, Required<UserConta
   /** 是否可转让队长 */
   can_transfer_captain: boolean;
   /** 用户状态 */
-  walk_status: MemberWalkStatus;
+  walk_status: UserWalkStatus;
 }
 
 /** 团队页面基本信息 请求 */

@@ -1,5 +1,3 @@
-import type { MemberWalkStatus } from "../admin";
-
 /** 用户信息 */
 export interface UserInfo extends UserSummary, Required<UserContact> {
   /** 剩余创建团队次数 */
@@ -11,7 +9,7 @@ export interface UserInfo extends UserSummary, Required<UserContact> {
   /** 团队ID */
   team_id: number;
   /** 用户状态 */
-  walk_status: MemberWalkStatus;
+  walk_status: UserWalkStatus;
 }
 
 export interface UserRegisterBasic {
@@ -52,6 +50,16 @@ export type UserType = "alumnus" | "student" | "teacher";
 
 /** 用户身份 */
 export type UserRole = "unbind" | "member" | "captain";
+
+/** 用户状态 */
+export type UserWalkStatus =
+  | "not_start"
+  | "pending"
+  | "abandoned"
+  | "in_progress"
+  | "withdrawn"
+  | "violated"
+  | "completed";
 
 /** 用户性别 */
 export const enum UserGender {
