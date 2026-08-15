@@ -1,6 +1,6 @@
-import { MemberWalkStatus } from "../admin";
-import { TeamRandomListItem, TeamSummary } from "./team";
-import { UserContact, UserGender, UserInfo, UserRegisterBasic, UserSummary } from "./user";
+import type { MemberWalkStatus } from "../admin";
+import type { TeamRandomListItem, TeamSummary } from "./team";
+import type { UserContact, UserGender, UserInfo, UserRegisterBasic, UserSummary } from "./user";
 
 /** 用户登录 请求 */
 export interface LoginRequest {

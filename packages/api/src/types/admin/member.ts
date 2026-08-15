@@ -1,4 +1,4 @@
-import { TeamMemberRole } from "./team";
+import type { TeamMemberRole } from "./team";
 
 /** 人员行进状态 */
 export type MemberWalkStatus =

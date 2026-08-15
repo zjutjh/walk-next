@@ -1,4 +1,4 @@
-import { MemberWalkStatus } from "../admin";
+import type { MemberWalkStatus } from "../admin";
 
 /** 用户信息 */
 export interface UserInfo extends UserSummary, Required<UserContact> {
