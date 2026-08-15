@@ -1,0 +1,24 @@
+// 拓展功能的单元格组
+.expanded-cell-group {
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &__loading,
+    &__retry-btn {
+      width: 16px;
+      height: 16px;
+    }
+
+    &__error-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    &__error-text {
+      color: var(--van-danger-color);
+    }
+  }
+}

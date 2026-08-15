@@ -1,9 +1,18 @@
+import { useRouterState } from "shared";
 import type { SetRequired } from "type-fest";
-import { showFailToast } from "vant";
-import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import { showFailToast, showToast } from "vant";
+import {
+  createRouter,
+  createWebHistory,
+  isNavigationFailure,
+  NavigationFailureType,
+  type RouteRecordRaw
+} from "vue-router";
 
-import { useAdminInfo } from "@/composables/admin-user-info";
+import { useAdminUserData } from "@/composables";
 import IndexPage from "@/pages/index/index.vue";
+
+import { globalQueryClient } from "./vue-query";
 
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
@@ -33,7 +42,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     }
   },
   {
-    path: "/dashboard/:campusId",
+    path: "/dashboard/:campusIdParam",
     props: true,
     name: "dashboard",
     component: () => import("@/pages/walk-dashboard/index.vue"),
@@ -43,7 +52,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     }
   },
   {
-    path: "/team-list/:campusId",
+    path: "/team-list/:campusIdParam",
     props: true,
     name: "team-list",
     component: () => import("@/pages/team-list/index.vue"),
@@ -52,7 +61,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     }
   },
   {
-    path: "/team/:teamIdStr",
+    path: "/team/:teamIdParam",
     name: "team-info",
     component: () => import("@/pages/team-info/index.vue"),
     props: true,
@@ -72,14 +81,16 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   }
 ];
 
-export const routerConfig = createRouter({
-  history: createWebHistory(),
+export const routerInstance = createRouter({
+  history: createWebHistory(import.meta.env.VITE_BASE_PATH),
   routes
 });
 
-// 路由守卫
-routerConfig.beforeEach((to, from) => {
-  const { hasPermission, isLoggedIn } = useAdminInfo();
+// 前置路由守卫
+routerInstance.beforeEach((to, from) => {
+  const { hasPermission, isLoggedIn } = useAdminUserData(globalQueryClient);
+  const { incPendingNavigationCount } = useRouterState();
+
   // 拦截无效路由
   if (to.matched.length === 0) {
     return isLoggedIn.value ? { name: "index" } : { name: "login" };
@@ -90,6 +101,7 @@ routerConfig.beforeEach((to, from) => {
   }
   // 未登录状态返回登录
   if (!isLoggedIn.value && !to.meta.allowNoAuth) {
+    showToast({ message: "未登录", position: "bottom" });
     return { name: "login", query: { fromPath: encodeURIComponent(to.fullPath) } };
   }
   // 权限不足
@@ -104,4 +116,28 @@ routerConfig.beforeEach((to, from) => {
       return { name: "index" };
     }
   }
+
+  // 更新全局路由状态
+  incPendingNavigationCount();
+});
+
+// 后置路由守卫
+routerInstance.afterEach((_to, _from, failure) => {
+  const { decPendingNavigationCount } = useRouterState();
+
+  /**
+   * Vue Router 5.x中，duplicated会跳过navigate，也就不会执行beforeEach，需要过滤，以免计数器泄露
+   *  @see https://github.com/vuejs/router/blob/main/packages/router/src/router.ts */
+  if (!isNavigationFailure(failure, NavigationFailureType.duplicated)) {
+    // 更新全局路由状态
+    decPendingNavigationCount();
+  }
+});
+
+// 路由内部逻辑错误处理
+routerInstance.onError((error) => {
+  console.error(error);
+  // 重置全局路由状态
+  const { resetPendingNavigationCount } = useRouterState();
+  resetPendingNavigationCount();
 });

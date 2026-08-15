@@ -2,7 +2,8 @@
   "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vite/client", "./node_modules/unplugin-icons/types/vue3.d.ts"],
     "module": "ESNext",
     "strict": true,
     "baseUrl": "./",

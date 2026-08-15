@@ -1,56 +1,65 @@
+// 登录页
 .page {
+  position: relative;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(
-    circle at 50% 50%,
-    transparent 0%,
-    transparent 35%,
-    rgb(from var(--van-success-color) r g b / 0.04) 80%,
-    rgb(from var(--van-success-color) r g b / 0.08) 100%
-  );
+  font-family: "DingTalk Sans";
+  background: var(--van-background);
 
-  .productName,
-  .title {
-    font-weight: bold;
-    text-align: center;
-    user-select: none;
-    font-family: "DingTalk JinBuTi";
-  }
-
-  .productName {
-    font-size: 36px;
-  }
-
-  .title {
-    font-size: 24px;
-  }
-
-  .content {
+  .topArea {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 30px;
-    --van-cell-background: none;
-    font-family: "DingTalk Sans";
+    padding: {
+      top: 60px;
+      left: 35px;
+      right: 35px;
+      bottom: 50px;
+    }
 
-    .error {
-      height: 14px;
-      font-size: 14px;
-      line-height: 14px;
-      color: var(--van-danger-color);
+    .title,
+    .productName {
       text-align: center;
-      margin: {
-        top: 10px;
-      }
+      user-select: none;
+      align-self: flex-start;
     }
 
-    .loginButton {
-      font-size: 18px;
-      display: block;
-      user-select: none;
+    .title {
+      font-size: 40px;
+      color: var(--van-black);
+      font-weight: bold;
     }
+
+    .productName {
+      font-size: 21px;
+      color: var(--van-gray-8);
+      margin-top: 20px;
+    }
+
+    .form {
+      margin-top: 25px;
+    }
+  }
+
+  .decoration,
+  .logo {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .decoration {
+    flex-grow: 1;
+    flex-shrink: 1;
+    height: 120px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .logo {
+    position: absolute;
+    top: 55px;
+    right: 35px;
+    width: 60px;
   }
 }

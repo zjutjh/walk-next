@@ -1,61 +1,77 @@
-.qr-scan-popup-container {
-  height: 100%;
-}
-
 .qr-scan-popup {
   height: 100%;
-  background: #000000;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
 
-.qr-scan-popup__video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  &__content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--van-background);
+  }
 
-.qr-scan-popup__close {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  width: 36px;
-  height: 36px;
-  border-radius: 18px;
-  background: rgba(0, 0, 0, 0.4);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  z-index: 2;
-}
+  &__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--van-black);
+  }
 
-.qr-scan-popup__album {
-  position: absolute;
-  right: 18px;
-  bottom: 22px;
-  width: 44px;
-  height: 44px;
-  border-radius: 22px;
-  background: rgba(0, 0, 0, 0.4);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  z-index: 2;
-}
+  &__permission-tip,
+  &__loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    text-align: center;
+    user-select: none;
+    z-index: 2;
+  }
 
-.qr-scan-popup__error {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 74px;
-  text-align: center;
-  font-size: 12px;
-  color: #ffffff;
-  z-index: 2;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  &__permission-tip {
+    line-height: 1.6em;
+  }
+
+  &__loading {
+    color: #ffffff;
+  }
+
+  &__btn {
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
+    z-index: 2;
+    --van-button-default-background: rgba(0, 0, 0, 0.5);
+    --van-button-default-color: #ffffff;
+    --van-button-normal-font-size: 18px;
+    --van-button-border-width: 0;
+
+    .van-button__icon {
+      line-height: 0;
+    }
+  }
+
+  &__close-btn {
+    position: absolute;
+    top: 22px;
+    right: 18px;
+  }
+
+  &__right-bottom,
+  &__left-bottom {
+    position: absolute;
+    bottom: 22px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  &__right-bottom {
+    right: 18px;
+  }
+
+  &__left-bottom {
+    left: 18px;
+  }
 }

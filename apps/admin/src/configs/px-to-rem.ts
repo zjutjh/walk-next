@@ -1,16 +1,22 @@
-import { round } from "lodash-es";
+import { clamp, round } from "lodash-es";
 
-import { BASE_ROOT_FONT_SIZE, DESIGN_WIDTH, MAX_VIEW_WIDTH } from "@/constants/ui";
+import {
+  BASE_ROOT_FONT_SIZE,
+  DESIGN_WIDTH,
+  MAX_UI_SCALE_RATIO,
+  MIN_UI_SCALE_RATIO
+} from "@/constants";
 
 /**
- * 获取视口宽度，限制了最大视口宽度，防止在超大屏幕上字体过大
+ * 获取UI缩放比例，限制了上下限
  */
-export function getViewWidth() {
-  return Math.min(document.documentElement.clientWidth || window.innerWidth, MAX_VIEW_WIDTH);
+export function getUiScaleRatio() {
+  const scaleRatio = (document.documentElement.clientWidth || window.innerWidth) / DESIGN_WIDTH;
+  return clamp(scaleRatio, MIN_UI_SCALE_RATIO, MAX_UI_SCALE_RATIO);
 }
 
 export function setRootFontSize() {
-  const size = round((getViewWidth() / DESIGN_WIDTH) * BASE_ROOT_FONT_SIZE, 3);
+  const size = round(getUiScaleRatio() * BASE_ROOT_FONT_SIZE, 3);
   document.documentElement.style.fontSize = `${size}px`;
 }
 

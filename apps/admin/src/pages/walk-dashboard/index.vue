@@ -1,44 +1,54 @@
 <!-- 数据仪表盘页 -->
 <template>
-  <default-layout :class="styles.layout" :title="`${CAMPUS_CONFIG[props.campusId]?.text}数据大盘`">
+  <default-layout :class="styles.page" :title="`${CAMPUS_CONFIG[campusId]?.text ?? ''}数据大盘`">
     <template #right>
+      <!-- 搜索团队按钮 -->
       <van-icon name="search" size="22" @click="handleSearchClick" />
     </template>
-    <div :class="styles.topArea">
-      <pan-zoom-map-view
-        ref="panZoomMapViewRef"
-        v-model:url-query="urlQuery"
-        :campus-id="props.campusId"
-        :map-url="CAMPUS_CONFIG[props.campusId]?.mapUrl"
-      />
-    </div>
-    <data-overview :class="styles.dataPanel" :url-query="urlQuery" :campus-id="props.campusId" />
-    <!-- 展示点位或行程段详情的浮动面板 -->
-    <van-floating-panel
-      v-model:height="floatingPanelHeight"
-      :class="styles.floatingPanel"
-      :anchors="floatingPanelAnchors"
-    >
-      <point-details
-        v-if="urlQuery.point !== ''"
-        v-model:point="urlQuery.point"
-        :campus-id="props.campusId"
-      />
-      <segment-details
-        v-else-if="urlQuery.segment !== ''"
-        v-model:segment="urlQuery.segment"
-        :campus-id="props.campusId"
-      />
-    </van-floating-panel>
+    <template v-if="campusId">
+      <div :class="styles.topArea">
+        <!-- 地图 -->
+        <pan-zoom-map-view
+          ref="panZoomMapViewRef"
+          v-model:url-query="urlQuery"
+          :campus-id="campusId"
+          :map-url="CAMPUS_CONFIG[campusId]?.mapUrl"
+        />
+      </div>
+
+      <!-- 数据总览 -->
+      <data-overview :class="styles.dataPanel" :url-query="urlQuery" :campus-id="campusId" />
+
+      <!-- 展示点位或行程段详情的浮动面板 -->
+      <van-floating-panel
+        v-model:height="floatingPanelHeight"
+        :class="styles.floatingPanel"
+        :anchors="floatingPanelAnchors"
+      >
+        <!-- 点位详情 -->
+        <point-details
+          v-if="urlQuery.point !== ''"
+          v-model:point="urlQuery.point"
+          :campus-id="campusId"
+        />
+        <!-- 行程段详情 -->
+        <segment-details
+          v-else-if="urlQuery.segment !== ''"
+          v-model:segment="urlQuery.segment"
+          :campus-id="campusId"
+        />
+      </van-floating-panel>
+    </template>
+    <error-empty v-else :error="`校区不存在：${props.campusIdParam}`" />
   </default-layout>
 </template>
 
 <script setup lang="ts">
-import { useWindowSize } from "@vueuse/core";
-import { computed, ref, watch } from "vue";
+import { useWindowSize, watchImmediate } from "@vueuse/core";
+import { ErrorEmpty, useStoredUrlQuery } from "shared";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import { useStoredUrlQuery } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { pxToSize } from "@/utils";
 import { CAMPUS_CONFIG, type CampusId } from "@/walk-config";
@@ -51,32 +61,35 @@ import styles from "./index.module.scss";
 import type { DashboardUrlQuery } from "./types";
 
 const props = defineProps<{
-  /** 校区ID */
-  campusId: CampusId;
+  /** Path Param传入的校区ID */
+  campusIdParam: string;
 }>();
+/** 校区ID */
+const campusId = computed(() => {
+  if (Object.hasOwn(CAMPUS_CONFIG, props.campusIdParam)) {
+    return props.campusIdParam as CampusId;
+  }
+  return "";
+});
 
 const router = useRouter();
 
 const { urlQuery } = useStoredUrlQuery<DashboardUrlQuery>({
-  initialValue: {
+  defaultValue: {
     point: "",
     segment: ""
   },
-  persist: "memory"
+  persist: sessionStorage
 });
 
 /** 浮动面板锚点位置 */
 const floatingPanelAnchors = ref<number[]>([]);
 // 根据视口宽度计算锚点位置
 const { width } = useWindowSize();
-watch(
-  width,
-  () => {
-    // 关闭位置不能恰好为0，需留余量，因为浮动面板有向外阴影
-    floatingPanelAnchors.value = [-pxToSize(10), pxToSize(240)];
-  },
-  { immediate: true }
-);
+watchImmediate(width, () => {
+  // 关闭位置不能恰好为0，需留余量，因为浮动面板有向外阴影
+  floatingPanelAnchors.value = [-pxToSize(10), pxToSize(240)];
+});
 
 /** 浮动面板高度 */
 const floatingPanelHeight = computed({
@@ -86,7 +99,7 @@ const floatingPanelHeight = computed({
       ? floatingPanelAnchors.value.at(1)
       : floatingPanelAnchors.value.at(0),
   set: (newHeight) => {
-    // 手动关闭浮动面板时清空选中项
+    // 浮动面板被下拉关闭时清空选中项
     if (newHeight === floatingPanelAnchors.value.at(0)) {
       urlQuery.value.segment = "";
       urlQuery.value.point = "";
@@ -96,6 +109,6 @@ const floatingPanelHeight = computed({
 
 /** 前往搜索页 */
 const handleSearchClick = () => {
-  router.push({ name: "team-list", params: { campusId: props.campusId } });
+  router.push({ name: "team-list", params: { campusIdParam: props.campusIdParam } });
 };
 </script>

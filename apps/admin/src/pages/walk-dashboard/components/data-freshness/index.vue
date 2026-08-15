@@ -1,4 +1,4 @@
-<!-- 数据新鲜度 支持手动刷新数据 -->
+<!-- 数据新鲜度控制器 支持手动刷新数据 -->
 <template>
   <div :class="styles.component">
     <ic-outline-info :class="styles.icon" />

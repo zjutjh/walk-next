@@ -13,11 +13,18 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "peerDependencies": {
+    "@tanstack/vue-query": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
     "axios": "catalog:frontend",
-    "vue": "catalog:frontend"
+    "lodash-es": "catalog:frontend",
+    "pinia": "catalog:frontend",
+    "vant": "catalog:frontend",
+    "vite": "catalog:infra",
+    "vue": "catalog:frontend",
+    "vue-router": "catalog:frontend"
   },
   "devDependencies": {
+    "@tanstack/vue-query": "catalog:frontend",
     "@types/lodash-es": "catalog:types",
     "@vue/tsconfig": "catalog:infra",
     "@vueuse/core": "catalog:frontend",
@@ -25,7 +32,11 @@
     "lodash-es": "catalog:frontend",
     "pinia": "catalog:frontend",
     "typescript": "catalog:infra",
+    "unplugin-icons": "catalog:infra",
+    "vant": "catalog:frontend",
+    "vite": "catalog:infra",
     "vue": "catalog:frontend",
+    "vue-router": "catalog:frontend",
     "vue-tsc": "catalog:infra"
   }
 }

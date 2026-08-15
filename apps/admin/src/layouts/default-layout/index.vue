@@ -6,6 +6,7 @@
       v-if="!isNil(getNavbarTitleText)"
       :title="getNavbarTitleText"
       :left-arrow="props.showBack"
+      :left-disabled="props.backDisabled || isNavigationPending"
       class="default-layout__navbar"
       @click-left="handleBackClick"
       @click-right="emit('clickNavbarRight')"
@@ -16,9 +17,14 @@
     </van-nav-bar>
     <slot name="header" />
     <!-- 主内容区域 -->
-    <main class="default-layout__main">
-      <slot />
-    </main>
+    <loading-container
+      class="default-layout__loading-container"
+      :loading="props.loading || isNavigationPending"
+    >
+      <main class="default-layout__main">
+        <slot />
+      </main>
+    </loading-container>
   </div>
 </template>
 
@@ -26,6 +32,7 @@
 import "./index.scss";
 
 import { isNil, last } from "lodash-es";
+import { LoadingContainer, useRouterState } from "shared";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -48,12 +55,26 @@ interface DefaultLayoutProps {
    * @default true
    */
   showBack?: boolean;
+  /**
+   * 是否禁用返回上一页的按钮
+   *
+   * @default false
+   */
+  backDisabled?: boolean;
+  /**
+   * 是否为整个主内容区域显示加载态
+   *
+   * @default false
+   */
+  loading?: boolean;
 }
 
 const props = withDefaults(defineProps<DefaultLayoutProps>(), {
   title: undefined,
   showNavbar: true,
-  showBack: true
+  showBack: true,
+  backDisabled: false,
+  loading: false
 });
 
 const emit = defineEmits<{
@@ -62,6 +83,7 @@ const emit = defineEmits<{
 }>();
 
 const router = useRouter();
+const { isNavigationPending } = useRouterState();
 const route = useRoute();
 
 /** 获取导航栏标题文字 */

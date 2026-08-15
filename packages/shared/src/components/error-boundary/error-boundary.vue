@@ -1,3 +1,4 @@
+<!-- 全局错误边界 -->
 <template>
   <slot v-if="error" name="fallback" :error="error" />
   <slot v-else />
@@ -10,8 +11,8 @@ import { onErrorCaptured } from "vue";
 import { useErrorBoundaryStore } from "./error-boundary-store";
 
 const slots = defineSlots<{
-  default: (() => void) | undefined;
-  fallback: ((_: { error: unknown }) => void) | undefined;
+  default?(): void;
+  fallback?(props: { error: unknown }): void;
 }>();
 
 if (!slots.default && !slots.fallback) {

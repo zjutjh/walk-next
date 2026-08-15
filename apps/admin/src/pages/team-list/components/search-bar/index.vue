@@ -1,10 +1,10 @@
 <!-- 团队搜索栏 -->
 <template>
   <van-search
-    ref="searchRef"
+    ref="vantSearchRef"
     v-model.trim="searchValue"
     :class="styles.component"
-    :show-action="Boolean(searchValue.trim())"
+    :show-action="Boolean(searchValue.trim() || urlQuery.keyword)"
     :placeholder="`搜索${TEAM_SEARCH_TYPE[urlQuery.searchType]?.text}`"
     clear-trigger="always"
     input-align="center"
@@ -15,6 +15,7 @@
     @blur="isSearchInputFocus = false"
   >
     <template #left>
+      <!-- 搜索类型选择器 -->
       <van-dropdown-menu :class="styles.typeDropdownMenu">
         <van-dropdown-item
           v-model="urlQuery.searchType"
@@ -24,8 +25,9 @@
       </van-dropdown-menu>
     </template>
     <template #action>
+      <!-- 输入框右侧按钮 -->
       <div
-        v-if="searchValue !== urlQuery.keyword"
+        v-if="searchValue !== urlQuery.keyword && searchValue.trim()"
         :class="styles.searchBtn"
         @click="handleSearchApply"
       >
@@ -47,7 +49,7 @@ import styles from "./index.module.scss";
 const urlQuery = defineModel<TeamListUrlQuery>("urlQuery", { required: true });
 
 /** vant搜索框组件 */
-const vantSearchComponent = useTemplateRef<SearchInstance>("searchRef");
+const vantSearchRef = useTemplateRef<SearchInstance>("vantSearchRef");
 
 /** 搜索输入框的内容 */
 const searchValue = ref(urlQuery.value.keyword);
@@ -69,9 +71,11 @@ const handleSearchCancel = () => {
 };
 
 /** 搜索输入框的内容变化 */
-const handleInputValueChange = () => {
-  /** 取消搜索词 */
-  urlQuery.value.keyword = "";
+const handleInputValueChange = (newValue: string) => {
+  // 若内容不为空，取消搜索词
+  if (newValue.trim()) {
+    urlQuery.value.keyword = "";
+  }
 };
 
 /** 搜索框是否被聚焦 */
@@ -79,7 +83,7 @@ const isSearchInputFocus = ref(false);
 
 defineExpose({
   /** vant搜索框组件 */
-  vantSearchComponent,
+  vantSearchRef,
   /** 搜索框是否被聚焦 */
   isSearchInputFocus
 });

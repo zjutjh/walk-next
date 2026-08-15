@@ -11,13 +11,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ErrorBoundary: typeof import('./../src/components/error-boundary/index.vue')['default']
-    ErrorEmpty: typeof import('./../src/components/error-empty/index.vue')['default']
+    IMdiCameraFlip: typeof import('~icons/mdi/camera-flip')['default']
     IMdiClose: typeof import('~icons/mdi/close')['default']
+    IMdiFlashlight: typeof import('~icons/mdi/flashlight')['default']
+    IMdiFlashlightOff: typeof import('~icons/mdi/flashlight-off')['default']
     IMdiImage: typeof import('~icons/mdi/image')['default']
-    LoadingContainer: typeof import('./../src/components/loading-container/index.vue')['default']
-    PromptDialog: typeof import('./../src/components/prompt-dialog/index.vue')['default']
-    QrScanPopup: typeof import('./../src/components/qr-scan-popup/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanActionSheet: typeof import('vant/es')['ActionSheet']

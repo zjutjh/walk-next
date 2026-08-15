@@ -1,3 +1,4 @@
+// 团队信息页
 .page :global(.default-layout__main) {
   font-family: "Barlow", "DingTalk Sans";
 
@@ -34,15 +35,7 @@
       }
 
       .buttonContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-        margin: var(--van-cell-group-inset-padding);
         margin-top: 24px;
-
-        :global(.van-button__text) {
-          font-size: 18px;
-        }
       }
     }
   }

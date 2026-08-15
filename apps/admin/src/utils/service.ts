@@ -1,11 +1,13 @@
 import WalkAdminService from "api/services/admin";
-import { SERVICE_TIMEOUT } from "api/utils";
 import { type CommonRespWrap, type ServiceOptions } from "api/utils";
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import { RequestError, RESP_CODE } from "shared";
+import { showToast } from "vant";
 
-import { useAdminInfo } from "@/composables/admin-user-info";
-import { routerConfig as router } from "@/configs";
+import { useAdminUserData } from "@/composables";
+import { globalQueryClient, routerInstance } from "@/configs";
+
+const SERVICE_TIMEOUT = 15000 as const;
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 
@@ -15,12 +17,17 @@ axiosInstance.interceptors.response.use(
 
     if (body.code !== RESP_CODE.OK) {
       switch (body.code) {
-        // 未登录
+        // 未登录或登录过期
         case RESP_CODE.NOT_LOGGED_IN:
-          useAdminInfo().resetAdminInfo();
-          router.push({
+        case RESP_CODE.LOGIN_EXPIRED:
+          showToast({
+            message: body.code === RESP_CODE.NOT_LOGGED_IN ? "未登录" : "登录过期",
+            position: "bottom"
+          });
+          useAdminUserData(globalQueryClient).resetAdminUserData();
+          routerInstance.push({
             name: "login",
-            query: { fromPath: encodeURIComponent(router.currentRoute.value.fullPath) }
+            query: { fromPath: encodeURIComponent(routerInstance.currentRoute.value.fullPath) }
           });
           break;
         default:

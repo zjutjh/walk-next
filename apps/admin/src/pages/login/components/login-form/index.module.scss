@@ -1,0 +1,36 @@
+// 登录表单
+.component {
+  display: flex;
+  flex-direction: column;
+  --van-cell-background: none;
+  --van-cell-horizontal-padding: 0;
+  --van-cell-large-value-font-size: 20px;
+
+  :global(.van-field__label) {
+    color: var(--van-gray-8);
+    margin-bottom: 8px;
+  }
+
+  :global(.van-field__value) {
+    font-family: initial;
+    font-weight: 500;
+  }
+
+  .error {
+    font-size: 16px;
+    height: 1em;
+    line-height: 1em;
+    color: var(--van-danger-color);
+    text-align: center;
+    margin: {
+      top: 12px;
+      bottom: 12px;
+    }
+  }
+
+  .loginButton {
+    font-size: 18px;
+    display: block;
+    user-select: none;
+  }
+}

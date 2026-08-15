@@ -16,6 +16,7 @@
     "persistedstate",
     "picklist",
     "pxtorem",
+    "retryable",
     "swipeable",
     "unplugin",
     "ValiError",

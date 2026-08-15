@@ -23,7 +23,7 @@
               <div :class="styles.dataKey">路段人数</div>
             </div>
             <div :class="styles.data">
-              <div :class="styles.dataValue">{{ segmentBelongsTo }}</div>
+              <div :class="styles.dataValue">{{ segmentBelongsToText }}</div>
               <div :class="styles.dataKey">所属路线</div>
             </div>
           </div>
@@ -48,8 +48,7 @@ import { includes } from "lodash-es";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 
-import { ADMIN_QUERY_KEY } from "@/constants";
-import { ADMIN_REFRESH_INTERVAL } from "@/constants/refresh-interval";
+import { ADMIN_QUERY_KEY, ADMIN_REFRESH_INTERVAL } from "@/constants";
 import { walkAdminService } from "@/utils";
 import {
   CAMPUS_ROUTE_LIST_MAP,
@@ -73,8 +72,8 @@ const router = useRouter();
 /** URL Query 当前选中的行程段key */
 const chosenSegmentKey = defineModel<DashboardUrlQuery["segment"]>("segment", { required: true });
 
-/** 行程段所归属的路线 */
-const segmentBelongsTo = computed(() => {
+/** 行程段所归属的路线 显示文本 */
+const segmentBelongsToText = computed(() => {
   if (chosenSegmentKey.value === "") return "";
   // 遍历当前校区所有路线 筛选出所有含有此行程段的路线
   const belongingList = CAMPUS_ROUTE_LIST_MAP[props.campusId].filter((routeId) =>
@@ -104,7 +103,8 @@ const {
   refetchInterval: ADMIN_REFRESH_INTERVAL.DASHBOARD.SEGMENT,
   queryKey: [ADMIN_QUERY_KEY.DASHBOARD.SEGMENT, chosenSegmentKey] as const,
   queryFn: ({ queryKey }) => {
-    if (queryKey[1] === "") return Promise.reject();
+    if (queryKey[1] === "") return Promise.reject("Unexpected empty segment key.");
+
     return walkAdminService.QueryDashboardSegmentDetails({
       prev_point_name: SEGMENT_DERIVATIVE[queryKey[1]].from,
       to_point_name: SEGMENT_DERIVATIVE[queryKey[1]].to
@@ -121,7 +121,7 @@ const handleRefresh = () => {
 const handleViewTeamList = () => {
   router.push({
     name: "team-list",
-    params: { campusId: props.campusId },
+    params: { campusIdParam: props.campusId },
     query: { segment: chosenSegmentKey.value }
   });
 };

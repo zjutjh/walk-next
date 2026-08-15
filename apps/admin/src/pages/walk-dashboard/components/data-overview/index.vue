@@ -8,10 +8,11 @@
       <error-empty
         :error="error"
         :disabled="!isNil(overviewData)"
-        :show-retry="false"
+        :show-btn="false"
         image-size="1rem"
       >
         <van-skeleton :class="styles.skeleton" title :row="4" :loading="isLoading">
+          <!-- 路线卡片列表 -->
           <div
             v-for="routeData in overviewData?.routes"
             :key="routeData.route_name"
@@ -21,16 +22,18 @@
                 ROUTE_CONFIG[routeData.route_name as RouteId]?.dataCardColor
             }"
           >
+            <!-- 路线名 -->
             <div :class="styles.cardTitle">
               <strong>{{ ROUTE_CONFIG[routeData.route_name as RouteId]?.text }}</strong>
             </div>
+            <!-- 路线数据 -->
             <div :class="styles.data">
               <span :class="styles.dataKey">总报名</span
               ><span :class="styles.dataValue">{{ routeData.total_reg }}</span>
             </div>
             <div :class="styles.data">
               <span :class="styles.dataKey">进行中</span
-              ><span :class="styles.dataValue">{{ routeData.walking }}</span>
+              ><span :class="styles.dataValue">{{ routeData.in_progress }}</span>
             </div>
             <div :class="styles.data">
               <span :class="styles.dataKey">已结束</span
@@ -59,8 +62,8 @@
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
 import { isNil } from "lodash-es";
+import { ErrorEmpty } from "shared";
 
-import errorEmpty from "@/components/error-empty/index.vue";
 import { ADMIN_QUERY_KEY } from "@/constants";
 import { ADMIN_REFRESH_INTERVAL } from "@/constants/refresh-interval";
 import { walkAdminService } from "@/utils";

@@ -1,4 +1,4 @@
-import type { MemberWalkStatus } from "./member";
+import { AdminAPI } from ".";
 
 /** 搜索类型 */
 export type SearchType = "team_id" | "captain_phone" | "captain_name";
@@ -11,9 +11,9 @@ export interface TeamsTeamBriefInfo {
   is_lost: boolean;
   /** 路线ID */
   route_name: string;
-  /** 最新经过点位ID */
+  /** 最近一次打卡的点位ID */
   latest_point_name: string;
-  /** 最新经过点位时间 */
+  /** 最近一次打卡的时间 */
   latest_point_time: string;
   /** 队长姓名 */
   captain_name: string;
@@ -34,33 +34,31 @@ export interface TeamsMemberInfo {
   role: TeamMemberRole;
 }
 
-/** 团队状态 */
+/** 团队行进状态 */
 export type TeamWalkStatus = "not_start" | "in_progress" | "completed" | "withdrawn";
 
 /** 团队状态信息 */
 export interface TeamStatusInfo {
   /** 队名 */
   name: string;
-  /** 上次打卡的点位ID */
+  /** 上个打卡点位的ID */
   prev_point_name: string;
+  /** 最近一次打卡的点位ID */
+  latest_point_name: string;
   /** 路线ID */
   route_name: string;
-  /** 团队状态 */
+  /** 团队行进状态 */
   status: TeamWalkStatus;
   /** 是否走错路线 */
   is_wrong_route: boolean;
-  /** 上次打卡点位是否异常 */
+  /** 上个打卡点位是否异常 */
   is_prev_point_invalid: boolean;
   /** 是否在最近一次打卡时进入错误路线 */
   is_just_enter_wrong_route: boolean;
 }
 
 /** 重组团队人员信息 */
-export interface TeamRebuildMember {
+export interface TeamRebuildMember extends AdminAPI.QueryMemberInfoResponse {
   /** 用户编号 */
   id: number;
-  /** 姓名 */
-  name: string;
-  /** 当前状态 */
-  status: MemberWalkStatus;
 }

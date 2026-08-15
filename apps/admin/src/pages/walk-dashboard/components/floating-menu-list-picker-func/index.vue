@@ -1,23 +1,26 @@
 <!-- 列表式点位/路线选择器功能 -->
 <template>
-  <div @click="handleFuncBtnClick">
-    <slot />
+  <div>
+    <div @click="handleFuncBtnClick">
+      <slot />
+    </div>
+
+    <van-popup
+      v-model:show="isListPickerShow"
+      :class="styles.popup"
+      position="bottom"
+      destroy-on-close
+    >
+      <!-- height=""是为了消除vant默认的内联height，使CSS样式生效 -->
+      <van-tree-select
+        v-model:main-active-index="routeIndex"
+        :class="styles.treeSelect"
+        :items="items"
+        height=""
+        @click-item="handleItemClick"
+      />
+    </van-popup>
   </div>
-  <van-popup
-    v-model:show="isListPickerShow"
-    :class="styles.popup"
-    position="bottom"
-    destroy-on-close
-  >
-    <!-- height=""是为了消除vant默认的内联height，使CSS样式生效 -->
-    <van-tree-select
-      v-model:main-active-index="routeIndex"
-      :class="styles.treeSelect"
-      :items="items"
-      height=""
-      @click-item="handleItemClick"
-    />
-  </van-popup>
 </template>
 
 <script setup lang="ts">

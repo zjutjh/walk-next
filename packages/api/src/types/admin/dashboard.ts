@@ -5,7 +5,7 @@ export interface DashboardRoutesOverviewData {
   /** 总报名人数 */
   total_reg: number;
   /** 进行中人数 */
-  walking: number;
+  in_progress: number;
   /**  到达终点人数（无论是否违规） */
   finished: number;
   /** 走错路线人数 */

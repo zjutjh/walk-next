@@ -94,7 +94,8 @@
             .dataValue {
               font-size: 22px;
               font-variant-numeric: tabular-nums;
-              word-break: break-all;
+              word-wrap: break-word;
+              overflow-wrap: break-word;
               padding-right: 10px;
             }
 

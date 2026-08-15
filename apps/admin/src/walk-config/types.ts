@@ -41,7 +41,7 @@ export type PointId = ValueOf<typeof STRICT_ROUTE_POINT_LIST_MAP>[number];
 export type CampusIdListMap = {
   // 遍历所有 校区ID
   [Camp in CampusId]: {
-    // 遍历 校区ID 对应的 路段ID列表，进而取得 路段ID 对应的 点位ID的Union
+    // 遍历 校区ID 对应的 路线ID列表，进而取得 路线ID 对应的 点位ID的Union
     [Rt in (typeof STRICT_CAMPUS_ROUTE_LIST_MAP)[Camp][number]]: (typeof STRICT_ROUTE_POINT_LIST_MAP)[Rt][number];
   }[(typeof STRICT_CAMPUS_ROUTE_LIST_MAP)[Camp][number]][];
 };
@@ -116,7 +116,7 @@ export type RouteSegmentListMap = {
 export type CampusSegmentListMap = {
   // 遍历所有 校区ID
   [Camp in CampusId]: {
-    // 遍历 校区ID 对应的 路段ID列表，进而取得 路段ID 对应的 行程段key的Union
+    // 遍历 校区ID 对应的 路线ID列表，进而取得 路线ID 对应的 行程段key的Union
     [Rt in (typeof STRICT_CAMPUS_ROUTE_LIST_MAP)[Camp][number]]: (typeof ROUTE_SEGMENT_LIST_MAP)[Rt][number];
   }[(typeof STRICT_CAMPUS_ROUTE_LIST_MAP)[Camp][number]][];
 };

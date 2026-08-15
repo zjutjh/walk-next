@@ -1,11 +1,10 @@
-/** 人员状态 */
+/** 人员行进状态 */
 export type MemberWalkStatus =
   | "not_start"
   | "pending"
   | "abandoned"
   | "in_progress"
   | "withdrawn"
-  | "violated"
   | "completed";
 
 /** 人员统计指标 */
@@ -18,14 +17,16 @@ export type MemberStatsMetric =
   | "withdrawn"
   | "wrong_route";
 
-/** 团队状态中的成员信息 */
+/** 成员状态信息 */
 export interface TeamStatusMemberInfo {
   /** 姓名 */
   name: string;
-  /** 用户身份 */
-  role: "unbind" | "member" | "captain" | (string & {});
-  /** 用户编号 */
+  /** 成员身份 */
+  role: "unbind" | "member" | "captain";
+  /** 成员编号 */
   user_id: number;
-  /** 用户状态 */
+  /** 成员行进状态 */
   walk_status: MemberWalkStatus;
+  /** 成员是否违规 */
+  is_violated: boolean;
 }

@@ -1,6 +1,6 @@
+import type { CheckinException, CheckinQrCodeType } from "./check-in";
 import type { DashboardRoutesOverviewData } from "./dashboard";
 import type { MemberWalkStatus, TeamStatusMemberInfo } from "./member";
-import type { AdminQrCodeType } from "./qr-code";
 import type { OverviewStatsRouteData, PointStat, RouteStat } from "./stats";
 import type { SearchType, TeamsMemberInfo, TeamStatusInfo, TeamsTeamBriefInfo } from "./team";
 import type { PermissionLevel } from "./user";
@@ -14,16 +14,7 @@ export interface LoginRequest {
 }
 
 /** 管理员登录 响应 */
-export interface LoginResponse {
-  /** 管理员姓名 */
-  name: string;
-  /** 管理员所在点位ID */
-  point_name: string;
-  /** 管理员所在校区ID */
-  campus: string;
-  /** 管理员权限等级 */
-  permission: PermissionLevel;
-}
+export type LoginResponse = QueryAdminUserInfoResponse;
 
 /** 管理员退出登录 请求 */
 export type LogoutRequest = undefined;
@@ -170,32 +161,41 @@ export interface QueryRouteStatsResponse {
   point_stats: PointStat[];
 }
 
-/** 获取团队状态 请求 */
+/** 获取团队状态信息 请求 */
 export interface QueryTeamStatusRequest {
   /** 团队ID */
   team_id: number;
 }
 
-/** 获取团队状态 响应 */
+/** 获取团队状态信息 响应 */
 export interface QueryTeamStatusResponse {
-  /** 团队成员 */
+  /** 团队成员状态信息 */
   members: TeamStatusMemberInfo[];
   /** 团队状态信息 */
   team: TeamStatusInfo;
 }
 
-/** 更改人员状态 请求 */
-export interface UpdateWalkerStatusRequest {
-  /** 未开始notStart, 待出发pending, 已放弃abandoned, 进行中inProgress */
-  status: string;
+/** 更改人员行进状态 请求 */
+export interface UpdateMemberWalkStatusRequest {
+  /** 目标行进状态 */
+  status: MemberWalkStatus;
   /** 用户编号 */
   user_id: number;
 }
 
-/** 更改人员状态 响应 */
-export interface UpdateWalkerStatusResponse {
-  team_id: number;
+/** 更改人员行进状态 响应 */
+export type UpdateMemberWalkStatusResponse = null;
+
+/** 更改人员违规状态 请求 */
+export interface UpdateMemberViolatedRequest {
+  /** 用户编号 */
+  user_id: number;
+  /** 是否违规 */
+  is_violated: boolean;
 }
+
+/** 更改人员违规状态 响应 */
+export type UpdateMemberViolatedResponse = null;
 
 /** 重组团队 请求 */
 export interface RebuildTeamRequest {
@@ -221,7 +221,7 @@ export interface QueryMemberInfoRequest {
 export interface QueryMemberInfoResponse {
   /** 姓名 */
   name: string;
-  /** 人员状态 */
+  /** 人员行进状态 */
   status: MemberWalkStatus;
 }
 
@@ -242,20 +242,20 @@ export interface BindCheckinCodeRequest {
 /** 绑定签到码 响应 */
 export type BindCheckinCodeResponse = null;
 
-/** 打卡(指团队到了某个点位后打卡表示已经过) 请求 */
+/** 打卡 请求 */
 export interface CheckinTeamRequest {
   /** CodeType */
-  code_type: AdminQrCodeType.Checkin | AdminQrCodeType.Team;
+  code_type: CheckinQrCodeType;
   /** Content */
   content: string;
 }
 
-/** 打卡(指团队到了某个点位后打卡表示已经过) 响应 */
+/** 打卡 响应 */
 export interface CheckinTeamResponse {
   /** 团队编号 */
   team_id: number;
-  /** 是否重复打卡 */
-  is_duplicate_check_in: boolean;
+  /** 非阻断性错误 */
+  exception: CheckinException;
 }
 
 /** 终点确认 请求 */
@@ -268,10 +268,10 @@ export interface ConfirmDestinationRequest {
 export type ConfirmDestinationResponse = null;
 
 /** 标记团队违规 请求 */
-export interface MarkTeamViolationRequest {
+export interface MarkTeamViolatedRequest {
   /** 团队编号 */
   team_id: number;
 }
 
 /** 标记团队违规 响应 */
-export type MarkTeamViolationResponse = null;
+export type MarkTeamViolatedResponse = null;

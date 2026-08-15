@@ -1,26 +1,29 @@
 <!-- 图例功能 -->
 <template>
-  <div @click="handleFuncBtnClick">
-    <slot />
+  <div>
+    <div @click="handleFuncBtnClick">
+      <slot />
+    </div>
+
+    <van-popup v-model:show="isLegendShow" :class="styles.popup" destroy-on-close closeable round>
+      <van-cell :class="styles.cell" title="打卡点" size="large" center
+        ><van-image
+          :class="styles.legend"
+          :src="CAMPUS_CONFIG[props.campusId].pointLegendUrl"
+          fit="contain"
+      /></van-cell>
+      <van-cell
+        v-for="route in CAMPUS_ROUTE_LIST_MAP[props.campusId]"
+        :key="route"
+        :class="styles.cell"
+        :title="`${ROUTE_CONFIG[route].text}路线`"
+        size="large"
+        center
+        ><van-image :class="styles.legend" :src="ROUTE_CONFIG[route].legendUrl" fit="contain"
+          ><template #loading><van-loading size="0.25rem" /></template></van-image
+      ></van-cell>
+    </van-popup>
   </div>
-  <van-popup v-model:show="isLegendShow" :class="styles.popup" destroy-on-close closeable round>
-    <van-cell :class="styles.cell" title="打卡点" size="large" center
-      ><van-image
-        :class="styles.legend"
-        :src="CAMPUS_CONFIG[props.campusId].pointLegendUrl"
-        fit="contain"
-    /></van-cell>
-    <van-cell
-      v-for="route in CAMPUS_ROUTE_LIST_MAP[props.campusId]"
-      :key="route"
-      :class="styles.cell"
-      :title="`${ROUTE_CONFIG[route].text}路线`"
-      size="large"
-      center
-      ><van-image :class="styles.legend" :src="ROUTE_CONFIG[route].legendUrl" fit="contain"
-        ><template #loading><van-loading size="0.25rem" /></template></van-image
-    ></van-cell>
-  </van-popup>
 </template>
 
 <script setup lang="ts">

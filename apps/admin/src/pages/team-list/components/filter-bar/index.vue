@@ -17,6 +17,7 @@
           /></div
       ></template>
     </van-checkbox>
+
     <!-- 弹出的行程段选择器 -->
     <van-popup v-model:show="isSegmentPickerVisible" position="bottom" destroy-on-close>
       <van-picker
@@ -33,9 +34,10 @@
 </template>
 
 <script setup lang="ts">
+import { syncRefs } from "@vueuse/core";
 import type { SetRequired } from "type-fest";
 import type { PickerOption } from "vant";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 
 import {
   CAMPUS_SEGMENT_LIST_MAP,
@@ -57,12 +59,7 @@ const urlQuery = defineModel<TeamListUrlQuery>("urlQuery", { required: true });
 /** 选择器选择的行程段key 类型是数组 因为vant选择器组件只接受数组 */
 const segment = ref<[SegmentKey | ""]>([urlQuery.value.segment]);
 // 实际搜索值变化时同步状态
-watch(
-  () => urlQuery.value.segment,
-  (newValue) => {
-    segment.value = [newValue];
-  }
-);
+syncRefs(() => [urlQuery.value.segment], segment);
 
 /** 行程段选择器的选项 */
 const columns = computed<Array<SetRequired<PickerOption, "text" | "value">>>(() =>
@@ -95,8 +92,6 @@ const handleSegmentPickerCancel = () => {
 
 /** 打开行程段筛选器 */
 const handleSegmentFilterOpen = () => {
-  // 与实际搜索值同步
-  segment.value = [urlQuery.value.segment];
   // 显示弹出层
   isSegmentPickerVisible.value = true;
 };

@@ -4,8 +4,10 @@ export const DESIGN_WIDTH = 414;
 export const BASE_ROOT_FONT_SIZE = 100;
 /** rem 单位最大精度 */
 export const MAX_REM_UNIT_PRECISION = 5;
-/** 最大视口宽度 */
-export const MAX_VIEW_WIDTH = 750;
+/** UI最小缩放比例 */
+export const MIN_UI_SCALE_RATIO = 0.4;
+/** UI最大缩放比例 */
+export const MAX_UI_SCALE_RATIO = 1.5;
 
 /** 组件库主题色 */
 export const THEME_VAR_RECORD = {

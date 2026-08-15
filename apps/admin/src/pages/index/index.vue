@@ -1,106 +1,112 @@
 <!-- 首页 -->
 <template>
-  <default-layout :class="styles.page" :show-back="false" title="精弘毅行管理后台">
-    <loading-container :loading="isAnyMutationPending">
-      <admin-info
-        :admin-name="adminName || '-'"
-        :walk-point="POINT_CONFIG[adminPointId]?.text ?? '-'"
+  <default-layout
+    :class="styles.page"
+    :loading="isAnyMutationPending"
+    :show-back="false"
+    title="精弘毅行管理后台"
+  >
+    <!-- 管理员信息卡片 -->
+    <admin-info-card />
+
+    <!-- 打卡 -->
+    <van-cell-group title="签到">
+      <van-cell title="扫码签到" is-link @click="handleScanClick" />
+      <van-cell title="输入签到" is-link @click="handleManualInputClick" />
+    </van-cell-group>
+
+    <!-- 数据大盘 -->
+    <van-cell-group v-if="hasPermission('internal')" title="数据大盘">
+      <van-cell
+        v-for="campusId in CAMPUS_LIST"
+        :key="campusId"
+        :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
+        :to="`/dashboard/${campusId}`"
+        is-link
       />
-      <van-cell-group title="签到">
-        <van-cell title="扫码签到" is-link @click="handleScanClick" />
-        <van-cell title="输入签到" is-link @click="handleManualInputClick" />
-      </van-cell-group>
+      <van-cell title="数据表格" is-link to="/data-table" />
+    </van-cell-group>
 
-      <van-cell-group v-if="hasPermission('internal')" title="数据大盘">
-        <van-cell
-          v-for="campusId in CAMPUS_LIST"
-          :key="campusId"
-          :title="`${CAMPUS_CONFIG[campusId].text}可视化地图`"
-          :to="`/dashboard/${campusId}`"
-          is-link
-        />
-        <van-cell title="数据表格" is-link to="/data-table" />
-      </van-cell-group>
+    <!-- 重组队伍 -->
+    <van-cell-group v-if="hasPermission('super')" title="人员管理">
+      <van-cell title="重组团队" is-link to="/team-rebuild" />
+    </van-cell-group>
 
-      <van-cell-group v-if="hasPermission('super')" title="人员管理">
-        <van-cell title="重组团队" is-link to="/team-rebuild" />
-      </van-cell-group>
+    <!-- 功能按钮列表 -->
+    <div :class="styles.buttonContainer">
+      <van-button
+        v-if="hasPermission('super')"
+        :class="styles.functionButton"
+        :loading="isStartAllThePendingPending"
+        type="primary"
+        block
+        @click="handleStartAllThePendingClick"
+      >
+        待出发→进行中
+      </van-button>
+      <van-button
+        :loading="isLogoutPending"
+        :disabled="isLogoutPending"
+        type="danger"
+        plain
+        block
+        @click="handleLogoutClick"
+      >
+        退出登录
+      </van-button>
+    </div>
 
-      <div :class="styles.buttonContainer">
-        <van-button
-          v-if="hasPermission('super')"
-          :class="styles.functionButton"
-          :loading="isStartAllThePendingPending"
-          type="primary"
-          block
-          @click="handleStartAllThePendingClick"
-        >
-          待出发→进行中
-        </van-button>
-        <van-button
-          :loading="isLogoutPending"
-          :disabled="isLogoutPending"
-          type="danger"
-          plain
-          block
-          @click="handleLogoutClick"
-        >
-          退出登录
-        </van-button>
-      </div>
-    </loading-container>
+    <!-- 扫码弹层 -->
+    <qr-scan-popup
+      v-model:show="urlQuery.isScanning"
+      :loading="isCheckinPending || isNavigationPending"
+      :schema="checkinQrCodeSchema"
+      @success="handleScanSuccess"
+    />
+
+    <!-- 团队ID输入弹窗 -->
+    <prompt-dialog
+      v-model:show="isTeamIdDialogVisible"
+      v-model="teamIdDialogValue"
+      title="输入签到"
+      :field-config="TEAM_ID_DIALOG_CONFIG"
+      :submit-disabled="isCheckinPending"
+      @submit="handleTeamIdDialogSubmit"
+      @cancel="cancelMutateCheckin"
+    />
   </default-layout>
-
-  <!-- 扫码弹层 -->
-  <qr-scan-popup
-    v-model:show="urlQuery.isScanning"
-    :loading="isCheckInPending"
-    :schema="checkinQrCodeSchema"
-    @success="handleScanSuccess"
-  />
-
-  <!-- 团队ID输入弹窗 -->
-  <prompt-dialog
-    v-model:show="isTeamIdDialogVisible"
-    v-model="teamIdDialogValue"
-    title="输入签到"
-    :field-config="TEAM_ID_DIALOG_CONFIG"
-    :confirm-disabled="isCheckInPending"
-    @confirm="handleTeamIdDialogConfirm"
-    @cancel="handleTeamIdDialogCancel"
-  />
 </template>
 
 <script setup lang="ts">
-import { useMutation } from "@tanstack/vue-query";
-import { type AdminAPI, AdminQrCodeType } from "api/types/admin";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { useArraySome } from "@vueuse/core";
+import type { AdminAPI } from "api/types/admin";
 import { CanceledError } from "axios";
-import { RequestError } from "shared";
+import type { PromptDialogFieldConfig } from "shared";
+import { PromptDialog, RequestError, useRouterState, useStoredUrlQuery } from "shared";
 import { is } from "valibot";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-import LoadingContainer from "@/components/loading-container/index.vue";
-import PromptDialog from "@/components/prompt-dialog/index.vue";
-import type { PromptDialogFieldConfig } from "@/components/prompt-dialog/types";
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
-import { useAdminInfo } from "@/composables/admin-user-info";
-import { useStoredUrlQuery } from "@/composables/stored-url-query";
+import { useAdminUserData } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
-import { CAMPUS_CONFIG, CAMPUS_LIST, POINT_CONFIG } from "@/walk-config";
+import { CAMPUS_CONFIG, CAMPUS_LIST } from "@/walk-config";
 
-import AdminInfo from "./components/admin-info/index.vue";
+import AdminInfoCard from "./components/admin-info-card/index.vue";
 import styles from "./index.module.scss";
 import type { IndexUrlQuery } from "./types";
 import { checkinQrCodeSchema } from "./utils";
 
 const router = useRouter();
-const { adminName, adminPointId, resetAdminInfo, hasPermission } = useAdminInfo();
+const queryClient = useQueryClient();
+const { isNavigationPending } = useRouterState();
+const { hasPermission, resetAdminUserData } = useAdminUserData();
 
 const { urlQuery } = useStoredUrlQuery<IndexUrlQuery>({
-  initialValue: {
+  defaultValue: {
     isScanning: false
   }
 });
@@ -123,7 +129,7 @@ const isTeamIdDialogVisible = ref(false);
 
 /** 点击扫码签到按钮 */
 const handleScanClick = () => {
-  if (isCheckInPending.value) {
+  if (isCheckinPending.value) {
     showFailToast("正在打卡\n请稍后再试");
     return;
   }
@@ -140,10 +146,12 @@ const handleManualInputClick = () => {
 const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
   mutationFn: () => walkAdminService.Logout(undefined),
   onSuccess: () => {
-    resetAdminInfo();
+    resetAdminUserData();
     urlQuery.value.isScanning = false;
     isTeamIdDialogVisible.value = false;
     showSuccessToast("登出成功");
+    // 清空所有缓存
+    queryClient.clear();
     // 跳转登录页
     router.push({ name: "login" });
   },
@@ -154,20 +162,33 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
 
 /** 打卡 取消控制器 */
 let checkinAbortController: AbortController | null = null;
+/** 取消打卡请求 */
+const cancelMutateCheckin = () => {
+  checkinAbortController?.abort();
+};
 // 打卡
-const { mutate: mutateCheckin, isPending: isCheckInPending } = useMutation({
+const { mutate: mutateCheckin, isPending: isCheckinPending } = useMutation({
   mutationFn: (params: AdminAPI.CheckinTeamRequest) => {
+    cancelMutateCheckin();
     checkinAbortController = new AbortController();
     return walkAdminService.CheckinTeam(params, { signal: checkinAbortController.signal });
   },
   onSuccess: (data) => {
     isTeamIdDialogVisible.value = false;
-    if (data.is_duplicate_check_in) {
-      showFailToast("团队重复打卡");
-    } else {
-      showSuccessToast("打卡成功");
+    switch (data.exception) {
+      case "duplicate":
+        showFailToast("团队重复打卡");
+        break;
+      case "wrong_direction":
+        showFailToast("团队行进方向错误");
+        break;
+      case "":
+        showSuccessToast("打卡成功");
+        break;
+      default:
+        showFailToast("状态异常");
     }
-    router.push({ name: "team-info", params: { teamIdStr: data.team_id } });
+    router.push({ name: "team-info", params: { teamIdParam: data.team_id } });
   },
   onError: (err) => {
     if (err instanceof RequestError && err.originError instanceof CanceledError) return;
@@ -189,20 +210,15 @@ const { mutate: mutateStartAllThePending, isPending: isStartAllThePendingPending
 /** 扫码成功 */
 const handleScanSuccess = (data: unknown) => {
   if (is(TeamQrCodeSchema, data)) {
-    mutateCheckin({ code_type: AdminQrCodeType.Team, content: String(data.team_id) });
+    mutateCheckin({ code_type: "team", content: String(data.team_id) });
   } else if (is(CheckinQrCodeSchema, data)) {
-    mutateCheckin({ code_type: AdminQrCodeType.Checkin, content: data.code });
+    mutateCheckin({ code_type: "checkin", content: data.code });
   }
 };
 
-/** 团队ID输入弹窗确认 */
-const handleTeamIdDialogConfirm = () => {
-  mutateCheckin({ code_type: AdminQrCodeType.Team, content: teamIdDialogValue.value.teamIdStr });
-};
-
-/** 团队ID输入弹窗取消 */
-const handleTeamIdDialogCancel = () => {
-  checkinAbortController?.abort();
+/** 团队ID输入弹窗提交 */
+const handleTeamIdDialogSubmit = () => {
+  mutateCheckin({ code_type: "team", content: teamIdDialogValue.value.teamIdStr });
 };
 
 /** 点击登出按钮 */
@@ -233,7 +249,8 @@ const handleStartAllThePendingClick = async () => {
 };
 
 /** 任意mutation请求中 */
-const isAnyMutationPending = computed(
-  () => isLogoutPending.value || isCheckInPending.value || isStartAllThePendingPending.value
+const isAnyMutationPending = useArraySome(
+  [isLogoutPending, isCheckinPending, isStartAllThePendingPending],
+  Boolean
 );
 </script>

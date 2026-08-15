@@ -1,9 +1,11 @@
-<!-- 搜索建议面板 -->
+<!-- 搜索空屏 -->
 <template>
   <div :class="styles.component">
+    <!-- 提示文本 -->
     <div :class="styles.textTip">
       {{ props.isSearchInputFocus ? "请输入搜索内容" : "猜你想搜" }}
     </div>
+    <!-- 搜索建议 -->
     <van-grid :column-num="2" :border="false" gutter="0.5rem" icon-size="0.5rem" square clickable>
       <van-grid-item
         v-for="(type, typeValue) in TEAM_SEARCH_TYPE"
@@ -17,7 +19,7 @@
         :class="styles.gridBtn"
         text="路段团队列表"
         icon="filter-o"
-        @click="props.openSegmentFilter"
+        @click="handleOpenSegmentFilter"
       />
     </van-grid>
   </div>
@@ -36,8 +38,11 @@ const props = defineProps<{
   searchInstance: SearchInstance | null | undefined;
   /** 搜索框是否被聚焦 */
   isSearchInputFocus: boolean;
-  /** 打开行程段筛选器的函数 */
-  openSegmentFilter: () => void;
+}>();
+
+const emit = defineEmits<{
+  /** 打开行程段筛选器 */
+  openSegmentFilter: [];
 }>();
 
 const urlQuery = defineModel<TeamListUrlQuery>("urlQuery", { required: true });
@@ -48,5 +53,10 @@ const handleSearchTypeClick = (typeValue: SearchType) => {
   urlQuery.value.searchType = typeValue;
   // 聚焦输入框
   props.searchInstance?.focus();
+};
+
+/** 点击建议中的路段团队列表 */
+const handleOpenSegmentFilter = () => {
+  emit("openSegmentFilter");
 };
 </script>

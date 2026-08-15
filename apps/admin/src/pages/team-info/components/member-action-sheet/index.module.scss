@@ -1,0 +1,14 @@
+// 团队信息页成员操作弹层
+.component {
+  // 这是对Vant样式的Hack，目的是让有图标的Action与无图标的Acton文字对齐
+  :global(.van-action-sheet__item:has(.van-action-sheet__item-icon))::after {
+    content: "";
+    display: block;
+    width: 1em;
+    margin-left: var(--van-action-sheet-item-icon-margin-right);
+  }
+
+  :global(.van-action-sheet__item--disabled) {
+    opacity: 0.5;
+  }
+}

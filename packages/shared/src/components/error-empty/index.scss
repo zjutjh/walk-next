@@ -1,0 +1,24 @@
+// 错误态
+.error-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__empty {
+    --van-empty-padding: 0;
+    --van-empty-description-padding: 0;
+  }
+
+  &__btn {
+    height: 35px;
+    min-width: 100px;
+  }
+
+  .van-empty__image img {
+    user-select: none;
+    pointer-events: none;
+  }
+}

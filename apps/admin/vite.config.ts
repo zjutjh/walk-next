@@ -11,6 +11,7 @@ import { defineConfig, loadEnv } from "vite";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   return {
+    base: env.VITE_BASE_PATH,
     plugins: [
       vue(),
       Icons({
@@ -21,6 +22,7 @@ export default defineConfig(({ mode }) => {
         dts: "types/auto-imports.d.ts"
       }),
       Components({
+        dirs: [],
         resolvers: [VantResolver(), IconsResolver()],
         dts: "types/components.d.ts"
       })

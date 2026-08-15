@@ -32,6 +32,7 @@
       </div>
     </div>
     <div :class="styles.footer">
+      <!-- 数据新鲜度控制器 -->
       <data-freshness
         :refresh-interval="ADMIN_REFRESH_INTERVAL.DASHBOARD.POINT"
         :data-updated-at="dataUpdatedAt"

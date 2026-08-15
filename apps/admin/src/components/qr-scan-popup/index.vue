@@ -1,46 +1,152 @@
 <!-- 扫码弹层 -->
 <template>
-  <van-popup v-model:show="isVisible" position="bottom" class="qr-scan-popup-container">
-    <loading-container class="qr-scan-popup" :loading="props.loading">
-      <video ref="videoRef" class="qr-scan-popup__video" autoplay muted playsinline></video>
+  <van-popup
+    v-model:show="isVisible"
+    position="bottom"
+    class="qr-scan-popup"
+    @open="handleScanPopupOpen"
+    @closed="handleScanPopupClosed"
+  >
+    <loading-container class="qr-scan-popup__content" :loading="props.loading">
+      <!-- 摄像头视频 -->
+      <video
+        v-show="isVideoVisible"
+        ref="videoRef"
+        class="qr-scan-popup__video"
+        autoplay
+        muted
+        playsinline
+      ></video>
 
-      <button class="qr-scan-popup__close" type="button" @click="handleClose">
-        <i-mdi-close />
-      </button>
-
-      <button
-        class="qr-scan-popup__album"
-        :disabled="uploadQrScannerStatus === 'pending'"
-        type="button"
-        @click="handleUploadImageClick"
+      <!-- 关闭按钮 -->
+      <van-button
+        class="qr-scan-popup__btn qr-scan-popup__close-btn"
+        round
+        @click="handleCloseClick"
       >
-        <i-mdi-image />
-      </button>
+        <template #icon><i-mdi-close /></template>
+      </van-button>
 
-      <div v-if="error" class="qr-scan-popup__error">{{ error.message }}</div>
+      <!-- 左下角按钮列表 -->
+      <div class="qr-scan-popup__left-bottom">
+        <!-- 切换摄像头按钮 -->
+        <van-button
+          v-if="isPermissionGranted && (isCameraListUpdating || cameraList.length > 1)"
+          class="qr-scan-popup__btn"
+          :loading="isCameraListUpdating"
+          round
+          @click="handleSwitchCameraClick"
+        >
+          <template #icon><i-mdi-camera-flip /></template>
+        </van-button>
+
+        <!-- 手电筒按钮 -->
+        <van-button
+          v-if="isPermissionGranted && hasTorch"
+          class="qr-scan-popup__btn"
+          round
+          @click="handleSwitchTorchClick"
+        >
+          <template #icon>
+            <i-mdi-flashlight-off v-if="isTorchOn" />
+            <i-mdi-flashlight v-else />
+          </template>
+        </van-button>
+      </div>
+
+      <!-- 右下角按钮列表 -->
+      <div class="qr-scan-popup__right-bottom">
+        <!-- 上传图片按钮 -->
+        <van-button
+          class="qr-scan-popup__btn"
+          :loading="getUploadQrScannerStatus() === 'pending'"
+          round
+          @click="handleUploadImageClick"
+        >
+          <template #icon><i-mdi-image /></template>
+        </van-button>
+      </div>
+
+      <!-- 浏览器不支持提示 -->
+      <error-empty
+        v-if="!isCameraApiSupported"
+        error="浏览器不支持扫码，请拍照上传"
+        btn-text="上传图片"
+        @btn-click="handleUploadImageClick"
+      />
+      <!-- 权限被拒绝提示 -->
+      <error-empty
+        v-else-if="isCameraPermissionRefused"
+        error="扫码权限被拒绝，请检查设置"
+        btn-text="刷新"
+        @btn-click="handleReloadWindow"
+      />
+      <!-- 获取权限中提示 -->
+      <div v-else-if="!isPermissionGranted" class="qr-scan-popup__permission-tip">
+        <div>正在请求您的摄像头权限</div>
+        <div>请按提示操作</div>
+      </div>
+      <!-- 无摄像头提示 -->
+      <error-empty
+        v-else-if="isNoCamera"
+        error="未找到可用摄像头"
+        btn-text="上传图片"
+        @btn-click="handleUploadImageClick"
+      />
+      <!-- 阻断性的扫码错误 -->
+      <error-empty v-else-if="blockingError" :error="blockingError" :show-btn="false" />
+      <!-- 准备中提示 -->
+      <div
+        v-else-if="!isCameraVideoPlayable && getCameraScannerStatus() !== 'off'"
+        class="qr-scan-popup__loading"
+      >
+        正在连接摄像头...
+      </div>
     </loading-container>
+
+    <!-- 摄像头选择弹层 -->
+    <van-action-sheet
+      v-model:show="isCameraPickerVisible"
+      :actions="cameraPickerActions"
+      cancel-text="取消"
+      close-on-click-action
+      @select="handleSelectCamera"
+    />
   </van-popup>
 </template>
 
 <script setup lang="ts">
 import "./index.scss";
 
+import { watchImmediate } from "@vueuse/core";
+import { isEmpty } from "lodash-es";
+import { ErrorEmpty, LoadingContainer, unknownToError } from "shared";
 import type { BaseIssue, BaseSchema } from "valibot";
 import { showFailToast } from "vant";
-import { nextTick, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, useTemplateRef } from "vue";
 
-import LoadingContainer from "@/components/loading-container/index.vue";
-import { useCameraQrScanner } from "@/composables/camera-qr-scanner";
-import { useUploadQrScanner } from "@/composables/upload-qr-scanner";
+import { humanizeScannerErr, type UseQrScannerErrorOptions } from "@/utils";
 
-const props = defineProps<{
-  /** 是否处于加载态 */
-  loading?: boolean;
-  /** 二维码数据的类型模式 */
-  schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
-  /** 两次扫描之间的间隔(毫秒) */
-  scanInterval?: number;
-}>();
+import { useCameraQrScanner } from "./composables/camera-qr-scanner";
+import { useLazyFreeCameraStream } from "./composables/lazy-free-camera-stream";
+import { useScannerCameraList } from "./composables/scanner-camera-list";
+import { useUploadQrScanner } from "./composables/upload-qr-scanner";
+import type { CameraPickerAction, ExtendedCameraInfo } from "./types";
+
+const props = withDefaults(
+  defineProps<{
+    /** 二维码数据的类型模式 */
+    schema: BaseSchema<unknown, unknown, BaseIssue<unknown>>;
+    /** 是否处于加载态 */
+    loading?: boolean;
+    /** 两次扫描之间的间隔(毫秒) */
+    scanInterval?: number;
+  }>(),
+  {
+    loading: false,
+    scanInterval: undefined
+  }
+);
 
 const emit = defineEmits<{
   /** 扫码成功 */
@@ -52,74 +158,112 @@ const emit = defineEmits<{
 /** 视频元素 */
 const videoRef = useTemplateRef("videoRef");
 
-/** 扫码弹层是否显示 */
+const { setCameraDeviceId, cameraDeviceId, hasTorch, isTorchOn, turnOnTorch, turnOffTorch } =
+  useLazyFreeCameraStream();
+
+// 摄像头列表
+const {
+  cameraList,
+  isCameraApiSupported,
+  isPermissionGranted,
+  isCameraListUpdating,
+  ensurePermissions
+} = useScannerCameraList();
+/** 是否没有可用摄像头 */
+const isNoCamera = computed(() => !isCameraListUpdating.value && isEmpty(cameraList.value));
+
+/** 扫码弹层是否可见 */
 const isVisible = defineModel<boolean>("show", { required: true });
 
-/** 当前显示的错误 */
-const error = ref<Error | null>(null);
+/** 最后一个抛出的阻断性错误 */
+const blockingError = ref<Error | null>(null);
+
+/** 无摄像头权限，且请求摄像头权限失败 */
+const isCameraPermissionRefused = ref(false);
+
+/** 摄像头选择弹层是否可见 */
+const isCameraPickerVisible = ref(false);
+
+/** 视频元素是否可见 */
+const isVideoVisible = computed(
+  () => isPermissionGranted.value && !isNoCamera.value && !blockingError.value
+);
 
 /** 扫码成功 */
 const handleScanSuccess = (data: unknown) => {
-  error.value = null;
+  // 扫码弹层已关闭或处于加载态，忽略扫码结果
+  if (!isVisible.value || props.loading) return;
+
   emit("success", data);
 };
 
-/** 扫码出错 */
-const handleScanError = (err: Error) => {
-  showFailToast(err.message);
-  error.value = err;
-  emit("error", err);
+/** 错误处理 */
+const handleError = (err: unknown, errOptions?: UseQrScannerErrorOptions) => {
+  const { blocking = false } = errOptions || {};
+
+  const safeErr = unknownToError(err);
+  if (!safeErr) return;
+
+  /** 转译 */
+  const humanizedErr = humanizeScannerErr(safeErr);
+
+  // 更新错误态
+  if (blocking) {
+    // 阻断性错误展示错误态
+    console.error(err);
+    blockingError.value = humanizedErr;
+  } else {
+    // 非阻断性错误Toast提示
+    console.warn(err);
+    showFailToast(humanizedErr.message);
+  }
+
+  emit("error", humanizedErr);
 };
 
 // 摄像头扫码
 const {
+  getStatus: getCameraScannerStatus,
   start: startCameraScanner,
   stop: stopCameraScanner,
+  isCameraVideoPlayable,
   switchToIdle: pauseCameraScanner,
   switchToActive: resumeCameraScanner
 } = useCameraQrScanner(
   videoRef,
   {
-    scanInterval: props.scanInterval,
     onSuccess: handleScanSuccess,
-    onError: handleScanError
+    onError: handleError,
+    scanInterval: props.scanInterval
   },
   props.schema
 );
 
 // 上传图片扫码
-const { requestUploadQrCodeImage, status: uploadQrScannerStatus } = useUploadQrScanner(
+const { requestUploadQrCodeImage, getStatus: getUploadQrScannerStatus } = useUploadQrScanner(
   {
     onSuccess: handleScanSuccess,
-    onError: handleScanError
+    onError: handleError
   },
   props.schema
 );
 
-/** 启动摄像头扫码 */
-const startCameraScan = async () => {
-  try {
-    await startCameraScanner();
-  } catch (err) {
-    if (!(err instanceof Error)) return;
-    emit("error", err);
-  }
-};
-
 /** 关闭扫码弹层 */
-const handleClose = () => {
+const handleCloseClick = () => {
   isVisible.value = false;
-  stopCameraScanner();
 };
 
 /** 上传图片扫码 */
 const handleUploadImageClick = async () => {
   try {
+    if (isTorchOn.value) {
+      // 尝试关闭手电筒
+      await turnOffTorch();
+    }
     pauseCameraScanner();
     await requestUploadQrCodeImage();
   } catch (err) {
-    if (!(err instanceof Error)) return;
-    emit("error", err);
+    handleError(err);
   } finally {
     if (isVisible.value) {
       resumeCameraScanner();
@@ -127,19 +271,124 @@ const handleUploadImageClick = async () => {
   }
 };
 
-// 监听显隐，启动或停止摄像头扫码
-watch(
-  isVisible,
-  async (newIsVisible) => {
-    if (newIsVisible) {
-      if (!videoRef.value) {
-        await nextTick();
-      }
-      startCameraScan();
-    } else {
-      stopCameraScanner();
+/** 扫码弹层打开 */
+const handleScanPopupOpen = async () => {
+  if (!videoRef.value) {
+    await nextTick();
+  }
+  // 获取权限
+  isCameraPermissionRefused.value = !(await ensurePermissions());
+  // 重置状态
+  blockingError.value = null;
+  /**
+   * 不可以在此处启动摄像头扫码，否则会与useScannerCameraList竞争摄像头流，在部分移动设备上出错
+   * 启动放在了cameraList和isVisible的监听器回调中
+   */
+};
+
+/** 扫码弹层关闭（动画结束） */
+const handleScanPopupClosed = () => {
+  stopCameraScanner();
+};
+
+/** 点击切换摄像头 */
+const handleSwitchCameraClick = () => {
+  if (cameraList.value.length <= 2) {
+    /** 另一个摄像头 */
+    const anotherCamera = cameraList.value.find(
+      (camera) => camera.deviceId !== cameraDeviceId.value
+    );
+    // 无其他摄像头
+    if (!anotherCamera) {
+      showFailToast("无法连接其他摄像头");
+      return;
     }
-  },
-  { immediate: true }
+    setCameraDeviceId(anotherCamera.deviceId);
+  } else {
+    // 摄像头多于2个，显示选择弹层
+    isCameraPickerVisible.value = true;
+  }
+};
+
+/** 点击切换手电筒 */
+const handleSwitchTorchClick = () => {
+  if (isTorchOn.value) {
+    turnOffTorch();
+  } else {
+    turnOnTorch();
+  }
+};
+
+/** 生成摄像头备注 */
+const buildCameraSubname = (device: ExtendedCameraInfo) => {
+  const list = [];
+  switch (device.settings.facingMode) {
+    case "user":
+      list.push("前置摄像头");
+      break;
+    case "environment":
+      list.push("后置摄像头");
+      break;
+  }
+  if (typeof device.settings.torch === "boolean") {
+    list.push("关联手电筒");
+  }
+  return list.join(" ");
+};
+
+/** 获取摄像头在弹层中的图标 */
+const getCameraIcon = (device: ExtendedCameraInfo) => {
+  if (cameraDeviceId.value === device.deviceId) return "success";
+  if (device.settings.facingMode === "user") return "user";
+  return "photograph";
+};
+
+/** 摄像头选择弹层的选项列表 */
+const cameraPickerActions = computed<CameraPickerAction[]>(() =>
+  cameraList.value.map((device) => ({
+    name: device.label,
+    subname: buildCameraSubname(device),
+    deviceInfo: device,
+    disabled: cameraDeviceId.value === device.deviceId,
+    color: cameraDeviceId.value === device.deviceId ? "var(--van-primary-color)" : undefined,
+    icon: getCameraIcon(device)
+  }))
 );
+
+/** 选择摄像头 */
+const handleSelectCamera = (action: CameraPickerAction) => {
+  isCameraPickerVisible.value = false;
+  setCameraDeviceId(action.deviceInfo.deviceId);
+};
+
+/** 刷新页面 */
+const handleReloadWindow = () => {
+  window.location.reload();
+};
+
+// 监听状态，完成摄像头扫码初始化与启动
+watchImmediate([cameraList, isCameraListUpdating, isVisible], () => {
+  if (!isVisible.value) return;
+
+  if (!cameraList.value[0])
+    // 摄像头列表为空
+    return;
+
+  // 未指定摄像头或指定的摄像头不在列表中，则设置为第一个摄像头
+  if (
+    !cameraDeviceId.value ||
+    !cameraList.value.some((camera) => camera.deviceId === cameraDeviceId.value)
+  ) {
+    setCameraDeviceId(cameraList.value[0].deviceId);
+  }
+
+  // 摄像头列表更新未结束，不启动扫码，以免竞争摄像头流
+  if (isCameraListUpdating.value) return;
+
+  // 重复启动
+  if (getCameraScannerStatus() !== "off") return;
+
+  // 启动摄像头扫码
+  startCameraScanner();
+});
 </script>
