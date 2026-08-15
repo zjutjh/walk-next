@@ -65,9 +65,9 @@ type UseStoredUrlQueryOptions<UrlQuery> = {
   /** 默认值 */
   defaultValue: Readonly<UrlQuery>;
   /** URL Query持久化策略
-   * @description undefined 不持久化
-   * @description "memory" 内存中持久化，不抗reload
-   * @description Storage 将通过该Storage进行持久化
+   * - undefined 不持久化
+   * - "memory" 内存中持久化，不抗reload
+   * - Storage 将通过该Storage进行持久化
    * @default undefined
    */
   persist?: "memory" | Storage;
