@@ -296,6 +296,9 @@ importers:
       '@intlify/unplugin-vue-i18n':
         specifier: ^11.2.4
         version: 11.2.4(@vue/compiler-dom@3.5.28)(eslint@10.0.1(jiti@2.6.1))(petite-vue-i18n@11.4.8(vue@3.5.28(typescript@5.9.3)))(rollup@4.52.5)(typescript@5.9.3)(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(yaml@2.8.2))(vue-i18n@11.4.8(vue@3.5.28(typescript@5.9.3)))(vue@3.5.28(typescript@5.9.3))
+      '@tanstack/vue-query':
+        specifier: catalog:frontend
+        version: 5.92.9(vue@3.5.28(typescript@5.9.3))
       '@vueuse/core':
         specifier: catalog:frontend
         version: 14.2.1(vue@3.5.28(typescript@5.9.3))

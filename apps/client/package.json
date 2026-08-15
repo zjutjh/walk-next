@@ -19,7 +19,8 @@
     "shared": "workspace:*",
     "vue": "catalog:frontend",
     "vue-i18n": "^11.4.8",
-    "vue-router": "catalog:frontend"
+    "vue-router": "catalog:frontend",
+    "@tanstack/vue-query": "catalog:frontend"
   },
   "devDependencies": {
     "@types/lodash-es": "catalog:types",
