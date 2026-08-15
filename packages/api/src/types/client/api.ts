@@ -22,7 +22,7 @@ export interface LoginResponse {
 export type QueryUserInfoRequest = undefined;
 
 /** 获取用户信息 响应 */
-export interface QueryUserUserInfoResponse extends UserInfo {
+export interface QueryUserInfoResponse extends UserInfo {
   /** 性别 */
   gender: UserGender;
   /** 个人通行码，即用户 ID */
