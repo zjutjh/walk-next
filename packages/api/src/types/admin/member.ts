@@ -1,3 +1,5 @@
+import type { TeamMemberRole } from "./team";
+
 /** 人员行进状态 */
 export type MemberWalkStatus =
   | "not_start"
@@ -22,7 +24,7 @@ export interface TeamStatusMemberInfo {
   /** 姓名 */
   name: string;
   /** 成员身份 */
-  role: "unbind" | "member" | "captain";
+  role: TeamMemberRole;
   /** 成员编号 */
   user_id: number;
   /** 成员行进状态 */
