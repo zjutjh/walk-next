@@ -3,8 +3,9 @@ import type {
   UserContact,
   UserGender,
   UserInfo,
-  UserRegisterBasic,
+  UserRole,
   UserSummary,
+  UserType,
   UserWalkStatus
 } from "./user";
 
@@ -28,7 +29,31 @@ export interface LoginResponse {
 export type QueryUserInfoRequest = undefined;
 
 /** 获取用户信息 响应 */
-export interface QueryUserInfoResponse extends UserInfo {
+export interface QueryUserInfoResponse {
+  /** QQ 号 */
+  qq: string;
+  /** 电话 */
+  tel: string;
+  /** 微信号 */
+  wechat: string;
+  /** ID */
+  id: number;
+  /** 队员姓名 */
+  name: string;
+  /** 队伍中身份 */
+  role: UserRole;
+  /** 人员类型 */
+  type: UserType;
+  /** 剩余创建团队次数 */
+  create_op: number;
+  /** 剩余加入团队次数 */
+  join_op: number;
+  /** 学号或工号 */
+  stu_id: string;
+  /** 团队ID */
+  team_id: number;
+  /** 用户状态 */
+  walk_status: UserWalkStatus;
   /** 性别 */
   gender: UserGender;
   /** 个人通行码，即用户 ID */
@@ -47,13 +72,32 @@ export interface UpdateUserInfoRequest {
 export type UpdateUserInfoResponse = null;
 
 /** 校友注册 请求 */
-export type AlumRegisterRequest = UserRegisterBasic;
+export interface AlumRegisterRequest {
+  /** 身份证号 */
+  identity: string;
+  /** 姓名 */
+  name: string;
+  /** 登录密码 */
+  password: string;
+  /** 电话 */
+  tel: string;
+}
 
 /** 校友注册 响应 */
 export type AlumRegisterResponse = null;
 
 /** 学生注册 请求 */
-export interface StudentRegisterRequest extends UserContact, UserRegisterBasic {
+export interface StudentRegisterRequest {
+  /** QQ 号 */
+  qq?: string;
+  /** 微信号 */
+  wechat?: string;
+  /** 身份证号 */
+  identity: string;
+  /** 姓名 */
+  name: string;
+  /** 登录密码 */
+  password: string;
   /** 学号 */
   stu_id: string;
   /** 电话号 */
@@ -102,7 +146,15 @@ export interface CreateTeamResponse {
 export type QueryTeamDetailRequest = undefined;
 
 /** 团队详细信息 响应 */
-export interface QueryTeamDetailResponse extends TeamSummary {
+export interface QueryTeamDetailResponse {
+  /** ID */
+  id: number;
+  /** 队名 */
+  name: string;
+  /** 所选路线 */
+  route_name: string;
+  /** 队伍标语 */
+  slogan: string;
   /** 是否允许随机匹配 */
   allow_match: boolean;
   /** 最新经过点位名称 */
@@ -147,7 +199,21 @@ export interface QueryTeamMemberRequest {
 }
 
 /** 队员详细信息 响应 */
-export interface QueryTeamMemberResponse extends UserSummary, Required<UserContact> {
+export interface QueryTeamMemberResponse {
+  /** ID */
+  id: number;
+  /** 队员姓名 */
+  name: string;
+  /** 队伍中身份 */
+  role: UserRole;
+  /** 人员类型 */
+  type: UserType;
+  /** QQ 号 */
+  qq: string;
+  /** 电话 */
+  tel: string;
+  /** 微信号 */
+  wechat: string;
   /** 是否可移除 */
   can_remove: boolean;
   /** 是否可转让队长 */

@@ -16,7 +16,7 @@ export interface UserContact {
 }
 
 /** 用户信息 */
-export interface UserInfo extends Required<UserContact>, UserSummary {
+export interface UserInfo {
   /** 剩余创建团队次数 */
   create_op: number;
   /** 剩余加入团队次数 */
@@ -27,17 +27,20 @@ export interface UserInfo extends Required<UserContact>, UserSummary {
   team_id: number;
   /** 用户状态 */
   walk_status: UserWalkStatus;
-}
-
-export interface UserRegisterBasic {
-  /** 身份证号 */
-  identity: string;
-  /** 姓名 */
-  name: string;
-  /** 登录密码 */
-  password: string;
+  /** QQ 号 */
+  qq?: string;
   /** 电话 */
-  tel: string;
+  tel?: string;
+  /** 微信号 */
+  wechat?: string;
+  /** ID */
+  id: number;
+  /** 队员姓名 */
+  name: string;
+  /** 队伍中身份 */
+  role: UserRole;
+  /** 人员类型 */
+  type: UserType;
 }
 
 /** 用户身份 */
