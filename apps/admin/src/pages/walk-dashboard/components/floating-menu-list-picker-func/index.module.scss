@@ -1,6 +1,9 @@
 // 列表式点位/路线选择器功能
 .popup {
-  height: 60svh;
+  height: 60vh;
+  @supports (height: 60dvh) {
+    height: 60dvh;
+  }
 
   .treeSelect {
     height: 100%;

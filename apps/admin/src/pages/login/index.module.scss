@@ -1,11 +1,14 @@
 // 登录页
 .page {
   position: relative;
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: "DingTalk Sans";
   background: var(--van-background);
+  @supports (min-height: 100dvh) {
+    min-height: 100dvh;
+  }
 
   .topArea {
     display: flex;
