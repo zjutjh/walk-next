@@ -1,9 +1,12 @@
 .default-layout {
   display: flex;
   flex-direction: column;
-  height: 100svh;
+  height: 100vh;
   overflow: hidden;
   background-color: var(--van-background);
+  @supports (height: 1dvh) {
+    height: 100dvh;
+  }
 
   &__loading-container {
     flex-grow: 1;

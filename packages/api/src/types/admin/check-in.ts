@@ -1,5 +1,5 @@
 /** 打卡二维码类型 */
-export type CheckinQrCodeType = "team" | "checkin";
+export type CheckinQrCodeType = "team" | "checkin" | "user";
 
 /** 打卡非阻断性错误的类型 */
 export type CheckinException = "" | "duplicate" | "wrong_direction";

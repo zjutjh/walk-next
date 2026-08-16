@@ -92,7 +92,12 @@ import { useRouter } from "vue-router";
 import QrScanPopup from "@/components/qr-scan-popup/index.vue";
 import { useAdminUserData } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
-import { CheckinQrCodeSchema, TeamQrCodeSchema, walkAdminService } from "@/utils";
+import {
+  CheckinQrCodeSchema,
+  MemberQrCodeSchema,
+  TeamQrCodeSchema,
+  walkAdminService
+} from "@/utils";
 import { CAMPUS_CONFIG, CAMPUS_LIST } from "@/walk-config";
 
 import AdminInfoCard from "./components/admin-info-card/index.vue";
@@ -213,6 +218,8 @@ const handleScanSuccess = (data: unknown) => {
     mutateCheckin({ code_type: "team", content: String(data.team_id) });
   } else if (is(CheckinQrCodeSchema, data)) {
     mutateCheckin({ code_type: "checkin", content: data.code });
+  } else if (is(MemberQrCodeSchema, data)) {
+    mutateCheckin({ code_type: "user", content: String(data.user_id) });
   }
 };
 
