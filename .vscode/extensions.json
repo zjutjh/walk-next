@@ -3,6 +3,7 @@
     "antfu.pnpm-catalog-lens",
     "dbaeumer.vscode-eslint",
     "streetsidesoftware.code-spell-checker",
-    "Vue.volar"
+    "Vue.volar",
+    "lokalise.i18n-ally"
   ]
 }
