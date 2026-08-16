@@ -10,7 +10,8 @@
     "isolatedModules": true,
     "rootDir": "src",
     "declarationDir": "dist/types",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true
   },
   "include": ["src"],
   "exclude": ["**/node_modules"]
