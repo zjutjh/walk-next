@@ -6,7 +6,7 @@
   flex-direction: column;
   font-family: "DingTalk Sans";
   background: var(--van-background);
-  @supports (min-height: 100dvh) {
+  @supports (min-height: 1dvh) {
     min-height: 100dvh;
   }
 

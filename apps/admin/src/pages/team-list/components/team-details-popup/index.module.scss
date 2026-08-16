@@ -5,7 +5,7 @@
   flex-direction: column;
   background-color: var(--van-background);
   --van-popup-close-icon-size: 16px;
-  @supports (calc(100dvh - var(--van-nav-bar-height))) {
+  @supports (height: 1dvh) {
     height: calc(100dvh - var(--van-nav-bar-height));
   }
 
