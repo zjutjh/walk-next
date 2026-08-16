@@ -1,10 +1,13 @@
 // 团队详情弹层
 .component {
-  height: calc(100svh - var(--van-nav-bar-height));
+  height: calc(100vh - var(--van-nav-bar-height));
   display: flex;
   flex-direction: column;
   background-color: var(--van-background);
   --van-popup-close-icon-size: 16px;
+  @supports (height: 1dvh) {
+    height: calc(100dvh - var(--van-nav-bar-height));
+  }
 
   .title {
     flex-shrink: 0;
