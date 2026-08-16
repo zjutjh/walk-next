@@ -65,11 +65,10 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
   };
 
   /** 登录成功后更新用户数据 */
-  const updateClientLoginData = (loginData: { jwt: string; userInfo: QueryUserInfoResponse }) => {
+  const updateClientLoginData = (jwtValue: string) => {
     updateClientUserData({
       isLoggedIn: true,
-      jwt: loginData.jwt,
-      userInfo: loginData.userInfo
+      jwt: jwtValue
     });
   };
 

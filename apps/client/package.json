@@ -20,7 +20,8 @@
     "vue": "catalog:frontend",
     "vue-i18n": "^11.4.8",
     "vue-router": "catalog:frontend",
-    "@tanstack/vue-query": "catalog:frontend"
+    "@tanstack/vue-query": "catalog:frontend",
+    "vant": "catalog:frontend"
   },
   "devDependencies": {
     "@types/lodash-es": "catalog:types",
@@ -31,6 +32,7 @@
     "postcss-pxtorem": "catalog:infra",
     "typescript": "catalog:infra",
     "vite": "catalog:infra",
-    "vue-tsc": "catalog:infra"
+    "vue-tsc": "catalog:infra",
+    "type-fest": "catalog:types"
   }
 }
