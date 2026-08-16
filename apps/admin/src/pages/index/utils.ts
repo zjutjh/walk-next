@@ -6,5 +6,5 @@ import { CheckinQrCodeSchema, MemberQrCodeSchema, TeamQrCodeSchema } from "@/uti
 export const checkinQrCodeSchema = variant(
   "type",
   [TeamQrCodeSchema, CheckinQrCodeSchema, MemberQrCodeSchema],
-  "类型错误\n请扫团队码、\n签到码\n或队员个人码"
+  "类型错误\n请扫团队码\n签到码\n或队员个人码"
 );
