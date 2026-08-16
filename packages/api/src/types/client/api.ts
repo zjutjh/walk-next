@@ -53,7 +53,7 @@ export type AlumRegisterRequest = UserRegisterBasic;
 export type AlumRegisterResponse = null;
 
 /** 学生注册 请求 */
-export interface StudentRegisterRequest extends UserRegisterBasic, UserContact {
+export interface StudentRegisterRequest extends UserContact, UserRegisterBasic {
   /** 学号 */
   stu_id: string;
   /** 电话号 */
@@ -105,8 +105,6 @@ export type QueryTeamDetailRequest = undefined;
 export interface QueryTeamDetailResponse extends TeamSummary {
   /** 是否允许随机匹配 */
   allow_match: boolean;
-  // TODO: 这是什么？文档翻烂了也没找到😡
-  code: string;
   /** 最新经过点位名称 */
   latest_point_name: string;
   /** 团队加入密码，仅队长返回 */

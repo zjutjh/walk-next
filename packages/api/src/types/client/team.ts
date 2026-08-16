@@ -1,3 +1,8 @@
+export interface TeamRandomListItem extends TeamSummary {
+  /** 团队人数 */
+  num: number;
+}
+
 export interface TeamSummary {
   /** ID */
   id: number;
@@ -7,9 +12,4 @@ export interface TeamSummary {
   route_name: string;
   /** 队伍标语 */
   slogan: string;
-}
-
-export interface TeamRandomListItem extends TeamSummary {
-  /** 团队人数 */
-  num: number;
 }
