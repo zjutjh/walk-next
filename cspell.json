@@ -22,7 +22,8 @@
     "ValiError",
     "vueuse",
     "wechat",
-    "zjutjh"
+    "zjutjh",
+    "intlify"
   ],
   "ignorePaths": [
     "node_modules/**",
