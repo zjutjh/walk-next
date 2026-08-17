@@ -1,7 +1,25 @@
 import "./style.css";
 
+import messages from "@intlify/unplugin-vue-i18n/messages";
+import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
+import { createI18n } from "vue-i18n";
+
+import { useUserLocale } from "@/composables";
+import type { ValidLanguage } from "@/constants";
 
 import App from "./app.vue";
 
-createApp(App).mount("#app");
+console.info(messages);
+
+createApp(App)
+  .use(createPinia().use(piniaPluginPersistedstate))
+  .use(
+    createI18n({
+      locale: useUserLocale().locale.value,
+      fallbackLocale: "zh-Hans" as ValidLanguage,
+      messages
+    })
+  )
+  .mount("#app");
