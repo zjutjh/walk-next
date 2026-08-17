@@ -320,6 +320,9 @@ importers:
       shared:
         specifier: workspace:*
         version: link:../../packages/shared
+      vant:
+        specifier: catalog:frontend
+        version: 4.9.22(vue@3.5.28(typescript@5.9.3))
       vue:
         specifier: catalog:frontend
         version: 3.5.28(typescript@5.9.3)
@@ -348,6 +351,9 @@ importers:
       postcss-pxtorem:
         specifier: catalog:infra
         version: 6.1.0(postcss@8.5.6)
+      type-fest:
+        specifier: catalog:types
+        version: 5.4.4
       typescript:
         specifier: catalog:infra
         version: 5.9.3
