@@ -7,7 +7,7 @@ import { createApp } from "vue";
 import { createI18n } from "vue-i18n";
 
 import { useUserLocale } from "@/composables";
-import type { ValidLanguage } from "@/constants";
+import { VALID_LANG, type ValidLanguage } from "@/constants";
 
 import App from "./app.vue";
 
@@ -19,6 +19,8 @@ createApp(App)
     createI18n({
       locale: useUserLocale().locale.value,
       fallbackLocale: "zh-Hans" as ValidLanguage,
+      availableLocales: VALID_LANG,
+      globalInjection: true,
       messages
     })
   )
