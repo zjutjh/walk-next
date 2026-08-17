@@ -10,5 +10,10 @@ export const useLocaleStore = defineStore(
     const locale = ref<ValidLanguage | undefined>(undefined);
     return { locale };
   },
-  { persist: { key: CLIENT_PINIA_PERSIST_KEY.CLIENT_USER_LOCALE } }
+  {
+    persist: {
+      key: CLIENT_PINIA_PERSIST_KEY.CLIENT_USER_LOCALE,
+      pick: ["locale"]
+    }
+  }
 );

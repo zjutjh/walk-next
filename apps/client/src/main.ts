@@ -11,8 +11,6 @@ import { VALID_LANG, type ValidLanguage } from "@/constants";
 
 import App from "./app.vue";
 
-console.info(messages);
-
 createApp(App)
   .use(createPinia().use(piniaPluginPersistedstate))
   .use(
