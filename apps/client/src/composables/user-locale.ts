@@ -23,15 +23,15 @@ export const useUserLocale = () => {
     const { i18nInstance } = storeToRefs(useLocaleStore());
     if (i18nInstance.value) return i18nInstance.value as I18n;
     const locale = getInitLocale();
-    const instanse: I18n = createI18n({
+    const instance: I18n = createI18n({
       locale,
       fallbackLocale: "zh-Hans",
       availableLocales: VALID_LANG,
       globalInjection: true,
       messages
     });
-    i18nInstance.value = instanse;
-    return instanse;
+    i18nInstance.value = instance;
+    return instance;
   };
   const locale = computed({
     get: () => VALID_LANG.find((prefix) => useI18n().locale.value.startsWith(prefix)),
