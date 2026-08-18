@@ -5,7 +5,7 @@ import { RequestError, RESP_CODE } from "shared";
 import { showToast } from "vant";
 
 import { useClientUserData } from "@/composables";
-import { globalQueryClient, routerInstance } from "@/configs";
+import { globalQueryClient } from "@/configs";
 
 const SERVICE_TIMEOUT = 15000 as const;
 
@@ -25,10 +25,6 @@ axiosInstance.interceptors.response.use(
             position: "bottom"
           });
           useClientUserData(globalQueryClient).resetClientUserData();
-          routerInstance.push({
-            name: "login",
-            query: { fromPath: encodeURIComponent(routerInstance.currentRoute.value.fullPath) }
-          });
           break;
         default:
       }
