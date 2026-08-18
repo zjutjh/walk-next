@@ -33,6 +33,7 @@
     "typescript": "catalog:infra",
     "vite": "catalog:infra",
     "vue-tsc": "catalog:infra",
-    "type-fest": "catalog:types"
+    "type-fest": "catalog:types",
+    "unplugin-icons": "catalog:infra"
   }
 }

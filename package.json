@@ -34,7 +34,6 @@
     "lint-staged": "catalog:infra",
     "prettier": "catalog:infra",
     "simple-git-hooks": "catalog:infra",
-    "vue-eslint-parser": "catalog:infra",
-    "unplugin-icons": "catalog:infra"
+    "vue-eslint-parser": "catalog:infra"
   }
 }

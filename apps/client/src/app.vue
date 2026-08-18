@@ -1,3 +1,3 @@
 <template>
-  <h1>Init</h1>
+  <error-boundary></error-boundary>
 </template>

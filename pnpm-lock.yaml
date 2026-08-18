@@ -184,9 +184,6 @@ importers:
       simple-git-hooks:
         specifier: catalog:infra
         version: 2.13.1
-      unplugin-icons:
-        specifier: catalog:infra
-        version: 23.0.1(@vue/compiler-sfc@3.5.28)
       vue-eslint-parser:
         specifier: catalog:infra
         version: 10.4.0(eslint@10.0.1(jiti@2.6.1))
@@ -360,6 +357,9 @@ importers:
       typescript:
         specifier: catalog:infra
         version: 5.9.3
+      unplugin-icons:
+        specifier: catalog:infra
+        version: 23.0.1(@vue/compiler-sfc@3.5.28)
       vite:
         specifier: catalog:infra
         version: 7.3.1(@types/node@24.10.13)(jiti@2.6.1)(sass-embedded@1.97.3)(sass@1.97.3)(yaml@2.8.2)

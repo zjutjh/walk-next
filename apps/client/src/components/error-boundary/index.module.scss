@@ -1,0 +1,63 @@
+.errorContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background: radial-gradient(transparent, #ccccdd);
+  padding: {
+    top: 20px;
+    bottom: 40px;
+  }
+}
+
+.errorTitle {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.errorInfo {
+  max-width: 100%;
+  overflow: auto;
+  color: #880000;
+  margin-top: 10px;
+  padding: {
+    left: 20px;
+    right: 20px;
+  }
+}
+
+.buttons {
+  button {
+    outline: none;
+    border: none;
+    background-color: var(--van-primary-color);
+    color: #ffffff;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    user-select: none;
+    cursor: pointer;
+    opacity: 0.9;
+    margin: {
+      left: 12px;
+      right: 12px;
+    }
+    padding: {
+      top: 7px;
+      bottom: 7px;
+      left: 15px;
+      right: 15px;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &:active {
+      transform: scale(1.02);
+      opacity: 1;
+    }
+  }
+}
