@@ -1,4 +1,4 @@
-import messages from "@intlify/unplugin-vue-i18n/messages";
+import messages from "@intlify/unplugin-vue-i18n/messages"; // 全量词条
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { createI18n, type I18n, useI18n } from "vue-i18n";
@@ -20,8 +20,6 @@ const getInitLocale = (): string => {
 
 export const useUserLocale = () => {
   const getInstance = (): I18n => {
-    const { i18nInstance } = storeToRefs(useLocaleStore());
-    if (i18nInstance.value) return i18nInstance.value as I18n;
     const locale = getInitLocale();
     const instance: I18n = createI18n({
       locale,
@@ -30,7 +28,6 @@ export const useUserLocale = () => {
       globalInjection: true,
       messages
     });
-    i18nInstance.value = instance;
     return instance;
   };
   const locale = computed({
