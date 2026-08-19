@@ -9,7 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@intlify/unplugin-vue-i18n": "^11.2.4",
+    "@intlify/unplugin-vue-i18n": "^11.2.5",
+    "@tanstack/vue-query": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
     "api": "workspace:*",
     "axios": "catalog:frontend",
@@ -17,11 +18,10 @@
     "pinia": "catalog:frontend",
     "pinia-plugin-persistedstate": "catalog:frontend",
     "shared": "workspace:*",
+    "vant": "catalog:frontend",
     "vue": "catalog:frontend",
     "vue-i18n": "^11.4.8",
-    "vue-router": "catalog:frontend",
-    "@tanstack/vue-query": "catalog:frontend",
-    "vant": "catalog:frontend"
+    "vue-router": "catalog:frontend"
   },
   "devDependencies": {
     "@iconify-json/ic": "catalog:frontend",
@@ -31,10 +31,10 @@
     "@vitejs/plugin-vue": "catalog:infra",
     "@vue/tsconfig": "catalog:infra",
     "postcss-pxtorem": "catalog:infra",
-    "typescript": "catalog:infra",
-    "vite": "catalog:infra",
-    "vue-tsc": "catalog:infra",
     "type-fest": "catalog:types",
-    "unplugin-icons": "catalog:infra"
+    "typescript": "catalog:infra",
+    "unplugin-icons": "catalog:infra",
+    "vite": "catalog:infra",
+    "vue-tsc": "catalog:infra"
   }
 }
