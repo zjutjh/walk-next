@@ -1,6 +1,6 @@
 // import messages from "@intlify/unplugin-vue-i18n/messages"; // 全量词条
 import { storeToRefs } from "pinia";
-import { computed, nextTick } from "vue";
+import { computed, nextTick, type WritableComputedRef } from "vue";
 import { type Composer, createI18n, type I18n, type I18nOptions, useI18n } from "vue-i18n";
 
 import { LANG_MAP, VALID_LANG, type ValidLanguage } from "@/constants";
@@ -14,11 +14,14 @@ const getInitLocale = (): string => {
     navigator.language
   ])
     if (VALID_LANG.some((prefix) => lang.startsWith(prefix))) return lang;
-    else if (lang.toLowerCase() in LANG_MAP) return LANG_MAP[lang.toLowerCase()] as string;
+    else {
+      const mappedLang: ValidLanguage | undefined = LANG_MAP[lang.toLowerCase()];
+      if (mappedLang) return mappedLang;
+    }
   return "en";
 };
 
-export const loadLocaleMessages = async (i18n: Composer, locale: ValidLanguage) => {
+export const loadLocaleMessages = async (i18n: Composer, locale: ValidLanguage): Promise<void> => {
   const messages = await import(
     /* webpackChunkName: "locale-[request]" */ `../locales/${locale}.yaml`
   );
@@ -26,7 +29,10 @@ export const loadLocaleMessages = async (i18n: Composer, locale: ValidLanguage) 
   return nextTick();
 };
 
-export const useUserLocale = () => {
+export const useUserLocale = (): {
+  locale: WritableComputedRef<ValidLanguage | undefined>;
+  initI18n: () => Promise<I18n>;
+} => {
   const initI18n = async (): Promise<I18n> => {
     const locale = getInitLocale();
     const messages = await import(
