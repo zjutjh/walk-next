@@ -51,4 +51,7 @@ export const request: ServiceOptions<AxiosRequestConfig>["request"] = async (req
   return (body as CommonRespWrap<any>).data;
 };
 
-export const walkClientService = new WalkClientService({ request, baseURL: "/api" });
+export const walkClientService = new WalkClientService({
+  request,
+  baseURL: "/api"
+});
