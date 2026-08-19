@@ -10,5 +10,5 @@ import App from "./app.vue";
 
 createApp(App)
   .use(createPinia().use(piniaPluginPersistedstate))
-  .use(useUserLocale().getInstance())
+  .use(await useUserLocale().initI18n())
   .mount("#app");
