@@ -24,6 +24,7 @@
     "vant": "catalog:frontend"
   },
   "devDependencies": {
+    "@iconify-json/ic": "catalog:frontend",
     "@types/lodash-es": "catalog:types",
     "@types/node": "catalog:types",
     "@types/postcss-pxtorem": "catalog:types",
