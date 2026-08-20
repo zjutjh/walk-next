@@ -7,6 +7,7 @@
       "@intlify/unplugin-vue-i18n/messages",
       "unplugin-icons/types/vue"
     ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "allowArbitraryExtensions": true,
     "paths": {
       "@/*": ["./src/*"]
