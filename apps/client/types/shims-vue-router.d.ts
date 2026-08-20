@@ -1,5 +1,7 @@
 import "vue-router";
 
+import type { UserRole } from "api/types/client";
+
 // To ensure it is treated as a module, add at least one `export` statement
 export {};
 

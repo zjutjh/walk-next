@@ -39,7 +39,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     component: () => import("@/pages/register/index.vue"),
     meta: {
       pageName: "注册",
-      allowNoAuth: true
+      allowNoAuth: true,
+      guestOnly: true
     }
   },
   {
@@ -49,7 +50,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     props: { userType: "student" },
     meta: {
       pageName: "学生注册",
-      allowNoAuth: true
+      allowNoAuth: true,
+      guestOnly: true
     }
   },
   {
@@ -59,7 +61,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     props: { userType: "teacher" },
     meta: {
       pageName: "教职工注册",
-      allowNoAuth: true
+      allowNoAuth: true,
+      guestOnly: true
     }
   },
   {
@@ -68,7 +71,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     component: () => import("@/pages/register-alumnus/index.vue"),
     meta: {
       pageName: "校友注册",
-      allowNoAuth: true
+      allowNoAuth: true,
+      guestOnly: true
     }
   },
   {
