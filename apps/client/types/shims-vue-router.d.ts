@@ -13,5 +13,7 @@ declare module "vue-router" {
     recreateComponentByPath?: boolean;
     /** 允许访问该路由的团队身份 */
     allowedRoles?: UserRole[];
+    /** 已登录用户不应访问，如登录、注册 */
+    guestOnly?: boolean;
   }
 }
