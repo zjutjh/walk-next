@@ -36,6 +36,9 @@
     "typescript": "catalog:infra",
     "unplugin-icons": "catalog:infra",
     "vite": "catalog:infra",
-    "vue-tsc": "catalog:infra"
+    "vue-tsc": "catalog:infra",
+    "@vant/auto-import-resolver": "catalog:infra",
+    "unplugin-auto-import": "catalog:infra",
+    "unplugin-vue-components": "catalog:infra"
   }
 }
