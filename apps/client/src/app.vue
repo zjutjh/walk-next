@@ -1,9 +1,13 @@
 <template>
   <error-boundary>
-    <h1>Init</h1>
+    <router-view :key="route.meta.recreateComponentByPath ? route.fullPath : undefined" />
   </error-boundary>
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "vue-router";
+
 import ErrorBoundary from "@/components/error-boundary/index.vue";
+
+const route = useRoute();
 </script>
