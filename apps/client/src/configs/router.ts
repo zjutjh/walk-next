@@ -10,19 +10,10 @@ import {
 } from "vue-router";
 
 import { useClientUserData } from "@/composables";
-import IndexPage from "@/pages/index/index.vue";
 
 import { globalQueryClient } from "./vue-query";
 
 const routes: SetRequired<RouteRecordRaw, "meta">[] = [
-  {
-    path: "/",
-    name: "index",
-    component: IndexPage,
-    meta: {
-      pageName: "首页"
-    }
-  },
   {
     path: "/login",
     name: "login",
@@ -36,7 +27,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
     path: "/register",
     name: "register",
-    component: () => import("@/pages/register/index.vue"),
+    component: () => import("@/pages/register-index/index.vue"),
     meta: {
       pageName: "注册",
       allowNoAuth: true,
@@ -80,7 +71,8 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     name: "terms",
     component: () => import("@/pages/terms/index.vue"),
     meta: {
-      pageName: "用户协议"
+      pageName: "用户协议与隐私政策",
+      allowNoAuth: true
     }
   },
   {
