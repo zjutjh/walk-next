@@ -23,7 +23,8 @@
     "vueuse",
     "wechat",
     "zjutjh",
-    "intlify"
+    "intlify",
+    "lokalise"
   ],
   "ignorePaths": [
     "node_modules/**",

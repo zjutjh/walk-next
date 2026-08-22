@@ -8,6 +8,11 @@
 import { useRoute } from "vue-router";
 
 import ErrorBoundary from "@/components/error-boundary/index.vue";
+import { useClientUserData, useTitleMeta } from "@/composables";
 
 const route = useRoute();
+const { setupClientUserDataQuery } = useClientUserData();
+
+useTitleMeta();
+setupClientUserDataQuery();
 </script>
