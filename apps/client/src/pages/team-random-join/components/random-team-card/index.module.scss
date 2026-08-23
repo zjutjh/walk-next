@@ -1,0 +1,36 @@
+.teamCard {
+  border-radius: 8px;
+  background: #fff;
+
+  & + & {
+    margin-top: 12px;
+  }
+
+  :global(.van-card__content) {
+    min-height: 72px;
+  }
+
+  :global(.van-card__title) {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #1f2937;
+  }
+
+  :global(.van-card__desc) {
+    margin-top: 6px;
+    color: #646566;
+  }
+}
+
+.memberCount {
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.footer {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}

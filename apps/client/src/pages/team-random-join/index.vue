@@ -1,3 +1,124 @@
 <template>
-  <main>TODO</main>
+  <main :class="styles.page">
+    <van-sticky>
+      <section :class="styles.topArea">
+        <van-nav-bar title="随机加入" left-arrow @click-left="handleBackClick" />
+
+        <p :class="styles.subtitle">选择路线和队伍，加入志同道合的伙伴一起出发吧!</p>
+
+        <random-join-filter
+          v-model:route-name="selectedRouteName"
+          v-model:team-filter="selectedTeamFilter"
+          :route-options="ROUTE_OPTIONS"
+          :team-filter-options="TEAM_FILTER_OPTIONS"
+        />
+      </section>
+    </van-sticky>
+
+    <random-team-list
+      :teams="visibleTeams"
+      :loading="isRandomTeamListLoading"
+      :error="randomTeamListError"
+      :joining-team-id="joiningTeamId"
+      :join-loading="isRandomJoinPending"
+      @join="handleJoinClick"
+      @retry="handleRandomTeamListRetry"
+    />
+  </main>
 </template>
+
+<script setup lang="ts">
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { showFailToast, showSuccessToast } from "vant";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+
+import { useClientUserData } from "@/composables";
+import { CLIENT_QUERY_KEY } from "@/constants";
+import { walkClientService } from "@/utils";
+
+import RandomJoinFilter from "./components/random-join-filter/index.vue";
+import RandomTeamList from "./components/random-team-list/index.vue";
+import styles from "./index.module.scss";
+import type { RouteName, TeamFilter } from "./types";
+
+const TEAM_MEMBER_LIMIT = 6;
+
+const ROUTE_OPTIONS = [
+  { name: "pf-half", title: "屏峰半程", distanceKm: 11 },
+  { name: "pf-full", title: "屏峰全程", distanceKm: 16 },
+  { name: "mgs", title: "莫干山全程", distanceKm: 17 }
+] as const;
+
+const TEAM_FILTER_OPTIONS = [{ value: "all", label: "全部队伍" }] as const;
+
+const router = useRouter();
+const queryClient = useQueryClient();
+const { updateClientUserData } = useClientUserData();
+
+const selectedRouteName = ref<RouteName>(ROUTE_OPTIONS[0].name);
+const selectedTeamFilter = ref<TeamFilter>(TEAM_FILTER_OPTIONS[0].value);
+const joiningTeamId = ref<number>();
+
+const handleBackClick = () => {
+  router.push({ name: "team-info" });
+};
+
+const {
+  data: randomTeamListData,
+  isLoading: isRandomTeamListLoading,
+  error: randomTeamListError,
+  refetch: refetchRandomTeamList
+} = useQuery({
+  queryKey: computed(() => [CLIENT_QUERY_KEY.TEAM.RANDOM_LIST, selectedRouteName.value] as const),
+  queryFn: () =>
+    walkClientService.QueryRandomTeamList({
+      route_name: selectedRouteName.value
+    })
+});
+
+const availableTeams = computed(
+  () => randomTeamListData.value?.teams.filter((team) => team.num < TEAM_MEMBER_LIMIT) ?? []
+);
+
+const visibleTeams = computed(() => availableTeams.value);
+
+const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation({
+  mutationFn: (teamId: number) => walkClientService.RandomJoinTeam({ id: teamId }),
+  onSuccess: async () => {
+    showSuccessToast({
+      message: "加入成功！",
+      duration: 3000,
+      position: "top"
+    });
+
+    const userInfo = await queryClient.fetchQuery({
+      queryKey: [CLIENT_QUERY_KEY.USER.SELF],
+      queryFn: () => walkClientService.QueryUserInfo(undefined)
+    });
+
+    updateClientUserData({ userInfo });
+
+    window.setTimeout(() => {
+      router.replace({ name: "team-detail" });
+    }, 3000);
+  },
+  onError: () => {
+    joiningTeamId.value = undefined;
+    showFailToast({
+      message: "加入失败，请稍后重试",
+      position: "top"
+    });
+  }
+});
+
+const handleJoinClick = (teamId: number) => {
+  if (isRandomJoinPending.value) return;
+  joiningTeamId.value = teamId;
+  mutateRandomJoinTeam(teamId);
+};
+
+const handleRandomTeamListRetry = () => {
+  void refetchRandomTeamList();
+};
+</script>
