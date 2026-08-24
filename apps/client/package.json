@@ -18,6 +18,7 @@
     "lodash-es": "catalog:frontend",
     "pinia": "catalog:frontend",
     "pinia-plugin-persistedstate": "catalog:frontend",
+    "sass-embedded": "catalog:infra",
     "shared": "workspace:*",
     "vant": "catalog:frontend",
     "vue": "catalog:frontend",
@@ -29,16 +30,16 @@
     "@types/lodash-es": "catalog:types",
     "@types/node": "catalog:types",
     "@types/postcss-pxtorem": "catalog:types",
+    "@vant/auto-import-resolver": "catalog:infra",
     "@vitejs/plugin-vue": "catalog:infra",
     "@vue/tsconfig": "catalog:infra",
     "postcss-pxtorem": "catalog:infra",
     "type-fest": "catalog:types",
     "typescript": "catalog:infra",
-    "unplugin-icons": "catalog:infra",
-    "vite": "catalog:infra",
-    "vue-tsc": "catalog:infra",
-    "@vant/auto-import-resolver": "catalog:infra",
     "unplugin-auto-import": "catalog:infra",
-    "unplugin-vue-components": "catalog:infra"
+    "unplugin-icons": "catalog:infra",
+    "unplugin-vue-components": "catalog:infra",
+    "vite": "catalog:infra",
+    "vue-tsc": "catalog:infra"
   }
 }

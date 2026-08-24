@@ -317,6 +317,9 @@ importers:
       pinia-plugin-persistedstate:
         specifier: catalog:frontend
         version: 4.7.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.28(typescript@5.9.3)))
+      sass-embedded:
+        specifier: catalog:infra
+        version: 1.97.3
       shared:
         specifier: workspace:*
         version: link:../../packages/shared
