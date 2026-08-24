@@ -152,13 +152,18 @@ const tabItems = computed(() => [
 
 .bottom-nav-item__text {
   letter-spacing: 0.01em;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  transform-origin: center center;
   transition: transform 300ms cubic-bezier(0.2, 0.95, 0.22, 1);
 }
 
 :deep(.bottom-nav .van-tabbar-item--active .bottom-nav-item__icon) {
   transform: scale(2);
   filter: drop-shadow(0 4px 6px rgb(34 50 18 / 22%));
+}
+
+:deep(.bottom-nav .van-tabbar-item--active .bottom-nav-item__text) {
+  transform: translateY(0) scale(1.12);
 }
 
 @media (max-width: 360px) {
