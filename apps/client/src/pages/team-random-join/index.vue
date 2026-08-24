@@ -31,6 +31,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { QueryRandomTeamListResponse, RandomJoinTeamResponse } from "api/types/client";
 import { showFailToast, showSuccessToast } from "vant";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { useClientUserData } from "@/composables";
@@ -69,7 +70,7 @@ const {
   isLoading: isRandomTeamListLoading,
   error: randomTeamListError,
   refetch: refetchRandomTeamList
-} = useQuery({
+} = useQuery<QueryRandomTeamListResponse>({
   queryKey: computed(() => [CLIENT_QUERY_KEY.TEAM.RANDOM_LIST, selectedRouteName.value] as const),
   queryFn: () =>
     walkClientService.QueryRandomTeamList({
@@ -83,7 +84,11 @@ const availableTeams = computed(
 
 const visibleTeams = computed(() => availableTeams.value);
 
-const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation({
+const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation<
+  RandomJoinTeamResponse,
+  Error,
+  number
+>({
   mutationFn: (teamId: number) => walkClientService.RandomJoinTeam({ id: teamId }),
   onSuccess: async () => {
     showSuccessToast({

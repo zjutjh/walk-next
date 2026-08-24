@@ -54,9 +54,11 @@ const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({
       router.replace({ name: "team-detail" });
     }, 3000);
   },
-  onError: (error) => {
+  onError: (error: unknown) => {
+    const message = error instanceof Error ? error.message : "创建失败，请稍后重试";
+
     showFailToast({
-      message: error.message || "创建失败，请稍后重试",
+      message,
       position: "top"
     });
   }
