@@ -10,7 +10,9 @@
 
     <template #footer>
       <div :class="styles.footer">
-        <span :class="styles.memberCount">{{ props.team.num }}/6人</span>
+        <span :class="styles.memberCount">{{
+          t("{n}/{m} 人", { n: props.team.num, m: MAXIMUM_TEAM_SIZE })
+        }}</span>
         <van-button
           round
           size="small"
@@ -26,9 +28,12 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
+
+import { MAXIMUM_TEAM_SIZE } from "@/constants";
+
 import type { RandomJoinTeam } from "../../types";
 import styles from "./index.module.scss";
-
 const props = defineProps<{
   team: RandomJoinTeam;
   loading: boolean;
@@ -37,6 +42,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   join: [teamId: number];
 }>();
+
+const { t } = useI18n();
 
 const handleJoinClick = () => {
   emit("join", props.team.id);
