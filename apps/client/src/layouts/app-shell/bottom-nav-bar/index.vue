@@ -21,9 +21,9 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-import fingerHeartIcon from "@/assets/finger-heart.png";
-import proudIcon from "@/assets/proud.png";
-import thumbsUpIcon from "@/assets/thumbs-up.png";
+import fingerHeartIcon from "@/assets/images/finger-heart.png";
+import proudIcon from "@/assets/images/proud.png";
+import thumbsUpIcon from "@/assets/images/thumbs-up.png";
 
 const { t } = useI18n();
 
