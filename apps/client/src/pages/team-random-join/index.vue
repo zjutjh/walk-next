@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import type { QueryRandomTeamListResponse, RandomJoinTeamResponse } from "api/types/client";
 import { showFailToast, showSuccessToast } from "vant";
-import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { useClientUserData } from "@/composables";

@@ -35,10 +35,12 @@
 </template>
 
 <script setup lang="ts">
-// eslint-disable-next-line import/no-duplicates
-import type { RandomJoinRouteOption, RandomJoinTeamFilterOption } from "../../types";
-// eslint-disable-next-line import/no-duplicates
-import type { RouteName, TeamFilter } from "../../types";
+import type {
+  RandomJoinRouteOption,
+  RandomJoinTeamFilterOption,
+  RouteName,
+  TeamFilter
+} from "../../types";
 import styles from "./index.module.scss";
 
 const props = defineProps<{
