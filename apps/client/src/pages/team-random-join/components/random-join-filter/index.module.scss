@@ -1,0 +1,32 @@
+.filterSection {
+  padding-top: 12px;
+}
+
+.routeGrid {
+  padding: 8px 0;
+}
+
+:global(.van-grid-item__content) {
+  padding: 0 4px;
+  background: transparent;
+}
+
+.routeName,
+.routeDistance {
+  display: flex;
+  line-height: 1.25;
+}
+
+.routeDistance {
+  margin-top: 2px;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.teamFilterGroup {
+  padding: 14px 16px;
+  :global(.van-radio__label) {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+}
