@@ -39,3 +39,14 @@
   box-sizing: border-box;
   min-height: 100vh;
 }
+
+.layoutLogo {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  left: 12px;
+  z-index: 1;
+  width: 96px;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}

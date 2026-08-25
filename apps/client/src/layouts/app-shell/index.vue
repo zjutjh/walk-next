@@ -19,6 +19,7 @@
       ]"
     />
     <main :class="styles.layoutContent">
+      <img v-if="isShowLogo" :src="logo" alt="Logo" :class="styles.layoutLogo" />
       <slot />
     </main>
   </div>
@@ -30,10 +31,12 @@ import { useRoute } from "vue-router";
 
 import bgBottom from "@/assets/images/bg-bottom.svg";
 import bgTop from "@/assets/images/bg-top.svg";
+import logo from "@/assets/images/logo.png";
 
 import styles from "./index.module.scss";
 
 const route = useRoute();
 
 const isBgCanvas = computed(() => route.meta.bgCanvas ?? true);
+const isShowLogo = computed(() => route.meta.showLogo ?? false);
 </script>
