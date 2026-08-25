@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import bgAuthBottom from "@/assets/images/bg-auth-bottom.svg";
+import bgAuthBottom from "@/assets/images/bg-bottom.svg";
 import bgAuthTop from "@/assets/images/bg-top.svg";
 
 import styles from "./index.module.scss";
