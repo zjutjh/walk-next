@@ -13,15 +13,15 @@ import { walkClientService } from "@/utils";
 export interface ClientUserData {
   isLoggedIn: boolean;
   jwt: string;
-  userInfo: QueryUserInfoResponse | null;
+  userInfo?: QueryUserInfoResponse;
 }
 
-/** 客户端用户数据空值 */
-const buildDefaultClientUserData = (): ClientUserData => ({
-  isLoggedIn: false,
-  jwt: "",
-  userInfo: null
-});
+/** 当前用户信息查询配置 */
+export const CLIENT_USER_INFO_QUERY_OPTIONS = {
+  queryKey: [CLIENT_QUERY_KEY.USER.SELF] as const,
+  queryFn: () => walkClientService.QueryUserInfo(),
+  staleTime: Infinity
+};
 
 /** 客户端用户数据 Store */
 const useClientUserDataStore = defineStore(
@@ -87,10 +87,8 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
     if (userDataStore.isQueryExist) return;
 
     const { data } = useQuery({
-      enabled: () => isLoggedIn.value,
-      queryKey: [CLIENT_QUERY_KEY.USER.SELF] as const,
-      queryFn: () => walkClientService.QueryUserInfo(undefined),
-      staleTime: Infinity
+      ...CLIENT_USER_INFO_QUERY_OPTIONS,
+      enabled: () => isLoggedIn.value
     });
 
     watchImmediate(data, (newData) => {
@@ -116,3 +114,11 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
     setupClientUserDataQuery
   };
 };
+
+/** 客户端用户数据空值 */
+function buildDefaultClientUserData(): ClientUserData {
+  return {
+    isLoggedIn: false,
+    jwt: ""
+  };
+}
