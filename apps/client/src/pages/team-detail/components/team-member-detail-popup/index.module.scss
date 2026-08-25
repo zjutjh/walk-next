@@ -1,0 +1,25 @@
+.popup {
+  max-height: 86vh;
+}
+
+.content {
+  box-sizing: border-box;
+  padding: 22px 0 calc(20px + env(safe-area-inset-bottom));
+}
+
+.title {
+  margin: 0 48px 18px 16px;
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.loading {
+  margin: 56px 0;
+}
+
+.actionArea {
+  margin: 20px 16px 0;
+  display: grid;
+  gap: 12px;
+}
