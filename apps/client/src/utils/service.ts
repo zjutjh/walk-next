@@ -7,7 +7,6 @@ import { showToast } from "vant";
 import { useClientUserData } from "@/composables";
 import { globalQueryClient } from "@/configs";
 
-const { jwt } = useClientUserData(globalQueryClient);
 const SERVICE_TIMEOUT = 15000 as const;
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
@@ -39,16 +38,18 @@ axiosInstance.interceptors.response.use(
 );
 
 export const request: ServiceOptions<AxiosRequestConfig>["request"] = async (req, options) => {
+  const { jwt } = useClientUserData(globalQueryClient);
+
   const { data: body } = await axiosInstance({
     url: req.url,
     method: req.method,
     params: req.params,
     data: req.data,
+    ...options,
     headers: {
       ...(jwt.value ? { Authorization: `Bearer ${jwt.value}` } : {}),
       ...options?.headers
-    },
-    ...options
+    }
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
