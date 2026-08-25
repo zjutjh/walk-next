@@ -21,50 +21,51 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
     meta: {
       pageName: "登录",
       allowNoAuth: true,
-      guestOnly: true
+      guestOnly: true,
+      bgCanvas: false
     }
   },
   {
     path: "/register",
-    name: "register",
-    component: () => import("@/pages/register-index/index.vue"),
     meta: {
       pageName: "注册",
       allowNoAuth: true,
-      guestOnly: true
-    }
-  },
-  {
-    path: "/register/student",
-    name: "register-student",
-    component: () => import("@/pages/register-school/index.vue"),
-    props: { userType: "student" },
-    meta: {
-      pageName: "学生注册",
-      allowNoAuth: true,
-      guestOnly: true
-    }
-  },
-  {
-    path: "/register/teacher",
-    name: "register-teacher",
-    component: () => import("@/pages/register-school/index.vue"),
-    props: { userType: "teacher" },
-    meta: {
-      pageName: "教职工注册",
-      allowNoAuth: true,
-      guestOnly: true
-    }
-  },
-  {
-    path: "/register/alumnus",
-    name: "register-alumnus",
-    component: () => import("@/pages/register-alumnus/index.vue"),
-    meta: {
-      pageName: "校友注册",
-      allowNoAuth: true,
-      guestOnly: true
-    }
+      guestOnly: true,
+      bgCanvas: false
+    },
+    children: [
+      {
+        path: "",
+        name: "register",
+        component: () => import("@/pages/register-index/index.vue")
+      },
+      {
+        path: "student",
+        name: "register-student",
+        component: () => import("@/pages/register-school/index.vue"),
+        props: { userType: "student" },
+        meta: {
+          pageName: "学生"
+        }
+      },
+      {
+        path: "teacher",
+        name: "register-teacher",
+        component: () => import("@/pages/register-school/index.vue"),
+        props: { userType: "teacher" },
+        meta: {
+          pageName: "教职工"
+        }
+      },
+      {
+        path: "alumnus",
+        name: "register-alumnus",
+        component: () => import("@/pages/register-alumnus/index.vue"),
+        meta: {
+          pageName: "校友"
+        }
+      }
+    ]
   },
   {
     path: "/terms",
@@ -77,69 +78,85 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   },
   {
     path: "/team",
-    name: "team-info",
-    components: {
-      default: () => import("@/pages/team-info/index.vue"),
-      navbar: () => import("@/components/navbar/index.vue")
+    meta: {
+      pageName: "团队"
     },
-    meta: {
-      pageName: "团队信息"
-    }
-  },
-  {
-    path: "/team/join/password",
-    name: "team-password-join",
-    component: () => import("@/pages/team-password-join/index.vue"),
-    meta: {
-      pageName: "密码加入",
-      allowedRoles: ["unbind"]
-    }
-  },
-  {
-    path: "/team/join/random",
-    name: "team-random-join",
-    component: () => import("@/pages/team-random-join/index.vue"),
-    meta: {
-      pageName: "随机加入",
-      allowedRoles: ["unbind"]
-    }
-  },
-  {
-    path: "/team/create",
-    name: "team-create",
-    component: () => import("@/pages/team-create/index.vue"),
-    meta: {
-      pageName: "创建团队",
-      allowedRoles: ["unbind"]
-    }
-  },
-  {
-    path: "/team/detail",
-    name: "team-detail",
-    component: () => import("@/pages/team-detail/index.vue"),
-    meta: {
-      pageName: "团队详情",
-      allowedRoles: ["member", "captain"]
-    }
+    children: [
+      {
+        path: "",
+        name: "team-info",
+        components: {
+          default: () => import("@/pages/team-info/index.vue"),
+          navbar: () => import("@/components/navbar/index.vue")
+        },
+        meta: {
+          pageName: "团队信息"
+        }
+      },
+      {
+        path: "join/password",
+        name: "team-password-join",
+        component: () => import("@/pages/team-password-join/index.vue"),
+        meta: {
+          pageName: "密码加入",
+          allowedRoles: ["unbind"]
+        }
+      },
+      {
+        path: "join/random",
+        name: "team-random-join",
+        component: () => import("@/pages/team-random-join/index.vue"),
+        meta: {
+          pageName: "随机加入",
+          allowedRoles: ["unbind"]
+        }
+      },
+      {
+        path: "create",
+        name: "team-create",
+        component: () => import("@/pages/team-create/index.vue"),
+        meta: {
+          pageName: "创建团队",
+          allowedRoles: ["unbind"]
+        }
+      },
+      {
+        path: "detail",
+        name: "team-detail",
+        component: () => import("@/pages/team-detail/index.vue"),
+        meta: {
+          pageName: "团队详情",
+          allowedRoles: ["member", "captain"]
+        }
+      }
+    ]
   },
   {
     path: "/profile",
-    name: "profile",
-    components: {
-      default: () => import("@/pages/profile/index.vue"),
-      navbar: () => import("@/components/navbar/index.vue")
+    meta: {
+      pageName: "个人"
     },
-    meta: {
-      pageName: "个人信息"
-    }
-  },
-  {
-    path: "/profile/edit",
-    name: "profile-edit",
-    component: () => import("@/pages/profile-edit/index.vue"),
-    meta: {
-      pageName: "修改信息"
-    }
+    children: [
+      {
+        path: "",
+        name: "profile",
+        components: {
+          default: () => import("@/pages/profile/index.vue"),
+          navbar: () => import("@/components/navbar/index.vue")
+        },
+        meta: {
+          pageName: "个人信息"
+        }
+      },
+      {
+        path: "edit",
+        name: "profile-edit",
+        component: () => import("@/pages/profile-edit/index.vue"),
+        meta: {
+          pageName: "修改信息"
+        }
+      }
+    ]
   },
   {
     path: "/settings",

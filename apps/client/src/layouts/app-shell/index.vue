@@ -1,16 +1,31 @@
 <template>
-  <div :class="styles.authLayout">
-    <img :src="bgAuthTop" alt="" :class="[styles.authLayoutBg, styles.authLayoutBgTop]" />
-    <img :src="bgAuthBottom" alt="" :class="[styles.authLayoutBg, styles.authLayoutBgBottom]" />
-    <main :class="styles.authLayoutContent">
+  <div :class="styles.layout">
+    <img
+      :src="bgTop"
+      alt=""
+      :class="[
+        styles.layoutBg,
+        styles.layoutBgTop,
+        isBgCanvas ? styles.layoutBgTopCanvas : undefined
+      ]"
+    />
+    <img :src="bgBottom" alt="" :class="[styles.layoutBg, styles.layoutBgBottom]" />
+    <main :class="styles.layoutContent">
       <slot />
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import bgAuthBottom from "@/assets/images/bg-bottom.svg";
-import bgAuthTop from "@/assets/images/bg-top.svg";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+
+import bgBottom from "@/assets/images/bg-bottom.svg";
+import bgTop from "@/assets/images/bg-top.svg";
 
 import styles from "./index.module.scss";
+
+const route = useRoute();
+
+const isBgCanvas = computed(() => route.meta.bgCanvas ?? true);
 </script>

@@ -1,11 +1,11 @@
-.authLayout {
+.layout {
   position: relative;
   min-height: 100vh;
   overflow: hidden;
   background: #fff;
 }
 
-.authLayoutBg {
+.layoutBg {
   position: absolute;
   left: 0;
   z-index: 0;
@@ -15,15 +15,20 @@
   user-select: none;
 }
 
-.authLayoutBgTop {
+.layoutBgTop {
   top: -174px;
+  transition: top 0.3s ease;
 }
 
-.authLayoutBgBottom {
+.layoutBgTopCanvas {
+  top: 0;
+}
+
+.layoutBgBottom {
   bottom: 0;
 }
 
-.authLayoutContent {
+.layoutContent {
   position: relative;
   z-index: 1;
   box-sizing: border-box;
