@@ -35,7 +35,7 @@ const tabItems = computed(() => [
   },
   {
     to: "/team",
-    label: t("team"),
+    label: t("team.info"),
     icon: fingerHeartIcon
   },
   {
@@ -58,6 +58,28 @@ const tabItems = computed(() => [
   transform: translateX(-50%);
   pointer-events: none;
   /* 不裁剪：item 阴影和放大图标都可自由溢出 */
+}
+
+/* 显隐动画（由 app.vue 中 <transition name="navbar"> 触发） */
+.navbar-enter-active,
+.navbar-leave-active {
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.navbar-enter-from,
+.navbar-leave-to {
+  transform: translateX(-50%) translateY(calc(100% + 9px));
+  opacity: 0;
+}
+
+.navbar-leave-active {
+  pointer-events: none;
+}
+
+.navbar-leave-active :deep(.bottom-nav) {
+  pointer-events: none;
 }
 
 .bottom-nav {

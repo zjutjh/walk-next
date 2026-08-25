@@ -2,7 +2,11 @@
   <app-shell>
     <error-boundary>
       <router-view :key="route.meta.recreateComponentByPath ? route.fullPath : undefined" />
-      <router-view name="navbar" />
+      <router-view v-slot="{ Component }" name="navbar">
+        <transition name="navbar">
+          <component :is="Component" v-if="Component" />
+        </transition>
+      </router-view>
     </error-boundary>
   </app-shell>
 </template>
