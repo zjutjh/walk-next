@@ -11,10 +11,34 @@
   z-index: 0;
   width: 250px;
   max-width: 65vw;
-  height: auto;
   pointer-events: none;
   user-select: none;
-  opacity: 0.85;
+}
+
+.illustrationImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+// 用 PNG 自身作为遮罩，让白色叠加层只作用在不透明区域
+// 透明区域继续透明，非透明区域以白色为底淡化（不会透出页面背景色）
+.illustration::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  -webkit-mask-image: var(--illustration-mask);
+  mask-image: var(--illustration-mask);
+  -webkit-mask-mode: alpha;
+  mask-mode: alpha;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 .content {

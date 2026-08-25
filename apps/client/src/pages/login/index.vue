@@ -1,6 +1,8 @@
 <template>
   <main :class="styles.page">
-    <img :src="thumbsUpImage" alt="" :class="styles.illustration" />
+    <div :class="styles.illustration" :style="{ '--illustration-mask': `url(${thumbsUpImage})` }">
+      <img :src="thumbsUpImage" alt="" :class="styles.illustrationImage" />
+    </div>
 
     <div :class="styles.content">
       <h1 :class="styles.title">登录</h1>
