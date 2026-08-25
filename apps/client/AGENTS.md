@@ -1,6 +1,8 @@
 # Walk-Next Client — AGENTS.md
 
-精弘毅行报名系统是面向学生、教职工和校友的移动端 Web 应用，使用 Vue3 开发
+精弘毅行报名系统是面向学生、教职工和校友的移动端 `Web` 应用，使用 `Vue3` 开发。
+
+本项目使用 `vue-i18n` 实现国际化。
 
 ## 1. 项目概览
 
@@ -13,6 +15,7 @@
 | 状态管理  | Pinia                                          |
 | 样式方案  | SCSS                                           |
 | 请求方案  | Axios + Tanstack Vue Query                     |
+| i18n      | vue-i18n                                       |
 
 ---
 
@@ -46,7 +49,7 @@ apps/client/src/
 ## 3. 环境准备
 
 1. 阅读[环境变量模板](./.env.example)，按注释完成配置
-2. 安装依赖，会自动配置 git hooks：
+2. 安装依赖，会自动配置 git hooks
 
    ```bash
    pnpm install
@@ -58,12 +61,12 @@ apps/client/src/
 
 在仓库根目录执行：
 
-| 操作            | 命令                   | 说明           |
-| --------------- | ---------------------- | -------------- |
-| 启动开发服务    | `pnpm run dev:client`  |                |
-| 类型检查        | `pnpm typecheck`       | 提交前必须通过 |
-| Lint 检查与修复 | `pnpm lint --fix`      | 提交前必须通过 |
-| 生产构建        | `pnpm run build:client`|                |
+| 操作            | 命令                    | 说明           |
+| --------------- | ----------------------- | -------------- |
+| 启动开发服务    | `pnpm run dev:client`   |                |
+| 类型检查        | `pnpm typecheck`        | 提交前必须通过 |
+| Lint 检查与修复 | `pnpm lint --fix`       | 提交前必须通过 |
+| 生产构建        | `pnpm run build:client` |                |
 
 ---
 
