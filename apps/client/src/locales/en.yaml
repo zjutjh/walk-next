@@ -17,12 +17,16 @@ QQ: QQ
 用户协议: Terms of Service
 语言: Language
 请输入电话号码: Please enter your phone number
+请输入微信: Please enter your WeChat ID
+请输入QQ: Please enter your QQ number
+请输入11位有效电话号码: Please enter a valid 11-digit phone number
 请输入密码: Please enter your password
 电话号码或密码不正确: Incorrect phone number or password
 请填写{w}: Please fill in {w}
 尚未加入团队: Not yet part of the team
 提交成功: Submitted successfully
 更新成功: Updated successfully
+更新失败: Update failed
 团队名称: Team Name
 学生: Student
 队长: Captain
@@ -48,6 +52,14 @@ QQ: QQ
 全部: All
 "{n}/{m} 人": "{n}/{m} members"
 profile: Profile
+剩余组队次数: Remaining team actions
+剩余创建团队次数: Remaining team creation attempts
+剩余加入团队次数: Remaining team join attempts
+剩余次数说明: Remaining attempts
+剩余次数说明内容: Team creation attempts are used to create teams, while team join attempts are used to join existing teams.
+无: None
+暂无个人信息: No personal information
+重试: Retry
 中国大陆: Mainland China
 身份证号: ID Number
 注册并登录: Sign up and sign in
@@ -67,6 +79,7 @@ team:
 请确认队伍信息是否正确: Please confirm whether the team information is correct
 队员信息: Team member information
 修改信息: Edit Information
+是否确认保存修改？: Confirm saving these changes?
 当前位置: Your location
 德馨府广场: Dexinfu Square
 滑板公园: Slider Park
