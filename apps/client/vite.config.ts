@@ -1,4 +1,5 @@
 import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
+import mdx from "@mdx-js/rollup";
 import { VantResolver } from "@vant/auto-import-resolver";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
@@ -15,7 +16,13 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.VITE_BASE_PATH,
     plugins: [
-      vue(),
+      {
+        enforce: "pre",
+        ...mdx({
+          jsxImportSource: "vue"
+        })
+      },
+      vue({ include: /\.(vue|mdx|md)$/ }),
       VueI18nPlugin({
         include: [path.resolve(__dirname, "./src/locales/**")],
         treeShaking: true
