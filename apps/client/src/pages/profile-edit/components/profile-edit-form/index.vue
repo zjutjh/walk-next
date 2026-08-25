@@ -45,10 +45,11 @@ import type { FieldRule } from "vant";
 import { computed, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 
-import { TEL_PATTERN } from "../../constants";
 import type { ProfileEditFormValue } from "../../types";
 import { buildInitialFormValue, normalizeFormValue } from "../../utils";
 import styles from "./index.module.scss";
+
+const TEL_PATTERN = /^1[3-9]\d{9}$/;
 
 const props = defineProps<{
   loading: boolean;
