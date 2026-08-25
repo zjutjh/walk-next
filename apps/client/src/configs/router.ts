@@ -1,5 +1,4 @@
 import { useRouterState } from "shared";
-import type { SetRequired } from "type-fest";
 import { showFailToast, showToast } from "vant";
 import {
   createRouter,
@@ -13,7 +12,7 @@ import { useClientUserData } from "@/composables";
 
 import { globalQueryClient } from "./vue-query";
 
-const routes: SetRequired<RouteRecordRaw, "meta">[] = [
+const routes: RouteRecordRaw[] = [
   {
     path: "/login",
     name: "login",
@@ -22,13 +21,13 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
       pageName: "登录",
       allowNoAuth: true,
       guestOnly: true,
-      bgCanvas: false
+      bgCanvas: false,
+      showLogo: true
     }
   },
   {
     path: "/register",
     meta: {
-      pageName: "注册",
       allowNoAuth: true,
       guestOnly: true,
       bgCanvas: false
@@ -37,7 +36,10 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
       {
         path: "",
         name: "register",
-        component: () => import("@/pages/register-index/index.vue")
+        component: () => import("@/pages/register-index/index.vue"),
+        meta: {
+          pageName: "注册"
+        }
       },
       {
         path: "student",
@@ -45,7 +47,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
         component: () => import("@/pages/register-school/index.vue"),
         props: { userType: "student" },
         meta: {
-          pageName: "学生"
+          pageName: "学生注册"
         }
       },
       {
@@ -54,7 +56,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
         component: () => import("@/pages/register-school/index.vue"),
         props: { userType: "teacher" },
         meta: {
-          pageName: "教职工"
+          pageName: "教职工注册"
         }
       },
       {
@@ -62,7 +64,7 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
         name: "register-alumnus",
         component: () => import("@/pages/register-alumnus/index.vue"),
         meta: {
-          pageName: "校友"
+          pageName: "校友注册"
         }
       }
     ]
@@ -78,9 +80,6 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   },
   {
     path: "/team",
-    meta: {
-      pageName: "团队"
-    },
     children: [
       {
         path: "",
@@ -133,9 +132,6 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   },
   {
     path: "/profile",
-    meta: {
-      pageName: "个人"
-    },
     children: [
       {
         path: "",
