@@ -1,0 +1,26 @@
+.section {
+  min-width: 0;
+}
+
+.title {
+  margin: 0 0 10px;
+  padding: 0 4px;
+  color: #283224;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.list {
+  margin: 0;
+  overflow: hidden;
+}
+
+.value {
+  display: inline-block;
+  max-width: 60vw;
+  overflow: hidden;
+  color: #465142;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,65 @@
+.section {
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #e6e8e1;
+  border-radius: 12px;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.title {
+  margin: 0;
+  color: #283224;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.helpButton {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: #68745d;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 12px;
+  background: #f7f9f3;
+  border-radius: 8px;
+}
+
+.label {
+  overflow: hidden;
+  color: #68745d;
+  font-size: 13px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.value {
+  color: #34452b;
+  font-size: 24px;
+  line-height: 1.2;
+}

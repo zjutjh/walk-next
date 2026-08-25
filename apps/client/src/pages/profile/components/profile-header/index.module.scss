@@ -1,0 +1,43 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 18px;
+  color: #2d3a26;
+  background: #e8f0d9;
+  border: 1px solid #cfdfb5;
+  border-radius: 12px;
+}
+
+.avatar {
+  display: grid;
+  flex: 0 0 56px;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  color: #5e793b;
+  background: #fff;
+  border: 1px solid #cfdfb5;
+  border-radius: 50%;
+}
+
+.content {
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  overflow: hidden;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tel {
+  margin: 4px 0 0;
+  color: #68745d;
+  font-size: 14px;
+  line-height: 1.4;
+}

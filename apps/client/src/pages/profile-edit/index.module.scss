@@ -1,0 +1,25 @@
+.page {
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  overflow-x: hidden;
+  background: #f7f8fa;
+}
+
+.page :global(.van-nav-bar) {
+  background: #f7f8fa;
+}
+
+.page :global(.error-empty) {
+  min-height: calc(100vh - 56px);
+}
+
+.content {
+  min-height: calc(100vh - 56px);
+}
+
+.loading {
+  min-height: 220px;
+  justify-content: center;
+  color: #68745d;
+}

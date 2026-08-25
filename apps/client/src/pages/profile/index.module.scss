@@ -1,0 +1,27 @@
+.page {
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 16px 16px calc(96px + env(safe-area-inset-bottom, 0px));
+  overflow-x: hidden;
+  background: #f7f8fa;
+}
+
+.page :global(.error-empty) {
+  min-height: calc(100vh - 112px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.loading {
+  min-height: 220px;
+  justify-content: center;
+  color: #68745d;
+}
+
+.editButton {
+  margin-top: 2px;
+}
