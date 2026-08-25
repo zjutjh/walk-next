@@ -1,0 +1,99 @@
+精弘网络: Jinghong Union
+登录: Sign In
+注册: Sign Up
+毅行: Trailwalk
+团队: Team
+个人: Personal
+电话号码: Phone number
+密码: Password
+统一身份认证: Unified Identity Authentication
+学工号: Student/Staff ID
+姓名: Name
+微信: Weixin
+QQ: QQ
+选填: Optional
+隐私政策: Privacy Policy
+报名须知: Event Guidelines and Disclaimer
+用户协议: Terms of Service
+语言: Language
+请输入电话号码: Please enter your phone number
+请输入密码: Please enter your password
+电话号码或密码不正确: Incorrect phone number or password
+请填写{w}: Please fill in {w}
+尚未加入团队: Not yet part of the team
+提交成功: Submitted successfully
+更新成功: Updated successfully
+团队名称: Team Name
+学生: Student
+队长: Captain
+队员: Team Member
+加入队伍: Join Team
+无需申请: No application required
+退出登录: Log Out
+我已阅读{w}: I have read {w}
+屏峰: Pingfeng
+莫干山: Mogan Shan
+分享队伍: Share Team
+分享: Share
+解散: Disband
+解散队伍: Disband team
+提交: Submit
+提交队伍: Submit Team
+取消: Cancel
+确认: Confirm
+团队编号: Team ID
+团队密码: Team password
+立即加入: Join Now
+确认加入: Confirm joining
+全部: All
+"{n}/{m} 人": "{n}/{m} members"
+团队信息: Team Information
+个人信息: Profile
+中国大陆: Mainland China
+身份证号: ID Number
+注册并登录: Sign up and sign in
+查看{w}详细信息: View {w} details
+查看团队详细信息: View Team Details
+sign-up-guide-link: Don't have an account? Sign up here
+team:
+  join:
+    hint: Choose a route and team, and set off with like-minded partners!
+状态: Status
+未开始: Not started
+关闭: Close
+路线: Route
+返回: Back
+是的，我已确认: Yes, I have confirmed
+请确认队伍信息是否正确: Please confirm whether the team information is correct
+队员信息: Team member information
+修改信息: Edit Information
+当前位置: Your location
+德馨府广场: Dexinfu Square
+滑板公园: Slider Park
+兆丰公园: Zhaofeng Park
+天安云谷: Deqing Tian'an Cloud Valley
+东苕溪: Dongtiao Xi
+浙江工业大学: Zhejiang University of Technology
+金莲寺: Jinlian Temple
+老焦山: Laojiaoshan
+屏峰山: Pingfeng Mountain
+屏峰善院: Pingfeng Temple
+白龙潭: Bailongtan
+慈母桥: Cimuqiao
+古樟树公园: Guzhangshu Park
+refresh:
+  pull: Pull to refresh...
+  release: Release to refresh...
+  loading: Loading...
+您是否确认退出？: Are you sure you want to log out?
+是: Yes
+否: No
+精弘毅行: Jinghong Trailwalk
+港澳: Hong Kong and Macao
+海外: Overseas
+中国台湾: Taiwan, China
+我已阅读并同意: I have read and agreed
+通行码: Passcode
+个人通行码: Personal passcode
+团队通行码: Team passcode
+未提交: Unsubmitted

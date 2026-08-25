@@ -1,7 +1,14 @@
 {
   "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
-  "language": "en",
   "dictionaries": ["typescript", "node", "html", "css", "bash", "npm"],
+  "ignorePaths": [
+    "node_modules/**",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "**/dist/**",
+    "**/public/**"
+  ],
+  "language": "en",
   "words": [
     "Apifox",
     "autorenew",
@@ -24,13 +31,9 @@
     "wechat",
     "zjutjh",
     "intlify",
-    "lokalise"
-  ],
-  "ignorePaths": [
-    "node_modules/**",
-    "pnpm-lock.yaml",
-    "pnpm-workspace.yaml",
-    "**/dist/**",
-    "**/public/**"
+    "lokalise",
+    "Jinghong",
+    "Pingfeng",
+    "Weixin"
   ]
 }
