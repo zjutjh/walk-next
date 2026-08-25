@@ -13,7 +13,7 @@ export default class WalkClientService<T> extends BaseService<T> {
 
   /** 获取用户信息 */
   QueryUserInfo(
-    req: ClientAPI.QueryUserInfoRequest,
+    req?: ClientAPI.QueryUserInfoRequest,
     options?: T
   ): Promise<ClientAPI.QueryUserInfoResponse> {
     const url = this.genBaseURL("/user/info");
@@ -82,7 +82,7 @@ export default class WalkClientService<T> extends BaseService<T> {
 
   /** 获取团队详情 */
   QueryTeamDetail(
-    req: ClientAPI.QueryTeamDetailRequest,
+    req?: ClientAPI.QueryTeamDetailRequest,
     options?: T
   ): Promise<ClientAPI.QueryTeamDetailResponse> {
     const url = this.genBaseURL("/user/team/detail");
@@ -94,7 +94,7 @@ export default class WalkClientService<T> extends BaseService<T> {
 
   /** 解散团队 */
   DisbandTeam(
-    req: ClientAPI.DisbandTeamRequest,
+    req?: ClientAPI.DisbandTeamRequest,
     options?: T
   ): Promise<ClientAPI.DisbandTeamResponse> {
     const url = this.genBaseURL("/user/team/disband");
@@ -114,7 +114,7 @@ export default class WalkClientService<T> extends BaseService<T> {
   }
 
   /** 离开团队 */
-  LeaveTeam(req: ClientAPI.LeaveTeamRequest, options?: T): Promise<ClientAPI.LeaveTeamResponse> {
+  LeaveTeam(req?: ClientAPI.LeaveTeamRequest, options?: T): Promise<ClientAPI.LeaveTeamResponse> {
     const url = this.genBaseURL("/user/team/leave");
     const method = "POST";
     const data = req;
@@ -136,7 +136,7 @@ export default class WalkClientService<T> extends BaseService<T> {
 
   /** 获取团队页面基本信息 */
   QueryTeamOverview(
-    req: ClientAPI.QueryTeamOverviewRequest,
+    req?: ClientAPI.QueryTeamOverviewRequest,
     options?: T
   ): Promise<ClientAPI.QueryTeamOverviewResponse> {
     const url = this.genBaseURL("/user/team/overview");
@@ -196,7 +196,7 @@ export default class WalkClientService<T> extends BaseService<T> {
 
   /** 撤销提交 */
   UndoTeamSubmission(
-    req: ClientAPI.UndoTeamSubmissionRequest,
+    req?: ClientAPI.UndoTeamSubmissionRequest,
     options?: T
   ): Promise<ClientAPI.UndoTeamSubmissionResponse> {
     const url = this.genBaseURL("/user/team/rollback");
@@ -207,7 +207,10 @@ export default class WalkClientService<T> extends BaseService<T> {
   }
 
   /** 提交团队 */
-  SubmitTeam(req: ClientAPI.SubmitTeamRequest, options?: T): Promise<ClientAPI.SubmitTeamResponse> {
+  SubmitTeam(
+    req?: ClientAPI.SubmitTeamRequest,
+    options?: T
+  ): Promise<ClientAPI.SubmitTeamResponse> {
     const url = this.genBaseURL("/user/team/submit");
     const method = "POST";
     const data = req;
