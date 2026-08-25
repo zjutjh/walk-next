@@ -18,7 +18,7 @@ export function useTitleMeta(options?: UseTitleMetaOptions) {
   const pageNameTitle = computed(() => {
     const slice = route.matched.map((item) => item.meta.pageName);
 
-    const proceed = compact(slice).concat(["精弘毅行"]);
+    const proceed = compact(slice).reverse().concat(["精弘毅行"]);
 
     return proceed.join(" | ");
   });
