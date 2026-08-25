@@ -26,6 +26,11 @@
 
 .layoutBgBottom {
   bottom: 0;
+  transition: opacity 0.3s ease;
+}
+
+.layoutBgBottomHidden {
+  opacity: 0;
 }
 
 .layoutContent {

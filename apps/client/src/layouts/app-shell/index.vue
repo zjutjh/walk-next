@@ -9,7 +9,15 @@
         isBgCanvas ? styles.layoutBgTopCanvas : undefined
       ]"
     />
-    <img :src="bgBottom" alt="" :class="[styles.layoutBg, styles.layoutBgBottom]" />
+    <img
+      :src="bgBottom"
+      alt=""
+      :class="[
+        styles.layoutBg,
+        styles.layoutBgBottom,
+        isBgCanvas ? styles.layoutBgBottomHidden : undefined
+      ]"
+    />
     <main :class="styles.layoutContent">
       <slot />
     </main>
