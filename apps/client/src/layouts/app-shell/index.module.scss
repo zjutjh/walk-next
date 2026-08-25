@@ -16,7 +16,7 @@
 }
 
 .layoutBgTop {
-  top: -174px;
+  top: -175px;
   transition: top 0.3s ease;
 }
 
@@ -31,6 +31,24 @@
 
 .layoutBgBottomHidden {
   opacity: 0;
+}
+
+/* 横屏时显式高度压扁（SVG 内的 preserveAspectRatio="none" 保证满宽拉伸）；
+   top 的 -175px 是按竖屏自然高度调的，横屏压扁后会整片推出屏幕外，改为按比例偏移（约裁掉同样比例的上半部分） */
+@media (orientation: landscape) {
+  .layoutBgTop {
+    top: -18%;
+    height: 40%;
+  }
+
+  /* canvas 模式仍需贴顶，放在 .layoutBgTop 之后保证优先级 */
+  .layoutBgTopCanvas {
+    top: 0;
+  }
+
+  .layoutBgBottom {
+    height: 15%;
+  }
 }
 
 .layoutContent {
