@@ -1,0 +1,168 @@
+// 通用 UI 控件与表单样式 Mixins
+
+/// 页面基础布局
+@mixin page-container {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: calc(env(safe-area-inset-top, 0px) + 80px) 32px
+    calc(env(safe-area-inset-bottom, 0px) + 40px);
+  overflow-x: hidden;
+}
+
+/// 页面大标题
+@mixin page-title {
+  margin-bottom: 24px;
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #734a23;
+  letter-spacing: 2px;
+}
+
+/// 底部引导链接
+@mixin guide-link {
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #734a23;
+  text-align: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+/// 表单容器
+@mixin form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/// 字段分组
+@mixin field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/// 字段标签
+@mixin field-label {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #734a23;
+}
+
+/// 圆角描边输入框（校验错误提示置于外侧下方）
+@mixin custom-input {
+  padding: 0;
+  background: transparent;
+
+  &::after {
+    display: none !important;
+  }
+
+  :global(.van-field__value) {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  :global(.van-field__body) {
+    box-sizing: border-box;
+    min-height: 44px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1.5px solid #be8f58;
+    border-radius: 8px;
+  }
+
+  :global(.van-field__control) {
+    font-size: 15px;
+    color: #333;
+
+    &::placeholder {
+      color: #9e9589;
+    }
+  }
+
+  :global(.van-field__error-message) {
+    margin-top: 4px;
+    padding-left: 2px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--van-danger-color, #ee0a24);
+  }
+}
+
+/// 白底棕边阴影按钮
+@mixin custom-button {
+  min-width: 150px;
+  height: 44px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #734a23;
+  cursor: pointer;
+  background: #fff;
+  border: 1.5px solid #be8f58;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(190, 143, 88, 0.25);
+  transition: all 0.2s ease;
+
+  &:active {
+    background: #fcf8f3;
+    box-shadow: 0 2px 6px rgba(190, 143, 88, 0.2);
+    transform: translateY(1px);
+  }
+
+  :global(.van-button__text) {
+    font-size: 18px;
+    font-weight: 600;
+    color: #734a23;
+  }
+}
+
+/// 密码明密文切换按钮
+@mixin eye-button {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font-size: 18px;
+  color: #9e9589;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+/// 隐私协议复选框
+@mixin agreement-checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #777;
+
+  :global(.van-checkbox__icon) {
+    font-size: 16px;
+  }
+
+  :global(.van-checkbox__icon--checked .van-icon) {
+    background-color: #be8f58;
+    border-color: #be8f58;
+  }
+
+  :global(.van-checkbox__label) {
+    margin-left: 6px;
+    font-size: 13px;
+    color: #666;
+  }
+}

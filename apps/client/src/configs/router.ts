@@ -30,7 +30,8 @@ const routes: RouteRecordRaw[] = [
     meta: {
       allowNoAuth: true,
       guestOnly: true,
-      bgCanvas: false
+      bgCanvas: false,
+      showLogo: true
     },
     children: [
       {

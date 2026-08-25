@@ -1,0 +1,34 @@
+@use "@/styles/mixins" as ui;
+
+.page {
+  @include ui.page-container;
+}
+
+.illustration {
+  position: absolute;
+  right: -20px;
+  bottom: 0;
+  z-index: 0;
+  width: 220px;
+  max-width: 55vw;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.85;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.title {
+  @include ui.page-title;
+}
+
+.loginLink {
+  @include ui.guide-link;
+}
