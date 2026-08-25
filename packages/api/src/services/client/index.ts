@@ -98,10 +98,10 @@ export default class WalkClientService<T> extends BaseService<T> {
     options?: T
   ): Promise<ClientAPI.DisbandTeamResponse> {
     const url = this.genBaseURL("/user/team/disband");
-    const method = "GET";
-    const params = req;
+    const method = "POST";
+    const data = req;
 
-    return this.request({ url, method, params }, options);
+    return this.request({ url, method, data }, options);
   }
 
   /** 加入团队 */
@@ -116,10 +116,10 @@ export default class WalkClientService<T> extends BaseService<T> {
   /** 离开团队 */
   LeaveTeam(req: ClientAPI.LeaveTeamRequest, options?: T): Promise<ClientAPI.LeaveTeamResponse> {
     const url = this.genBaseURL("/user/team/leave");
-    const method = "GET";
-    const params = req;
+    const method = "POST";
+    const data = req;
 
-    return this.request({ url, method, params }, options);
+    return this.request({ url, method, data }, options);
   }
 
   /** 获取队员详情 */
@@ -164,10 +164,10 @@ export default class WalkClientService<T> extends BaseService<T> {
     options?: T
   ): Promise<ClientAPI.QueryRandomTeamListResponse> {
     const url = this.genBaseURL("/user/team/random-list");
-    const method = "POST";
-    const data = req;
+    const method = "GET";
+    const params = req;
 
-    return this.request({ url, method, data }, options);
+    return this.request({ url, method, params }, options);
   }
 
   /** 移除成员 */
@@ -176,10 +176,10 @@ export default class WalkClientService<T> extends BaseService<T> {
     options?: T
   ): Promise<ClientAPI.RemoveTeamMemberResponse> {
     const url = this.genBaseURL("/user/team/remove");
-    const method = "GET";
-    const params = req;
+    const method = "POST";
+    const data = req;
 
-    return this.request({ url, method, params }, options);
+    return this.request({ url, method, data }, options);
   }
 
   /** 更换队长 */
@@ -200,19 +200,19 @@ export default class WalkClientService<T> extends BaseService<T> {
     options?: T
   ): Promise<ClientAPI.UndoTeamSubmissionResponse> {
     const url = this.genBaseURL("/user/team/rollback");
-    const method = "GET";
-    const params = req;
+    const method = "POST";
+    const data = req;
 
-    return this.request({ url, method, params }, options);
+    return this.request({ url, method, data }, options);
   }
 
   /** 提交团队 */
   SubmitTeam(req: ClientAPI.SubmitTeamRequest, options?: T): Promise<ClientAPI.SubmitTeamResponse> {
     const url = this.genBaseURL("/user/team/submit");
-    const method = "GET";
-    const params = req;
+    const method = "POST";
+    const data = req;
 
-    return this.request({ url, method, params }, options);
+    return this.request({ url, method, data }, options);
   }
 
   /** 修改团队 */
