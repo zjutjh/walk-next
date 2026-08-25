@@ -74,6 +74,7 @@ const {
   queryKey: computed(() => [CLIENT_QUERY_KEY.TEAM.RANDOM_LIST, selectedRouteName.value] as const),
   queryFn: () =>
     walkClientService.QueryRandomTeamList({
+      // eslint-disable-next-line camelcase
       route_name: selectedRouteName.value
     })
 });

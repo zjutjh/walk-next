@@ -30,6 +30,7 @@ const handleBackClick = () => {
 const { mutate: mutateJoinTeam, isPending: isJoinPending } = useMutation({
   mutationFn: (value: PasswordJoinFormValue) =>
     walkClientService.JoinTeam({
+      // eslint-disable-next-line camelcase
       team_id: value.teamId,
       password: value.password
     }),

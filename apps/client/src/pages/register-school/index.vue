@@ -43,6 +43,7 @@ const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
   mutationFn: (value: SchoolRegisterFormValue) => {
     const payload = {
       name: value.name,
+      // eslint-disable-next-line camelcase
       stu_id: value.stuId,
       identity: value.identity,
       tel: value.tel,

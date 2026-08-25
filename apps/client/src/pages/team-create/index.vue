@@ -33,7 +33,9 @@ const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({
       name: value.name,
       slogan: value.slogan,
       password: value.password,
+      // eslint-disable-next-line camelcase
       allow_match: value.allowMatch,
+      // eslint-disable-next-line camelcase
       route_name: value.routeName
     }),
   onSuccess: async () => {
