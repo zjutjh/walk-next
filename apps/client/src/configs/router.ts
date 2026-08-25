@@ -78,7 +78,10 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
     path: "/team",
     name: "team-info",
-    component: () => import("@/pages/team-info/index.vue"),
+    components: {
+      default: () => import("@/pages/team-info/index.vue"),
+      navbar: () => import("@/components/navbar/index.vue")
+    },
     meta: {
       pageName: "团队信息"
     }
@@ -122,7 +125,10 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
     path: "/profile",
     name: "profile",
-    component: () => import("@/pages/profile/index.vue"),
+    components: {
+      default: () => import("@/pages/profile/index.vue"),
+      navbar: () => import("@/components/navbar/index.vue")
+    },
     meta: {
       pageName: "个人信息"
     }
@@ -138,7 +144,10 @@ const routes: SetRequired<RouteRecordRaw, "meta">[] = [
   {
     path: "/settings",
     name: "settings",
-    component: () => import("@/pages/settings/index.vue"),
+    components: {
+      default: () => import("@/pages/settings/index.vue"),
+      navbar: () => import("@/components/navbar/index.vue")
+    },
     meta: {
       pageName: "设置"
     }

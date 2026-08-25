@@ -1,0 +1,31 @@
+.authLayout {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+.authLayoutBg {
+  position: absolute;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.authLayoutBgTop {
+  top: -174px;
+}
+
+.authLayoutBgBottom {
+  bottom: 0;
+}
+
+.authLayoutContent {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
