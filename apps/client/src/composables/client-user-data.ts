@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { QueryClient, queryOptions, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { watchImmediate } from "@vueuse/core";
 import type { QueryUserInfoResponse } from "api/types/client";
 import { isNil, merge } from "lodash-es";
@@ -17,11 +17,11 @@ export interface ClientUserData {
 }
 
 /** 当前用户信息查询配置 */
-export const CLIENT_USER_INFO_QUERY_OPTIONS = {
+export const CLIENT_USER_INFO_QUERY_OPTIONS = queryOptions({
   queryKey: [CLIENT_QUERY_KEY.USER.SELF] as const,
   queryFn: () => walkClientService.QueryUserInfo(),
   staleTime: Infinity
-};
+});
 
 /** 客户端用户数据 Store */
 const useClientUserDataStore = defineStore(
