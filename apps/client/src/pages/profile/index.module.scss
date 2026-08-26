@@ -3,7 +3,6 @@
   min-height: 100vh;
   padding: 16px 16px calc(96px + env(safe-area-inset-bottom, 0px));
   overflow-x: hidden;
-  background: #f7f8fa;
 }
 
 .page :global(.error-empty) {
