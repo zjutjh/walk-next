@@ -39,6 +39,19 @@
             {{ teamDetail?.submitted ? "取消提交" : "提交队伍" }}
           </van-button>
         </section>
+
+        <section v-else-if="isLeaveTeamVisible" :class="styles.actionArea">
+          <van-button
+            block
+            round
+            type="danger"
+            plain
+            :loading="isLeaveTeamPending"
+            @click="handleLeaveTeamClick"
+          >
+            退出队伍
+          </van-button>
+        </section>
       </template>
 
       <van-empty v-else description="暂无团队信息" />
@@ -47,8 +60,10 @@
     <team-member-detail-popup
       :opened="isMemberDetailPopupOpened"
       :member="selectedMemberDetail"
+      :member-summary="selectedMemberSummary"
       :loading="isSelectedMemberDetailFetching"
       :error="selectedMemberDetailError"
+      :can-manage-member="canManageSelectedMember"
       :action-loading="isMemberActionPending"
       @close="handleMemberPopupClose"
       @retry="handleSelectedMemberRetry"
@@ -61,6 +76,7 @@
     <team-basic-detail
       v-if="teamDetail"
       :team="teamDetail"
+      :team-type="teamTypeLabel"
       :can-edit="isCaptain"
       @back="handleBasicDetailBack"
       @edit="handleEditTeamClick"
@@ -95,6 +111,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type {
   DisbandTeamResponse,
+  LeaveTeamResponse,
   QueryTeamDetailResponse,
   QueryTeamMemberResponse,
   QueryTeamOverviewResponse,
@@ -120,6 +137,7 @@ import TeamMemberList from "./components/team-member-list/index.vue";
 import TeamOverviewCard from "./components/team-overview-card/index.vue";
 import styles from "./index.module.scss";
 import type { TeamDetailView, TeamEditFormValue } from "./types";
+import { getMemberTypeLabel } from "./utils";
 
 const TEAM_SUBMIT_MIN_SIZE = 4;
 
@@ -133,6 +151,10 @@ const isMemberDetailPopupOpened = ref(false);
 const isTeamEditPopupOpened = ref(false);
 
 const isCaptain = computed(() => clientUserInfo.value?.role === "captain");
+
+const isMember = computed(() => clientUserInfo.value?.role === "member");
+
+const isLeaveTeamVisible = computed(() => isMember.value && teamDetail.value?.submitted === false);
 
 const {
   data: teamOverview,
@@ -182,6 +204,20 @@ const sortedMembers = computed(() => {
     })
     .map(({ member }) => member);
 });
+
+const selectedMemberSummary = computed(() =>
+  sortedMembers.value.find((member) => member.id === selectedMemberId.value)
+);
+
+const teamTypeLabel = computed(() => {
+  const captain = sortedMembers.value.find((member) => member.role === "captain");
+  if (captain) return getMemberTypeLabel(captain.type);
+  return "暂无";
+});
+
+const canManageSelectedMember = computed(
+  () => isCaptain.value && selectedMemberSummary.value?.role === "member"
+);
 
 const refreshTeamData = async () => {
   await Promise.all([
@@ -263,6 +299,21 @@ const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutati
   },
   onError: (error) => {
     showErrorToast(error.message || "解散失败，请稍后重试");
+  }
+});
+
+const { mutate: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation<
+  LeaveTeamResponse,
+  Error
+>({
+  mutationFn: () => walkClientService.LeaveTeam(undefined),
+  onSuccess: async () => {
+    showSuccessToast({ message: "退出成功", duration: 3000, position: "top" });
+    await refreshClientUserData();
+    await router.replace({ name: "team-info" });
+  },
+  onError: (error) => {
+    showErrorToast(error.message || "退出失败，请稍后重试");
   }
 });
 
@@ -414,6 +465,19 @@ const handleDisbandClick = async () => {
   }
 
   mutateDisbandTeam();
+};
+
+const handleLeaveTeamClick = async () => {
+  try {
+    await showConfirmDialog({
+      title: "退出队伍",
+      message: "确认退出当前队伍吗？退出后需要重新加入队伍。"
+    });
+  } catch {
+    return;
+  }
+
+  mutateLeaveTeam();
 };
 
 const handleSubmissionClick = async () => {

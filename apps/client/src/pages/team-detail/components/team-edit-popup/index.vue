@@ -181,7 +181,7 @@ watch(
     if (!team) return;
     formValue.name = team.name;
     formValue.slogan = team.slogan;
-    formValue.password = team.password ?? "";
+    formValue.password = team.password;
     formValue.allowMatch = team.allow_match ? "true" : "false";
     formValue.routeName = isRouteName(team.route_name) ? team.route_name : "";
     selectErrors.allowMatch = "";

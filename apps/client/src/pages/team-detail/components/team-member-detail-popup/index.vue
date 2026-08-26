@@ -16,8 +16,8 @@
 
         <van-cell-group v-else-if="props.member" inset>
           <van-cell title="姓名" :value="props.member.name" />
-          <van-cell title="人员性质" :value="getMemberTypeLabel(props.member.type)" />
-          <van-cell title="队内身份" :value="getMemberRoleLabel(props.member.role)" />
+          <van-cell title="人员性质" :value="memberTypeLabel" />
+          <van-cell title="队内身份" :value="memberRoleLabel" />
           <van-cell title="电话" :value="props.member.tel || '未填写'" />
           <van-cell title="微信" :value="props.member.wechat || '未填写'" />
           <van-cell title="QQ" :value="props.member.qq || '未填写'" />
@@ -29,7 +29,7 @@
 
       <div v-if="props.member" :class="styles.actionArea">
         <van-button
-          v-if="props.member.can_remove"
+          v-if="props.canManageMember"
           block
           round
           type="danger"
@@ -41,7 +41,7 @@
         </van-button>
 
         <van-button
-          v-if="props.member.can_transfer_captain"
+          v-if="props.canManageMember"
           block
           round
           type="primary"
@@ -51,14 +51,19 @@
         >
           移交队长
         </van-button>
+
+        <van-button block round plain :disabled="props.actionLoading" @click="handleCloseClick">
+          取消
+        </van-button>
       </div>
     </section>
   </van-popup>
 </template>
 
 <script setup lang="ts">
-import type { QueryTeamMemberResponse } from "api/types/client";
+import type { QueryTeamMemberResponse, UserSummary } from "api/types/client";
 import { ErrorEmpty } from "shared";
+import { computed } from "vue";
 
 import { getMemberRoleLabel, getMemberTypeLabel, getWalkStatusLabel } from "../../utils";
 import styles from "./index.module.scss";
@@ -66,8 +71,10 @@ import styles from "./index.module.scss";
 const props = defineProps<{
   opened: boolean;
   member: QueryTeamMemberResponse | undefined;
+  memberSummary: UserSummary | undefined;
   loading: boolean;
   error: Error | null;
+  canManageMember: boolean;
   actionLoading: boolean;
 }>();
 
@@ -77,6 +84,16 @@ const emit = defineEmits<{
   remove: [memberId: number];
   transfer: [memberId: number];
 }>();
+
+const memberTypeLabel = computed(() => {
+  if (!props.memberSummary) return "暂无";
+  return getMemberTypeLabel(props.memberSummary.type);
+});
+
+const memberRoleLabel = computed(() => {
+  if (!props.memberSummary) return "暂无";
+  return getMemberRoleLabel(props.memberSummary.role);
+});
 
 const handleCloseClick = () => {
   emit("close");

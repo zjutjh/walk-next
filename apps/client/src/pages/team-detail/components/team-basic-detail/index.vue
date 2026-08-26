@@ -20,7 +20,7 @@
           <van-tag type="success">{{ props.team.allow_match ? "是" : "否" }}</van-tag>
         </template>
       </van-cell>
-      <van-cell title="团队性质" :value="props.team.type" />
+      <van-cell title="团队性质" :value="props.teamType" />
       <van-cell title="队伍状态" :value="teamStatusLabel" />
       <van-cell title="当前位置" :value="props.team.latest_point_name || '未开始'" />
     </van-cell-group>
@@ -40,6 +40,7 @@ import styles from "./index.module.scss";
 
 const props = defineProps<{
   team: QueryTeamDetailResponse;
+  teamType: string;
   canEdit: boolean;
 }>();
 
