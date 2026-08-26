@@ -68,6 +68,8 @@ apps/client/src/
 | Lint 检查与修复 | `pnpm lint --fix`       | 提交前必须通过 |
 | 生产构建        | `pnpm run build:client` |                |
 
+检查时，可指定只检查更改的文件。
+
 ---
 
 ## 5. 代码规范
