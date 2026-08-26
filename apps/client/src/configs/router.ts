@@ -90,7 +90,8 @@ const routes: RouteRecordRaw[] = [
           navbar: () => import("@/components/navbar/index.vue")
         },
         meta: {
-          pageName: "团队信息"
+          pageName: "团队信息",
+          showLogo: true
         }
       },
       {
@@ -142,7 +143,8 @@ const routes: RouteRecordRaw[] = [
           navbar: () => import("@/components/navbar/index.vue")
         },
         meta: {
-          pageName: "个人信息"
+          pageName: "个人信息",
+          showLogo: true
         }
       },
       {
