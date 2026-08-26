@@ -6,7 +6,6 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   padding: calc(env(safe-area-inset-top, 0px) + 80px) 32px
     calc(env(safe-area-inset-bottom, 0px) + 40px);
   overflow-x: hidden;

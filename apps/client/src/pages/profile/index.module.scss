@@ -1,12 +1,7 @@
 .page {
   box-sizing: border-box;
-  min-height: 100vh;
   padding: 16px 16px calc(96px + env(safe-area-inset-bottom, 0px));
   overflow-x: hidden;
-}
-
-.page :global(.error-empty) {
-  min-height: calc(100vh - 112px);
 }
 
 .content {
