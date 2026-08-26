@@ -39,7 +39,9 @@ const routes: RouteRecordRaw[] = [
         name: "register",
         component: () => import("@/pages/register-index/index.vue"),
         meta: {
-          pageName: "注册"
+          pageName: "注册",
+          bgCanvas: true,
+          showLogo: false
         }
       },
       {
