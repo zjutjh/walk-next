@@ -1,4 +1,4 @@
-import "./style.css";
+import "@/styles/global.scss";
 import "vant/es/toast/style";
 import "vant/es/dialog/style";
 
