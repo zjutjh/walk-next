@@ -12,11 +12,17 @@
   "language": "en",
   "words": [
     "Apifox",
+    "Jinghong",
+    "Pingfeng",
+    "ValiError",
+    "Weixin",
     "autorenew",
     "checkin",
     "dbaeumer",
     "dingtalk",
     "iconify",
+    "intlify",
+    "lokalise",
     "njsproj",
     "ntvs",
     "nums",
@@ -24,17 +30,12 @@
     "persistedstate",
     "picklist",
     "pxtorem",
+    "qrcode",
     "retryable",
     "swipeable",
     "unplugin",
-    "ValiError",
     "vueuse",
     "wechat",
-    "zjutjh",
-    "intlify",
-    "lokalise",
-    "Jinghong",
-    "Pingfeng",
-    "Weixin"
+    "zjutjh"
   ]
 }
