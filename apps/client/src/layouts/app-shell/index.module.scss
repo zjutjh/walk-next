@@ -67,24 +67,59 @@
   padding-bottom: var(--navbar-space, 0px);
 }
 
-/* 显示 Logo 时，内容向下避让（top 8px + height 55px + 缓冲 16px） */
+/* 显示 Logo 时，内容向下避让（光晕底缘 safe-area+69px + 缓冲 16px） */
 .layoutContentWithLogo {
-  padding-top: calc(env(safe-area-inset-top, 0px) + 79px);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 85px);
 }
 
-/* Logo 无底衬，仅虚化背后内容：空背景上不可见，压到文字时才显形 */
+/* Logo 自身带虚化光晕：图案只绘制在中央内容区，外扩的 padding 用于承载羽化渐隐 */
 .layoutLogo {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 8px);
-  left: 8px;
-  z-index: 1;
+  top: calc(env(safe-area-inset-top, 0px) + 2px);
+  left: 2px;
+  z-index: 3;
   box-sizing: border-box;
-  width: 112px;
-  height: 55px;
-  padding: 8px;
-  border-radius: 10px;
+  width: 124px;
+  height: 67px;
+  padding: 14px;
+  border-radius: 20px;
   object-fit: contain;
-  backdrop-filter: blur(6px);
   pointer-events: none;
   user-select: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  /* 横向 + 纵向两份羽化渐变取交集；羽化 8px < 内边距 14px，不触及图案像素 */
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      #000 8px,
+      #000 calc(100% - 12px),
+      transparent
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      #000 8px,
+      #000 calc(100% - 12px),
+      transparent
+    );
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      #000 8px,
+      #000 calc(100% - 12px),
+      transparent
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      #000 8px,
+      #000 calc(100% - 12px),
+      transparent
+    );
+  mask-composite: intersect;
 }
