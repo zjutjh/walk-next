@@ -14,9 +14,13 @@ initializeRootFontSize();
 
 import App from "./app.vue";
 
-createApp(App)
-  .use(routerInstance)
-  .use(VueQueryPlugin, { queryClient: globalQueryClient })
-  .use(createPinia().use(piniaPluginPersistedstate))
-  .use(await useUserLocale().initI18n())
-  .mount("#app");
+async function bootstrap() {
+  createApp(App)
+    .use(routerInstance)
+    .use(VueQueryPlugin, { queryClient: globalQueryClient })
+    .use(createPinia().use(piniaPluginPersistedstate))
+    .use(await useUserLocale().initI18n())
+    .mount("#app");
+}
+
+bootstrap();
