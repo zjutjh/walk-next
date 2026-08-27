@@ -1,6 +1,5 @@
 .page {
   box-sizing: border-box;
-  min-height: 100vh;
   padding: 16px 0 calc(96px + env(safe-area-inset-bottom, 0px));
   color: #1f2937;
 }
