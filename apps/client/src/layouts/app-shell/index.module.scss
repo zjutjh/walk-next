@@ -62,6 +62,7 @@
   overflow-x: hidden;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
   /* 底部悬浮层（如悬浮导航）通过 --navbar-space 自行申报避让空间，未申报则为 0 */
   padding-bottom: var(--navbar-space, 0px);
 }
