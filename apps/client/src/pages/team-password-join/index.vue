@@ -48,7 +48,7 @@ const { mutate: mutateJoinTeam, isPending: isJoinPending } = useMutation({
     updateClientUserData({ userInfo });
 
     window.setTimeout(() => {
-      router.replace({ name: "team-detail" });
+      router.replace({ name: "team-info" });
     }, 3000);
   },
   onError: () => {

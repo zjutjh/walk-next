@@ -1,7 +1,5 @@
 import type { UserRole, UserType, UserWalkStatus } from "api/types/client";
 
-export type TeamDetailView = "overview" | "basic-detail";
-
 export type RouteName = "pf-half" | "pf-full" | "mgs";
 
 export type MatchValue = "false" | "true";
