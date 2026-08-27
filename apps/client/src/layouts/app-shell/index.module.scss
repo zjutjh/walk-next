@@ -1,6 +1,7 @@
 .layout {
   position: relative;
   min-height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background: #fff;
 }
@@ -56,6 +57,11 @@
   z-index: 1;
   box-sizing: border-box;
   min-height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
   /* 底部悬浮层（如悬浮导航）通过 --navbar-space 自行申报避让空间，未申报则为 0 */
   padding-bottom: var(--navbar-space, 0px);
 }
