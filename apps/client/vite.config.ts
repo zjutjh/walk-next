@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
           jsxImportSource: "vue"
         })
       },
-      vue({ include: /\.(vue|mdx|md)$/ }),
+      vue(),
       VueI18nPlugin({
         include: [path.resolve(__dirname, "./src/locales/**")],
         treeShaking: true
