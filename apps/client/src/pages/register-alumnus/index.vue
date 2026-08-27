@@ -1,6 +1,8 @@
 <template>
   <main :class="styles.page">
-    <img :src="proudImage" alt="" :class="styles.illustration" />
+    <div :class="styles.illustration" :style="{ '--illustration-mask': `url(${proudImage})` }">
+      <img :src="proudImage" alt="" :class="styles.illustrationImage" />
+    </div>
 
     <div :class="styles.content">
       <h1 :class="styles.title">注册</h1>

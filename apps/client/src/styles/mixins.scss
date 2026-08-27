@@ -165,3 +165,63 @@
     color: #666;
   }
 }
+
+/// 装饰图片通用样式
+@mixin illustration-image(
+  $top: null,
+  $right: null,
+  $bottom: null,
+  $left: null,
+  $width: 250px,
+  $max-width: 65vw,
+  $opacity: null,
+  $mask: true
+) {
+  position: absolute;
+
+  @if $top != null {
+    top: $top;
+  }
+
+  @if $right != null {
+    right: $right;
+  }
+
+  @if $bottom != null {
+    bottom: $bottom;
+  }
+
+  @if $left != null {
+    left: $left;
+  }
+
+  z-index: 0;
+  width: $width;
+  max-width: $max-width;
+  pointer-events: none;
+  user-select: none;
+
+  @if $opacity != null {
+    opacity: $opacity;
+  }
+
+  @if $mask {
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+      -webkit-mask-image: var(--illustration-mask);
+      mask-image: var(--illustration-mask);
+      -webkit-mask-mode: alpha;
+      mask-mode: alpha;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+    }
+  }
+}

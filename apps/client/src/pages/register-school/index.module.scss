@@ -5,16 +5,19 @@
 }
 
 .illustration {
-  position: absolute;
-  right: -20px;
-  bottom: 0;
-  z-index: 0;
-  width: 220px;
-  max-width: 55vw;
+  @include ui.illustration-image(
+    $right: -20px,
+    $bottom: 0,
+    $width: 220px,
+    $max-width: 55vw,
+    $opacity: 0.85
+  );
+}
+
+.illustrationImage {
+  display: block;
+  width: 100%;
   height: auto;
-  pointer-events: none;
-  user-select: none;
-  opacity: 0.85;
 }
 
 .content {
