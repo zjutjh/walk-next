@@ -8,6 +8,7 @@
 
 <script setup lang="ts">
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { RequestError, RESP_CODE } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { useRouter } from "vue-router";
 
@@ -25,6 +26,14 @@ const { updateClientUserData } = useClientUserData();
 
 const handleBackClick = () => {
   router.push({ name: "team-info" });
+};
+
+const getJoinErrorMessage = (error: Error) => {
+  if (error instanceof RequestError && error.code === RESP_CODE.NO_JOIN_CHANCE) {
+    return "加入团队次数已用完";
+  }
+
+  return "编号密码有误，请重新输入！";
 };
 
 const { mutate: mutateJoinTeam, isPending: isJoinPending } = useMutation({
@@ -48,11 +57,11 @@ const { mutate: mutateJoinTeam, isPending: isJoinPending } = useMutation({
     updateClientUserData({ userInfo });
 
     window.setTimeout(() => {
-      router.replace({ name: "team-detail" });
+      router.replace({ name: "team-info" });
     }, 3000);
   },
-  onError: () => {
-    showFailToast("编号密码有误，请重新输入！");
+  onError: (error) => {
+    showFailToast(getJoinErrorMessage(error));
   }
 });
 

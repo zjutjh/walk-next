@@ -1,0 +1,19 @@
+.popup {
+  max-height: 92vh;
+}
+
+.content {
+  box-sizing: border-box;
+  padding: 22px 0 calc(20px + env(safe-area-inset-bottom));
+}
+
+.title {
+  margin: 0 48px 18px 16px;
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.submitArea {
+  margin: 24px 16px 0;
+}

@@ -1,22 +1,26 @@
 <template>
-  <main v-if="!isUserInfoReady || isJoined" :class="styles.loadingPage">
-    <van-loading vertical>{{ isJoined ? "跳转中" : "加载中" }}</van-loading>
+  <main v-if="!isUserInfoReady" :class="styles.loadingPage">
+    <van-loading vertical>加载中</van-loading>
   </main>
 
   <unjoined-team-home v-else-if="isUnjoined" />
+  <joined-team v-else-if="isJoined" />
+
+  <main v-else :class="styles.placeholderPage">
+    <van-empty description="暂无团队状态" />
+  </main>
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from "vue";
-import { useRouter } from "vue-router";
+import { computed } from "vue";
 
 import { useClientUserData } from "@/composables";
 
+import JoinedTeam from "./components/joined-team/index.vue";
 import UnjoinedTeamHome from "./components/unjoined-team/index.vue";
 import styles from "./index.module.scss";
 
 const { clientUserInfo } = useClientUserData();
-const router = useRouter();
 
 const isUserInfoReady = computed(() => Boolean(clientUserInfo.value));
 
@@ -26,13 +30,4 @@ const isJoined = computed(() => {
   const role = clientUserInfo.value?.role;
   return role === "member" || role === "captain";
 });
-
-watch(
-  isJoined,
-  (shouldRedirect) => {
-    if (!shouldRedirect) return;
-    void router.replace({ name: "team-detail" });
-  },
-  { immediate: true }
-);
 </script>
