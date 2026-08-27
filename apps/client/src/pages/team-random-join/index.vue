@@ -30,6 +30,7 @@
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { QueryRandomTeamListResponse, RandomJoinTeamResponse } from "api/types/client";
+import { RequestError, RESP_CODE } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -85,6 +86,14 @@ const availableTeams = computed(
 
 const visibleTeams = computed(() => availableTeams.value);
 
+const getRandomJoinErrorMessage = (error: Error) => {
+  if (error instanceof RequestError && error.code === RESP_CODE.NO_JOIN_CHANCE) {
+    return "加入团队次数已用完";
+  }
+
+  return "加入失败，请稍后重试";
+};
+
 const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation<
   RandomJoinTeamResponse,
   Error,
@@ -109,10 +118,10 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
       router.replace({ name: "team-info" });
     }, 3000);
   },
-  onError: () => {
+  onError: (error) => {
     joiningTeamId.value = undefined;
     showFailToast({
-      message: "加入失败，请稍后重试",
+      message: getRandomJoinErrorMessage(error),
       position: "top"
     });
   }
