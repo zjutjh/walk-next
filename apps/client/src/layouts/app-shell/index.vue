@@ -18,7 +18,7 @@
         isBgCanvas ? styles.layoutBgBottomHidden : undefined
       ]"
     />
-    <main :class="styles.layoutContent">
+    <main :class="[styles.layoutContent, isShowLogo ? styles.layoutContentWithLogo : undefined]">
       <img v-if="isShowLogo" :src="logo" alt="Logo" :class="styles.layoutLogo" />
       <slot />
     </main>
@@ -38,5 +38,5 @@ import styles from "./index.module.scss";
 const route = useRoute();
 
 const isBgCanvas = computed(() => route.meta.bgCanvas ?? true);
-const isShowLogo = computed(() => route.meta.showLogo ?? false);
+const isShowLogo = computed(() => route.meta.showLogo === true);
 </script>
