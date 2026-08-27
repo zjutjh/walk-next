@@ -266,3 +266,25 @@ export type UpdateTeamInfoRequest = CreateTeamRequest;
 
 /** 修改团队 响应 */
 export type UpdateTeamInfoResponse = null;
+
+/** 获取团队变更通知 请求 */
+export type QueryTeamChangeNoticeRequest = undefined;
+
+/** 获取团队变更通知 响应 */
+export interface QueryTeamChangeNoticeResponse {
+  /** 团队密码是否已修改 */
+  password_changed: boolean;
+  /** 团队路线是否已修改 */
+  route_changed: boolean;
+}
+
+/** 确认团队变更通知 请求 */
+export interface AckTeamChangeNoticeRequest {
+  /** 确认团队密码变更通知 */
+  password_changed?: boolean;
+  /** 确认团队路线变更通知 */
+  route_changed?: boolean;
+}
+
+/** 确认团队变更通知 响应 */
+export type AckTeamChangeNoticeResponse = null;

@@ -229,4 +229,28 @@ export default class WalkClientService<T> extends BaseService<T> {
 
     return this.request({ url, method, data }, options);
   }
+
+  /** 获取团队变更通知 */
+  QueryTeamChangeNotice(
+    req?: ClientAPI.QueryTeamChangeNoticeRequest,
+    options?: T
+  ): Promise<ClientAPI.QueryTeamChangeNoticeResponse> {
+    const url = this.genBaseURL("/user/team/change-notice");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 确认团队变更通知 */
+  AckTeamChangeNotice(
+    req: ClientAPI.AckTeamChangeNoticeRequest,
+    options?: T
+  ): Promise<ClientAPI.AckTeamChangeNoticeResponse> {
+    const url = this.genBaseURL("/user/team/change-notice/ack");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
 }
