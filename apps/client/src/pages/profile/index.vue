@@ -86,7 +86,7 @@ function displayValue(value: string) {
 }
 
 function handleNavigateEdit() {
-  return router.push({ name: "profile-edit" });
+  return router.replace({ name: "profile-edit" });
 }
 
 function handleQuotaHelp() {

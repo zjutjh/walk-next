@@ -143,7 +143,7 @@ const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = use
     await refreshTeamData();
 
     window.setTimeout(() => {
-      void router.replace({ name: "team-info" });
+      router.replace({ name: "team-info" });
     }, 3000);
   },
   onError: (error) => {
@@ -157,7 +157,7 @@ const handleTeamDetailRetry = () => {
 };
 
 const handleBasicDetailBack = () => {
-  void router.push({ name: "team-info" });
+  router.replace({ name: "team-info" });
 };
 
 const handleEditTeamClick = () => {

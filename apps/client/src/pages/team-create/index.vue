@@ -24,7 +24,7 @@ const queryClient = useQueryClient();
 const { updateClientUserData } = useClientUserData();
 
 const handleBackClick = () => {
-  router.push({ name: "team-info" });
+  router.replace({ name: "team-info" });
 };
 
 const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({

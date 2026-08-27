@@ -63,7 +63,7 @@ const selectedTeamFilter = ref<TeamFilter>(TEAM_FILTER_OPTIONS[0].value);
 const joiningTeamId = ref<number>();
 
 const handleBackClick = () => {
-  router.push({ name: "team-info" });
+  router.replace({ name: "team-info" });
 };
 
 const {

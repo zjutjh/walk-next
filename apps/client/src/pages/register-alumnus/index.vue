@@ -59,6 +59,6 @@ const handleRegisterSubmit = (value: AlumnusRegisterFormValue) => {
 };
 
 const handleNavigateLogin = () => {
-  router.push({ name: "login" });
+  router.replace({ name: "login" });
 };
 </script>

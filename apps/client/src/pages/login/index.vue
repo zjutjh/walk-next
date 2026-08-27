@@ -76,6 +76,6 @@ const handleLoginSubmit = (value: LoginFormValue) => {
 };
 
 const handleNavigateRegister = () => {
-  router.push({ name: "register" });
+  router.replace({ name: "register" });
 };
 </script>

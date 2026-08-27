@@ -333,7 +333,7 @@ const handleSelectedMemberRetry = () => {
 };
 
 const handleDetailClick = () => {
-  void router.push({ name: "team-detail" });
+  void router.replace({ name: "team-detail" });
 };
 
 const handleMemberClick = (memberId: number) => {

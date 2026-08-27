@@ -59,6 +59,6 @@ const TEAM_ACTIONS: TeamAction[] = [
 ];
 
 const handleActionSelect = (routeName: TeamActionRouteName) => {
-  router.push({ name: routeName });
+  router.replace({ name: routeName });
 };
 </script>

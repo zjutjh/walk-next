@@ -5,6 +5,11 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>精弘毅行</title>
+    <script>
+      if (window.history.length > 1) {
+        window.history.replaceState(null, "", window.location.href);
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>
