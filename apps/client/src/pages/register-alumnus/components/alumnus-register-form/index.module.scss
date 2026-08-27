@@ -16,6 +16,12 @@
   @include ui.custom-input;
 }
 
+// 明文显示密码时保持type="password"不变，仅用CSS去掉圆点遮罩，
+// 避免切换input type导致浏览器撤销自动填充并放开中文输入法
+.passwordVisible :global(input) {
+  -webkit-text-security: none;
+}
+
 .eyeButton {
   @include ui.eye-button;
 }

@@ -45,9 +45,9 @@
       <label :class="styles.fieldLabel">密码</label>
       <van-field
         v-model="formValue.password"
-        :class="styles.fieldInput"
+        :class="[styles.fieldInput, isPasswordVisible ? styles.passwordVisible : undefined]"
         :rules="PASSWORD_RULES"
-        :type="isPasswordVisible ? 'text' : 'password'"
+        type="password"
         name="password"
         placeholder="请输入密码"
         autocomplete="new-password"
