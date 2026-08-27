@@ -45,6 +45,7 @@
     "unplugin-icons": "catalog:infra",
     "unplugin-vue-components": "catalog:infra",
     "vite": "catalog:infra",
+    "vite-plugin-vue-devtools": "^8.2.1",
     "vue-tsc": "catalog:infra"
   }
 }
