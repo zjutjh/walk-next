@@ -1,7 +1,4 @@
-@use "@/styles/mixins" as ui;
-
 .page {
-  @include ui.page-container;
   min-height: 100vh;
   color: #1f2937;
 }

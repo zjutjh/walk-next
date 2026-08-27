@@ -1,3 +1,5 @@
+@use "@/styles/mixins" as ui;
+
 .layout {
   position: relative;
   min-height: 100vh;
@@ -53,13 +55,12 @@
 }
 
 .layoutContent {
-  position: relative;
+  @include ui.page-container;
+
   z-index: 1;
-  box-sizing: border-box;
   min-height: 100vh;
   height: 100dvh;
   overflow-y: auto;
-  overflow-x: hidden;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
   padding-top: calc(env(safe-area-inset-top, 0px) + 16px);

@@ -18,8 +18,8 @@
         isBgCanvas ? styles.layoutBgBottomHidden : undefined
       ]"
     />
+    <img v-if="isShowLogo" :src="logo" alt="Logo" :class="styles.layoutLogo" />
     <main :class="[styles.layoutContent, isShowLogo ? styles.layoutContentWithLogo : undefined]">
-      <img v-if="isShowLogo" :src="logo" alt="Logo" :class="styles.layoutLogo" />
       <slot />
     </main>
   </div>

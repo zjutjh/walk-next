@@ -1,9 +1,3 @@
-@use "@/styles/mixins" as ui;
-
-.page {
-  @include ui.page-container;
-}
-
 .content {
   display: flex;
   flex-direction: column;
