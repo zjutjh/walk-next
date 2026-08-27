@@ -1,9 +1,9 @@
 // 通用 UI 控件与表单样式 Mixins
 
 @mixin card-container {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.6);
   border: 0;
-  border-radius: 0;
+  border-radius: 5px;
   box-shadow: none;
   backdrop-filter: blur(4px);
 }

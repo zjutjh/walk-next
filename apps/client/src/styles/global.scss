@@ -4,12 +4,18 @@ body {
   font-size: initial;
 }
 
-:global(.van-cell-group--inset) {
-  margin: 0;
-  overflow: visible;
-  @include card-container;
-}
+html {
+  .van-cell-group--inset {
+    margin: 0;
+    overflow: visible;
+    @include card-container;
+  }
 
-:global(.van-card) {
-  @include card-container;
+  .van-cell {
+    background: transparent;
+  }
+
+  .van-card {
+    @include card-container;
+  }
 }
