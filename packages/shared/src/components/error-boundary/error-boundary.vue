@@ -1,7 +1,11 @@
 <!-- 全局错误边界 -->
 <template>
-  <slot v-if="error" name="fallback" :error="error" />
-  <slot v-else />
+  <template v-if="error">
+    <slot name="fallback" :error="error" />
+  </template>
+  <template v-else>
+    <slot />
+  </template>
 </template>
 
 <script setup lang="ts">
