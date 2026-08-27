@@ -1,5 +1,5 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <van-empty image="search" description="尚未加入团队" />
 
     <van-cell-group inset title="加入或创建队伍">
@@ -12,7 +12,7 @@
         @select="handleActionSelect(action.routeName)"
       />
     </van-cell-group>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <error-empty
       :error="overviewError"
       :disabled="isOverviewLoading"
@@ -66,7 +66,7 @@
       @remove="handleRemoveMemberClick"
       @transfer="handleTransferCaptainClick"
     />
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

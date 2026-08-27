@@ -1,9 +1,5 @@
 @use "@/styles/mixins" as ui;
 
-.page {
-  position: relative;
-}
-
 .illustration {
   @include ui.illustration-image(
     $right: -20px,

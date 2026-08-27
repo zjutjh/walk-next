@@ -1,15 +1,15 @@
 <template>
   <main :class="styles.page">
-    <main v-if="!isUserInfoReady" :class="styles.loadingPage">
+    <div v-if="!isUserInfoReady" :class="styles.loadingPage">
       <van-loading vertical>加载中</van-loading>
-    </main>
+    </div>
 
     <unjoined-team-home v-else-if="isUnjoined" />
     <joined-team v-else-if="isJoined" />
 
-    <main v-else :class="styles.placeholderPage">
+    <div v-else :class="styles.placeholderPage">
       <van-empty description="暂无团队状态" />
-    </main>
+    </div>
   </main>
 </template>
 
