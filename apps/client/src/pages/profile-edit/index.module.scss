@@ -1,8 +1,8 @@
+@use "@/styles/mixins" as ui;
+
 .page {
-  box-sizing: border-box;
+  @include ui.page-container;
   min-height: 100vh;
-  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  overflow-x: hidden;
 }
 
 .page :global(.error-empty) {

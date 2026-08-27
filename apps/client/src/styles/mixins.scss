@@ -14,8 +14,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: calc(env(safe-area-inset-top, 0px) + 80px) 32px
-    calc(env(safe-area-inset-bottom, 0px) + 40px);
+  padding: 0 16px;
   overflow-x: hidden;
 }
 

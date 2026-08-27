@@ -1,7 +1,8 @@
+@use "@/styles/mixins" as ui;
+
 .page {
+  @include ui.page-container;
   min-height: 100vh;
-  box-sizing: border-box;
-  padding-bottom: 32px;
   color: #1f2937;
 }
 
