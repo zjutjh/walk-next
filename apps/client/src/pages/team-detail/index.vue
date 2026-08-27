@@ -1,5 +1,5 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <team-basic-detail
       v-if="teamDetail"
       :team="teamDetail"
@@ -23,7 +23,7 @@
         <van-empty v-else description="暂无团队详细信息" />
       </error-empty>
     </template>
-  </main>
+  </div>
 
   <team-edit-popup
     :opened="isTeamEditPopupOpened"

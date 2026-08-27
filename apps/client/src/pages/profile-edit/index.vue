@@ -1,5 +1,5 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <van-nav-bar
       :title="t('修改信息')"
       left-arrow
@@ -27,7 +27,7 @@
         />
       </div>
     </error-empty>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

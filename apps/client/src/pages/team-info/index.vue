@@ -1,5 +1,5 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <div v-if="!isUserInfoReady" :class="styles.loadingPage">
       <van-loading vertical>加载中</van-loading>
     </div>
@@ -10,7 +10,7 @@
     <div v-else :class="styles.placeholderPage">
       <van-empty description="暂无团队状态" />
     </div>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

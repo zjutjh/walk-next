@@ -1,5 +1,5 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <div :class="styles.illustration" :style="{ '--illustration-mask': `url(${thumbsUpImage})` }">
       <img :src="thumbsUpImage" alt="" :class="styles.illustrationImage" />
     </div>
@@ -11,7 +11,7 @@
 
       <div :class="styles.registerLink" @click="handleNavigateRegister">没有账号？戳我注册</div>
     </div>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

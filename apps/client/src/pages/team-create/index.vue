@@ -1,9 +1,9 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <van-nav-bar title="创建团队" left-arrow @click-left="handleBackClick" />
 
     <create-team-form :loading="isCreatePending" @submit="handleCreateSubmit" />
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

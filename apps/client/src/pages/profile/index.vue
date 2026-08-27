@@ -1,5 +1,5 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <error-empty
       :error="userInfo ? undefined : error"
       :disabled="isLoading || Boolean(userInfo)"
@@ -34,7 +34,7 @@
         </van-button>
       </div>
     </error-empty>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

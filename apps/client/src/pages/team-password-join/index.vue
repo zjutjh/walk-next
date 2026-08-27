@@ -1,9 +1,9 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <van-nav-bar title="密码加入" left-arrow @click-left="handleBackClick" />
 
     <password-join-form :loading="isJoinPending" @submit="handleJoinSubmit" />
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

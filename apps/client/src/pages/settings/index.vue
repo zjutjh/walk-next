@@ -1,9 +1,9 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <van-cell-group inset>
       <van-cell title="退出登录" clickable is-link @click="handleLogoutClick" />
     </van-cell-group>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

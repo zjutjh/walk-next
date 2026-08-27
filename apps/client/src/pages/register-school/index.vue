@@ -1,5 +1,5 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <div :class="styles.illustration" :style="{ '--illustration-mask': `url(${proudImage})` }">
       <img :src="proudImage" alt="" :class="styles.illustrationImage" />
     </div>
@@ -15,7 +15,7 @@
 
       <div :class="styles.loginLink" @click="handleNavigateLogin">已有账号？去登录</div>
     </div>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

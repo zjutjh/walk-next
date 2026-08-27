@@ -1,5 +1,5 @@
 <template>
-  <main :class="styles.page">
+  <div :class="styles.page">
     <van-sticky>
       <section :class="styles.topArea">
         <van-nav-bar title="随机加入" left-arrow @click-left="handleBackClick" />
@@ -24,7 +24,7 @@
       @join="handleJoinClick"
       @retry="handleRandomTeamListRetry"
     />
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">
