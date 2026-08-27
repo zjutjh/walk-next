@@ -66,13 +66,18 @@
   padding-bottom: var(--navbar-space, 0px);
 }
 
+/* 显示 Logo 时，内容向下避让（top 12px + height 39px + 缓冲 16px） */
+.layoutContentWithLogo {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 67px);
+}
+
 .layoutLogo {
   position: fixed;
   top: calc(env(safe-area-inset-top, 0px) + 12px);
   left: 12px;
   z-index: 1;
   width: 96px;
-  height: auto;
+  height: 39px;
   pointer-events: none;
   user-select: none;
 }
