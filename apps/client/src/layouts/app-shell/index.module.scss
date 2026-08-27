@@ -67,18 +67,24 @@
   padding-bottom: var(--navbar-space, 0px);
 }
 
-/* 显示 Logo 时，内容向下避让（top 12px + height 39px + 缓冲 16px） */
+/* 显示 Logo 时，内容向下避让（top 8px + height 55px + 缓冲 16px） */
 .layoutContentWithLogo {
-  padding-top: calc(env(safe-area-inset-top, 0px) + 67px);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 79px);
 }
 
+/* Logo 无底衬，仅虚化背后内容：空背景上不可见，压到文字时才显形 */
 .layoutLogo {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 12px);
-  left: 12px;
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
+  left: 8px;
   z-index: 1;
-  width: 96px;
-  height: 39px;
+  box-sizing: border-box;
+  width: 112px;
+  height: 55px;
+  padding: 8px;
+  border-radius: 10px;
+  object-fit: contain;
+  backdrop-filter: blur(6px);
   pointer-events: none;
   user-select: none;
 }
