@@ -1,3 +1,15 @@
+@use "./mixins" as *;
+
 body {
   font-size: initial;
+}
+
+:global(.van-cell-group--inset) {
+  margin: 0;
+  overflow: visible;
+  @include card-container;
+}
+
+:global(.van-card) {
+  @include card-container;
 }

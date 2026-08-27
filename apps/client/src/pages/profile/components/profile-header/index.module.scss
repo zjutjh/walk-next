@@ -1,12 +1,12 @@
+@use "@/styles/mixins" as ui;
+
 .header {
+  @include ui.card-container;
   display: flex;
   align-items: center;
   gap: 14px;
   padding: 20px 18px;
   color: #2d3a26;
-  background: #e8f0d9;
-  border: 1px solid #cfdfb5;
-  border-radius: 12px;
 }
 
 .avatar {

@@ -1,8 +1,8 @@
+@use "@/styles/mixins" as ui;
+
 .section {
+  @include ui.card-container;
   padding: 16px;
-  background: #fff;
-  border: 1px solid #e6e8e1;
-  border-radius: 12px;
 }
 
 .heading {
@@ -45,8 +45,10 @@
   gap: 4px;
   min-width: 0;
   padding: 12px;
-  background: #f7f9f3;
-  border-radius: 8px;
+  background: rgba(247, 249, 243, 0.7);
+  border: 1px solid rgba(230, 232, 225, 0.6);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .label {

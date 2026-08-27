@@ -1,6 +1,7 @@
+@use "@/styles/mixins" as ui;
+
 .teamCard {
-  border-radius: 8px;
-  background: #fff;
+  @include ui.card-container;
 
   & + & {
     margin-top: 12px;
