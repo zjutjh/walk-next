@@ -3,7 +3,9 @@
 .illustration {
   @include ui.illustration-image(
     $top: calc(env(safe-area-inset-top, 0px) + 40px),
-    $right: -10px
+    $right: -10px,
+    $width: 400px,
+    $max-width: 75vw
   );
 }
 
