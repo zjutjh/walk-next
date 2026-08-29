@@ -35,4 +35,9 @@ html {
   .van-card {
     @include card-container;
   }
+
+  .van-button--default:not(.van-button--plain):not(.van-button--small),
+  .van-button--primary:not(.van-button--plain):not(.van-button--small) {
+    @include custom-button;
+  }
 }

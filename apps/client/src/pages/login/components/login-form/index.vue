@@ -48,9 +48,7 @@
     </div>
 
     <div :class="styles.submitArea">
-      <van-button :class="styles.submitButton" native-type="submit" :loading="props.loading">
-        提交
-      </van-button>
+      <van-button native-type="submit" :loading="props.loading"> 提交 </van-button>
     </div>
   </van-form>
 </template>
