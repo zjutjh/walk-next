@@ -3,3 +3,73 @@
   padding: 16px 0 calc(96px + env(safe-area-inset-bottom, 0px));
   color: #1f2937;
 }
+
+.logoutDialog {
+  overflow: visible;
+  border-radius: 20px;
+
+  :global(.van-dialog__content) {
+    overflow: visible;
+  }
+}
+
+.logoutDialogContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 24px;
+  overflow: visible;
+}
+
+.logoutDialogImage {
+  width: 160px;
+  margin-top: -70px;
+  margin-bottom: 8px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.logoutDialogMessage {
+  margin: 0 0 24px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+}
+
+.logoutDialogFooter {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+}
+
+.logoutDialogCancel {
+  flex: 1;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b7280;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 10px;
+
+  :global(.van-button__text) {
+    font-size: 15px;
+    font-weight: 500;
+    color: #6b7280;
+  }
+}
+
+.logoutDialogConfirm {
+  flex: 1;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 10px;
+
+  :global(.van-button__text) {
+    font-size: 15px;
+    font-weight: 500;
+  }
+}
