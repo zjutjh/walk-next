@@ -1,6 +1,7 @@
 <template>
   <div :class="styles.page">
     <van-cell-group inset>
+      <van-cell title="反馈" clickable is-link :url="FEEDBACK_QA_URL" />
       <van-cell title="退出登录" clickable is-link @click="handleLogoutClick" />
     </van-cell-group>
   </div>
@@ -16,6 +17,8 @@ import styles from "./index.module.scss";
 
 const router = useRouter();
 const { resetClientUserData } = useClientUserData();
+
+const FEEDBACK_QA_URL = import.meta.env.VITE_FEEDBACK_QA_URL;
 
 const handleLogoutClick = async () => {
   try {
