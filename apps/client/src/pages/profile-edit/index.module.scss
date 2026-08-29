@@ -1,12 +1,4 @@
-.page {
-  min-height: 100vh;
-}
-
 .page :global(.error-empty) {
-  min-height: calc(100vh - 56px);
-}
-
-.content {
   min-height: calc(100vh - 56px);
 }
 
