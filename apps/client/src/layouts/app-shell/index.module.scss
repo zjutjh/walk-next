@@ -73,54 +73,20 @@
   padding-top: calc(env(safe-area-inset-top, 0px) + 85px);
 }
 
-/* Logo 自身带虚化光晕：图案只绘制在中央内容区，外扩的 padding 用于承载羽化渐隐 */
+/* Logo 浮在毛玻璃块上：边缘不做羽化，靠圆角裁切出清晰边界；padding 保证图案不贴边 */
 .layoutLogo {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 2px);
-  left: 2px;
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  left: 10px;
   z-index: 3;
   box-sizing: border-box;
   width: 124px;
   height: 67px;
-  padding: 14px;
+  padding: 10px;
   border-radius: 20px;
   object-fit: contain;
   pointer-events: none;
   user-select: none;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
-  /* 横向 + 纵向两份羽化渐变取交集；羽化 8px < 内边距 14px，不触及图案像素 */
-  -webkit-mask-image:
-    linear-gradient(
-      to right,
-      transparent,
-      #000 8px,
-      #000 calc(100% - 12px),
-      transparent
-    ),
-    linear-gradient(
-      to bottom,
-      transparent,
-      #000 8px,
-      #000 calc(100% - 12px),
-      transparent
-    );
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(
-      to right,
-      transparent,
-      #000 8px,
-      #000 calc(100% - 12px),
-      transparent
-    ),
-    linear-gradient(
-      to bottom,
-      transparent,
-      #000 8px,
-      #000 calc(100% - 12px),
-      transparent
-    );
-  mask-composite: intersect;
 }
