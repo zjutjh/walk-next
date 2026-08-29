@@ -154,7 +154,7 @@ const routes: RouteRecordRaw[] = [
           navbar: () => import("@/components/navbar/index.vue")
         },
         meta: {
-          pageName: "个人信息",
+          pageName: "profile",
           showLogo: true
         }
       },
