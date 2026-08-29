@@ -74,8 +74,10 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
 
   /** 重置当前用户数据 */
   const resetClientUserData = () => {
-    updateClientUserData(buildDefaultClientUserData());
-    queryClient.invalidateQueries({ queryKey: [CLIENT_QUERY_KEY.USER.SELF] });
+    userDataStore.data.isLoggedIn = false;
+    userDataStore.data.jwt = "";
+    userDataStore.data.userInfo = undefined;
+    queryClient.clear();
   };
 
   /** 启动 query，需要在顶层组件调用 */

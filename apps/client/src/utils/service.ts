@@ -5,11 +5,43 @@ import { RequestError, RESP_CODE } from "shared";
 import { showToast } from "vant";
 
 import { useClientUserData } from "@/composables";
-import { globalQueryClient } from "@/configs";
+import { globalQueryClient } from "@/configs/vue-query";
 
 const SERVICE_TIMEOUT = 15000 as const;
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
+let isHandlingAuthExpired = false;
+
+const redirectToLogin = async () => {
+  const { routerInstance } = await import("@/configs/router");
+  const currentRoute = routerInstance.currentRoute.value;
+
+  if (currentRoute.name === "login") return;
+
+  await routerInstance.replace({
+    name: "login",
+    query: {
+      fromPath: encodeURIComponent(currentRoute.fullPath)
+    }
+  });
+};
+
+const handleAuthExpired = (code: number) => {
+  useClientUserData(globalQueryClient).resetClientUserData();
+
+  if (isHandlingAuthExpired) return;
+
+  isHandlingAuthExpired = true;
+
+  showToast({
+    message: code === RESP_CODE.NOT_LOGGED_IN ? "未登录" : "登录过期，请重新登录",
+    position: "bottom"
+  });
+
+  void redirectToLogin().finally(() => {
+    isHandlingAuthExpired = false;
+  });
+};
 
 axiosInstance.interceptors.response.use(
   (response) => {
@@ -20,11 +52,7 @@ axiosInstance.interceptors.response.use(
         // 未登录或登录过期
         case RESP_CODE.NOT_LOGGED_IN:
         case RESP_CODE.LOGIN_EXPIRED:
-          showToast({
-            message: body.code === RESP_CODE.NOT_LOGGED_IN ? "未登录" : "登录过期",
-            position: "bottom"
-          });
-          useClientUserData(globalQueryClient).resetClientUserData();
+          handleAuthExpired(body.code);
           break;
         default:
       }
@@ -33,6 +61,11 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (axiosErr: AxiosError) => {
+    if (axiosErr.response?.status === 401) {
+      handleAuthExpired(RESP_CODE.LOGIN_EXPIRED);
+      throw new RequestError("登录过期，请重新登录", RESP_CODE.LOGIN_EXPIRED);
+    }
+
     throw RequestError.fromAxiosError(axiosErr);
   }
 );
