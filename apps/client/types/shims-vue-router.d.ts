@@ -7,7 +7,7 @@ export {};
 
 declare module "vue-router" {
   interface RouteMeta {
-    /** 中文页面名称 */
+    /** 页面名称（i18n 词条 key） */
     pageName?: string;
     /** 不需要登录即可访问 */
     allowNoAuth?: boolean;
