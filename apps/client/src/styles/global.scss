@@ -14,9 +14,18 @@ input[type="password"] {
 
 html {
   .van-cell-group--inset {
-    margin: 0;
-    overflow: visible;
     @include card-container;
+
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .van-cell--clickable:active {
+    background: color-mix(
+      in srgb,
+      var(--van-cell-active-color) 20%,
+      transparent
+    );
   }
 
   .van-cell {
