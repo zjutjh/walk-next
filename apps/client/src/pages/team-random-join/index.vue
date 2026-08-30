@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { RequestError, RESP_CODE, useStoredUrlQuery } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, onMounted, ref } from "vue";
@@ -76,7 +76,9 @@ const {
     walkClientService.QueryRandomTeamList({
       // eslint-disable-next-line camelcase
       route_name: urlQuery.value.route
-    })
+    }),
+  // 切换筛选时保留旧数据在屏，供旧卡片先播完飞出动画再换新数据
+  placeholderData: keepPreviousData
 });
 
 const visibleTeams = computed(

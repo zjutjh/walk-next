@@ -16,3 +16,31 @@
   min-height: 240px;
   justify-content: center;
 }
+
+// 卡片飞入：插入即自动播放；backwards 在延迟期间保持初始态，结束后释放
+// transform，不影响卡片自身的 :active 按压缩放
+.flyInCard {
+  animation: card-fly-in 0.35s ease-out backwards;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+// 卡片飞出：both 在结束后保持透明，由脚本完成错峰计时后换列表无缝移除
+.cardFlyOut {
+  animation: card-fly-out 0.2s ease-in both;
+  animation-delay: var(--leave-delay, 0ms);
+  pointer-events: none;
+}
+
+@keyframes card-fly-in {
+  from {
+    opacity: 0;
+    transform: translateX(60px) scale(0.96);
+  }
+}
+
+@keyframes card-fly-out {
+  to {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.96);
+  }
+}
