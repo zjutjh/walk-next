@@ -2,7 +2,7 @@
 
 .illustration {
   @include ui.illustration-image(
-    $right: -20px,
+    $right: -75px,
     $bottom: 0,
     $width: 400px,
     $max-width: 75vw
@@ -20,7 +20,7 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  margin: 30px 12px;
+  margin: 30px 12px 50px;
 }
 
 .title {
