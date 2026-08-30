@@ -69,9 +69,9 @@
   padding-bottom: var(--navbar-space, 0px);
 }
 
-/* 显示 Logo 时，内容向下避让（光晕底缘 safe-area+69px + 缓冲 16px） */
+/* 显示 Logo 时，内容向下避让 */
 .layoutContentWithLogo {
-  padding-top: calc(env(safe-area-inset-top, 0px) + 85px);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 75px);
 }
 
 .layoutNavbar {

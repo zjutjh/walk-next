@@ -4,6 +4,5 @@
 }
 
 :global(.van-empty) {
-  padding-top: 56px;
-  padding-bottom: 20px;
+  --van-empty-padding: 25px 0;
 }
