@@ -1,9 +1,9 @@
 <template>
   <div :class="styles.page">
+    <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
+
     <van-sticky :offset-top="stickyOffsetTop">
       <section :class="styles.topArea">
-        <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
-
         <random-join-filter v-model:route-name="urlQuery.route" :route-options="ROUTE_OPTIONS" />
       </section>
     </van-sticky>
