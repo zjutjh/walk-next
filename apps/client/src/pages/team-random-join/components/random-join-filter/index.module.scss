@@ -1,9 +1,17 @@
 .filterSection {
-  padding-top: 12px;
+  padding-top: 6px;
+}
+
+.filterSection + .filterSection {
+  padding-top: 8px;
 }
 
 .routeGrid {
-  padding: 8px 0;
+  padding: 6px 8px 8px;
+}
+
+.filterSection :global(.van-cell-group__title) {
+  padding: 0 12px 6px;
 }
 
 :global(.van-grid-item__content) {
@@ -11,20 +19,32 @@
   background: transparent;
 }
 
+:global(.van-button__content) {
+  min-width: 0;
+}
+
 .routeName,
 .routeDistance {
-  display: flex;
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
   line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.routeName {
+  font-size: 12px;
 }
 
 .routeDistance {
   margin-top: 2px;
-  font-size: 12px;
+  font-size: 11px;
   opacity: 0.75;
 }
 
 .teamFilterGroup {
-  padding: 14px 16px;
+  padding: 8px 16px 10px;
   :global(.van-radio__label) {
     font-size: 16px;
     line-height: 1.4;

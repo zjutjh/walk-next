@@ -1,13 +1,29 @@
 .page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
   color: #1f2937;
 }
 
+.stickyHeader {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
 .topArea {
-  padding-bottom: 12px;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 0 0 12px 12px;
+  backdrop-filter: blur(8px);
 }
 
 .subtitle {
-  margin: 14px 16px 0;
+  margin: 0 4px;
+  padding: 0 12px 8px;
   font-size: 15px;
   line-height: 1.4;
   color: #7b8493;

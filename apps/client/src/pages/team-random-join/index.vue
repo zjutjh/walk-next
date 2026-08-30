@@ -1,17 +1,15 @@
 <template>
   <div :class="styles.page">
-    <van-sticky>
-      <section :class="styles.topArea">
-        <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
+    <section :class="[styles.stickyHeader, styles.topArea]">
+      <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
 
-        <random-join-filter
-          v-model:route-name="selectedRouteName"
-          v-model:team-filter="selectedTeamFilter"
-          :route-options="ROUTE_OPTIONS"
-          :team-filter-options="TEAM_FILTER_OPTIONS"
-        />
-      </section>
-    </van-sticky>
+      <random-join-filter
+        v-model:route-name="selectedRouteName"
+        v-model:team-filter="selectedTeamFilter"
+        :route-options="ROUTE_OPTIONS"
+        :team-filter-options="TEAM_FILTER_OPTIONS"
+      />
+    </section>
 
     <random-team-list
       :teams="visibleTeams"

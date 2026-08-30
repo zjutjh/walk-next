@@ -1,5 +1,7 @@
 .teamList {
-  padding: 14px 12px 0;
+  flex: 1;
+  min-height: 0;
+  padding: 14px 0 0;
 }
 
 .countText {
@@ -8,6 +10,11 @@
   color: #8a94a6;
 }
 
+.teamList :global(.error-empty) {
+  min-height: 240px;
+}
+
 .loading {
-  margin-top: 80px;
+  min-height: 240px;
+  justify-content: center;
 }
