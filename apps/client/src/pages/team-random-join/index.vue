@@ -1,10 +1,12 @@
 <template>
   <div :class="styles.page">
-    <section :class="[styles.stickyHeader, styles.topArea]">
-      <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
+    <van-sticky :offset-top="stickyOffsetTop">
+      <section :class="styles.topArea">
+        <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
 
-      <random-join-filter v-model:route-name="selectedRouteName" :route-options="ROUTE_OPTIONS" />
-    </section>
+        <random-join-filter v-model:route-name="selectedRouteName" :route-options="ROUTE_OPTIONS" />
+      </section>
+    </van-sticky>
 
     <random-team-list
       :teams="visibleTeams"
@@ -23,7 +25,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { QueryRandomTeamListResponse, RandomJoinTeamResponse } from "api/types/client";
 import { RequestError, RESP_CODE } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -51,6 +53,14 @@ const { updateClientUserData } = useClientUserData();
 
 const selectedRouteName = ref<RouteName>(ROUTE_OPTIONS[0].name);
 const joiningTeamId = ref<number>();
+
+// 吸顶时 fixed 定位相对视口，偏移量需为 navbar 底边（含刘海安全区），避免盖住导航栏
+const stickyOffsetTop = ref(0);
+
+onMounted(() => {
+  stickyOffsetTop.value =
+    document.querySelector(".van-nav-bar")?.getBoundingClientRect().bottom ?? 0;
+});
 
 const {
   data: randomTeamListData,
