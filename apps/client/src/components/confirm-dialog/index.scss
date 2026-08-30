@@ -53,6 +53,19 @@
   width: 100%;
 }
 
+/* 纯提示模式：确认按钮占满整行，使用主色 */
+.confirm-dialog__footer--single {
+  .confirm-dialog__action {
+    color: #fff;
+    background: var(--van-primary-color);
+    border: none;
+
+    .van-button__text {
+      color: #fff;
+    }
+  }
+}
+
 .confirm-dialog__action {
   flex: 1;
   height: 40px;

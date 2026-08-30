@@ -8,8 +8,8 @@ export interface ConfirmDialogOptions {
   message?: string;
   /** 确认动作按钮文案（左侧灰色按钮） */
   actionText?: string;
-  /** 取消按钮文案（右侧主色按钮） */
-  dismissText?: string;
+  /** 取消按钮文案（右侧主色按钮）；传 null 隐藏该按钮，变为纯提示弹窗 */
+  dismissText?: string | null;
 }
 
 /** 模块级单例状态：全局仅挂载一个 <ConfirmDialog /> 实例 */

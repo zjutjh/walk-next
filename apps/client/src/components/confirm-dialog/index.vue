@@ -17,11 +17,19 @@
         <p v-if="dialogOptions.message" class="confirm-dialog__message">
           {{ dialogOptions.message }}
         </p>
-        <div class="confirm-dialog__footer">
-          <van-button class="confirm-dialog__action" size="small" @click="handleConfirm">
+        <div
+          :class="['confirm-dialog__footer', { 'confirm-dialog__footer--single': isSingleAction }]"
+        >
+          <van-button
+            class="confirm-dialog__action"
+            :type="isSingleAction ? 'primary' : 'default'"
+            size="small"
+            @click="handleConfirm"
+          >
             {{ dialogOptions.actionText ?? t("确认") }}
           </van-button>
           <van-button
+            v-if="!isSingleAction"
             class="confirm-dialog__dismiss"
             type="primary"
             size="small"
@@ -38,10 +46,14 @@
 <script setup lang="ts">
 import "./index.scss";
 
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { useConfirmDialog } from "@/composables";
 
 const { t } = useI18n();
 const { isVisible, dialogOptions, handleConfirm, handleCancel } = useConfirmDialog();
+
+/** 纯提示模式：dismissText 传 null 时仅保留确认按钮 */
+const isSingleAction = computed(() => dialogOptions.value?.dismissText === null);
 </script>

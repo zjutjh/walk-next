@@ -40,12 +40,11 @@
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
 import { ErrorEmpty } from "shared";
-import { showDialog } from "vant";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { CLIENT_USER_INFO_QUERY_OPTIONS, useClientUserData } from "@/composables";
+import { CLIENT_USER_INFO_QUERY_OPTIONS, useClientUserData, useConfirmDialog } from "@/composables";
 
 import ProfileHeader from "./components/profile-header/index.vue";
 import ProfileInfoList from "./components/profile-info-list/index.vue";
@@ -57,6 +56,7 @@ const router = useRouter();
 const { t } = useI18n();
 
 const { clientUserInfo } = useClientUserData();
+const { confirmDialog } = useConfirmDialog();
 const {
   data: queriedUserInfo,
   error,
@@ -89,11 +89,11 @@ function handleNavigateEdit() {
   return router.replace({ name: "profile-edit" });
 }
 
-function handleQuotaHelp() {
-  return showDialog({
-    confirmButtonText: t("确认"),
+async function handleQuotaHelp() {
+  await confirmDialog({
+    title: t("剩余次数说明"),
     message: t("剩余次数说明内容"),
-    title: t("剩余次数说明")
+    dismissText: null
   });
 }
 </script>
