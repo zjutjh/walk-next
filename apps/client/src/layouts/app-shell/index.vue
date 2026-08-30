@@ -55,7 +55,7 @@ const pageTitle = computed(() => route.meta.pageName);
 
 const handleBackClick = () => {
   const parentRoute = route.matched[route.matched.length - 2];
-  if (parentRoute?.path) router.replace(parentRoute.path);
-  else router.replace({ name: "team-info" });
+  if (parentRoute?.path && parentRoute.path !== route.path) router.replace(parentRoute.path);
+  else router.replace("/");
 };
 </script>
