@@ -5,7 +5,7 @@
     </div>
 
     <div :class="styles.content">
-      <h1 :class="styles.title">{{ t("注册") }}</h1>
+      <h1 :class="styles.title">{{ t(pageName) }}</h1>
 
       <school-register-form
         :user-type="props.userType"
@@ -24,7 +24,7 @@
 import { useMutation } from "@tanstack/vue-query";
 import { showFailToast, showSuccessToast } from "vant";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import proudImage from "@/assets/images/proud.png";
 import { walkClientService } from "@/utils";
@@ -42,6 +42,7 @@ const props = withDefaults(
   }
 );
 
+const pageName = useRoute().meta.pageName as string;
 const router = useRouter();
 const { t } = useI18n();
 

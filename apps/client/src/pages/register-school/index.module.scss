@@ -25,6 +25,7 @@
 
 .title {
   @include ui.page-title;
+  text-align: right;
 }
 
 .loginLink {
