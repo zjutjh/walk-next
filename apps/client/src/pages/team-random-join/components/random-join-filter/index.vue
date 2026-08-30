@@ -18,42 +18,21 @@
       </van-grid>
     </van-cell-group>
   </section>
-
-  <section :class="styles.filterSection">
-    <van-cell-group inset :title="t('队伍选择')">
-      <van-radio-group v-model="teamFilter" direction="horizontal" :class="styles.teamFilterGroup">
-        <van-radio
-          v-for="filter in props.teamFilterOptions"
-          :key="filter.value"
-          :name="filter.value"
-        >
-          {{ t(filter.label) }}
-        </van-radio>
-      </van-radio-group>
-    </van-cell-group>
-  </section>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 
-import type {
-  RandomJoinRouteOption,
-  RandomJoinTeamFilterOption,
-  RouteName,
-  TeamFilter
-} from "../../types";
+import type { RandomJoinRouteOption, RouteName } from "../../types";
 import styles from "./index.module.scss";
 
 const { t } = useI18n();
 
 const props = defineProps<{
   routeOptions: readonly RandomJoinRouteOption[];
-  teamFilterOptions: readonly RandomJoinTeamFilterOption[];
 }>();
 
 const routeName = defineModel<RouteName>("routeName", { required: true });
-const teamFilter = defineModel<TeamFilter>("teamFilter", { required: true });
 
 const handleRouteClick = (value: RouteName) => {
   routeName.value = value;

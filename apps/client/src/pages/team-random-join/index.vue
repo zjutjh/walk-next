@@ -3,12 +3,7 @@
     <section :class="[styles.stickyHeader, styles.topArea]">
       <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
 
-      <random-join-filter
-        v-model:route-name="selectedRouteName"
-        v-model:team-filter="selectedTeamFilter"
-        :route-options="ROUTE_OPTIONS"
-        :team-filter-options="TEAM_FILTER_OPTIONS"
-      />
+      <random-join-filter v-model:route-name="selectedRouteName" :route-options="ROUTE_OPTIONS" />
     </section>
 
     <random-team-list
@@ -39,7 +34,7 @@ import { walkClientService } from "@/utils";
 import RandomJoinFilter from "./components/random-join-filter/index.vue";
 import RandomTeamList from "./components/random-team-list/index.vue";
 import styles from "./index.module.scss";
-import type { RouteName, TeamFilter } from "./types";
+import type { RouteName } from "./types";
 
 const TEAM_MEMBER_LIMIT = 6;
 
@@ -49,15 +44,12 @@ const ROUTE_OPTIONS = [
   { name: "mgs", title: "莫干山全程", distanceKm: 17 }
 ] as const;
 
-const TEAM_FILTER_OPTIONS = [{ value: "all", label: "全部队伍" }] as const;
-
 const router = useRouter();
 const { t } = useI18n();
 const queryClient = useQueryClient();
 const { updateClientUserData } = useClientUserData();
 
 const selectedRouteName = ref<RouteName>(ROUTE_OPTIONS[0].name);
-const selectedTeamFilter = ref<TeamFilter>(TEAM_FILTER_OPTIONS[0].value);
 const joiningTeamId = ref<number>();
 
 const {
