@@ -2,10 +2,10 @@
   <van-card
     :class="styles.teamCard"
     :title="props.team.name"
-    :desc="props.team.slogan || '暂无口号'"
+    :desc="props.team.slogan || t('暂无口号')"
   >
     <template #tags>
-      <van-tag round type="success">无需申请</van-tag>
+      <van-tag round type="success">{{ t("无需申请") }}</van-tag>
     </template>
 
     <template #footer>
@@ -20,7 +20,7 @@
           :loading="props.loading"
           @click="handleJoinClick"
         >
-          加入队伍
+          {{ t("加入队伍") }}
         </van-button>
       </div>
     </template>

@@ -1,32 +1,32 @@
 <template>
-  <van-nav-bar title="基本信息" left-arrow @click-left="handleBackClick" />
+  <van-nav-bar :title="t('基本信息')" left-arrow @click-left="handleBackClick" />
 
   <section :class="styles.content">
     <van-cell-group inset :class="styles.card">
-      <van-cell title="团队名称" :value="props.team.name" />
-      <van-cell title="团队口号" :value="props.team.slogan || '暂无口号'" />
-      <van-cell title="团队编号" :value="String(props.team.id)" />
-      <van-cell title="团队密码" :value="props.team.password || '仅队长可见'" />
-      <van-cell title="毅行路线" :value="routeLabel" />
-      <van-cell title="是否提交">
+      <van-cell :title="t('团队名称')" :value="props.team.name" />
+      <van-cell :title="t('团队口号')" :value="props.team.slogan || t('暂无口号')" />
+      <van-cell :title="t('团队编号')" :value="String(props.team.id)" />
+      <van-cell :title="t('团队密码')" :value="props.team.password || t('仅队长可见')" />
+      <van-cell :title="t('毅行路线')" :value="routeLabel" />
+      <van-cell :title="t('是否提交')">
         <template #value>
           <van-tag :type="props.team.submitted ? 'success' : 'danger'">
-            {{ props.team.submitted ? "已提交" : "未提交" }}
+            {{ props.team.submitted ? t("已提交") : t("未提交") }}
           </van-tag>
         </template>
       </van-cell>
-      <van-cell title="随机成员">
+      <van-cell :title="t('随机成员')">
         <template #value>
-          <van-tag type="success">{{ props.team.allow_match ? "是" : "否" }}</van-tag>
+          <van-tag type="success">{{ props.team.allow_match ? t("是") : t("否") }}</van-tag>
         </template>
       </van-cell>
-      <van-cell title="团队性质" :value="props.teamType" />
-      <van-cell title="队伍状态" :value="teamStatusLabel" />
-      <van-cell title="当前位置" :value="props.team.latest_point_name || '未开始'" />
+      <van-cell :title="t('团队性质')" :value="props.teamType" />
+      <van-cell :title="t('队伍状态')" :value="teamStatusLabel" />
+      <van-cell :title="t('当前位置')" :value="props.team.latest_point_name || t('未开始')" />
     </van-cell-group>
 
     <van-button v-if="props.canEdit" block round type="primary" @click="handleEditClick">
-      修改信息
+      {{ t("修改信息") }}
     </van-button>
   </section>
 </template>
@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import type { QueryTeamDetailResponse } from "api/types/client";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { getRouteLabel, getTeamStatusLabel } from "../../utils";
 import styles from "./index.module.scss";
@@ -49,9 +50,11 @@ const emit = defineEmits<{
   edit: [];
 }>();
 
-const routeLabel = computed(() => getRouteLabel(props.team.route_name));
+const { t } = useI18n();
 
-const teamStatusLabel = computed(() => getTeamStatusLabel(props.team.status));
+const routeLabel = computed(() => t(getRouteLabel(props.team.route_name)));
+
+const teamStatusLabel = computed(() => t(getTeamStatusLabel(props.team.status)));
 
 const handleBackClick = () => {
   emit("back");

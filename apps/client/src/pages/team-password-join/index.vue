@@ -1,6 +1,6 @@
 <template>
   <div :class="styles.page">
-    <van-nav-bar title="密码加入" left-arrow @click-left="handleBackClick" />
+    <van-nav-bar :title="t('密码加入')" left-arrow @click-left="handleBackClick" />
 
     <password-join-form :loading="isJoinPending" @submit="handleJoinSubmit" />
   </div>
@@ -10,6 +10,7 @@
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { RequestError, RESP_CODE } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { useClientUserData } from "@/composables";
@@ -21,6 +22,7 @@ import styles from "./index.module.scss";
 import type { PasswordJoinFormValue } from "./types";
 
 const router = useRouter();
+const { t } = useI18n();
 const queryClient = useQueryClient();
 const { updateClientUserData } = useClientUserData();
 
@@ -30,10 +32,10 @@ const handleBackClick = () => {
 
 const getJoinErrorMessage = (error: Error) => {
   if (error instanceof RequestError && error.code === RESP_CODE.NO_JOIN_CHANCE) {
-    return "加入团队次数已用完";
+    return t("加入团队次数已用完");
   }
 
-  return "编号密码有误，请重新输入！";
+  return t("编号密码有误，请重新输入！");
 };
 
 const { mutate: mutateJoinTeam, isPending: isJoinPending } = useMutation({
@@ -45,7 +47,7 @@ const { mutate: mutateJoinTeam, isPending: isJoinPending } = useMutation({
     }),
   onSuccess: async () => {
     showSuccessToast({
-      message: "加入成功！",
+      message: t("加入成功！"),
       duration: 3000
     });
 

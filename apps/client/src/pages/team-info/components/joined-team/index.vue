@@ -5,7 +5,9 @@
       :disabled="isOverviewLoading"
       @btn-click="handleOverviewRetry"
     >
-      <van-loading v-if="isOverviewLoading" :class="styles.loading" vertical>加载中</van-loading>
+      <van-loading v-if="isOverviewLoading" :class="styles.loading" vertical>
+        {{ t("refresh.loading") }}
+      </van-loading>
 
       <template v-else-if="teamOverview">
         <team-overview-card :team="teamOverview.team" @detail="handleDetailClick" />
@@ -13,7 +15,9 @@
         <team-member-list :members="sortedMembers" @member-click="handleMemberClick" />
 
         <section v-if="isCaptain" :class="styles.actionArea">
-          <van-button block round type="primary" @click="handleShareClick">分享队伍</van-button>
+          <van-button block round type="primary" @click="handleShareClick">
+            {{ t("分享队伍") }}
+          </van-button>
           <van-button
             block
             round
@@ -22,7 +26,7 @@
             :loading="isDisbandTeamPending"
             @click="handleDisbandClick"
           >
-            解散队伍
+            {{ t("解散队伍") }}
           </van-button>
           <van-button
             block
@@ -32,7 +36,7 @@
             :disabled="isTeamDetailLoading"
             @click="handleSubmissionClick"
           >
-            {{ teamDetail?.submitted ? "取消提交" : "提交队伍" }}
+            {{ teamDetail?.submitted ? t("取消提交") : t("提交队伍") }}
           </van-button>
         </section>
 
@@ -45,12 +49,12 @@
             :loading="isLeaveTeamPending"
             @click="handleLeaveTeamClick"
           >
-            退出队伍
+            {{ t("退出队伍") }}
           </van-button>
         </section>
       </template>
 
-      <van-empty v-else description="暂无团队信息" />
+      <van-empty v-else :description="t('暂无团队信息')" />
     </error-empty>
 
     <team-member-detail-popup
@@ -85,6 +89,7 @@ import type {
 import { ErrorEmpty, RequestError, RESP_CODE } from "shared";
 import { showConfirmDialog, showFailToast, showSuccessToast, showToast } from "vant";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { useClientUserData } from "@/composables";
@@ -99,6 +104,7 @@ import styles from "./index.module.scss";
 const TEAM_SUBMIT_MIN_SIZE = 4;
 
 const router = useRouter();
+const { t } = useI18n();
 const queryClient = useQueryClient();
 const { clientUserInfo, updateClientUserData } = useClientUserData();
 
@@ -140,7 +146,7 @@ const {
   enabled: () => selectedMemberId.value !== undefined,
   queryFn: () => {
     const memberId = selectedMemberId.value;
-    if (memberId === undefined) throw new Error("未选择队员");
+    if (memberId === undefined) throw new Error(t("未选择队员"));
     return walkClientService.QueryTeamMember({ id: memberId });
   }
 });
@@ -187,17 +193,17 @@ const refreshClientUserData = async () => {
 };
 
 const getSubmitErrorMessage = (error: Error) => {
-  if (!(error instanceof RequestError)) return error.message || "提交失败，请稍后重试";
+  if (!(error instanceof RequestError)) return error.message || t("提交失败，请稍后重试");
 
   switch (error.code) {
     case RESP_CODE.TEAM_NOT_ENOUGH:
-      return "当前团队人数不足";
+      return t("当前团队人数不足");
     case RESP_CODE.NOT_IN_REGISTER_TIME:
-      return "未到提交时间";
+      return t("未到提交时间");
     case RESP_CODE.USER_NO_QUOTA:
-      return "当天名额已满";
+      return t("当天名额已满");
     default:
-      return error.message || "提交失败，请稍后重试";
+      return error.message || t("提交失败，请稍后重试");
   }
 };
 
@@ -216,7 +222,7 @@ const { mutate: mutateSubmitTeam, isPending: isSubmitTeamPending } = useMutation
   mutationFn: () => walkClientService.SubmitTeam(undefined),
   onSuccess: async () => {
     showSuccessToast({
-      message: "提交成功",
+      message: t("提交成功"),
       duration: 3000,
       position: "top"
     });
@@ -234,14 +240,14 @@ const { mutate: mutateUndoTeamSubmission, isPending: isUndoTeamSubmissionPending
   mutationFn: () => walkClientService.UndoTeamSubmission(undefined),
   onSuccess: async () => {
     showSuccessToast({
-      message: "取消提交成功",
+      message: t("取消提交成功"),
       duration: 3000,
       position: "top"
     });
     await refreshTeamData();
   },
   onError: (error) => {
-    showErrorToast(error.message || "取消提交失败，请稍后重试");
+    showErrorToast(error.message || t("取消提交失败，请稍后重试"));
   }
 });
 
@@ -252,7 +258,7 @@ const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutati
   mutationFn: () => walkClientService.DisbandTeam(undefined),
   onSuccess: async () => {
     showSuccessToast({
-      message: "解散成功",
+      message: t("解散成功"),
       duration: 3000,
       position: "top"
     });
@@ -260,7 +266,7 @@ const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutati
     await router.replace({ name: "team-info" });
   },
   onError: (error) => {
-    showErrorToast(error.message || "解散失败，请稍后重试");
+    showErrorToast(error.message || t("解散失败，请稍后重试"));
   }
 });
 
@@ -270,12 +276,12 @@ const { mutate: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation<
 >({
   mutationFn: () => walkClientService.LeaveTeam(undefined),
   onSuccess: async () => {
-    showSuccessToast({ message: "退出成功", duration: 3000, position: "top" });
+    showSuccessToast({ message: t("退出成功"), duration: 3000, position: "top" });
     await refreshClientUserData();
     await router.replace({ name: "team-info" });
   },
   onError: (error) => {
-    showErrorToast(error.message || "退出失败，请稍后重试");
+    showErrorToast(error.message || t("退出失败，请稍后重试"));
   }
 });
 
@@ -287,7 +293,7 @@ const { mutate: mutateRemoveMember, isPending: isRemoveMemberPending } = useMuta
   mutationFn: (memberId) => walkClientService.RemoveTeamMember({ id: memberId }),
   onSuccess: async () => {
     showSuccessToast({
-      message: "删除成功",
+      message: t("删除成功"),
       duration: 3000,
       position: "top"
     });
@@ -295,7 +301,7 @@ const { mutate: mutateRemoveMember, isPending: isRemoveMemberPending } = useMuta
     await refreshTeamData();
   },
   onError: (error) => {
-    showErrorToast(error.message || "删除失败，请稍后重试");
+    showErrorToast(error.message || t("删除失败，请稍后重试"));
   }
 });
 
@@ -307,7 +313,7 @@ const { mutate: mutateTransferCaptain, isPending: isTransferCaptainPending } = u
   mutationFn: (memberId) => walkClientService.UpdateTeamCaptain({ id: memberId }),
   onSuccess: async () => {
     showSuccessToast({
-      message: "移交成功",
+      message: t("移交成功"),
       duration: 3000,
       position: "top"
     });
@@ -315,7 +321,7 @@ const { mutate: mutateTransferCaptain, isPending: isTransferCaptainPending } = u
     await Promise.all([refreshTeamData(), refreshClientUserData()]);
   },
   onError: (error) => {
-    showErrorToast(error.message || "移交失败，请稍后重试");
+    showErrorToast(error.message || t("移交失败，请稍后重试"));
   }
 });
 
@@ -349,8 +355,8 @@ const handleMemberPopupClose = () => {
 const handleRemoveMemberClick = async (memberId: number) => {
   try {
     await showConfirmDialog({
-      title: "删除队员",
-      message: "确认将该队员移出队伍吗？"
+      title: t("删除队员"),
+      message: t("确认将该队员移出队伍吗？")
     });
   } catch {
     return;
@@ -362,8 +368,8 @@ const handleRemoveMemberClick = async (memberId: number) => {
 const handleTransferCaptainClick = async (memberId: number) => {
   try {
     await showConfirmDialog({
-      title: "移交队长",
-      message: "确认将队长移交给该队员吗？移交后你将变为队员。"
+      title: t("移交队长"),
+      message: t("确认将队长移交给该队员吗？移交后你将变为队员。")
     });
   } catch {
     return;
@@ -373,14 +379,14 @@ const handleTransferCaptainClick = async (memberId: number) => {
 };
 
 const handleShareClick = () => {
-  showToast({ message: "分享队伍功能将在二期开放", position: "bottom" });
+  showToast({ message: t("分享队伍功能将在二期开放"), position: "bottom" });
 };
 
 const handleDisbandClick = async () => {
   try {
     await showConfirmDialog({
-      title: "解散队伍",
-      message: "确认解散当前队伍吗？解散后所有队员都需要重新加入队伍。"
+      title: t("解散队伍"),
+      message: t("确认解散当前队伍吗？解散后所有队员都需要重新加入队伍。")
     });
   } catch {
     return;
@@ -392,8 +398,8 @@ const handleDisbandClick = async () => {
 const handleLeaveTeamClick = async () => {
   try {
     await showConfirmDialog({
-      title: "退出队伍",
-      message: "确认退出当前队伍吗？退出后需要重新加入队伍。"
+      title: t("退出队伍"),
+      message: t("确认退出当前队伍吗？退出后需要重新加入队伍。")
     });
   } catch {
     return;
@@ -404,15 +410,15 @@ const handleLeaveTeamClick = async () => {
 
 const handleSubmissionClick = async () => {
   if (!teamDetail.value) {
-    showErrorToast("团队详细信息加载中");
+    showErrorToast(t("团队详细信息加载中"));
     return;
   }
 
   if (teamDetail.value.submitted) {
     try {
       await showConfirmDialog({
-        title: "取消提交",
-        message: "确认取消当前队伍提交状态吗？"
+        title: t("取消提交"),
+        message: t("确认取消当前队伍提交状态吗？")
       });
     } catch {
       return;
@@ -423,7 +429,7 @@ const handleSubmissionClick = async () => {
   }
 
   if (sortedMembers.value.length < TEAM_SUBMIT_MIN_SIZE) {
-    showErrorToast("当前团队人数不足");
+    showErrorToast(t("当前团队人数不足"));
     return;
   }
 

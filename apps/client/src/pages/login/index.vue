@@ -5,11 +5,13 @@
     </div>
 
     <div :class="styles.content">
-      <h1 :class="styles.title">登录</h1>
+      <h1 :class="styles.title">{{ t("登录") }}</h1>
 
       <login-form :loading="isLoginPending" @submit="handleLoginSubmit" />
 
-      <div :class="styles.registerLink" @click="handleNavigateRegister">没有账号？戳我注册</div>
+      <div :class="styles.registerLink" @click="handleNavigateRegister">
+        {{ t("signup.guide-link") }}
+      </div>
     </div>
   </div>
 </template>
@@ -17,6 +19,7 @@
 <script setup lang="ts">
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { showFailToast, showSuccessToast } from "vant";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import thumbsUpImage from "@/assets/images/thumbs-up.png";
@@ -31,6 +34,7 @@ import type { LoginFormValue } from "./types";
 const router = useRouter();
 const route = useRoute();
 const queryClient = useQueryClient();
+const { t } = useI18n();
 const { updateClientLoginData, updateClientUserData } = useClientUserData(queryClient);
 
 const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
@@ -41,7 +45,7 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
     }),
   onSuccess: async (data) => {
     showSuccessToast({
-      message: "登录成功",
+      message: t("登录成功"),
       position: "top"
     });
 
@@ -62,7 +66,7 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
     }
   },
   onError: (error: unknown) => {
-    const message = error instanceof Error ? error.message : "登录失败，请稍后重试";
+    const message = error instanceof Error ? error.message : t("登录失败，请稍后重试");
     showFailToast({
       message,
       position: "top"

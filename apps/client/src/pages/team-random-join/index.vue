@@ -2,9 +2,9 @@
   <div :class="styles.page">
     <van-sticky>
       <section :class="styles.topArea">
-        <van-nav-bar title="随机加入" left-arrow @click-left="handleBackClick" />
+        <van-nav-bar :title="t('随机加入')" left-arrow @click-left="handleBackClick" />
 
-        <p :class="styles.subtitle">选择路线和队伍，加入志同道合的伙伴一起出发吧!</p>
+        <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
 
         <random-join-filter
           v-model:route-name="selectedRouteName"
@@ -33,6 +33,7 @@ import type { QueryRandomTeamListResponse, RandomJoinTeamResponse } from "api/ty
 import { RequestError, RESP_CODE } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { useClientUserData } from "@/composables";
@@ -55,6 +56,7 @@ const ROUTE_OPTIONS = [
 const TEAM_FILTER_OPTIONS = [{ value: "all", label: "全部队伍" }] as const;
 
 const router = useRouter();
+const { t } = useI18n();
 const queryClient = useQueryClient();
 const { updateClientUserData } = useClientUserData();
 
@@ -88,10 +90,10 @@ const visibleTeams = computed(() => availableTeams.value);
 
 const getRandomJoinErrorMessage = (error: Error) => {
   if (error instanceof RequestError && error.code === RESP_CODE.NO_JOIN_CHANCE) {
-    return "加入团队次数已用完";
+    return t("加入团队次数已用完");
   }
 
-  return "加入失败，请稍后重试";
+  return t("加入失败，请稍后重试");
 };
 
 const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation<
@@ -102,7 +104,7 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
   mutationFn: (teamId: number) => walkClientService.RandomJoinTeam({ id: teamId }),
   onSuccess: async () => {
     showSuccessToast({
-      message: "加入成功！",
+      message: t("加入成功！"),
       duration: 3000,
       position: "top"
     });

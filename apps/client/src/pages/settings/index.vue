@@ -1,8 +1,8 @@
 <template>
   <div :class="styles.page">
     <van-cell-group inset>
-      <van-cell title="反馈" clickable is-link :url="FEEDBACK_QA_URL" />
-      <van-cell title="退出登录" clickable is-link @click="handleLogoutClick" />
+      <van-cell :title="t('反馈')" clickable is-link :url="FEEDBACK_QA_URL" />
+      <van-cell :title="t('退出登录')" clickable is-link @click="handleLogoutClick" />
     </van-cell-group>
   </div>
 
@@ -19,10 +19,10 @@
         alt=""
         aria-hidden="true"
       />
-      <p :class="styles.logoutDialogMessage">是否确认退出？</p>
+      <p :class="styles.logoutDialogMessage">{{ t("您是否确认退出？") }}</p>
       <div :class="styles.logoutDialogFooter">
         <van-button :class="styles.logoutDialogCancel" size="small" @click="handleLogoutConfirm">
-          确认
+          {{ t("确认") }}
         </van-button>
         <van-button
           :class="styles.logoutDialogConfirm"
@@ -30,7 +30,7 @@
           size="small"
           @click="handleLogoutCancel"
         >
-          再想想
+          {{ t("再想想") }}
         </van-button>
       </div>
     </div>
@@ -40,6 +40,7 @@
 <script setup lang="ts">
 import { showSuccessToast } from "vant";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { useClientUserData } from "@/composables";
@@ -47,6 +48,7 @@ import { useClientUserData } from "@/composables";
 import styles from "./index.module.scss";
 
 const router = useRouter();
+const { t } = useI18n();
 const { resetClientUserData } = useClientUserData();
 
 const FEEDBACK_QA_URL = import.meta.env.VITE_FEEDBACK_QA_URL;
@@ -67,7 +69,7 @@ const handleLogoutConfirm = async () => {
   resetClientUserData();
 
   showSuccessToast({
-    message: "已退出登录",
+    message: t("已退出登录"),
     position: "top"
   });
 

@@ -1,68 +1,68 @@
 <template>
   <van-form ref="formRef" :class="styles.form" :disabled="props.loading" @submit="handleSubmit">
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">姓名</label>
+      <label :class="styles.fieldLabel">{{ t("姓名") }}</label>
       <van-field
         v-model="formValue.name"
         :class="styles.fieldInput"
-        :rules="NAME_RULES"
+        :rules="nameRules"
         name="name"
-        placeholder="请输入姓名"
+        :placeholder="t('请输入姓名')"
         autocomplete="name"
         clearable
       />
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">{{ props.userType === "student" ? "学号" : "工号" }}</label>
+      <label :class="styles.fieldLabel">{{ stuIdLabel }}</label>
       <van-field
         v-model="formValue.stuId"
         :class="styles.fieldInput"
         :rules="stuIdRules"
         name="stuId"
-        :placeholder="props.userType === 'student' ? '请输入学号' : '请输入工号'"
+        :placeholder="stuIdPrompt"
         autocomplete="off"
         clearable
       />
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">身份证号</label>
+      <label :class="styles.fieldLabel">{{ t("身份证号") }}</label>
       <van-field
         v-model="formValue.identity"
         :class="styles.fieldInput"
-        :rules="IDENTITY_RULES"
+        :rules="identityRules"
         name="identity"
-        placeholder="请输入身份证号码"
+        :placeholder="t('请输入身份证号码')"
         autocomplete="off"
         clearable
       />
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">电话号码</label>
+      <label :class="styles.fieldLabel">{{ t("电话号码") }}</label>
       <van-field
         v-model="formValue.tel"
         :class="styles.fieldInput"
-        :rules="TEL_RULES"
+        :rules="telRules"
         name="tel"
         type="tel"
         maxlength="11"
-        placeholder="请输入电话号码"
+        :placeholder="t('请输入电话号码')"
         autocomplete="tel"
         clearable
       />
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">密码</label>
+      <label :class="styles.fieldLabel">{{ t("密码") }}</label>
       <van-field
         v-model="formValue.password"
         :class="styles.fieldInput"
-        :rules="PASSWORD_RULES"
+        :rules="passwordRules"
         :type="isPasswordVisible ? 'text' : 'password'"
         name="password"
-        placeholder="请输入密码"
+        :placeholder="t('请输入密码')"
         autocomplete="new-password"
         clearable
       >
@@ -70,7 +70,7 @@
           <button
             :class="styles.eyeButton"
             type="button"
-            aria-label="切换密码显示"
+            :aria-label="t('切换密码显示')"
             @click.stop="handlePasswordVisibleClick"
           >
             <van-icon :name="isPasswordVisible ? 'eye-o' : 'closed-eye'" />
@@ -80,24 +80,24 @@
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">QQ（选填）</label>
+      <label :class="styles.fieldLabel">{{ t("QQ（选填）") }}</label>
       <van-field
         v-model="formValue.qq"
         :class="styles.fieldInput"
         name="qq"
-        placeholder="请输入QQ号"
+        :placeholder="t('请输入QQ')"
         autocomplete="off"
         clearable
       />
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">微信（选填）</label>
+      <label :class="styles.fieldLabel">{{ t("微信（选填）") }}</label>
       <van-field
         v-model="formValue.wechat"
         :class="styles.fieldInput"
         name="wechat"
-        placeholder="请输入微信号"
+        :placeholder="t('请输入微信')"
         autocomplete="off"
         clearable
       />
@@ -105,13 +105,17 @@
 
     <div :class="styles.agreementRow">
       <van-checkbox v-model="isAgreed" shape="round">
-        <span>您已阅读并同意</span>
-        <span :class="styles.termsLink" @click.stop="handleNavigateTerms">《隐私政策》</span>
+        <span>{{ t("您已阅读并同意") }}</span>
+        <span :class="styles.termsLink" @click.stop="handleNavigateTerms">
+          {{ t("《隐私政策》") }}
+        </span>
       </van-checkbox>
     </div>
 
     <div :class="styles.submitArea">
-      <van-button native-type="submit" :loading="props.loading"> 注册 </van-button>
+      <van-button native-type="submit" :loading="props.loading">
+        {{ t("注册") }}
+      </van-button>
     </div>
   </van-form>
 </template>
@@ -120,6 +124,7 @@
 import type { FieldRule, FormInstance } from "vant";
 import { showToast } from "vant";
 import { computed, reactive, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import type { SchoolRegisterFormValue } from "../../types";
@@ -135,6 +140,7 @@ const emit = defineEmits<{
 }>();
 
 const router = useRouter();
+const { t } = useI18n();
 const formRef = useTemplateRef<FormInstance>("formRef");
 
 const formValue = reactive<SchoolRegisterFormValue>({
@@ -150,29 +156,31 @@ const formValue = reactive<SchoolRegisterFormValue>({
 const isPasswordVisible = ref(false);
 const isAgreed = ref(false);
 
-const NAME_RULES: FieldRule[] = [{ required: true, message: "请输入姓名" }];
+const isStudent = computed(() => props.userType === "student");
 
-const stuIdRules = computed<FieldRule[]>(() => [
+const stuIdLabel = computed(() => (isStudent.value ? t("学号") : t("工号")));
+
+/** 学号/工号的占位提示，同时用作必填校验文案 */
+const stuIdPrompt = computed(() => (isStudent.value ? t("请输入学号") : t("请输入工号")));
+
+const nameRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入姓名") }]);
+
+const stuIdRules = computed<FieldRule[]>(() => [{ required: true, message: stuIdPrompt.value }]);
+
+const identityRules = computed<FieldRule[]>(() => [
+  { required: true, message: t("请输入身份证号码") },
   {
-    required: true,
-    message: props.userType === "student" ? "请输入学号" : "请输入工号"
+    pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+    message: t("请输入正确的身份证号码")
   }
 ]);
 
-const IDENTITY_RULES: FieldRule[] = [
-  { required: true, message: "请输入身份证号码" },
-  {
-    pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
-    message: "请输入正确的身份证号码"
-  }
-];
+const telRules = computed<FieldRule[]>(() => [
+  { required: true, message: t("请输入电话号码") },
+  { pattern: /^1[3-9]\d{9}$/, message: t("请输入正确的电话号码") }
+]);
 
-const TEL_RULES: FieldRule[] = [
-  { required: true, message: "请输入电话号码" },
-  { pattern: /^1[3-9]\d{9}$/, message: "请输入正确的电话号码" }
-];
-
-const PASSWORD_RULES: FieldRule[] = [{ required: true, message: "请输入密码" }];
+const passwordRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入密码") }]);
 
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;
@@ -199,7 +207,7 @@ const handleSubmit = async () => {
 
   if (!isAgreed.value) {
     showToast({
-      message: "请阅读并同意《隐私政策》",
+      message: t("请阅读并同意《隐私政策》"),
       position: "bottom"
     });
     return;

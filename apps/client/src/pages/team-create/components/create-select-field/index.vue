@@ -16,7 +16,7 @@
     :show="props.opened"
     :actions="actions"
     :title="props.label"
-    cancel-text="取消"
+    :cancel-text="t('取消')"
     close-on-click-action
     @select="handleActionSelect"
     @cancel="handleClose"
@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import type { ActionSheetAction } from "vant";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import type { CreateSelectOption } from "../../types";
 import styles from "./index.module.scss";
@@ -47,9 +48,11 @@ const emit = defineEmits<{
   close: [];
 }>();
 
+const { t } = useI18n();
+
 const actions = computed<ActionSheetAction[]>(() =>
   props.options.map((option) => ({
-    name: option.label,
+    name: t(option.label),
     color: option.value === props.selectedValue ? "#1989fa" : undefined
   }))
 );
@@ -58,8 +61,9 @@ const handleToggleClick = () => {
   emit("toggle");
 };
 
-const handleActionSelect = (action: ActionSheetAction) => {
-  const selectedOption = props.options.find((option) => option.label === action.name);
+/** 按索引取选项，避免翻译后的 `action.name` 与原始 label 匹配不上 */
+const handleActionSelect = (_action: ActionSheetAction, index: number) => {
+  const selectedOption = props.options[index];
   if (!selectedOption) return;
   emit("select", selectedOption.value);
 };

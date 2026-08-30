@@ -9,22 +9,24 @@
     @click-overlay="handleCloseClick"
   >
     <section :class="styles.content">
-      <h2 :class="styles.title">队员信息</h2>
+      <h2 :class="styles.title">{{ t("队员信息") }}</h2>
 
       <error-empty :error="props.error" :disabled="props.loading" @btn-click="handleRetryClick">
-        <van-loading v-if="props.loading" :class="styles.loading" vertical>加载中</van-loading>
+        <van-loading v-if="props.loading" :class="styles.loading" vertical>
+          {{ t("refresh.loading") }}
+        </van-loading>
 
         <van-cell-group v-else-if="props.member" inset>
-          <van-cell title="姓名" :value="props.member.name" />
-          <van-cell title="人员性质" :value="memberTypeLabel" />
-          <van-cell title="队内身份" :value="memberRoleLabel" />
-          <van-cell title="电话" :value="props.member.tel || '未填写'" />
-          <van-cell title="微信" :value="props.member.wechat || '未填写'" />
-          <van-cell title="QQ" :value="props.member.qq || '未填写'" />
-          <van-cell title="状态" :value="getWalkStatusLabel(props.member.walk_status)" />
+          <van-cell :title="t('姓名')" :value="props.member.name" />
+          <van-cell :title="t('人员性质')" :value="memberTypeLabel" />
+          <van-cell :title="t('队内身份')" :value="memberRoleLabel" />
+          <van-cell :title="t('电话')" :value="props.member.tel || t('未填写')" />
+          <van-cell :title="t('微信')" :value="props.member.wechat || t('未填写')" />
+          <van-cell :title="t('QQ')" :value="props.member.qq || t('未填写')" />
+          <van-cell :title="t('状态')" :value="walkStatusLabel" />
         </van-cell-group>
 
-        <van-empty v-else description="暂无队员信息" />
+        <van-empty v-else :description="t('暂无队员信息')" />
       </error-empty>
 
       <div v-if="props.member" :class="styles.actionArea">
@@ -37,7 +39,7 @@
           :loading="props.actionLoading"
           @click="handleRemoveClick"
         >
-          删除队员
+          {{ t("删除队员") }}
         </van-button>
 
         <van-button
@@ -49,11 +51,11 @@
           :loading="props.actionLoading"
           @click="handleTransferClick"
         >
-          移交队长
+          {{ t("移交队长") }}
         </van-button>
 
         <van-button block round plain :disabled="props.actionLoading" @click="handleCloseClick">
-          取消
+          {{ t("取消") }}
         </van-button>
       </div>
     </section>
@@ -64,6 +66,7 @@
 import type { QueryTeamMemberResponse, UserSummary } from "api/types/client";
 import { ErrorEmpty } from "shared";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { getMemberRoleLabel, getMemberTypeLabel, getWalkStatusLabel } from "../../utils";
 import styles from "./index.module.scss";
@@ -85,15 +88,21 @@ const emit = defineEmits<{
   transfer: [memberId: number];
 }>();
 
+const { t } = useI18n();
+
 const memberTypeLabel = computed(() => {
-  if (!props.memberSummary) return "暂无";
-  return getMemberTypeLabel(props.memberSummary.type);
+  if (!props.memberSummary) return t("暂无");
+  return t(getMemberTypeLabel(props.memberSummary.type));
 });
 
 const memberRoleLabel = computed(() => {
-  if (!props.memberSummary) return "暂无";
-  return getMemberRoleLabel(props.memberSummary.role);
+  if (!props.memberSummary) return t("暂无");
+  return t(getMemberRoleLabel(props.memberSummary.role));
 });
+
+const walkStatusLabel = computed(() =>
+  props.member ? t(getWalkStatusLabel(props.member.walk_status)) : ""
+);
 
 const handleCloseClick = () => {
   emit("close");

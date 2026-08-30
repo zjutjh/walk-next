@@ -3,38 +3,38 @@
     <van-cell-group inset>
       <van-field
         v-model="formValue.name"
-        :rules="NAME_RULES"
-        label="团队名称"
+        :rules="nameRules"
+        :label="t('团队名称')"
         name="name"
         maxlength="20"
         show-word-limit
-        placeholder="请输入名称"
+        :placeholder="t('请输入名称')"
         autocomplete="off"
       />
 
       <van-field
         v-model="formValue.slogan"
-        :rules="SLOGAN_RULES"
-        label="团队口号"
+        :rules="sloganRules"
+        :label="t('团队口号')"
         name="slogan"
         maxlength="20"
         show-word-limit
-        placeholder="请输入口号"
+        :placeholder="t('请输入口号')"
         autocomplete="off"
       />
 
       <van-field
         v-model="formValue.password"
-        :rules="PASSWORD_RULES"
-        label="团队密码"
+        :rules="passwordRules"
+        :label="t('团队密码')"
         name="password"
-        placeholder="请输入密码"
+        :placeholder="t('请输入密码')"
         autocomplete="off"
       />
 
       <create-select-field
-        label="是否随机队友"
-        placeholder="请选择"
+        :label="t('是否随机队友')"
+        :placeholder="t('请选择')"
         :options="MATCH_OPTIONS"
         :selected-value="formValue.allowMatch"
         :value-label="selectedMatchLabel"
@@ -46,8 +46,8 @@
       />
 
       <create-select-field
-        label="路线选择"
-        placeholder="请选择"
+        :label="t('路线选择')"
+        :placeholder="t('请选择')"
         :options="ROUTE_OPTIONS"
         :selected-value="formValue.routeName"
         :value-label="selectedRouteLabel"
@@ -61,7 +61,7 @@
 
     <div :class="styles.submitArea">
       <van-button block round type="primary" native-type="submit" :loading="props.loading">
-        创建团队
+        {{ t("创建团队") }}
       </van-button>
     </div>
   </van-form>
@@ -70,6 +70,7 @@
 <script setup lang="ts">
 import type { FieldRule, FormInstance } from "vant";
 import { computed, reactive, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 
 import type { CreateTeamFormValue, MatchValue, OpenedSelect, RouteName } from "../../types";
 import CreateSelectField from "../create-select-field/index.vue";
@@ -82,6 +83,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   submit: [value: CreateTeamFormValue];
 }>();
+
+const { t } = useI18n();
 
 const MATCH_OPTIONS = [
   { label: "不随机", value: "false" },
@@ -111,17 +114,21 @@ const selectErrors = reactive({
   routeName: ""
 });
 
-const NAME_RULES: FieldRule[] = [{ required: true, message: "请输入团队名称" }];
-const SLOGAN_RULES: FieldRule[] = [{ required: true, message: "请输入团队口号" }];
-const PASSWORD_RULES: FieldRule[] = [{ required: true, message: "请输入团队密码" }];
+const nameRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入团队名称") }]);
+const sloganRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入团队口号") }]);
+const passwordRules = computed<FieldRule[]>(() => [
+  { required: true, message: t("请输入团队密码") }
+]);
 
-const selectedMatchLabel = computed(
-  () => MATCH_OPTIONS.find((option) => option.value === formValue.allowMatch)?.label ?? ""
-);
+const selectedMatchLabel = computed(() => {
+  const option = MATCH_OPTIONS.find((item) => item.value === formValue.allowMatch);
+  return option ? t(option.label) : "";
+});
 
-const selectedRouteLabel = computed(
-  () => ROUTE_OPTIONS.find((option) => option.value === formValue.routeName)?.label ?? ""
-);
+const selectedRouteLabel = computed(() => {
+  const option = ROUTE_OPTIONS.find((item) => item.value === formValue.routeName);
+  return option ? t(option.label) : "";
+});
 
 const isMatchValue = (value: string): value is MatchValue =>
   MATCH_OPTIONS.some((option) => option.value === value);
@@ -152,8 +159,8 @@ const handleRouteSelect = (value: string) => {
 };
 
 const validateSelects = () => {
-  selectErrors.allowMatch = formValue.allowMatch ? "" : "请选择是否随机队友";
-  selectErrors.routeName = formValue.routeName ? "" : "请选择路线";
+  selectErrors.allowMatch = formValue.allowMatch ? "" : t("请选择是否随机队友");
+  selectErrors.routeName = formValue.routeName ? "" : t("请选择路线");
 
   return !selectErrors.allowMatch && !selectErrors.routeName;
 };

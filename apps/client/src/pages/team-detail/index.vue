@@ -10,17 +10,17 @@
     />
 
     <template v-else>
-      <van-nav-bar title="基本信息" left-arrow @click-left="handleBasicDetailBack" />
+      <van-nav-bar :title="t('基本信息')" left-arrow @click-left="handleBasicDetailBack" />
 
       <error-empty
         :error="teamDetailError"
         :disabled="isTeamDetailLoading"
         @btn-click="handleTeamDetailRetry"
       >
-        <van-loading v-if="isTeamDetailLoading" :class="styles.loading" vertical
-          >加载中</van-loading
-        >
-        <van-empty v-else description="暂无团队详细信息" />
+        <van-loading v-if="isTeamDetailLoading" :class="styles.loading" vertical>
+          {{ t("refresh.loading") }}
+        </van-loading>
+        <van-empty v-else :description="t('暂无团队详细信息')" />
       </error-empty>
     </template>
   </div>
@@ -44,6 +44,7 @@ import type {
 import { ErrorEmpty } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { useClientUserData } from "@/composables";
@@ -57,6 +58,7 @@ import type { TeamEditFormValue } from "./types";
 import { getMemberTypeLabel } from "./utils";
 
 const router = useRouter();
+const { t } = useI18n();
 const queryClient = useQueryClient();
 const { clientUserInfo } = useClientUserData();
 
@@ -97,8 +99,8 @@ const sortedMembers = computed(() => {
 
 const teamTypeLabel = computed(() => {
   const captain = sortedMembers.value.find((member) => member.role === "captain");
-  if (captain) return getMemberTypeLabel(captain.type);
-  return "暂无";
+  if (captain) return t(getMemberTypeLabel(captain.type));
+  return t("暂无");
 });
 
 const refreshTeamData = async () => {
@@ -135,7 +137,7 @@ const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = use
     }),
   onSuccess: async () => {
     showSuccessToast({
-      message: "更新成功",
+      message: t("更新成功"),
       duration: 3000,
       position: "top"
     });
@@ -147,7 +149,7 @@ const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = use
     }, 3000);
   },
   onError: (error) => {
-    showErrorToast(error.message || "更新失败，请稍后重试");
+    showErrorToast(error.message || t("更新失败，请稍后重试"));
   }
 });
 

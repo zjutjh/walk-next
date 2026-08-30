@@ -5,11 +5,13 @@
     </div>
 
     <div :class="styles.content">
-      <h1 :class="styles.title">注册</h1>
+      <h1 :class="styles.title">{{ t("注册") }}</h1>
 
       <alumnus-register-form :loading="isRegisterPending" @submit="handleRegisterSubmit" />
 
-      <div :class="styles.loginLink" @click="handleNavigateLogin">已有账号？去登录</div>
+      <div :class="styles.loginLink" @click="handleNavigateLogin">
+        {{ t("已有账号？去登录") }}
+      </div>
     </div>
   </div>
 </template>
@@ -17,6 +19,7 @@
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
 import { showFailToast, showSuccessToast } from "vant";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import proudImage from "@/assets/images/proud.png";
@@ -27,6 +30,7 @@ import styles from "./index.module.scss";
 import type { AlumnusRegisterFormValue } from "./types";
 
 const router = useRouter();
+const { t } = useI18n();
 
 const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
   mutationFn: (value: AlumnusRegisterFormValue) =>
@@ -38,14 +42,14 @@ const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
     }),
   onSuccess: () => {
     showSuccessToast({
-      message: "注册成功",
+      message: t("注册成功"),
       position: "top"
     });
 
     router.replace({ name: "login" });
   },
   onError: (error: unknown) => {
-    const message = error instanceof Error ? error.message : "注册失败，请稍后重试";
+    const message = error instanceof Error ? error.message : t("注册失败，请稍后重试");
     showFailToast({
       message,
       position: "top"

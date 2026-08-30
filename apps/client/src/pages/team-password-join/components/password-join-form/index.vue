@@ -3,10 +3,10 @@
     <van-cell-group inset>
       <van-field
         v-model="formValue.teamId"
-        :rules="TEAM_ID_RULES"
-        label="团队编号"
+        :rules="teamIdRules"
+        :label="t('团队编号')"
         name="teamId"
-        placeholder="请输入团队编号"
+        :placeholder="t('请输入团队编号')"
         type="digit"
         inputmode="numeric"
         autocomplete="off"
@@ -15,11 +15,11 @@
 
       <van-field
         v-model="formValue.password"
-        :rules="PASSWORD_RULES"
+        :rules="passwordRules"
         :type="isPasswordVisible ? 'text' : 'password'"
-        label="团队密码"
+        :label="t('团队密码')"
         name="password"
-        placeholder="请输入团队密码"
+        :placeholder="t('请输入团队密码')"
         autocomplete="off"
         clearable
       >
@@ -27,7 +27,7 @@
           <button
             :class="styles.eyeButton"
             type="button"
-            aria-label="切换密码显示"
+            :aria-label="t('切换密码显示')"
             @click.stop="handlePasswordVisibleClick"
           >
             <van-icon :name="isPasswordVisible ? 'eye-o' : 'closed-eye'" />
@@ -38,7 +38,7 @@
 
     <div :class="styles.submitArea">
       <van-button block round type="primary" native-type="submit" :loading="props.loading">
-        立即加入
+        {{ t("立即加入") }}
       </van-button>
     </div>
   </van-form>
@@ -46,7 +46,8 @@
 
 <script setup lang="ts">
 import type { FieldRule, FormInstance } from "vant";
-import { reactive, ref, useTemplateRef } from "vue";
+import { computed, reactive, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 
 import type { PasswordJoinFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -59,6 +60,7 @@ const emit = defineEmits<{
   submit: [value: PasswordJoinFormValue];
 }>();
 
+const { t } = useI18n();
 const formRef = useTemplateRef<FormInstance>("formRef");
 
 const formValue = reactive({
@@ -68,8 +70,10 @@ const formValue = reactive({
 
 const isPasswordVisible = ref(false);
 
-const TEAM_ID_RULES: FieldRule[] = [{ required: true, message: "请输入团队编号" }];
-const PASSWORD_RULES: FieldRule[] = [{ required: true, message: "请输入团队密码" }];
+const teamIdRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入团队编号") }]);
+const passwordRules = computed<FieldRule[]>(() => [
+  { required: true, message: t("请输入团队密码") }
+]);
 
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;

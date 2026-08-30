@@ -1,6 +1,6 @@
 <template>
   <section :class="styles.filterSection">
-    <van-cell-group inset title="路线选择">
+    <van-cell-group inset :title="t('路线选择')">
       <van-grid :border="false" :column-num="3" :class="styles.routeGrid">
         <van-grid-item v-for="route in props.routeOptions" :key="route.name">
           <van-button
@@ -11,7 +11,7 @@
             :plain="route.name !== routeName"
             @click="handleRouteClick(route.name)"
           >
-            <span :class="styles.routeName">{{ route.title }}</span>
+            <span :class="styles.routeName">{{ t(route.title) }}</span>
             <span :class="styles.routeDistance">{{ Math.round(route.distanceKm) }}km</span>
           </van-button>
         </van-grid-item>
@@ -20,14 +20,14 @@
   </section>
 
   <section :class="styles.filterSection">
-    <van-cell-group inset title="队伍选择">
+    <van-cell-group inset :title="t('队伍选择')">
       <van-radio-group v-model="teamFilter" direction="horizontal" :class="styles.teamFilterGroup">
         <van-radio
           v-for="filter in props.teamFilterOptions"
           :key="filter.value"
           :name="filter.value"
         >
-          {{ filter.label }}
+          {{ t(filter.label) }}
         </van-radio>
       </van-radio-group>
     </van-cell-group>
@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
+
 import type {
   RandomJoinRouteOption,
   RandomJoinTeamFilterOption,
@@ -42,6 +44,8 @@ import type {
   TeamFilter
 } from "../../types";
 import styles from "./index.module.scss";
+
+const { t } = useI18n();
 
 const props = defineProps<{
   routeOptions: readonly RandomJoinRouteOption[];
