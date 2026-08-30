@@ -5,6 +5,7 @@ import {
   createWebHistory,
   isNavigationFailure,
   NavigationFailureType,
+  type RouteLocationRaw,
   type RouteRecordRaw
 } from "vue-router";
 
@@ -198,35 +199,45 @@ export const routerInstance = createRouter({
 // 前置路由守卫
 routerInstance.beforeEach(async (to) => {
   const { clientUserInfo, isLoggedIn } = useClientUserData(globalQueryClient);
-  const { incPendingNavigationCount } = useRouterState();
+  const { incPendingNavigationCount, decPendingNavigationCount } = useRouterState();
+
+  // 进入守卫即计数；守卫内重定向（NAVIGATION_GUARD_REDIRECT）不会触发 afterEach，需自行归还计数
+  incPendingNavigationCount();
+
+  const redirect = (location: RouteLocationRaw) => {
+    decPendingNavigationCount();
+    return location;
+  };
 
   // 拦截无效路由
   if (to.matched.length === 0) {
-    return isLoggedIn.value ? { name: "team-info" } : { name: "register" };
+    return redirect(isLoggedIn.value ? { name: "team-info" } : { name: "register" });
   }
 
   if (!isLoggedIn.value && !to.meta.allowNoAuth) {
     showToast({ message: "未登录", position: "bottom" });
-    return { name: "register", query: { fromPath: encodeURIComponent(to.fullPath) } };
+    return redirect({ name: "register", query: { fromPath: encodeURIComponent(to.fullPath) } });
   }
 
   // 已登录访问登录/注册/身份选择页
-  if (isLoggedIn.value && to.meta.guestOnly) return { name: "team-info" };
+  if (isLoggedIn.value && to.meta.guestOnly) return redirect({ name: "team-info" });
 
   if (to.meta.allowedRoles) {
     // 刷新进入时 userInfo 尚未被顶层组件的 query 填充，先拉取一次再做角色校验
     const userInfo =
       clientUserInfo.value ??
       (await globalQueryClient.fetchQuery(CLIENT_USER_INFO_QUERY_OPTIONS).catch(() => undefined));
+
+    // 登录态已在请求侧失效并跳转登录页，静默中止本次导航，避免重复提示
+    if (!isLoggedIn.value) return false;
+
     const role = userInfo?.role;
 
     if (!role || !to.meta.allowedRoles.includes(role)) {
       showFailToast("当前状态不可访问");
-      return { name: "team-info" };
+      return redirect({ name: "team-info" });
     }
   }
-
-  incPendingNavigationCount();
 });
 
 // 后置路由守卫
