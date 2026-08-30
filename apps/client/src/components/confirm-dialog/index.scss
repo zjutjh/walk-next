@@ -16,10 +16,18 @@
   padding: 0 24px 24px;
 }
 
+.confirm-dialog__outline-filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 .confirm-dialog__image {
   width: 160px;
   margin-top: -70px;
   margin-bottom: 8px;
+  filter: url(#outline-filter);
   pointer-events: none;
   user-select: none;
 }

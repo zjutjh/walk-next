@@ -5,6 +5,17 @@
     class="confirm-dialog"
     teleport="body"
   >
+    <svg v-if="dialogOptions" class="confirm-dialog__outline-filter" aria-hidden="true">
+      <filter id="outline-filter">
+        <feMorphology in="SourceAlpha" result="dilated" operator="dilate" radius="4" />
+        <feFlood flood-color="#f0fff1" result="color" />
+        <feComposite in="color" in2="dilated" operator="in" result="outline" />
+        <feMerge>
+          <feMergeNode in="outline" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </svg>
     <div v-if="dialogOptions" class="confirm-dialog__content">
       <img
         class="confirm-dialog__image"
