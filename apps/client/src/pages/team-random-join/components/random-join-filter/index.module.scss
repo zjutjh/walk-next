@@ -17,6 +17,31 @@
 .routeButton {
   flex: 1;
   height: 44px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+/* 选中：棕色实底 + 柔和投影，边框与底色同宽避免切换抖动 */
+.routeButtonActive {
+  color: #fff;
+  background: #be8f58;
+  border: 1.5px solid #be8f58;
+  box-shadow: 0 2px 8px rgba(190, 143, 88, 0.35);
+
+  .routeDistance {
+    opacity: 0.85;
+  }
+}
+
+/* 未选中：毛玻璃 + 棕描边，与输入框语言一致 */
+.routeButtonIdle {
+  color: #734a23;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1.5px solid #be8f58;
 }
 
 .routeName,
@@ -30,7 +55,7 @@
 }
 
 .routeName {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .routeDistance {
