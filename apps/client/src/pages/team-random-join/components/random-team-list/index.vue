@@ -86,9 +86,7 @@ watch(
     // 飞出阶段不打断动画：属于新筛选的数据先暂存，飞完后统一换上；
     // 旧路线的残余更新（与旧列表有交集）直接丢弃，避免飞行中的卡片重播动画
     if (isFlyingOut.value) {
-      if (!hasSharedTeam(displayedTeams.value, teams)) {
-        pendingTeams = teams;
-      }
+      if (!hasSharedTeam(displayedTeams.value, teams)) pendingTeams = teams;
       return;
     }
 
