@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { RequestError, RESP_CODE } from "shared";
+import { RequestError, RESP_CODE, useStoredUrlQuery } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -50,7 +50,18 @@ const { t } = useI18n();
 const queryClient = useQueryClient();
 const { updateClientUserData } = useClientUserData();
 
-const selectedRouteName = ref<RouteName>(ROUTE_OPTIONS[0].name);
+/** 选中路线，通过 URL Query 持久化，刷新后保留 */
+const { urlQuery } = useStoredUrlQuery<{ route: RouteName }>({
+  defaultValue: { route: ROUTE_OPTIONS[0].name }
+});
+
+const selectedRouteName = computed({
+  get: () => urlQuery.value.route,
+  set: (routeName) => {
+    urlQuery.value.route = routeName;
+  }
+});
+
 const joiningTeamId = ref<number>();
 
 // 吸顶时 fixed 定位相对视口，偏移量需为 navbar 底边（含刘海安全区），避免盖住导航栏
