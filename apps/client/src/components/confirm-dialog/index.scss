@@ -1,84 +1,73 @@
 /* 全局确认框：顶部插画溢出弹窗边界，容器与内容不可裁剪 */
 .confirm-dialog {
   overflow: visible;
-  border-radius: 20px;
+  background: #f0fff1;
+  border-radius: 16px;
 
   .van-dialog__content {
     overflow: visible;
   }
+}
 
-  &__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 24px 24px;
+.confirm-dialog__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 24px;
+}
+
+.confirm-dialog__image {
+  width: 160px;
+  margin-top: -70px;
+  margin-bottom: 8px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.confirm-dialog__title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+
+  /* 仅主文案（无副文案）时加大底部间距 */
+  &:last-child {
+    margin-bottom: 28px;
   }
+}
 
-  &__image {
-    width: 160px;
-    margin-top: -70px;
-    margin-bottom: 8px;
-    pointer-events: none;
-    user-select: none;
-  }
+.confirm-dialog__message {
+  margin: 0 0 28px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #6b7280;
+  text-align: center;
+}
 
-  &__title {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #1f2937;
-    text-align: center;
+.confirm-dialog__footer {
+  /* 按钮主题经 Vant CSS 变量注入：灰色确认 / 绿色再想想，单确认模式自动复用绿色 */
+  --van-button-default-color: #3d4759;
+  --van-button-default-background: #cccccc;
+  --van-button-default-border-color: transparent;
+  --van-button-primary-background: #87c493;
+  --van-button-primary-border-color: #87c493;
+  --van-button-primary-color: #fff;
 
-    /* 仅主文案（无副文案）时保持底部间距 */
-    &:last-child {
-      margin-bottom: 24px;
-    }
-  }
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
 
-  &__message {
-    margin: 8px 0 24px;
+.confirm-dialog__action,
+.confirm-dialog__dismiss {
+  flex: 1;
+  height: 40px;
+  border: none;
+  border-radius: 999px;
+
+  .van-button__text {
     font-size: 15px;
-    line-height: 1.5;
-    color: #6b7280;
-    text-align: center;
-  }
-
-  &__footer {
-    display: flex;
-    gap: 16px;
-    width: 100%;
-
-    /* 纯提示模式：确认按钮占满整行并使用主色 */
-    &--single .confirm-dialog__action {
-      color: #fff;
-      background: var(--van-primary-color);
-      border: none;
-
-      .van-button__text {
-        color: #fff;
-      }
-    }
-  }
-
-  &__action,
-  &__dismiss {
-    flex: 1;
-    height: 40px;
-    border-radius: 10px;
-
-    .van-button__text {
-      font-size: 15px;
-      font-weight: 500;
-    }
-  }
-
-  &__action {
-    color: #6b7280;
-    background: #f3f4f6;
-    border: none;
-
-    .van-button__text {
-      color: #6b7280;
-    }
+    font-weight: 500;
   }
 }
