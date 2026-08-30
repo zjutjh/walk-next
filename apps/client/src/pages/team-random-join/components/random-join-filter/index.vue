@@ -6,11 +6,8 @@
       <van-button
         v-for="route in props.routeOptions"
         :key="route.name"
-        :class="[
-          styles.routeButton,
-          route.name === routeName ? styles.routeButtonActive : styles.routeButtonIdle
-        ]"
         size="small"
+        :type="route.name === routeName ? 'primary' : 'default'"
         @click="routeName = route.name"
       >
         <span :class="styles.routeName">{{ t(route.title) }}</span>

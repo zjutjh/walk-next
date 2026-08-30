@@ -10,38 +10,31 @@
 }
 
 .routeButtons {
+  /* 棕色主题经 Vant CSS 变量注入：选中实底棕，未选中毛玻璃棕描边 */
+  --van-button-small-height: 44px;
+  --van-button-radius: 12px;
+  --van-button-primary-background: #be8f58;
+  --van-button-primary-border-color: #be8f58;
+  --van-button-primary-color: #fff;
+  --van-button-default-color: #734a23;
+  --van-button-default-background: rgba(255, 255, 255, 0.6);
+  --van-button-default-border-color: #be8f58;
+
   display: flex;
   gap: 10px;
-}
 
-.routeButton {
-  flex: 1;
-  height: 44px;
-  border-radius: 12px;
-  transition: all 0.2s ease;
+  :global(.van-button) {
+    flex: 1;
+    transition: all 0.2s ease;
 
-  &:active {
-    transform: translateY(1px);
+    &:active {
+      transform: translateY(1px);
+    }
   }
-}
 
-/* 选中：棕色实底 + 柔和投影，边框与底色同宽避免切换抖动 */
-.routeButtonActive {
-  color: #fff;
-  background: #be8f58;
-  border: 1.5px solid #be8f58;
-  box-shadow: 0 2px 8px rgba(190, 143, 88, 0.35);
-
-  .routeDistance {
-    opacity: 0.85;
+  :global(.van-button--primary) {
+    box-shadow: 0 2px 8px rgba(190, 143, 88, 0.35);
   }
-}
-
-/* 未选中：毛玻璃 + 棕描边，与输入框语言一致 */
-.routeButtonIdle {
-  color: #734a23;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1.5px solid #be8f58;
 }
 
 .routeName,
