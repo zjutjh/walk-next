@@ -23,6 +23,7 @@
       v-else-if="pageTitle"
       :title="pageTitle"
       left-arrow
+      safe-area-inset-top
       :left-disabled="isNavigationPending"
       :class="styles.layoutNavbar"
       @click-left="handleBackClick"
