@@ -1,0 +1,10 @@
+.iframe {
+  display: block;
+  width: calc(100% + 32px);
+  height: calc(
+    100% + (env(safe-area-inset-top, 0px) + 16px) + var(--navbar-space, 0px)
+  );
+  margin: calc(-1 * var(--navbar-space, 0px)) -16px;
+  margin-top: calc(-1 * (env(safe-area-inset-top, 0px) + 16px));
+  border: none;
+}

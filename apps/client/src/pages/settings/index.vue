@@ -1,7 +1,7 @@
 <template>
   <div :class="styles.page">
     <van-cell-group inset>
-      <van-cell :title="t('反馈')" clickable is-link :url="FEEDBACK_QA_URL" />
+      <van-cell :title="t('反馈')" clickable is-link @click="handleFeedbackClick" />
       <van-cell :title="t('退出登录')" clickable is-link @click="handleLogoutClick" />
     </van-cell-group>
   </div>
@@ -51,9 +51,11 @@ const router = useRouter();
 const { t } = useI18n();
 const { resetClientUserData } = useClientUserData();
 
-const FEEDBACK_QA_URL = import.meta.env.VITE_FEEDBACK_QA_URL;
-
 const isLogoutDialogVisible = ref(false);
+
+const handleFeedbackClick = () => {
+  router.replace({ name: "feedback" });
+};
 
 const handleLogoutClick = () => {
   isLogoutDialogVisible.value = true;

@@ -179,6 +179,14 @@ const routes: RouteRecordRaw[] = [
       pageName: "settings",
       showLogo: true
     }
+  },
+  {
+    path: "/feedback",
+    name: "feedback",
+    component: () => import("@/pages/feedback/index.vue"),
+    meta: {
+      pageName: "反馈"
+    }
   }
 ];
 
