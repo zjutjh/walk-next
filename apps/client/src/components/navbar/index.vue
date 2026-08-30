@@ -1,6 +1,6 @@
 <template>
   <div ref="wrapRef" class="bottom-nav-wrap">
-    <van-tabbar route :border="false" class="bottom-nav" fixed>
+    <van-tabbar route :border="false" class="bottom-nav" safe-area-inset-bottom>
       <van-tabbar-item v-for="item in tabItems" :key="item.to" replace :to="item.to">
         <div class="bottom-nav-item">
           <img :src="item.icon" :alt="item.label" class="bottom-nav-item__icon" />
