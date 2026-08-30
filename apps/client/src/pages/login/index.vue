@@ -1,9 +1,12 @@
 <template>
   <div :class="styles.page">
-    <div :class="styles.illustration" :style="{ '--illustration-mask': `url(${thumbsUpImage})` }">
-      <img :src="thumbsUpImage" alt="" :class="styles.illustrationImage" />
-    </div>
-
+    <decoration
+      :src="thumbsUpImage"
+      :top="`calc(env(safe-area-inset-top, 0px) + 40px)`"
+      right="-10px"
+      width="400px"
+      max-width="75vw"
+    />
     <div :class="styles.content">
       <h1 :class="styles.title">{{ t("登录") }}</h1>
 
@@ -23,6 +26,7 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import thumbsUpImage from "@/assets/images/thumbs-up.png";
+import Decoration from "@/components/decoration/index.vue";
 import { useClientUserData } from "@/composables";
 import { CLIENT_QUERY_KEY } from "@/constants";
 import { walkClientService } from "@/utils";

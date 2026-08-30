@@ -1,20 +1,5 @@
 @use "@/styles/mixins" as ui;
 
-.illustration {
-  @include ui.illustration-image(
-    $top: calc(env(safe-area-inset-top, 0px) + 40px),
-    $right: -10px,
-    $width: 400px,
-    $max-width: 75vw
-  );
-}
-
-.illustrationImage {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .content {
   position: relative;
   z-index: 1;
