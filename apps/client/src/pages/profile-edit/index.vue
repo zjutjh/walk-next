@@ -1,12 +1,5 @@
 <template>
   <div :class="styles.page">
-    <van-nav-bar
-      :title="t('修改信息')"
-      left-arrow
-      :left-text="t('返回')"
-      @click-left="handleBackClick"
-    />
-
     <error-empty
       :error="userInfo ? undefined : error"
       :disabled="isLoading || Boolean(userInfo)"
@@ -68,10 +61,6 @@ const { isPending: isUpdatePending, mutate: mutateUpdateUserInfo } = useMutation
   },
   onSuccess: handleUpdateSuccess
 });
-
-function handleBackClick() {
-  router.back();
-}
 
 async function handleFormSubmit(value: ProfileEditFormValue) {
   if (isUpdatePending.value) {

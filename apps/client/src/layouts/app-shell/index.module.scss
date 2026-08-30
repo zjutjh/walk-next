@@ -2,6 +2,8 @@
 
 .layout {
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   height: 100dvh;
   overflow: hidden;
@@ -58,8 +60,7 @@
   @include ui.page-container;
 
   z-index: 1;
-  min-height: 100vh;
-  height: 100dvh;
+  flex: 1;
   overflow-y: auto;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
@@ -71,6 +72,11 @@
 /* 显示 Logo 时，内容向下避让（光晕底缘 safe-area+69px + 缓冲 16px） */
 .layoutContentWithLogo {
   padding-top: calc(env(safe-area-inset-top, 0px) + 85px);
+}
+
+.layoutNavbar {
+  flex-shrink: 0;
+  --van-nav-bar-icon-color: var(--van-text-color-2);
 }
 
 /* Logo 自身带虚化光晕：图案只绘制在中央内容区，外扩的 padding 用于承载羽化渐隐 */

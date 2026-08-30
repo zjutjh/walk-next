@@ -1,6 +1,4 @@
 <template>
-  <van-nav-bar :title="t('基本信息')" left-arrow @click-left="handleBackClick" />
-
   <section :class="styles.content">
     <van-cell-group inset :class="styles.card">
       <van-cell :title="t('团队名称')" :value="props.team.name" />
@@ -46,7 +44,6 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  back: [];
   edit: [];
 }>();
 
@@ -55,10 +52,6 @@ const { t } = useI18n();
 const routeLabel = computed(() => t(getRouteLabel(props.team.route_name)));
 
 const teamStatusLabel = computed(() => t(getTeamStatusLabel(props.team.status)));
-
-const handleBackClick = () => {
-  emit("back");
-};
 
 const handleEditClick = () => {
   emit("edit");

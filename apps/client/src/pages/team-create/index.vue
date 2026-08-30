@@ -1,7 +1,5 @@
 <template>
   <div :class="styles.page">
-    <van-nav-bar :title="t('创建团队')" left-arrow @click-left="handleBackClick" />
-
     <create-team-form :loading="isCreatePending" @submit="handleCreateSubmit" />
   </div>
 </template>
@@ -24,10 +22,6 @@ const router = useRouter();
 const { t } = useI18n();
 const queryClient = useQueryClient();
 const { updateClientUserData } = useClientUserData();
-
-const handleBackClick = () => {
-  router.replace({ name: "team-info" });
-};
 
 const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({
   mutationFn: (value: CreateTeamFormValue) =>

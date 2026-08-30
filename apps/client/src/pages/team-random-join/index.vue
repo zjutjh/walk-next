@@ -2,8 +2,6 @@
   <div :class="styles.page">
     <van-sticky>
       <section :class="styles.topArea">
-        <van-nav-bar :title="t('随机加入')" left-arrow @click-left="handleBackClick" />
-
         <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
 
         <random-join-filter
@@ -63,10 +61,6 @@ const { updateClientUserData } = useClientUserData();
 const selectedRouteName = ref<RouteName>(ROUTE_OPTIONS[0].name);
 const selectedTeamFilter = ref<TeamFilter>(TEAM_FILTER_OPTIONS[0].value);
 const joiningTeamId = ref<number>();
-
-const handleBackClick = () => {
-  router.replace({ name: "team-info" });
-};
 
 const {
   data: randomTeamListData,

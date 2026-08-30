@@ -1,7 +1,5 @@
 <template>
   <div :class="styles.page">
-    <van-nav-bar :title="t('密码加入')" left-arrow @click-left="handleBackClick" />
-
     <password-join-form :loading="isJoinPending" @submit="handleJoinSubmit" />
   </div>
 </template>
@@ -25,10 +23,6 @@ const router = useRouter();
 const { t } = useI18n();
 const queryClient = useQueryClient();
 const { updateClientUserData } = useClientUserData();
-
-const handleBackClick = () => {
-  router.replace({ name: "team-info" });
-};
 
 const getJoinErrorMessage = (error: Error) => {
   if (error instanceof RequestError && error.code === RESP_CODE.NO_JOIN_CHANCE) {

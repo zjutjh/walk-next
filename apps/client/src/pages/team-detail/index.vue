@@ -5,13 +5,10 @@
       :team="teamDetail"
       :team-type="teamTypeLabel"
       :can-edit="isCaptain"
-      @back="handleBasicDetailBack"
       @edit="handleEditTeamClick"
     />
 
     <template v-else>
-      <van-nav-bar :title="t('基本信息')" left-arrow @click-left="handleBasicDetailBack" />
-
       <error-empty
         :error="teamDetailError"
         :disabled="isTeamDetailLoading"
@@ -156,10 +153,6 @@ const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = use
 const handleTeamDetailRetry = () => {
   void refetchTeamDetail();
   void refetchOverview();
-};
-
-const handleBasicDetailBack = () => {
-  router.replace({ name: "team-info" });
 };
 
 const handleEditTeamClick = () => {
