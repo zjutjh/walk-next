@@ -77,8 +77,12 @@ const {
       // eslint-disable-next-line camelcase
       route_name: urlQuery.value.route
     }),
-  // 切换筛选时保留旧数据在屏，供旧卡片先播完飞出动画再换新数据
-  placeholderData: keepPreviousData
+  // 切换筛选时保留旧数据在屏，新数据到达后由列表组件播放换场动画
+  placeholderData: keepPreviousData,
+  // 随机列表再拉一次也只是另一批随机队伍，缓存永不过期即可。
+  // 关键作用：阻止 refetchOnMount/refetchOnWindowFocus 在动画播放中
+  // 换成新随机数据，否则飞入会播两次、列表会突然重排
+  staleTime: Infinity
 });
 
 const visibleTeams = computed(
