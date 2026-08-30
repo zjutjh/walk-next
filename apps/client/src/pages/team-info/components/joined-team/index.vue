@@ -92,7 +92,7 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { useClientUserData, useConfirmDialog } from "@/composables";
+import { confirmDialog, useClientUserData } from "@/composables";
 import { CLIENT_QUERY_KEY } from "@/constants";
 import TeamMemberDetailPopup from "@/pages/team-detail/components/team-member-detail-popup/index.vue";
 import TeamMemberList from "@/pages/team-detail/components/team-member-list/index.vue";
@@ -107,7 +107,6 @@ const router = useRouter();
 const { t } = useI18n();
 const queryClient = useQueryClient();
 const { clientUserInfo, updateClientUserData } = useClientUserData();
-const { confirmDialog } = useConfirmDialog();
 
 const selectedMemberId = ref<number>();
 const isMemberDetailPopupOpened = ref(false);

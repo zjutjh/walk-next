@@ -44,7 +44,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { CLIENT_USER_INFO_QUERY_OPTIONS, useClientUserData, useConfirmDialog } from "@/composables";
+import { CLIENT_USER_INFO_QUERY_OPTIONS, confirmDialog, useClientUserData } from "@/composables";
 
 import ProfileHeader from "./components/profile-header/index.vue";
 import ProfileInfoList from "./components/profile-info-list/index.vue";
@@ -56,7 +56,6 @@ const router = useRouter();
 const { t } = useI18n();
 
 const { clientUserInfo } = useClientUserData();
-const { confirmDialog } = useConfirmDialog();
 const {
   data: queriedUserInfo,
   error,

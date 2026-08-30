@@ -12,14 +12,13 @@ import { showSuccessToast } from "vant";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { useClientUserData, useConfirmDialog } from "@/composables";
+import { confirmDialog, useClientUserData } from "@/composables";
 
 import styles from "./index.module.scss";
 
 const router = useRouter();
 const { t } = useI18n();
 const { resetClientUserData } = useClientUserData();
-const { confirmDialog } = useConfirmDialog();
 
 const handleFeedbackClick = () => {
   router.replace({ name: "feedback" });

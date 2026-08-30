@@ -1,5 +1,4 @@
-/* 全局确认框。
-   顶部插画超出弹窗边界，容器与内容不可裁剪溢出。 */
+/* 全局确认框：顶部插画溢出弹窗边界，容器与内容不可裁剪 */
 .confirm-dialog {
   overflow: visible;
   border-radius: 20px;
@@ -7,91 +6,79 @@
   .van-dialog__content {
     overflow: visible;
   }
-}
 
-.confirm-dialog__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 24px 24px;
-  overflow: visible;
-}
-
-.confirm-dialog__image {
-  width: 160px;
-  margin-top: -70px;
-  margin-bottom: 8px;
-  pointer-events: none;
-  user-select: none;
-}
-
-.confirm-dialog__title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
-  text-align: center;
-
-  /* 仅主文案时保持与底部的既有间距 */
-  &:last-child {
-    margin-bottom: 24px;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 24px 24px;
   }
-}
 
-.confirm-dialog__message {
-  margin: 8px 0 24px;
-  font-size: 15px;
-  line-height: 1.5;
-  color: #6b7280;
-  text-align: center;
-}
+  &__image {
+    width: 160px;
+    margin-top: -70px;
+    margin-bottom: 8px;
+    pointer-events: none;
+    user-select: none;
+  }
 
-.confirm-dialog__footer {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  width: 100%;
-}
+  &__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    text-align: center;
 
-/* 纯提示模式：确认按钮占满整行，使用主色 */
-.confirm-dialog__footer--single {
-  .confirm-dialog__action {
-    color: #fff;
-    background: var(--van-primary-color);
+    /* 仅主文案（无副文案）时保持底部间距 */
+    &:last-child {
+      margin-bottom: 24px;
+    }
+  }
+
+  &__message {
+    margin: 8px 0 24px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #6b7280;
+    text-align: center;
+  }
+
+  &__footer {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+
+    /* 纯提示模式：确认按钮占满整行并使用主色 */
+    &--single .confirm-dialog__action {
+      color: #fff;
+      background: var(--van-primary-color);
+      border: none;
+
+      .van-button__text {
+        color: #fff;
+      }
+    }
+  }
+
+  &__action,
+  &__dismiss {
+    flex: 1;
+    height: 40px;
+    border-radius: 10px;
+
+    .van-button__text {
+      font-size: 15px;
+      font-weight: 500;
+    }
+  }
+
+  &__action {
+    color: #6b7280;
+    background: #f3f4f6;
     border: none;
 
     .van-button__text {
-      color: #fff;
+      color: #6b7280;
     }
-  }
-}
-
-.confirm-dialog__action {
-  flex: 1;
-  height: 40px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #6b7280;
-  background: #f3f4f6;
-  border: none;
-  border-radius: 10px;
-
-  .van-button__text {
-    font-size: 15px;
-    font-weight: 500;
-    color: #6b7280;
-  }
-}
-
-.confirm-dialog__dismiss {
-  flex: 1;
-  height: 40px;
-  font-size: 15px;
-  font-weight: 500;
-  border-radius: 10px;
-
-  .van-button__text {
-    font-size: 15px;
-    font-weight: 500;
   }
 }

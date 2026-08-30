@@ -31,7 +31,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { CLIENT_USER_INFO_QUERY_OPTIONS, useClientUserData, useConfirmDialog } from "@/composables";
+import { CLIENT_USER_INFO_QUERY_OPTIONS, confirmDialog, useClientUserData } from "@/composables";
 import { walkClientService } from "@/utils";
 
 import ProfileEditForm from "./components/profile-edit-form/index.vue";
@@ -43,7 +43,6 @@ const router = useRouter();
 const queryClient = useQueryClient();
 const { t } = useI18n();
 const { clientUserInfo, updateClientUserData } = useClientUserData(queryClient);
-const { confirmDialog } = useConfirmDialog();
 const {
   data: queriedUserInfo,
   error,
