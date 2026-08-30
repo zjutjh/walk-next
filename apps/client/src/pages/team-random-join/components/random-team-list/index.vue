@@ -61,6 +61,8 @@ const { t } = useI18n();
 const displayedTeams = ref<RandomJoinTeam[]>([]);
 /** 旧列表是否正在飞出 */
 const isFlyingOut = ref(false);
+/** 换场动画期间暂存的新列表，飞出结束后统一换上 */
+let pendingTeams: RandomJoinTeam[] | undefined;
 
 let swapTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -71,28 +73,41 @@ const clearSwapTimer = () => {
   }
 };
 
-/** 是否为同一批队伍（同路线后台重新拉取等场景），此时直接原地更新、不重播动画 */
-const isSameTeamList = (a: RandomJoinTeam[], b: RandomJoinTeam[]) =>
-  a.length === b.length && a.every((team, index) => team.id === b[index]?.id);
+/** 两批队伍是否存在交集：有交集说明是同一路线的数据刷新（原地修补、不重播动画），
+ *  完全无交集才视作切换了筛选、需要播放换场动画 */
+const hasSharedTeam = (a: RandomJoinTeam[], b: RandomJoinTeam[]) => {
+  const teamIds = new Set(b.map((team) => team.id));
+  return a.some((team) => teamIds.has(team.id));
+};
 
 watch(
   () => props.teams,
   (teams) => {
-    clearSwapTimer();
-    isFlyingOut.value = false;
+    // 飞出阶段不打断动画：属于新筛选的数据先暂存，飞完后统一换上；
+    // 旧路线的残余更新（与旧列表有交集）直接丢弃，避免飞行中的卡片重播动画
+    if (isFlyingOut.value) {
+      if (!hasSharedTeam(displayedTeams.value, teams)) {
+        pendingTeams = teams;
+      }
+      return;
+    }
 
-    // 首次加载或同一批数据：直接换上，新卡片随元素插入自动逐个飞入
-    if (displayedTeams.value.length === 0 || isSameTeamList(displayedTeams.value, teams)) {
+    // 首次加载或同一路线的数据刷新：直接原地更新，不播换场动画
+    if (displayedTeams.value.length === 0 || hasSharedTeam(displayedTeams.value, teams)) {
       displayedTeams.value = teams;
       return;
     }
 
-    // 切换了列表：旧卡片逐个飞出，全部飞完后再换成新列表
+    // 切换了筛选：旧卡片逐个飞出，全部飞完后再换上新列表飞入
     isFlyingOut.value = true;
+    pendingTeams = teams;
     swapTimer = setTimeout(
       () => {
         isFlyingOut.value = false;
-        displayedTeams.value = teams;
+        if (pendingTeams) {
+          displayedTeams.value = pendingTeams;
+          pendingTeams = undefined;
+        }
       },
       (displayedTeams.value.length - 1) * FLY_OUT_STAGGER_MS + FLY_OUT_DURATION_MS
     );
@@ -100,5 +115,8 @@ watch(
   { immediate: true }
 );
 
-onBeforeUnmount(clearSwapTimer);
+onBeforeUnmount(() => {
+  clearSwapTimer();
+  pendingTeams = undefined;
+});
 </script>
