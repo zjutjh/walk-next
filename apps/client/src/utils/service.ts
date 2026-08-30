@@ -53,10 +53,15 @@ axiosInstance.interceptors.response.use(
         case RESP_CODE.NOT_LOGGED_IN:
         case RESP_CODE.LOGIN_EXPIRED:
           handleAuthExpired(body.code);
-          break;
+          throw new RequestError("登录过期，请重新登录", body.code);
+
+        case RESP_CODE.DATA_PARSE_ERROR:
+          handleAuthExpired(RESP_CODE.LOGIN_EXPIRED);
+          throw new RequestError("登录过期，请重新登录", RESP_CODE.LOGIN_EXPIRED);
+
         default:
+          throw new RequestError(body.message, body.code);
       }
-      throw new RequestError(body.message, body.code);
     }
     return response;
   },
