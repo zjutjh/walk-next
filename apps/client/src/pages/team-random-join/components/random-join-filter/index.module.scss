@@ -10,12 +10,12 @@
   padding: 0 12px 6px;
 }
 
-:global(.van-grid-item__content) {
+.filterSection :global(.van-grid-item__content) {
   padding: 0 4px;
   background: transparent;
 }
 
-:global(.van-button__content) {
+.routeGrid :global(.van-button__content) {
   min-width: 0;
 }
 

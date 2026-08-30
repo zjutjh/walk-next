@@ -22,7 +22,6 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import type { QueryRandomTeamListResponse, RandomJoinTeamResponse } from "api/types/client";
 import { RequestError, RESP_CODE } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, onMounted, ref } from "vue";
@@ -67,7 +66,7 @@ const {
   isLoading: isRandomTeamListLoading,
   error: randomTeamListError,
   refetch: refetchRandomTeamList
-} = useQuery<QueryRandomTeamListResponse>({
+} = useQuery({
   queryKey: computed(() => [CLIENT_QUERY_KEY.TEAM.RANDOM_LIST, selectedRouteName.value] as const),
   queryFn: () =>
     walkClientService.QueryRandomTeamList({
@@ -76,11 +75,9 @@ const {
     })
 });
 
-const availableTeams = computed(
+const visibleTeams = computed(
   () => randomTeamListData.value?.teams.filter((team) => team.num < TEAM_MEMBER_LIMIT) ?? []
 );
-
-const visibleTeams = computed(() => availableTeams.value);
 
 const getRandomJoinErrorMessage = (error: Error) => {
   if (error instanceof RequestError && error.code === RESP_CODE.NO_JOIN_CHANCE) {
@@ -90,11 +87,7 @@ const getRandomJoinErrorMessage = (error: Error) => {
   return t("加入失败，请稍后重试");
 };
 
-const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation<
-  RandomJoinTeamResponse,
-  Error,
-  number
->({
+const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation({
   mutationFn: (teamId: number) => walkClientService.RandomJoinTeam({ id: teamId }),
   onSuccess: async () => {
     showSuccessToast({
