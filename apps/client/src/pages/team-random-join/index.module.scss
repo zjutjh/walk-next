@@ -7,8 +7,6 @@
 
 .topArea {
   @include ui.card-container;
-
-  z-index: 1;
 }
 
 .subtitle {

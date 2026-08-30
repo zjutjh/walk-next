@@ -3,9 +3,11 @@
     <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
 
     <van-sticky :offset-top="stickyOffsetTop">
-      <section :class="styles.topArea">
-        <random-join-filter v-model:route-name="urlQuery.route" :route-options="ROUTE_OPTIONS" />
-      </section>
+      <random-join-filter
+        v-model:route-name="urlQuery.route"
+        :class="styles.topArea"
+        :route-options="ROUTE_OPTIONS"
+      />
     </van-sticky>
 
     <random-team-list
