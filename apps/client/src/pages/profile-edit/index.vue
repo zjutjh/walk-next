@@ -26,12 +26,12 @@
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { ErrorEmpty } from "shared";
-import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
+import { showFailToast, showSuccessToast } from "vant";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { CLIENT_USER_INFO_QUERY_OPTIONS, useClientUserData } from "@/composables";
+import { CLIENT_USER_INFO_QUERY_OPTIONS, useClientUserData, useConfirmDialog } from "@/composables";
 import { walkClientService } from "@/utils";
 
 import ProfileEditForm from "./components/profile-edit-form/index.vue";
@@ -43,6 +43,7 @@ const router = useRouter();
 const queryClient = useQueryClient();
 const { t } = useI18n();
 const { clientUserInfo, updateClientUserData } = useClientUserData(queryClient);
+const { confirmDialog } = useConfirmDialog();
 const {
   data: queriedUserInfo,
   error,
@@ -67,12 +68,12 @@ async function handleFormSubmit(value: ProfileEditFormValue) {
     return;
   }
 
-  await showConfirmDialog({
-    cancelButtonText: t("取消"),
-    confirmButtonText: t("确认"),
-    message: t("是否确认保存修改？"),
-    title: t("确认")
+  const isConfirmed = await confirmDialog({
+    title: t("确认"),
+    message: t("是否确认保存修改？")
   });
+
+  if (!isConfirmed) return;
 
   mutateUpdateUserInfo(value);
 }

@@ -1,0 +1,84 @@
+/* 全局确认框。
+   顶部插画超出弹窗边界，容器与内容不可裁剪溢出。 */
+.confirm-dialog {
+  overflow: visible;
+  border-radius: 20px;
+
+  .van-dialog__content {
+    overflow: visible;
+  }
+}
+
+.confirm-dialog__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 24px;
+  overflow: visible;
+}
+
+.confirm-dialog__image {
+  width: 160px;
+  margin-top: -70px;
+  margin-bottom: 8px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.confirm-dialog__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+
+  /* 仅主文案时保持与底部的既有间距 */
+  &:last-child {
+    margin-bottom: 24px;
+  }
+}
+
+.confirm-dialog__message {
+  margin: 8px 0 24px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #6b7280;
+  text-align: center;
+}
+
+.confirm-dialog__footer {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+}
+
+.confirm-dialog__action {
+  flex: 1;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b7280;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 10px;
+
+  .van-button__text {
+    font-size: 15px;
+    font-weight: 500;
+    color: #6b7280;
+  }
+}
+
+.confirm-dialog__dismiss {
+  flex: 1;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 10px;
+
+  .van-button__text {
+    font-size: 15px;
+    font-weight: 500;
+  }
+}

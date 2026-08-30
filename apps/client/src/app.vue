@@ -9,11 +9,14 @@
       </router-view>
     </error-boundary>
   </app-shell>
+
+  <confirm-dialog />
 </template>
 
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 
+import ConfirmDialog from "@/components/confirm-dialog/index.vue";
 import ErrorBoundary from "@/components/error-boundary/index.vue";
 import { useClientUserData, useTitleMeta } from "@/composables";
 import AppShell from "@/layouts/app-shell/index.vue";
