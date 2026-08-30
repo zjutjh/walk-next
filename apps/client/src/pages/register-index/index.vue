@@ -55,7 +55,7 @@ const identityOptions = [
 ];
 
 const handleNavigate = (routeName: string) => {
-  router.push({ name: routeName });
+  router.replace({ name: routeName });
 };
 
 const handleNavigateLogin = () => {

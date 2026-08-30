@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           pageName: "注册",
           bgCanvas: true,
-          showLogo: false
+          showLogo: true
         }
       },
       {
@@ -202,18 +202,16 @@ routerInstance.beforeEach((to) => {
 
   // 拦截无效路由
   if (to.matched.length === 0) {
-    return isLoggedIn.value ? { name: "team-info" } : { name: "login" };
+    return isLoggedIn.value ? { name: "team-info" } : { name: "register" };
   }
 
   if (!isLoggedIn.value && !to.meta.allowNoAuth) {
     showToast({ message: "未登录", position: "bottom" });
-    return { name: "login", query: { fromPath: encodeURIComponent(to.fullPath) } };
+    return { name: "register", query: { fromPath: encodeURIComponent(to.fullPath) } };
   }
 
   // 已登录访问登录/注册/身份选择页
-  if (isLoggedIn.value && to.meta.guestOnly) {
-    return { name: "team-info" };
-  }
+  if (isLoggedIn.value && to.meta.guestOnly) return { name: "team-info" };
 
   if (to.meta.allowedRoles) {
     const role = clientUserInfo.value?.role;
