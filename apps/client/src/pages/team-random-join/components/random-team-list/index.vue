@@ -2,7 +2,7 @@
   <section :class="styles.teamList">
     <p :class="styles.countText">{{ t("共找到{n}支队伍", { n: props.teams.length }) }}</p>
 
-    <error-empty :error="props.error" :disabled="props.loading" @btn-click="handleRetryClick">
+    <error-empty :error="props.error" :disabled="props.loading" @btn-click="emit('retry')">
       <van-loading v-if="props.loading" :class="styles.loading" vertical>
         {{ t("refresh.loading") }}
       </van-loading>
@@ -15,7 +15,7 @@
         :key="team.id"
         :team="team"
         :loading="props.joiningTeamId === team.id && props.joinLoading"
-        @join="handleJoinClick"
+        @join="emit('join', $event)"
       />
     </error-empty>
   </section>
@@ -43,12 +43,4 @@ const emit = defineEmits<{
   join: [teamId: number];
   retry: [];
 }>();
-
-const handleJoinClick = (teamId: number) => {
-  emit("join", teamId);
-};
-
-const handleRetryClick = () => {
-  emit("retry");
-};
 </script>

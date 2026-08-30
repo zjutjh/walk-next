@@ -3,6 +3,12 @@
 .teamCard {
   @include ui.card-container;
 
+  transition: transform 0.2s ease;
+
+  &:active {
+    transform: scale(0.99);
+  }
+
   & + & {
     margin-top: 12px;
   }
@@ -29,9 +35,9 @@
 }
 
 .footer {
-  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 12px;
+  margin-top: 10px;
 }

@@ -1,22 +1,22 @@
-.filterSection {
-  padding-top: 6px;
+.routeFilter {
+  padding: 0 8px 8px;
 }
 
-.routeGrid {
-  padding: 6px 8px 8px;
+.filterTitle {
+  margin: 0;
+  padding: 0 8px 6px;
+  font-size: 14px;
+  color: #7b8493;
 }
 
-.filterSection :global(.van-cell-group__title) {
-  padding: 0 12px 6px;
+.routeButtons {
+  display: flex;
+  gap: 10px;
 }
 
-.filterSection :global(.van-grid-item__content) {
-  padding: 0 4px;
-  background: transparent;
-}
-
-.routeGrid :global(.van-button__content) {
-  min-width: 0;
+.routeButton {
+  flex: 1;
+  height: 44px;
 }
 
 .routeName,
