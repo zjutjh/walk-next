@@ -2,12 +2,12 @@ import { QueryClient, queryOptions, useQuery, useQueryClient } from "@tanstack/v
 import { watchImmediate } from "@vueuse/core";
 import type { QueryUserInfoResponse } from "api/types/client";
 import { isNil, merge } from "lodash-es";
-import { defineStore } from "pinia";
+import { storeToRefs } from "pinia";
 import type { PartialDeep, SimplifyDeep } from "type-fest";
-import { getCurrentScope, onScopeDispose, ref, toRef } from "vue";
+import { getCurrentScope, onScopeDispose } from "vue";
 
 import { CLIENT_QUERY_KEY } from "@/constants";
-import { CLIENT_PINIA_PERSIST_KEY } from "@/constants/pinia-persist-key";
+import { useClientUserDataStore } from "@/store/client-user-data";
 import { walkClientService } from "@/utils";
 
 export interface ClientUserData {
@@ -16,6 +16,11 @@ export interface ClientUserData {
   userInfo?: QueryUserInfoResponse;
 }
 
+const CLIENT_USER_DATA_DEFAULT: ClientUserData = {
+  isLoggedIn: false,
+  jwt: ""
+};
+
 /** 当前用户信息查询配置 */
 export const CLIENT_USER_INFO_QUERY_OPTIONS = queryOptions({
   queryKey: [CLIENT_QUERY_KEY.USER.SELF] as const,
@@ -23,45 +28,36 @@ export const CLIENT_USER_INFO_QUERY_OPTIONS = queryOptions({
   staleTime: Infinity
 });
 
-/** 客户端用户数据 Store */
-const useClientUserDataStore = defineStore(
-  "clientUserData",
-  () => {
-    const data = ref(buildDefaultClientUserData());
-    const isQueryExist = ref(false);
-
-    return {
-      data,
-      isQueryExist
-    };
-  },
-  {
-    persist: {
-      key: CLIENT_PINIA_PERSIST_KEY.CLIENT_USER_DATA,
-      pick: ["data"]
-    }
-  }
-);
-
 /**
  * 客户端用户数据
  */
 export const useClientUserData = (queryClient: QueryClient = useQueryClient()) => {
   const userDataStore = useClientUserDataStore();
+  const { isLoggedIn, jwt, userInfo: clientUserInfo } = storeToRefs(userDataStore);
 
-  /** 是否已登录 */
-  const isLoggedIn = toRef(() => userDataStore.data.isLoggedIn);
-  /** 系统 JWT */
-  const jwt = toRef(() => userDataStore.data.jwt);
-  /** 当前用户信息 */
-  const clientUserInfo = toRef(() => userDataStore.data.userInfo);
-
-  const updateClientUserData = (patch: SimplifyDeep<PartialDeep<ClientUserData>>) => {
-    merge(userDataStore.data, patch);
+  const syncClientUserInfoQueryData = () => {
     queryClient.setQueryData<QueryUserInfoResponse>(
       [CLIENT_QUERY_KEY.USER.SELF],
-      () => userDataStore.data.userInfo ?? undefined
+      () => clientUserInfo.value ?? undefined
     );
+  };
+
+  const updateClientUserData = (patch: SimplifyDeep<PartialDeep<ClientUserData>>) => {
+    const nextUserData = merge(
+      {
+        ...CLIENT_USER_DATA_DEFAULT,
+        userInfo: clientUserInfo.value
+      },
+      {
+        isLoggedIn: isLoggedIn.value,
+        jwt: jwt.value
+      },
+      patch
+    );
+
+    userDataStore.jwt = patch.isLoggedIn === false ? "" : nextUserData.jwt;
+    userDataStore.userInfo = nextUserData.userInfo;
+    syncClientUserInfoQueryData();
   };
 
   /** 登录成功后更新用户数据 */
@@ -74,9 +70,8 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
 
   /** 重置当前用户数据 */
   const resetClientUserData = () => {
-    userDataStore.data.isLoggedIn = false;
-    userDataStore.data.jwt = "";
-    userDataStore.data.userInfo = undefined;
+    userDataStore.jwt = "";
+    userDataStore.userInfo = undefined;
     queryClient.clear();
   };
 
@@ -116,11 +111,3 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
     setupClientUserDataQuery
   };
 };
-
-/** 客户端用户数据空值 */
-function buildDefaultClientUserData(): ClientUserData {
-  return {
-    isLoggedIn: false,
-    jwt: ""
-  };
-}
