@@ -114,8 +114,9 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
     joiningTeamId.value = undefined;
     showFailToast({
       message:
-        error instanceof RequestError && error.code === RESP_CODE.NO_JOIN_CHANCE
-          ? t("加入团队次数已用完")
+        error instanceof RequestError &&
+        (error.code === RESP_CODE.NO_JOIN_CHANCE || error.code === RESP_CODE.TEAM_SUBMITTED)
+          ? error.message
           : t("加入失败，请稍后重试"),
       position: "top"
     });
