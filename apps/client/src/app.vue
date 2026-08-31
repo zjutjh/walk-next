@@ -1,16 +1,16 @@
 <template>
-  <app-shell>
-    <error-boundary>
+  <error-boundary>
+    <app-shell>
       <router-view :key="route.meta.recreateComponentByPath ? route.fullPath : undefined" />
       <router-view v-slot="{ Component }" name="navbar">
         <transition name="navbar">
           <component :is="Component" v-if="Component" />
         </transition>
       </router-view>
-    </error-boundary>
-  </app-shell>
+    </app-shell>
 
-  <confirm-dialog />
+    <confirm-dialog />
+  </error-boundary>
 </template>
 
 <script setup lang="ts">
