@@ -3,15 +3,17 @@
   <error-boundary @error-captured="handleErrorCaptured">
     <template #fallback>
       <div :class="styles?.errorContainer">
-        <span :class="styles?.errorTitle">糟糕！页面出错了</span>
-        <span>以下是报错信息。请联系开发人员修复。</span>
+        <span :class="styles?.errorTitle">糟糕！页面出错了 Oops! Error Occurred</span>
+        <span>
+          以下是报错信息。请联系开发人员修复。Contact the development team for assistance.
+        </span>
         <div :class="styles?.errorInfo">
           <span>{{ lastError?.message }}</span>
           <pre>{{ lastError?.stack }}</pre>
         </div>
         <div :class="styles?.buttons">
-          <button v-if="historyStateBack" @click="handleBackClick()">返回上页</button>
-          <button @click="handleRefresh()">刷新重试</button>
+          <button v-if="historyStateBack" @click="handleBackClick()">返回上页 Back</button>
+          <button @click="handleRefresh()">刷新重试 Refresh</button>
         </div>
       </div>
     </template>
