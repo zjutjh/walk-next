@@ -10,6 +10,8 @@
 
 .title {
   @include ui.page-title;
+
+  margin: 0;
 }
 
 .cardList {
@@ -37,6 +39,18 @@
   }
 }
 
+.cardSelected {
+  .cardOverlay {
+    background: transparent;
+  }
+  .cardLabel {
+    opacity: 0;
+  }
+  .cardIcon {
+    opacity: 0;
+  }
+}
+
 .cardImage {
   display: block;
   width: 100%;
@@ -48,8 +62,9 @@
 .cardOverlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.3);
   pointer-events: none;
+  transition: background 0.3s ease;
 }
 
 .cardLabel {
@@ -66,14 +81,44 @@
   color: #734a23;
   text-shadow: 0 1px 4px rgba(255, 255, 255, 0.6);
   pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 .cardIcon {
   width: 50px;
   height: 50px;
   object-fit: contain;
+  transition: opacity 0.3s ease;
 }
 
 .loginLink {
   @include ui.guide-link;
+}
+
+.confirmButton {
+  align-self: center;
+  width: auto;
+  min-width: 150px;
+  padding: 10px 24px;
+  background: #734a23;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:active {
+    background: #5a3a1c;
+  }
+}
+
+.confirmButtonDisabled {
+  background: #ccc;
+  cursor: not-allowed;
+
+  &:active {
+    background: #ccc;
+  }
 }

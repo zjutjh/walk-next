@@ -9,12 +9,11 @@
 
       <div :class="styles.cardContainer">
         <div :class="styles.cardList">
-          <router-link
+          <div
             v-for="option in identityOptions"
             :key="option.route"
-            :class="styles.card"
-            :to="{ name: option.route, query: route.query }"
-            replace
+            :class="[styles.card, selectedOption === option.route && styles.cardSelected]"
+            @click="selectOption(option.route)"
           >
             <img :src="option.image" :alt="option.label" :class="styles.cardImage" />
             <div :class="styles.cardOverlay" />
@@ -22,9 +21,17 @@
               <img :src="tomatoJamImage" :class="styles.cardIcon" />
               {{ t(option.label) }}
             </span>
-          </router-link>
+          </div>
         </div>
       </div>
+
+      <button
+        :class="[styles.confirmButton, !selectedOption && styles.confirmButtonDisabled]"
+        :disabled="!selectedOption"
+        @click="confirmSelection"
+      >
+        {{ t("确认") }}
+      </button>
 
       <router-link :class="styles.loginLink" :to="{ name: 'login', query: route.query }" replace>
         {{ t("已有账号？去登录") }}
@@ -34,8 +41,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import hero1 from "@/assets/images/hero-1.jpg";
 import hero2 from "@/assets/images/hero-2.jpg";
@@ -47,11 +55,24 @@ import Decoration from "@/components/decoration/index.vue";
 import styles from "./index.module.scss";
 
 const route = useRoute();
+const router = useRouter();
 const { t } = useI18n();
+
+const selectedOption = ref<string | null>(null);
 
 const identityOptions = [
   { label: "我是学生", image: hero1, route: "register-student" },
   { label: "我是教职工", image: hero2, route: "register-teacher" },
   { label: "我是校友", image: hero3, route: "register-alumnus" }
 ];
+
+const selectOption = (routeName: string) => {
+  selectedOption.value = routeName;
+};
+
+const confirmSelection = () => {
+  if (selectedOption.value) {
+    router.replace({ name: selectedOption.value, query: route.query });
+  }
+};
 </script>
