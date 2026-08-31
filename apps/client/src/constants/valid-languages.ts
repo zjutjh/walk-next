@@ -15,10 +15,10 @@ export const LANG_DISPLAY_NAME: Record<ValidLanguage, string> = {
   "zh-Hans": "简体中文",
   "zh-Hant": "繁體中文",
   en: "English"
-};
+} as const;
 
 export const LANG_DISPLAY_NAME_SHORT: Record<ValidLanguage, string> = {
   "zh-Hans": "简",
   "zh-Hant": "繁",
   en: "En"
-};
+} as const;

@@ -3,15 +3,15 @@
   <error-boundary @error-captured="handleErrorCaptured">
     <template #fallback>
       <div :class="styles?.errorContainer">
-        <span :class="styles?.errorTitle">{{ t("糟糕！页面出错了") }}</span>
-        <span>{{ t("以下是报错信息。请联系开发人员修复。") }}</span>
+        <span :class="styles?.errorTitle">糟糕！页面出错了</span>
+        <span>以下是报错信息。请联系开发人员修复。</span>
         <div :class="styles?.errorInfo">
           <span>{{ lastError?.message }}</span>
           <pre>{{ lastError?.stack }}</pre>
         </div>
         <div :class="styles?.buttons">
-          <button v-if="historyStateBack" @click="handleBackClick()">{{ t("返回") }}</button>
-          <button @click="handleRefresh()">{{ t("刷新重试") }}</button>
+          <button v-if="historyStateBack" @click="handleBackClick()">返回上页</button>
+          <button @click="handleRefresh()">刷新重试</button>
         </div>
       </div>
     </template>
@@ -23,11 +23,8 @@
 import { storeToRefs } from "pinia";
 import { ErrorBoundary, unknownToError, useErrorBoundaryStore } from "shared";
 import { computed } from "vue";
-import { useI18n } from "vue-i18n";
 
 import styles from "./index.module.scss";
-
-const { t } = useI18n();
 
 const { error } = storeToRefs(useErrorBoundaryStore());
 
