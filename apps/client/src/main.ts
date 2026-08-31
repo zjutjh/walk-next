@@ -7,7 +7,7 @@ import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
 
-import { useUserLocale } from "@/composables";
+import { initI18n } from "@/composables";
 import { globalQueryClient, initializeRootFontSize, routerInstance } from "@/configs";
 
 initializeRootFontSize();
@@ -19,7 +19,7 @@ async function bootstrap() {
     .use(routerInstance)
     .use(VueQueryPlugin, { queryClient: globalQueryClient })
     .use(createPinia().use(piniaPluginPersistedstate))
-    .use(await useUserLocale().initI18n())
+    .use(await initI18n())
     .mount("#app");
 }
 

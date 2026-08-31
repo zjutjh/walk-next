@@ -29,36 +29,36 @@ export const loadLocaleMessages = async (i18n: Composer, locale: ValidLanguage):
   return nextTick();
 };
 
+export const initI18n = async (): Promise<I18n> => {
+  const locale = getInitLocale();
+  const messages = await import(
+    /* webpackChunkName: "locale-[request]" */ `../locales/${VALID_LANG.find((prefix) => locale.startsWith(prefix))}.yaml`
+  );
+  const i18n: I18n = createI18n({
+    locale,
+    fallbackLocale: "zh-Hans",
+    availableLocales: [...VALID_LANG],
+    globalInjection: true,
+    // messages
+    messages: { [locale]: messages.default }
+  } satisfies I18nOptions);
+  document.querySelector("html")?.setAttribute("lang", locale);
+  return i18n;
+};
+
 export const useUserLocale = (): {
   locale: WritableComputedRef<ValidLanguage | undefined>;
-  initI18n: () => Promise<I18n>;
 } => {
-  const initI18n = async (): Promise<I18n> => {
-    const locale = getInitLocale();
-    const messages = await import(
-      /* webpackChunkName: "locale-[request]" */ `../locales/${VALID_LANG.find((prefix) => locale.startsWith(prefix))}.yaml`
-    );
-    const i18n: I18n = createI18n({
-      locale,
-      fallbackLocale: "zh-Hans",
-      availableLocales: [...VALID_LANG],
-      globalInjection: true,
-      // messages
-      messages: { [locale]: messages.default }
-    } satisfies I18nOptions);
-    document.querySelector("html")?.setAttribute("lang", locale);
-    return i18n;
-  };
+  const i18n = useI18n();
   const locale = computed({
-    get: () => VALID_LANG.find((prefix) => useI18n().locale.value.startsWith(prefix)),
+    get: () => VALID_LANG.find((prefix) => i18n.locale.value.startsWith(prefix)),
     set: async (newLocale: ValidLanguage) => {
-      if (!useI18n().availableLocales.includes(newLocale))
-        await loadLocaleMessages(useI18n(), newLocale);
-      useI18n().locale.value = newLocale;
+      if (!i18n.availableLocales.includes(newLocale)) await loadLocaleMessages(i18n, newLocale);
+      i18n.locale.value = newLocale;
       useLocaleStore().locale = newLocale;
       document.querySelector("html")?.setAttribute("lang", newLocale);
     }
   });
 
-  return { locale, initI18n };
+  return { locale };
 };
