@@ -27,6 +27,7 @@
 
 .card {
   position: relative;
+  container-type: inline-size;
   overflow: hidden;
   border: 1px solid rgba(143, 83, 17, 1);
   border-radius: 0;
@@ -35,7 +36,25 @@
   transition: transform 0.2s ease;
 
   &:active {
-    transform: scale(0.97);
+    transform: scale(0.95);
+  }
+
+  &:nth-child(1) .cardName {
+    top: 8cqw;
+    left: 18cqw;
+    transform: rotate(12deg);
+  }
+
+  &:nth-child(2) .cardName {
+    top: 12cqw;
+    left: 18cqw;
+    transform: rotate(-22deg);
+  }
+
+  &:nth-child(3) .cardName {
+    top: 12cqw;
+    left: 40cqw;
+    transform: rotate(14deg);
   }
 }
 
@@ -57,6 +76,15 @@
   height: auto;
   object-fit: cover;
   aspect-ratio: 16 / 7;
+}
+
+.cardName {
+  position: absolute;
+  font-size: 15cqw;
+  font-weight: 600;
+  color: #8f5311;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 
 .cardOverlay {

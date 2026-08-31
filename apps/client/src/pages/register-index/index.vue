@@ -16,6 +16,7 @@
             @click="selectOption(option.route)"
           >
             <img :src="option.image" :alt="option.label" :class="styles.cardImage" />
+            <span :class="styles.cardName">{{ t(option.name) }}</span>
             <div :class="styles.cardOverlay" />
             <span :class="styles.cardLabel">
               <img :src="tomatoJamImage" :class="styles.cardIcon" />
@@ -61,9 +62,9 @@ const { t } = useI18n();
 const selectedOption = ref<string | null>(null);
 
 const identityOptions = [
-  { label: "我是学生", image: hero1, route: "register-student" },
-  { label: "我是教职工", image: hero2, route: "register-teacher" },
-  { label: "我是校友", image: hero3, route: "register-alumnus" }
+  { name: "学生", label: "我是学生", image: hero1, route: "register-student" },
+  { name: "教职工", label: "我是教职工", image: hero2, route: "register-teacher" },
+  { name: "校友", label: "我是校友", image: hero3, route: "register-alumnus" }
 ];
 
 const selectOption = (routeName: string) => {
