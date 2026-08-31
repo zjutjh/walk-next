@@ -12,7 +12,11 @@
 
       <login-form :loading="isLoginPending" @submit="handleLoginSubmit" />
 
-      <router-link :class="styles.registerLink" to="/register" replace>
+      <router-link
+        :class="styles.registerLink"
+        :to="{ name: 'register', query: route.query }"
+        replace
+      >
         {{ t("signup.guide-link") }}
       </router-link>
     </div>

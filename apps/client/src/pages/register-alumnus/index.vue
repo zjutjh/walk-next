@@ -8,7 +8,7 @@
 
       <alumnus-register-form :loading="isRegisterPending" @submit="handleRegisterSubmit" />
 
-      <router-link :class="styles.loginLink" to="/login" replace>
+      <router-link :class="styles.loginLink" :to="{ name: 'login', query: route.query }" replace>
         {{ t("已有账号？去登录") }}
       </router-link>
     </div>
@@ -30,7 +30,8 @@ import AlumnusRegisterForm from "./components/alumnus-register-form/index.vue";
 import styles from "./index.module.scss";
 import type { AlumnusRegisterFormValue } from "./types";
 
-const pageName = useRoute().meta.pageName as string;
+const route = useRoute();
+const pageName = route.meta.pageName as string;
 const router = useRouter();
 const { t } = useI18n();
 
@@ -48,7 +49,7 @@ const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
       position: "top"
     });
 
-    router.replace({ name: "login" });
+    router.replace({ name: "login", query: route.query });
   },
   onError: (error: unknown) => {
     const message = error instanceof Error ? error.message : t("注册失败，请稍后重试");

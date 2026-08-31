@@ -13,7 +13,7 @@
             v-for="option in identityOptions"
             :key="option.route"
             :class="styles.card"
-            :to="{ name: option.route }"
+            :to="{ name: option.route, query: route.query }"
             replace
           >
             <img :src="option.image" :alt="option.label" :class="styles.cardImage" />
@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <router-link :class="styles.loginLink" to="/login" replace>
+      <router-link :class="styles.loginLink" :to="{ name: 'login', query: route.query }" replace>
         {{ t("已有账号？去登录") }}
       </router-link>
     </div>
@@ -35,6 +35,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 
 import hero1 from "@/assets/images/hero-1.jpg";
 import hero2 from "@/assets/images/hero-2.jpg";
@@ -45,6 +46,7 @@ import Decoration from "@/components/decoration/index.vue";
 
 import styles from "./index.module.scss";
 
+const route = useRoute();
 const { t } = useI18n();
 
 const identityOptions = [
