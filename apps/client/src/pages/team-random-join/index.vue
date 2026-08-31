@@ -106,9 +106,7 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
 
     updateClientUserData({ userInfo });
 
-    window.setTimeout(() => {
-      router.replace({ name: "team-info" });
-    }, 3000);
+    router.replace({ name: "team-info" });
   },
   onError: (error) => {
     joiningTeamId.value = undefined;
