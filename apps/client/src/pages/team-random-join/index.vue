@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { RequestError, RESP_CODE, useStoredUrlQuery } from "shared";
+import { RequestError, useStoredUrlQuery } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -111,11 +111,7 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
   onError: (error) => {
     joiningTeamId.value = undefined;
     showFailToast({
-      message:
-        error instanceof RequestError &&
-        (error.code === RESP_CODE.NO_JOIN_CHANCE || error.code === RESP_CODE.TEAM_SUBMITTED)
-          ? error.message
-          : t("加入失败，请稍后重试"),
+      message: (error instanceof RequestError && error.message) || t("加入失败，请稍后重试"),
       position: "top"
     });
   }
