@@ -3,43 +3,48 @@
     <p :class="styles.countText">{{ t("共找到{n}支队伍", { n: displayedTeams.length }) }}</p>
 
     <error-empty :error="props.error" :disabled="props.loading" @btn-click="emit('retry')">
-      <van-loading v-if="props.loading" :class="styles.loading" vertical>
-        {{ t("refresh.loading") }}
-      </van-loading>
-
-      <van-empty v-else-if="displayedTeams.length === 0" :description="t('暂无可加入队伍')" />
-
-      <!-- 换场分两段：旧卡播完飞出动画（class 驱动，卡片不脱离文档流），
-           最后一张卡 animationend 后换上新列表，由 TransitionGroup 播飞入。
-           不要让 TransitionGroup 直接处理整列表替换：飞出卡片 absolute 后
-           静态位置塌陷，会全部堆叠到第一排 -->
-      <transition-group
-        v-else
-        appear
-        tag="div"
-        :class="styles.cardList"
-        :enter-active-class="styles.cardEnterActive"
-        :enter-from-class="styles.cardEnterFrom"
-        :leave-active-class="styles.cardLeaveActive"
-        :move-class="styles.cardMove"
+      <loading-container
+        :class="styles.loadingContainer"
+        :loading="props.loading"
+        :text="t('refresh.loading')"
       >
-        <random-team-card
-          v-for="(team, index) in displayedTeams"
-          :key="team.id"
-          :class="isFlyingOut ? styles.cardFlyOut : undefined"
-          :style="{ '--card-index': `${index}` }"
-          :team="team"
-          :loading="props.joiningTeamId === team.id && props.joinLoading"
-          @join="emit('join', $event)"
-          @animationend="handleFlyOutEnd(index)"
+        <van-empty
+          v-if="displayedTeams.length === 0 && !props.loading"
+          :description="t('暂无可加入队伍')"
         />
-      </transition-group>
+
+        <!-- 换场分两段：旧卡播完飞出动画（class 驱动，卡片不脱离文档流），
+             最后一张卡 animationend 后换上新列表，由 TransitionGroup 播飞入。
+             不要让 TransitionGroup 直接处理整列表替换：飞出卡片 absolute 后
+             静态位置塌陷，会全部堆叠到第一排 -->
+        <transition-group
+          v-else-if="displayedTeams.length > 0"
+          appear
+          tag="div"
+          :class="styles.cardList"
+          :enter-active-class="styles.cardEnterActive"
+          :enter-from-class="styles.cardEnterFrom"
+          :leave-active-class="styles.cardLeaveActive"
+          :move-class="styles.cardMove"
+        >
+          <random-team-card
+            v-for="(team, index) in displayedTeams"
+            :key="team.id"
+            :class="isFlyingOut ? styles.cardFlyOut : undefined"
+            :style="{ '--card-index': `${index}` }"
+            :team="team"
+            :loading="props.joiningTeamId === team.id && props.joinLoading"
+            @join="emit('join', $event)"
+            @animationend="handleFlyOutEnd(index)"
+          />
+        </transition-group>
+      </loading-container>
     </error-empty>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ErrorEmpty } from "shared";
+import { ErrorEmpty, LoadingContainer } from "shared";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

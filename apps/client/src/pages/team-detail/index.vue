@@ -14,10 +14,13 @@
         :disabled="isTeamDetailLoading"
         @btn-click="handleTeamDetailRetry"
       >
-        <van-loading v-if="isTeamDetailLoading" :class="styles.loading" vertical>
-          {{ t("refresh.loading") }}
-        </van-loading>
-        <van-empty v-else :description="t('暂无团队详细信息')" />
+        <loading-container
+          :class="styles.loadingContainer"
+          :loading="isTeamDetailLoading"
+          :text="t('refresh.loading')"
+        >
+          <van-empty v-if="!isTeamDetailLoading" :description="t('暂无团队详细信息')" />
+        </loading-container>
       </error-empty>
     </template>
   </div>
@@ -38,7 +41,7 @@ import type {
   QueryTeamOverviewResponse,
   UpdateTeamInfoResponse
 } from "api/types/client";
-import { ErrorEmpty } from "shared";
+import { ErrorEmpty, LoadingContainer } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";

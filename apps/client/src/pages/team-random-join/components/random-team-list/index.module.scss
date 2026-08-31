@@ -12,9 +12,8 @@
   min-height: 240px;
 }
 
-.loading {
+.loadingContainer {
   min-height: 240px;
-  justify-content: center;
 }
 
 // 带 .cardList 前缀提高优先级，覆盖卡片自身的 :active 按压缩放过渡

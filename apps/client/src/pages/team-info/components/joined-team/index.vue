@@ -5,56 +5,58 @@
       :disabled="isOverviewLoading"
       @btn-click="handleOverviewRetry"
     >
-      <van-loading v-if="isOverviewLoading" :class="styles.loading" vertical>
-        {{ t("refresh.loading") }}
-      </van-loading>
+      <loading-container
+        :class="styles.loadingContainer"
+        :loading="isOverviewLoading"
+        :text="t('refresh.loading')"
+      >
+        <template v-if="teamOverview && !isOverviewLoading">
+          <team-overview-card :team="teamOverview.team" @detail="handleDetailClick" />
 
-      <template v-else-if="teamOverview">
-        <team-overview-card :team="teamOverview.team" @detail="handleDetailClick" />
+          <team-member-list :members="sortedMembers" @member-click="handleMemberClick" />
 
-        <team-member-list :members="sortedMembers" @member-click="handleMemberClick" />
+          <section v-if="isCaptain" :class="styles.actionArea">
+            <van-button block round type="primary" @click="handleShareClick">
+              {{ t("分享队伍") }}
+            </van-button>
+            <van-button
+              block
+              round
+              type="danger"
+              plain
+              :loading="isDisbandTeamPending"
+              @click="handleDisbandClick"
+            >
+              {{ t("解散队伍") }}
+            </van-button>
+            <van-button
+              block
+              round
+              type="primary"
+              :loading="isSubmitTeamPending || isUndoTeamSubmissionPending"
+              :disabled="isTeamDetailLoading"
+              @click="handleSubmissionClick"
+            >
+              {{ teamDetail?.submitted ? t("取消提交") : t("提交队伍") }}
+            </van-button>
+          </section>
 
-        <section v-if="isCaptain" :class="styles.actionArea">
-          <van-button block round type="primary" @click="handleShareClick">
-            {{ t("分享队伍") }}
-          </van-button>
-          <van-button
-            block
-            round
-            type="danger"
-            plain
-            :loading="isDisbandTeamPending"
-            @click="handleDisbandClick"
-          >
-            {{ t("解散队伍") }}
-          </van-button>
-          <van-button
-            block
-            round
-            type="primary"
-            :loading="isSubmitTeamPending || isUndoTeamSubmissionPending"
-            :disabled="isTeamDetailLoading"
-            @click="handleSubmissionClick"
-          >
-            {{ teamDetail?.submitted ? t("取消提交") : t("提交队伍") }}
-          </van-button>
-        </section>
+          <section v-else-if="isLeaveTeamVisible" :class="styles.actionArea">
+            <van-button
+              block
+              round
+              type="danger"
+              plain
+              :loading="isLeaveTeamPending"
+              @click="handleLeaveTeamClick"
+            >
+              {{ t("退出队伍") }}
+            </van-button>
+          </section>
+        </template>
 
-        <section v-else-if="isLeaveTeamVisible" :class="styles.actionArea">
-          <van-button
-            block
-            round
-            type="danger"
-            plain
-            :loading="isLeaveTeamPending"
-            @click="handleLeaveTeamClick"
-          >
-            {{ t("退出队伍") }}
-          </van-button>
-        </section>
-      </template>
-
-      <van-empty v-else :description="t('暂无团队信息')" />
+        <van-empty v-else-if="!isOverviewLoading" :description="t('暂无团队信息')" />
+      </loading-container>
     </error-empty>
 
     <team-member-detail-popup
@@ -86,7 +88,7 @@ import type {
   UndoTeamSubmissionResponse,
   UpdateTeamCaptainResponse
 } from "api/types/client";
-import { ErrorEmpty, RequestError, RESP_CODE } from "shared";
+import { ErrorEmpty, LoadingContainer, RequestError, RESP_CODE } from "shared";
 import { showFailToast, showSuccessToast, showToast } from "vant";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";

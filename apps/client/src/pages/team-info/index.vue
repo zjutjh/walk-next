@@ -1,19 +1,24 @@
 <template>
   <div :class="styles.page">
-    <div v-if="!isUserInfoReady" :class="styles.loadingPage">
-      <van-loading vertical>{{ t("refresh.loading") }}</van-loading>
-    </div>
+    <loading-container
+      :class="styles.loadingPage"
+      :loading="!isUserInfoReady"
+      :text="t('refresh.loading')"
+    >
+      <template v-if="isUserInfoReady">
+        <unjoined-team-home v-if="isUnjoined" />
+        <joined-team v-else-if="isJoined" />
 
-    <unjoined-team-home v-else-if="isUnjoined" />
-    <joined-team v-else-if="isJoined" />
-
-    <div v-else :class="styles.placeholderPage">
-      <van-empty :description="t('暂无团队状态')" />
-    </div>
+        <div v-else :class="styles.placeholderPage">
+          <van-empty :description="t('暂无团队状态')" />
+        </div>
+      </template>
+    </loading-container>
   </div>
 </template>
 
 <script setup lang="ts">
+import { LoadingContainer } from "shared";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 

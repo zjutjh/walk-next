@@ -6,26 +6,28 @@
       :btn-text="t('重试')"
       @btn-click="refetch"
     >
-      <van-loading v-if="isLoading && !userInfo" vertical :class="styles.loading">
-        {{ t("refresh.loading") }}
-      </van-loading>
+      <loading-container
+        :class="styles.loadingContainer"
+        :loading="isLoading && !userInfo"
+        :text="t('refresh.loading')"
+      >
+        <van-empty v-if="!userInfo && !isLoading" :description="t('暂无个人信息')" />
 
-      <van-empty v-else-if="!userInfo" :description="t('暂无个人信息')" />
-
-      <div v-else :class="styles.content">
-        <profile-edit-form
-          :initial-value="initialFormValue"
-          :loading="isUpdatePending"
-          @submit="handleFormSubmit"
-        />
-      </div>
+        <div v-else-if="userInfo" :class="styles.content">
+          <profile-edit-form
+            :initial-value="initialFormValue"
+            :loading="isUpdatePending"
+            @submit="handleFormSubmit"
+          />
+        </div>
+      </loading-container>
     </error-empty>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { ErrorEmpty } from "shared";
+import { ErrorEmpty, LoadingContainer } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";

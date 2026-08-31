@@ -6,40 +6,42 @@
       :btn-text="t('重试')"
       @btn-click="refetch"
     >
-      <van-loading v-if="isLoading && !userInfo" vertical :class="styles.loading">
-        {{ t("refresh.loading") }}
-      </van-loading>
+      <loading-container
+        :class="styles.loadingContainer"
+        :loading="isLoading && !userInfo"
+        :text="t('refresh.loading')"
+      >
+        <van-empty v-if="!userInfo && !isLoading" :description="t('暂无个人信息')" />
 
-      <van-empty v-else-if="!userInfo" :description="t('暂无个人信息')" />
+        <div v-else-if="userInfo" :class="styles.content">
+          <profile-header :name="userInfo.name" :tel="displayValue(userInfo.tel)" />
 
-      <div v-else :class="styles.content">
-        <profile-header :name="userInfo.name" :tel="displayValue(userInfo.tel)" />
+          <quota-summary
+            :create-op="userInfo.create_op"
+            :join-op="userInfo.join_op"
+            @help="handleQuotaHelp"
+          />
 
-        <quota-summary
-          :create-op="userInfo.create_op"
-          :join-op="userInfo.join_op"
-          @help="handleQuotaHelp"
-        />
+          <profile-info-list :items="profileInfoItems" />
 
-        <profile-info-list :items="profileInfoItems" />
-
-        <van-button
-          block
-          type="primary"
-          icon="edit"
-          :class="styles.editButton"
-          @click="handleNavigateEdit"
-        >
-          {{ t("修改信息") }}
-        </van-button>
-      </div>
+          <van-button
+            block
+            type="primary"
+            icon="edit"
+            :class="styles.editButton"
+            @click="handleNavigateEdit"
+          >
+            {{ t("修改信息") }}
+          </van-button>
+        </div>
+      </loading-container>
     </error-empty>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
-import { ErrorEmpty } from "shared";
+import { ErrorEmpty, LoadingContainer } from "shared";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";

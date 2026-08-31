@@ -12,21 +12,23 @@
       <h2 :class="styles.title">{{ t("队员信息") }}</h2>
 
       <error-empty :error="props.error" :disabled="props.loading" @btn-click="handleRetryClick">
-        <van-loading v-if="props.loading" :class="styles.loading" vertical>
-          {{ t("refresh.loading") }}
-        </van-loading>
+        <loading-container
+          :class="styles.loadingContainer"
+          :loading="props.loading"
+          :text="t('refresh.loading')"
+        >
+          <van-cell-group v-if="props.member && !props.loading" inset>
+            <van-cell :title="t('姓名')" :value="props.member.name" />
+            <van-cell :title="t('人员性质')" :value="memberTypeLabel" />
+            <van-cell :title="t('队内身份')" :value="memberRoleLabel" />
+            <van-cell :title="t('电话')" :value="props.member.tel || t('未填写')" />
+            <van-cell :title="t('微信')" :value="props.member.wechat || t('未填写')" />
+            <van-cell :title="t('QQ')" :value="props.member.qq || t('未填写')" />
+            <van-cell :title="t('状态')" :value="walkStatusLabel" />
+          </van-cell-group>
 
-        <van-cell-group v-else-if="props.member" inset>
-          <van-cell :title="t('姓名')" :value="props.member.name" />
-          <van-cell :title="t('人员性质')" :value="memberTypeLabel" />
-          <van-cell :title="t('队内身份')" :value="memberRoleLabel" />
-          <van-cell :title="t('电话')" :value="props.member.tel || t('未填写')" />
-          <van-cell :title="t('微信')" :value="props.member.wechat || t('未填写')" />
-          <van-cell :title="t('QQ')" :value="props.member.qq || t('未填写')" />
-          <van-cell :title="t('状态')" :value="walkStatusLabel" />
-        </van-cell-group>
-
-        <van-empty v-else :description="t('暂无队员信息')" />
+          <van-empty v-else-if="!props.loading" :description="t('暂无队员信息')" />
+        </loading-container>
       </error-empty>
 
       <div v-if="props.member" :class="styles.actionArea">
@@ -64,7 +66,7 @@
 
 <script setup lang="ts">
 import type { QueryTeamMemberResponse, UserSummary } from "api/types/client";
-import { ErrorEmpty } from "shared";
+import { ErrorEmpty, LoadingContainer } from "shared";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
