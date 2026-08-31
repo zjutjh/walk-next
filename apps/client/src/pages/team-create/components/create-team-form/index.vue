@@ -1,5 +1,5 @@
 <template>
-  <van-form ref="formRef" :class="styles.form" :disabled="props.loading" @submit="handleSubmit">
+  <van-form ref="formRef" :disabled="props.loading" @submit="handleSubmit">
     <van-cell-group inset>
       <van-field
         v-model="formValue.name"
