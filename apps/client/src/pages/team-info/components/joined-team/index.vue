@@ -3,7 +3,8 @@
     <error-empty
       :error="overviewError"
       :disabled="isOverviewLoading"
-      @btn-click="handleOverviewRetry"
+      :btn-text="t('刷新')"
+      @btn-click="reload"
     >
       <loading-container
         :class="styles.loadingContainer"
@@ -122,18 +123,16 @@ const isLeaveTeamVisible = computed(() => isMember.value && teamDetail.value?.su
 const {
   data: teamOverview,
   isLoading: isOverviewLoading,
-  error: overviewError,
-  refetch: refetchOverview
+  error: overviewError
 } = useQuery<QueryTeamOverviewResponse, Error>({
   queryKey: [CLIENT_QUERY_KEY.TEAM.OVERVIEW],
   queryFn: () => walkClientService.QueryTeamOverview(undefined)
 });
 
-const {
-  data: teamDetail,
-  isLoading: isTeamDetailLoading,
-  refetch: refetchTeamDetail
-} = useQuery<QueryTeamDetailResponse, Error>({
+const { data: teamDetail, isLoading: isTeamDetailLoading } = useQuery<
+  QueryTeamDetailResponse,
+  Error
+>({
   queryKey: [CLIENT_QUERY_KEY.TEAM.DETAIL],
   queryFn: () => walkClientService.QueryTeamDetail(undefined)
 });
@@ -331,9 +330,8 @@ const isMemberActionPending = computed(
   () => isRemoveMemberPending.value || isTransferCaptainPending.value
 );
 
-const handleOverviewRetry = () => {
-  void refetchOverview();
-  void refetchTeamDetail();
+const reload = () => {
+  location.reload();
 };
 
 const handleSelectedMemberRetry = () => {
