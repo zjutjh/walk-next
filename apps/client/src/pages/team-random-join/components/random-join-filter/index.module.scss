@@ -1,5 +1,10 @@
 .routeFilter {
   padding: 12px 16px;
+  transition: padding 0.3s ease;
+
+  :global(.van-sticky--fixed) & {
+    padding: 8px 16px;
+  }
 }
 
 .filterTitle {
@@ -32,6 +37,11 @@
     &:active {
       transform: scale(0.98);
     }
+  }
+
+  :global(.van-sticky--fixed) & :global(.van-button) {
+    height: 40px;
+    padding: 7px 8px;
   }
 
   :global(.van-button--default) {

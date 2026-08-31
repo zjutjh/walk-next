@@ -7,6 +7,11 @@
 
 .topArea {
   @include ui.card-container;
+  transition: border-radius 0.3s ease;
+
+  :global(.van-sticky--fixed) & {
+    border-radius: 0 0 8px 8px;
+  }
 }
 
 .subtitle {
