@@ -13,9 +13,9 @@
         @submit="handleRegisterSubmit"
       />
 
-      <div :class="styles.loginLink" @click="handleNavigateLogin">
+      <router-link :class="styles.loginLink" to="/login" replace>
         {{ t("已有账号？去登录") }}
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -85,9 +85,5 @@ const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
 const handleRegisterSubmit = (value: SchoolRegisterFormValue) => {
   if (isRegisterPending.value) return;
   mutateRegister(value);
-};
-
-const handleNavigateLogin = () => {
-  router.replace({ name: "login" });
 };
 </script>

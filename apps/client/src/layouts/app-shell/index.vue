@@ -54,8 +54,15 @@ const isShowLogo = computed(() => route.meta.showLogo === true);
 const pageTitle = computed(() => route.meta.pageName);
 
 const handleBackClick = () => {
-  const parentRoute = route.matched[route.matched.length - 2];
-  if (parentRoute?.path && parentRoute.path !== route.path) router.replace(parentRoute.path);
-  else router.replace("/");
+  if (router.options.history.state.back) router.back();
+  else {
+    const matched = route.matched;
+    if (matched.length >= 2) {
+      const fullPath = route.path;
+      const lastSegmentEnd = fullPath.lastIndexOf("/");
+      const parentPath = lastSegmentEnd > 0 ? fullPath.substring(0, lastSegmentEnd) : "/";
+      router.replace(parentPath);
+    } else router.replace("/");
+  }
 };
 </script>

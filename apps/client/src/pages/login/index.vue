@@ -12,9 +12,9 @@
 
       <login-form :loading="isLoginPending" @submit="handleLoginSubmit" />
 
-      <div :class="styles.registerLink" @click="handleNavigateRegister">
+      <router-link :class="styles.registerLink" to="/register" replace>
         {{ t("signup.guide-link") }}
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -81,9 +81,5 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
 const handleLoginSubmit = (value: LoginFormValue) => {
   if (isLoginPending.value) return;
   mutateLogin(value);
-};
-
-const handleNavigateRegister = () => {
-  router.replace({ name: "register" });
 };
 </script>

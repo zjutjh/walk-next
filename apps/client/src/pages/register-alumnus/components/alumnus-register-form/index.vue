@@ -137,7 +137,7 @@ const handlePasswordVisibleClick = () => {
 };
 
 const handleNavigateTerms = () => {
-  router.replace({ name: "terms" });
+  router.push({ name: "terms" });
 };
 
 const handleSubmit = async () => {

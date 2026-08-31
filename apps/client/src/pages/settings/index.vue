@@ -1,7 +1,7 @@
 <template>
   <div :class="styles.page">
     <van-cell-group inset>
-      <van-cell :title="t('反馈')" clickable is-link @click="handleFeedbackClick" />
+      <van-cell :title="t('反馈')" is-link to="/feedback" />
       <van-cell :title="t('退出登录')" clickable is-link @click="handleLogoutClick" />
     </van-cell-group>
   </div>
@@ -19,10 +19,6 @@ import styles from "./index.module.scss";
 const router = useRouter();
 const { t } = useI18n();
 const { resetClientUserData } = useClientUserData();
-
-const handleFeedbackClick = () => {
-  router.replace({ name: "feedback" });
-};
 
 const handleLogoutClick = async () => {
   const isConfirmed = await confirmDialog({

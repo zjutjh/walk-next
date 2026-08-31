@@ -9,11 +9,12 @@
 
       <div :class="styles.cardContainer">
         <div :class="styles.cardList">
-          <div
+          <router-link
             v-for="option in identityOptions"
             :key="option.route"
             :class="styles.card"
-            @click="handleNavigate(option.route)"
+            :to="{ name: option.route }"
+            replace
           >
             <img :src="option.image" :alt="option.label" :class="styles.cardImage" />
             <div :class="styles.cardOverlay" />
@@ -21,20 +22,19 @@
               <img :src="tomatoJamImage" :class="styles.cardIcon" />
               {{ t(option.label) }}
             </span>
-          </div>
+          </router-link>
         </div>
       </div>
 
-      <div :class="styles.loginLink" @click="handleNavigateLogin">
+      <router-link :class="styles.loginLink" to="/login" replace>
         {{ t("已有账号？去登录") }}
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 
 import hero1 from "@/assets/images/hero-1.jpg";
 import hero2 from "@/assets/images/hero-2.jpg";
@@ -45,7 +45,6 @@ import Decoration from "@/components/decoration/index.vue";
 
 import styles from "./index.module.scss";
 
-const router = useRouter();
 const { t } = useI18n();
 
 const identityOptions = [
@@ -53,12 +52,4 @@ const identityOptions = [
   { label: "我是教职工", image: hero2, route: "register-teacher" },
   { label: "我是校友", image: hero3, route: "register-alumnus" }
 ];
-
-const handleNavigate = (routeName: string) => {
-  router.replace({ name: routeName });
-};
-
-const handleNavigateLogin = () => {
-  router.replace({ name: "login" });
-};
 </script>
