@@ -22,7 +22,7 @@ export const useClientUserDataStore = defineStore(
   {
     persist: {
       key: CLIENT_PINIA_PERSIST_KEY.CLIENT_USER_DATA,
-      pick: ["jwt"]
+      pick: ["jwt", "userInfo"]
     }
   }
 );

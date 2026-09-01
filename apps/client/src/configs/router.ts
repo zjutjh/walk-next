@@ -9,7 +9,7 @@ import {
   type RouteRecordRaw
 } from "vue-router";
 
-import { CLIENT_USER_INFO_QUERY_OPTIONS, useClientUserData } from "@/composables";
+import { useClientUserData } from "@/composables";
 
 import { globalQueryClient } from "./vue-query";
 
@@ -241,7 +241,7 @@ export const routerInstance = createRouter({
 });
 
 // 前置路由守卫
-routerInstance.beforeEach(async (to) => {
+routerInstance.beforeEach((to) => {
   const { clientUserInfo, isLoggedIn } = useClientUserData(globalQueryClient);
   const { incPendingNavigationCount, decPendingNavigationCount } = useRouterState();
 
@@ -267,15 +267,7 @@ routerInstance.beforeEach(async (to) => {
   if (isLoggedIn.value && to.meta.guestOnly) return redirect({ name: "team-info" });
 
   if (to.meta.allowedRoles) {
-    // 刷新进入时 userInfo 尚未被顶层组件的 query 填充，先拉取一次再做角色校验
-    const userInfo =
-      clientUserInfo.value ??
-      (await globalQueryClient.fetchQuery(CLIENT_USER_INFO_QUERY_OPTIONS).catch(() => undefined));
-
-    // 登录态已在请求侧失效并跳转登录页，静默中止本次导航，避免重复提示
-    if (!isLoggedIn.value) return false;
-
-    const role = userInfo?.role;
+    const role = clientUserInfo.value?.role;
 
     if (!role || !to.meta.allowedRoles.includes(role)) {
       showFailToast("当前状态不可访问");
