@@ -62,6 +62,9 @@
   .cardOverlay {
     background: transparent;
   }
+  .cardName {
+    opacity: 1;
+  }
   .cardLabel {
     opacity: 0;
   }
@@ -85,6 +88,8 @@
   color: #8f5311;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .cardOverlay {
