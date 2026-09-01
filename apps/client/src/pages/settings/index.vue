@@ -7,9 +7,9 @@
       <van-cell :title="t('语言')" is-link @click="handleLanguageClick">{{
         locale ? LANG_DISPLAY_NAME[locale] : ""
       }}</van-cell>
-      <van-cell :title="t('用户协议')" to="/terms" is-link />
-      <van-cell :title="t('隐私政策')" to="/privacy" is-link />
-      <van-cell :title="t('报名须知与免责协议')" is-link />
+      <van-cell :title="t('用户协议')" to="/terms-of-service" is-link />
+      <van-cell :title="t('隐私政策')" to="/privacy-policy" is-link />
+      <van-cell :title="t('报名须知与免责协议')" to="/registration-terms" is-link />
     </van-cell-group>
 
     <div :class="styles.buttonContainer">

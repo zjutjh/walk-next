@@ -1,10 +1,11 @@
 <template>
   <div :class="styles.page">
-    <privacy-md />
+    <terms-of-service-md />
   </div>
 </template>
 
 <script setup lang="ts">
-import privacyMd from "./index.mdx";
+import termsOfServiceMd from "@/mdx/terms-of-service.mdx";
+
 import styles from "./index.module.scss";
 </script>
