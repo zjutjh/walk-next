@@ -20,10 +20,15 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/login/index.vue"),
     meta: {
       pageName: "登录",
+      layout: {
+        props: {
+          showNavbar: false,
+          showLogo: true,
+          bgDecorationVariant: "topAndBottom"
+        }
+      },
       allowNoAuth: true,
-      guestOnly: true,
-      bgCanvas: false,
-      showLogo: true
+      guestOnly: true
     }
   },
   {
@@ -31,8 +36,13 @@ const routes: RouteRecordRaw[] = [
     meta: {
       allowNoAuth: true,
       guestOnly: true,
-      bgCanvas: false,
-      showLogo: true
+      layout: {
+        props: {
+          showNavbar: false,
+          showLogo: true,
+          bgDecorationVariant: "topAndBottom"
+        }
+      }
     },
     children: [
       {
@@ -41,8 +51,13 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/pages/register-index/index.vue"),
         meta: {
           pageName: "注册",
-          bgCanvas: true,
-          showLogo: true
+          layout: {
+            props: {
+              showNavbar: false,
+              showLogo: true,
+              bgDecorationVariant: "default"
+            }
+          }
         }
       },
       {
@@ -74,20 +89,29 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: "/terms",
-    name: "terms",
-    component: () => import("@/pages/terms/index.mdx"),
+    path: "/terms-of-service",
+    name: "termsOfService",
+    component: () => import("@/pages/terms-of-service/index.vue"),
     meta: {
       pageName: "用户协议",
       allowNoAuth: true
     }
   },
   {
-    path: "/privacy",
-    name: "privacy",
-    component: () => import("@/pages/privacy/index.mdx"),
+    path: "/privacy-policy",
+    name: "privacyPolicy",
+    component: () => import("@/pages/privacy-policy/index.vue"),
     meta: {
       pageName: "隐私政策",
+      allowNoAuth: true
+    }
+  },
+  {
+    path: "/registration-terms",
+    name: "registrationTerms",
+    component: () => import("@/pages/registration-terms/index.vue"),
+    meta: {
+      pageName: "报名须知与免责协议",
       allowNoAuth: true
     }
   },
@@ -103,7 +127,12 @@ const routes: RouteRecordRaw[] = [
         },
         meta: {
           pageName: "team.info",
-          showLogo: true
+          layout: {
+            props: {
+              showNavbar: false,
+              showLogo: true
+            }
+          }
         }
       },
       {
@@ -156,7 +185,12 @@ const routes: RouteRecordRaw[] = [
         },
         meta: {
           pageName: "profile",
-          showLogo: true
+          layout: {
+            props: {
+              showNavbar: false,
+              showLogo: true
+            }
+          }
         }
       },
       {
@@ -178,7 +212,12 @@ const routes: RouteRecordRaw[] = [
     },
     meta: {
       pageName: "settings",
-      showLogo: true
+      layout: {
+        props: {
+          showNavbar: false,
+          showLogo: true
+        }
+      }
     }
   },
   {
@@ -186,7 +225,12 @@ const routes: RouteRecordRaw[] = [
     name: "feedback",
     component: () => import("@/pages/feedback/index.vue"),
     meta: {
-      pageName: "反馈"
+      pageName: "反馈",
+      layout: {
+        props: {
+          noPadding: true
+        }
+      }
     }
   }
 ];
@@ -219,7 +263,7 @@ routerInstance.beforeEach(async (to) => {
     return redirect({ name: "register", query: { fromPath: encodeURIComponent(to.fullPath) } });
   }
 
-  // 已登录访问登录/注册/身份选择页
+  // 已登录访问仅未登录用户可访问的页面
   if (isLoggedIn.value && to.meta.guestOnly) return redirect({ name: "team-info" });
 
   if (to.meta.allowedRoles) {

@@ -1,5 +1,21 @@
 .page {
   box-sizing: border-box;
-  padding: 16px 0 calc(96px + env(safe-area-inset-bottom, 0px));
-  color: #1f2937;
+  padding-top: 16px;
+
+  .decorationImg {
+    pointer-events: none;
+    user-select: none;
+    padding: {
+      left: 16px;
+      right: 16px;
+      top: 10px;
+    }
+  }
+
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+  }
 }

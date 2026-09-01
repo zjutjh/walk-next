@@ -1,34 +1,46 @@
 <template>
   <div :class="styles.layout">
+    <!-- 背景装饰图 -->
     <img
       :src="bgTop"
       alt=""
       :class="[
-        styles.layoutBg,
-        styles.layoutBgTop,
-        isBgCanvas ? styles.layoutBgTopCanvas : undefined
+        styles.bgDecoration,
+        styles.top,
+        props.bgDecorationVariant === 'default' ? styles.topOnly : ''
       ]"
     />
     <img
       :src="bgBottom"
       alt=""
       :class="[
-        styles.layoutBg,
-        styles.layoutBgBottom,
-        isBgCanvas ? styles.layoutBgBottomHidden : undefined
+        styles.bgDecoration,
+        styles.bottom,
+        props.bgDecorationVariant === 'default' ? styles.topOnly : ''
       ]"
     />
-    <img v-if="isShowLogo" :src="logo" alt="Logo" :class="styles.layoutLogo" />
+
+    <!-- 顶部Logo -->
+    <img v-if="props.showLogo" :src="logo" alt="Logo" :class="styles.topLogo" />
+
+    <!-- 导航栏 -->
     <van-nav-bar
-      v-else-if="pageTitle"
+      v-if="props.showNavbar"
       :title="pageTitle"
       left-arrow
       safe-area-inset-top
       :left-disabled="isNavigationPending"
-      :class="styles.layoutNavbar"
+      :class="styles.navbar"
       @click-left="handleBackClick"
     />
-    <main :class="[styles.layoutContent, isShowLogo ? styles.layoutContentWithLogo : undefined]">
+
+    <main
+      :class="[
+        styles.content,
+        props.showLogo ? styles.withLogo : '',
+        props.noPadding ? styles.noPadding : ''
+      ]"
+    >
       <slot />
     </main>
   </div>
@@ -44,13 +56,20 @@ import bgTop from "@/assets/images/bg-top.svg";
 import logo from "@/assets/images/logo.png";
 
 import styles from "./index.module.scss";
+import type { DefaultLayoutProps } from "./types";
+
+const props = withDefaults(defineProps<DefaultLayoutProps>(), {
+  showNavbar: true,
+  showLogo: false,
+  noPadding: false,
+  bgDecorationVariant: "default"
+});
 
 const route = useRoute();
 const router = useRouter();
 const { isNavigationPending } = useRouterState();
 
-const isBgCanvas = computed(() => route.meta.bgCanvas ?? true);
-const isShowLogo = computed(() => route.meta.showLogo === true);
+/** 页面标题 */
 const pageTitle = computed(() => route.meta.pageName);
 
 const handleBackClick = () => {
