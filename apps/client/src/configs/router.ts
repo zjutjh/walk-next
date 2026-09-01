@@ -20,10 +20,14 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/login/index.vue"),
     meta: {
       pageName: "登录",
+      layout: {
+        props: {
+          showNavbar: false,
+          showLogo: true
+        }
+      },
       allowNoAuth: true,
-      guestOnly: true,
-      bgCanvas: false,
-      showLogo: true
+      guestOnly: true
     }
   },
   {
@@ -31,8 +35,13 @@ const routes: RouteRecordRaw[] = [
     meta: {
       allowNoAuth: true,
       guestOnly: true,
-      bgCanvas: false,
-      showLogo: true
+      layout: {
+        props: {
+          showNavbar: false,
+          showLogo: true,
+          bgDecorationVariant: "top"
+        }
+      }
     },
     children: [
       {
@@ -40,9 +49,7 @@ const routes: RouteRecordRaw[] = [
         name: "register",
         component: () => import("@/pages/register-index/index.vue"),
         meta: {
-          pageName: "注册",
-          bgCanvas: true,
-          showLogo: true
+          pageName: "注册"
         }
       },
       {
@@ -103,7 +110,12 @@ const routes: RouteRecordRaw[] = [
         },
         meta: {
           pageName: "team.info",
-          showLogo: true
+          layout: {
+            props: {
+              showNavbar: false,
+              showLogo: true
+            }
+          }
         }
       },
       {
@@ -156,7 +168,12 @@ const routes: RouteRecordRaw[] = [
         },
         meta: {
           pageName: "profile",
-          showLogo: true
+          layout: {
+            props: {
+              showNavbar: false,
+              showLogo: true
+            }
+          }
         }
       },
       {
@@ -178,7 +195,12 @@ const routes: RouteRecordRaw[] = [
     },
     meta: {
       pageName: "settings",
-      showLogo: true
+      layout: {
+        props: {
+          showNavbar: false,
+          showLogo: true
+        }
+      }
     }
   },
   {
@@ -186,7 +208,12 @@ const routes: RouteRecordRaw[] = [
     name: "feedback",
     component: () => import("@/pages/feedback/index.vue"),
     meta: {
-      pageName: "反馈"
+      pageName: "反馈",
+      layout: {
+        props: {
+          noPadding: true
+        }
+      }
     }
   }
 ];
@@ -219,7 +246,7 @@ routerInstance.beforeEach(async (to) => {
     return redirect({ name: "register", query: { fromPath: encodeURIComponent(to.fullPath) } });
   }
 
-  // 已登录访问登录/注册/身份选择页
+  // 已登录访问仅未登录用户可访问的页面
   if (isLoggedIn.value && to.meta.guestOnly) return redirect({ name: "team-info" });
 
   if (to.meta.allowedRoles) {

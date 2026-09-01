@@ -1,0 +1,134 @@
+@use "@/styles/mixins" as ui;
+
+.layout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: #fff;
+
+  .bg {
+    position: fixed;
+    left: 0;
+    z-index: 0;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+
+    &.bgTop {
+      top: -175px;
+      transition: top 0.3s ease;
+
+      &.topOnly {
+        top: 0;
+      }
+    }
+
+    &.bgBottom {
+      bottom: 0;
+      transition: opacity 0.3s ease;
+
+      &.topOnly {
+        opacity: 0;
+      }
+    }
+  }
+
+  /* Logo 自身带虚化光晕：图案只绘制在中央内容区，外扩的 padding 用于承载羽化渐隐 */
+  .topLogo {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 2px);
+    left: 2px;
+    z-index: 3;
+    box-sizing: border-box;
+    width: 124px;
+    height: 67px;
+    padding: 14px;
+    border-radius: 20px;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    /* 横向 + 纵向两份羽化渐变取交集；羽化 8px < 内边距 14px，不触及图案像素 */
+    -webkit-mask-image:
+      linear-gradient(
+        to right,
+        transparent,
+        #000 8px,
+        #000 calc(100% - 12px),
+        transparent
+      ),
+      linear-gradient(
+        to bottom,
+        transparent,
+        #000 8px,
+        #000 calc(100% - 12px),
+        transparent
+      );
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(
+        to right,
+        transparent,
+        #000 8px,
+        #000 calc(100% - 12px),
+        transparent
+      ),
+      linear-gradient(
+        to bottom,
+        transparent,
+        #000 8px,
+        #000 calc(100% - 12px),
+        transparent
+      );
+    mask-composite: intersect;
+  }
+
+  /* 横屏时显式高度压扁（SVG 内的 preserveAspectRatio="none" 保证满宽拉伸）；
+   top 的 -175px 是按竖屏自然高度调的，横屏压扁后会整片推出屏幕外，改为按比例偏移（约裁掉同样比例的上半部分） */
+  @media (orientation: landscape) {
+    .layoutBgTop {
+      top: -18%;
+      height: 40%;
+    }
+
+    /* canvas 模式仍需贴顶，放在 .layoutBgTop 之后保证优先级 */
+    .layoutBgTopCanvas {
+      top: 0;
+    }
+
+    .layoutBgBottom {
+      height: 15%;
+    }
+  }
+
+  .navbar {
+    flex-shrink: 0;
+    --van-nav-bar-icon-color: var(--van-text-color-2);
+  }
+
+  .content {
+    @include ui.page-container;
+
+    z-index: 1;
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+    /* 底部悬浮层（如悬浮导航）通过 --navbar-space 自行申报避让空间，未申报则为 0 */
+    padding-bottom: var(--navbar-space, 16px);
+
+    /* 显示 Logo 时，内容向下避让 */
+    &.withLogo {
+      padding-top: calc(env(safe-area-inset-top, 0px) + 75px);
+    }
+
+    &.noPadding {
+      padding: 0;
+    }
+  }
+}

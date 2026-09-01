@@ -2,6 +2,8 @@ import "vue-router";
 
 import type { UserRole } from "api/types/client";
 
+import type { DefaultLayoutProps } from "@/layouts/default-layout/types";
+
 // To ensure it is treated as a module, add at least one `export` statement
 export {};
 
@@ -9,6 +11,11 @@ declare module "vue-router" {
   interface RouteMeta {
     /** 页面名称（i18n 词条 key） */
     pageName?: string;
+    /** Layout */
+    layout?: {
+      component?: never;
+      props?: DefaultLayoutProps;
+    };
     /** 不需要登录即可访问 */
     allowNoAuth?: boolean;
     /** 路由参数变化时强制重建组件 */
