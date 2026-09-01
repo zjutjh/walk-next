@@ -6,13 +6,13 @@
   display: flex;
   flex-direction: column;
   margin: 30px 12px 50px;
-}
 
-.title {
-  @include ui.page-title;
-  text-align: right;
-}
+  .title {
+    @include ui.page-title;
+    text-align: right;
+  }
 
-.loginLink {
-  @include ui.guide-link;
+  .loginLink {
+    @include ui.guide-link;
+  }
 }

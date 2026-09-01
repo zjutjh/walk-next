@@ -2,36 +2,36 @@
 
 .form {
   @include ui.form-container;
-}
 
-.fieldGroup {
-  @include ui.field-group;
-}
+  .fieldGroup {
+    @include ui.field-group;
 
-.fieldLabel {
-  @include ui.field-label;
-}
+    .fieldLabel {
+      @include ui.field-label;
+    }
 
-.fieldInput {
-  @include ui.custom-input;
-}
+    .fieldInput {
+      @include ui.custom-input;
+    }
+  }
 
-.eyeButton {
-  @include ui.eye-button;
-}
+  .eyeButton {
+    @include ui.eye-button;
+  }
 
-.agreementRow {
-  @include ui.agreement-checkbox;
-}
+  .agreementRow {
+    @include ui.agreement-checkbox;
+  }
 
-.termsLink {
-  font-weight: 500;
-  color: #734a23;
-  cursor: pointer;
-}
+  .termsLink {
+    font-weight: 500;
+    color: #734a23;
+    cursor: pointer;
+  }
 
-.submitArea {
-  display: flex;
-  justify-content: center;
-  margin-top: 8px;
+  .submitArea {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
 }

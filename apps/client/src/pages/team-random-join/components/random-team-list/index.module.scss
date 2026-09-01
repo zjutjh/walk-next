@@ -1,56 +1,58 @@
 .teamList {
   padding: 14px 0 0;
-}
 
-.countText {
-  margin: 0 4px 12px;
-  font-size: 15px;
-  color: #8a94a6;
-}
+  .countText {
+    margin: 0 4px 12px;
+    font-size: 15px;
+    color: #8a94a6;
+  }
 
-.teamList :global(.error-empty) {
-  min-height: 240px;
-}
+  :global(.error-empty) {
+    min-height: 240px;
+  }
 
-.loadingContainer {
-  min-height: 240px;
-}
+  .loadingContainer {
+    min-height: 240px;
+  }
 
-// 带 .cardList 前缀提高优先级，覆盖卡片自身的 :active 按压缩放过渡
-// 每张卡片按序号错峰：飞入比飞出慢，观感上先散开再聚拢
-.cardList > .cardEnterActive {
-  transition:
-    opacity 0.35s ease-out,
-    transform 0.35s ease-out;
-  transition-delay: calc(var(--card-index, 0) * 60ms);
-}
+  .cardList {
+    // 带 .cardList 前缀提高优先级，覆盖卡片自身的 :active 按压缩放过渡
+    // 每张卡片按序号错峰：飞入比飞出慢，观感上先散开再聚拢
+    > .cardEnterActive {
+      transition:
+        opacity 0.35s ease-out,
+        transform 0.35s ease-out;
+      transition-delay: calc(var(--card-index, 0) * 60ms);
+    }
 
-.cardEnterFrom {
-  opacity: 0;
-  transform: translateX(60px) scale(0.96);
-}
+    > .cardEnterFrom {
+      opacity: 0;
+      transform: translateX(60px) scale(0.96);
+    }
 
-// 卡片飞出：both 在延迟期间保持原样、结束后保持透明，由脚本在最后一张卡
-// animationend 后换上新列表。卡片全程不脱离文档流，不存在定位塌陷问题
-.cardFlyOut {
-  animation: card-fly-out 0.2s ease-in both;
-  animation-delay: calc(var(--card-index, 0) * 40ms);
-  pointer-events: none;
-}
+    // 卡片飞出：both 在延迟期间保持原样、结束后保持透明，由脚本在最后一张卡
+    // animationend 后换上新列表。卡片全程不脱离文档流，不存在定位塌陷问题
+    > .cardFlyOut {
+      animation: card-fly-out 0.2s ease-in both;
+      animation-delay: calc(var(--card-index, 0) * 40ms);
+      pointer-events: none;
+    }
 
-// 换入新列表时被移除的旧卡（上一步已飞出隐形）必须立即消失：
-// 不显式清掉卡片自身的 transition/animation，Vue 会按自动检测到的时长
-// 把隐形旧卡继续留在文档流里，把新卡顶到下方、撑出长滚动条
-.cardList > .cardLeaveActive {
-  position: absolute;
-  transition: none;
-  animation: none;
-  opacity: 0;
-  pointer-events: none;
-}
+    // 换入新列表时被移除的旧卡（上一步已飞出隐形）必须立即消失：
+    // 不显式清掉卡片自身的 transition/animation，Vue 会按自动检测到的时长
+    // 把隐形旧卡继续留在文档流里，把新卡顶到下方、撑出长滚动条
+    > .cardLeaveActive {
+      position: absolute;
+      transition: none;
+      animation: none;
+      opacity: 0;
+      pointer-events: none;
+    }
 
-.cardList > .cardMove {
-  transition: transform 0.3s ease;
+    > .cardMove {
+      transition: transform 0.3s ease;
+    }
+  }
 }
 
 @keyframes card-fly-out {

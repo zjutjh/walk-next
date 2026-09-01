@@ -1,22 +1,22 @@
 .content {
   padding: 24px 0 0;
-}
 
-.card {
-  margin-bottom: 32px;
+  .card {
+    margin-bottom: 32px;
 
-  :global(.van-cell) {
-    padding-top: 14px;
-    padding-bottom: 14px;
-  }
+    :global(.van-cell) {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
 
-  :global(.van-cell__title) {
-    color: #4b5563;
-  }
+    :global(.van-cell__title) {
+      color: #4b5563;
+    }
 
-  :global(.van-cell__value) {
-    color: #111827;
-    font-weight: 600;
+    :global(.van-cell__value) {
+      color: #111827;
+      font-weight: 600;
+    }
   }
 }
 

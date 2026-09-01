@@ -7,75 +7,75 @@
   .van-dialog__content {
     overflow: visible;
   }
-}
 
-.confirm-dialog__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 24px 24px;
-}
-
-.confirm-dialog__outline-filter {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-.confirm-dialog__image {
-  width: 160px;
-  margin-top: -120px;
-  margin-bottom: 8px;
-  filter: url(#outline-filter);
-  pointer-events: none;
-  user-select: none;
-}
-
-.confirm-dialog__title {
-  margin: 0 0 16px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
-  text-align: center;
-
-  /* 仅主文案（无副文案）时加大底部间距 */
-  &:last-child {
-    margin-bottom: 28px;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 24px 24px;
   }
-}
 
-.confirm-dialog__message {
-  margin: 0 0 28px;
-  font-size: 15px;
-  line-height: 1.5;
-  color: #6b7280;
-  text-align: center;
-}
+  &__outline-filter {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
 
-.confirm-dialog__footer {
-  /* 按钮主题经 Vant CSS 变量注入：灰色确认 / 绿色再想想，单确认模式自动复用绿色 */
-  --van-button-default-color: #3d4759;
-  --van-button-default-background: #cccccc;
-  --van-button-default-border-color: transparent;
-  --van-button-primary-background: #87c493;
-  --van-button-primary-border-color: #87c493;
-  --van-button-primary-color: #fff;
+  &__image {
+    width: 160px;
+    margin-top: -120px;
+    margin-bottom: 8px;
+    filter: url(#outline-filter);
+    pointer-events: none;
+    user-select: none;
+  }
 
-  display: flex;
-  gap: 16px;
-  width: 100%;
-}
+  &__title {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    text-align: center;
 
-.confirm-dialog__action,
-.confirm-dialog__dismiss {
-  flex: 1;
-  height: 40px;
-  border: none;
-  border-radius: 999px;
+    /* 仅主文案（无副文案）时加大底部间距 */
+    &:last-child {
+      margin-bottom: 28px;
+    }
+  }
 
-  .van-button__text {
+  &__message {
+    margin: 0 0 28px;
     font-size: 15px;
-    font-weight: 500;
+    line-height: 1.5;
+    color: #6b7280;
+    text-align: center;
+  }
+
+  &__footer {
+    /* 按钮主题经 Vant CSS 变量注入：灰色确认 / 绿色再想想，单确认模式自动复用绿色 */
+    --van-button-default-color: #3d4759;
+    --van-button-default-background: #cccccc;
+    --van-button-default-border-color: transparent;
+    --van-button-primary-background: #87c493;
+    --van-button-primary-border-color: #87c493;
+    --van-button-primary-color: #fff;
+
+    display: flex;
+    gap: 16px;
+    width: 100%;
+  }
+
+  &__action,
+  &__dismiss {
+    flex: 1;
+    height: 40px;
+    border: none;
+    border-radius: 999px;
+
+    .van-button__text {
+      font-size: 15px;
+      font-weight: 500;
+    }
   }
 }

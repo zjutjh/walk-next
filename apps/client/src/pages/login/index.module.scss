@@ -6,12 +6,12 @@
   display: flex;
   flex-direction: column;
   margin: 60px 12px 30px;
-}
 
-.title {
-  @include ui.page-title;
-}
+  .title {
+    @include ui.page-title;
+  }
 
-.registerLink {
-  @include ui.guide-link;
+  .registerLink {
+    @include ui.guide-link;
+  }
 }
