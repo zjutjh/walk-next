@@ -91,7 +91,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/terms",
     name: "terms",
-    component: () => import("@/pages/terms/index.mdx"),
+    component: () => import("@/pages/terms/index.vue"),
     meta: {
       pageName: "用户协议",
       allowNoAuth: true
@@ -100,7 +100,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/privacy",
     name: "privacy",
-    component: () => import("@/pages/privacy/index.mdx"),
+    component: () => import("@/pages/privacy/index.vue"),
     meta: {
       pageName: "隐私政策",
       allowNoAuth: true
