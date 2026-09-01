@@ -10,8 +10,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n();
-const { locale } = useUserLocale();
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -19,6 +17,9 @@ import { useUserLocale } from "@/composables";
 import { LANG_DISPLAY_NAME, VALID_LANG } from "@/constants";
 
 import type { LanguageActionSheetAction } from "./types";
+
+const { t } = useI18n();
+const { locale } = useUserLocale();
 
 /** 语言选择弹层是否可见 */
 const isActionSheetVisible = defineModel<boolean>("visible", { required: true });
