@@ -23,7 +23,8 @@ const routes: RouteRecordRaw[] = [
       layout: {
         props: {
           showNavbar: false,
-          showLogo: true
+          showLogo: true,
+          bgDecorationVariant: "topAndBottom"
         }
       },
       allowNoAuth: true,
@@ -39,7 +40,7 @@ const routes: RouteRecordRaw[] = [
         props: {
           showNavbar: false,
           showLogo: true,
-          bgDecorationVariant: "top"
+          bgDecorationVariant: "topAndBottom"
         }
       }
     },
@@ -49,7 +50,14 @@ const routes: RouteRecordRaw[] = [
         name: "register",
         component: () => import("@/pages/register-index/index.vue"),
         meta: {
-          pageName: "注册"
+          pageName: "注册",
+          layout: {
+            props: {
+              showNavbar: false,
+              showLogo: true,
+              bgDecorationVariant: "default"
+            }
+          }
         }
       },
       {

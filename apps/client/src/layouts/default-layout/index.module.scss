@@ -7,7 +7,7 @@
   height: 100dvh;
   background: #fff;
 
-  .bg {
+  .bgDecoration {
     position: fixed;
     left: 0;
     z-index: 0;
@@ -16,7 +16,7 @@
     pointer-events: none;
     user-select: none;
 
-    &.bgTop {
+    &.top {
       top: -175px;
       transition: top 0.3s ease;
 
@@ -25,7 +25,7 @@
       }
     }
 
-    &.bgBottom {
+    &.bottom {
       bottom: 0;
       transition: opacity 0.3s ease;
 
@@ -90,18 +90,19 @@
   /* 横屏时显式高度压扁（SVG 内的 preserveAspectRatio="none" 保证满宽拉伸）；
    top 的 -175px 是按竖屏自然高度调的，横屏压扁后会整片推出屏幕外，改为按比例偏移（约裁掉同样比例的上半部分） */
   @media (orientation: landscape) {
-    .layoutBgTop {
-      top: -18%;
-      height: 40%;
-    }
+    .bgDecoration {
+      &.top {
+        top: -18%;
+        height: 40%;
 
-    /* canvas 模式仍需贴顶，放在 .layoutBgTop 之后保证优先级 */
-    .layoutBgTopCanvas {
-      top: 0;
-    }
+        &.topOnly {
+          top: 0;
+        }
+      }
 
-    .layoutBgBottom {
-      height: 15%;
+      &.bottom {
+        height: 15%;
+      }
     }
   }
 

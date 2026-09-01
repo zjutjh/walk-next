@@ -4,15 +4,19 @@
     <img
       :src="bgTop"
       alt=""
-      :class="[styles.bg, styles.bgTop, props.bgDecorationVariant === 'top' ? styles.topOnly : '']"
+      :class="[
+        styles.bgDecoration,
+        styles.top,
+        props.bgDecorationVariant === 'default' ? styles.topOnly : ''
+      ]"
     />
     <img
       :src="bgBottom"
       alt=""
       :class="[
-        styles.bg,
-        styles.bgBottom,
-        props.bgDecorationVariant === 'top' ? styles.topOnly : ''
+        styles.bgDecoration,
+        styles.bottom,
+        props.bgDecorationVariant === 'default' ? styles.topOnly : ''
       ]"
     />
 
@@ -56,9 +60,9 @@ import type { DefaultLayoutProps } from "./types";
 
 const props = withDefaults(defineProps<DefaultLayoutProps>(), {
   showNavbar: true,
-  showBgDecoration: true,
   showLogo: false,
-  noPadding: false
+  noPadding: false,
+  bgDecorationVariant: "default"
 });
 
 const route = useRoute();

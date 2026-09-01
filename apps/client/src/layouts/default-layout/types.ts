@@ -14,5 +14,5 @@ export interface DefaultLayoutProps {
   /** 背景装饰图变体
    * @default "default"
    */
-  bgDecorationVariant?: "default" | "top";
+  bgDecorationVariant?: "default" | "topAndBottom";
 }
