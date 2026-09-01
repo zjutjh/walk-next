@@ -3,9 +3,10 @@
   <error-boundary @error-captured="handleErrorCaptured">
     <template #fallback>
       <div :class="styles?.errorContainer">
-        <span :class="styles?.errorTitle">糟糕！页面出错了 Oops! Error Occurred</span>
+        <span :class="styles?.errorTitle">糟糕！页面出错了<br />Oops! Error Occurred</span>
         <span>
-          以下是报错信息。请联系开发人员修复。Contact the development team for assistance.
+          以下是报错信息。请通过反馈问卷联系我们解决。<br />
+          Please contact us via the feedback questionnaire for assistance.
         </span>
         <div :class="styles?.errorInfo">
           <span>{{ lastError?.message }}</span>
