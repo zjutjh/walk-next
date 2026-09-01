@@ -260,7 +260,7 @@ routerInstance.beforeEach(async (to) => {
 
   if (!isLoggedIn.value && !to.meta.allowNoAuth) {
     showToast({ message: "未登录", position: "bottom" });
-    return redirect({ name: "register", query: { fromPath: encodeURIComponent(to.fullPath) } });
+    return redirect({ name: "login", query: { fromPath: encodeURIComponent(to.fullPath) } });
   }
 
   // 已登录访问仅未登录用户可访问的页面
