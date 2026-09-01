@@ -10,9 +10,14 @@
 .filterTitle {
   margin: 0;
   padding: 0 4px 10px;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   color: #734a23;
+  transition: font-size 0.3s ease;
+
+  :global(.van-sticky--fixed) & {
+    font-size: 15px;
+  }
 }
 
 .routeButtons {
