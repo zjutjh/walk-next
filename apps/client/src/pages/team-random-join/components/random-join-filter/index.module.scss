@@ -1,0 +1,82 @@
+.routeFilter {
+  padding: 12px 16px;
+  transition: padding 0.3s ease;
+
+  :global(.van-sticky--fixed) & {
+    padding: 8px 16px;
+  }
+
+  .filterTitle {
+    margin: 0;
+    padding: 0 4px 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #734a23;
+    transition: font-size 0.3s ease;
+
+    :global(.van-sticky--fixed) & {
+      font-size: 15px;
+    }
+  }
+
+  .routeButtons {
+    --van-button-small-height: 48px;
+    --van-button-radius: 12px;
+    --van-button-primary-background: linear-gradient(135deg, #be8f58, #d4a76a);
+    --van-button-primary-border-color: transparent;
+    --van-button-primary-color: #fff;
+    --van-button-default-color: #734a23;
+    --van-button-default-background: rgba(255, 255, 255, 0.7);
+    --van-button-default-border-color: rgba(190, 143, 88, 0.5);
+
+    display: flex;
+    gap: 12px;
+
+    :global(.van-button) {
+      flex: 1;
+      padding: 10px 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    :global(.van-sticky--fixed) & :global(.van-button) {
+      height: 40px;
+      padding: 7px 8px;
+    }
+
+    :global(.van-button--default) {
+      &:active {
+        border-color: #be8f58;
+      }
+    }
+
+    :global(.van-button--primary) {
+      box-shadow: 0 4px 12px rgba(190, 143, 88, 0.3);
+    }
+
+    .routeName,
+    .routeDistance {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .routeName {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .routeDistance {
+      margin-top: 3px;
+      font-size: 12px;
+      line-height: 1.2;
+      opacity: 0.8;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+@use "@/styles/mixins.scss" as ui;
+
+.page {
+  min-height: 100%;
+  color: #1f2937;
+}
+
+.topArea {
+  @include ui.card-container;
+  transition: border-radius 0.3s ease;
+
+  :global(.van-sticky--fixed) & {
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+.subtitle {
+  margin: 0 4px 12px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #7b8493;
+}

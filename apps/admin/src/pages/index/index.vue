@@ -158,7 +158,7 @@ const { mutate: mutateLogout, isPending: isLogoutPending } = useMutation({
     // 清空所有缓存
     queryClient.clear();
     // 跳转登录页
-    router.push({ name: "login" });
+    router.replace({ name: "login" });
   },
   onError: (err: Error) => {
     showFailToast(err.message || "登出失败");

@@ -1,0 +1,89 @@
+<template>
+  <div :class="styles.page">
+    <decoration
+      :src="thumbsUpImage"
+      :top="`calc(env(safe-area-inset-top, 0px) + 40px)`"
+      right="-10px"
+      width="400px"
+      max-width="75vw"
+    />
+    <div :class="styles.content">
+      <h1 :class="styles.title">{{ t("登录") }}</h1>
+
+      <login-form :loading="isLoginPending" @submit="handleLoginSubmit" />
+
+      <router-link
+        :class="styles.registerLink"
+        :to="{ name: 'register', query: route.query }"
+        replace
+      >
+        {{ t("signup.guide-link") }}
+      </router-link>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { showFailToast, showSuccessToast } from "vant";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
+
+import thumbsUpImage from "@/assets/images/thumbs-up.png";
+import Decoration from "@/components/decoration/index.vue";
+import { useClientUserData } from "@/composables";
+import { CLIENT_QUERY_KEY } from "@/constants";
+import { walkClientService } from "@/utils";
+
+import LoginForm from "./components/login-form/index.vue";
+import styles from "./index.module.scss";
+import type { LoginFormValue } from "./types";
+
+const router = useRouter();
+const route = useRoute();
+const queryClient = useQueryClient();
+const { t } = useI18n();
+const { updateClientLoginData, updateClientUserData } = useClientUserData(queryClient);
+
+const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
+  mutationFn: (value: LoginFormValue) =>
+    walkClientService.Login({
+      tel: value.tel,
+      password: value.password
+    }),
+  onSuccess: async (data) => {
+    showSuccessToast({
+      message: t("登录成功"),
+      position: "top"
+    });
+
+    updateClientLoginData(data.jwt);
+
+    const userInfo = await queryClient.fetchQuery({
+      queryKey: [CLIENT_QUERY_KEY.USER.SELF],
+      queryFn: () => walkClientService.QueryUserInfo(undefined)
+    });
+
+    updateClientUserData({ userInfo });
+
+    const fromPath = route.query.fromPath;
+    if (typeof fromPath === "string" && fromPath) {
+      await router.replace({ path: decodeURIComponent(fromPath) });
+    } else {
+      await router.replace({ name: "team-info" });
+    }
+  },
+  onError: (error: unknown) => {
+    const message = error instanceof Error ? error.message : t("登录失败，请稍后重试");
+    showFailToast({
+      message,
+      position: "top"
+    });
+  }
+});
+
+const handleLoginSubmit = (value: LoginFormValue) => {
+  if (isLoginPending.value) return;
+  mutateLogin(value);
+};
+</script>

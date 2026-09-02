@@ -1,0 +1,43 @@
+@use "./mixins" as *;
+
+body {
+  font-size: initial;
+}
+
+// 隐藏Edge/IE自带的密码明文按钮，避免与自定义的显示密码按钮冲突
+input[type="password"] {
+  &::-ms-reveal,
+  &::-ms-clear {
+    display: none;
+  }
+}
+
+html {
+  .van-cell-group--inset {
+    @include card-container;
+
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .van-cell--clickable:active {
+    background: color-mix(
+      in srgb,
+      var(--van-cell-active-color) 20%,
+      transparent
+    );
+  }
+
+  .van-cell {
+    background: transparent;
+  }
+
+  .van-card {
+    @include card-container;
+  }
+
+  .van-button--default:not(.van-button--plain):not(.van-button--small),
+  .van-button--primary:not(.van-button--plain):not(.van-button--small) {
+    @include custom-button;
+  }
+}

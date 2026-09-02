@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
             position: "bottom"
           });
           useAdminUserData(globalQueryClient).resetAdminUserData();
-          routerInstance.push({
+          routerInstance.replace({
             name: "login",
             query: { fromPath: encodeURIComponent(routerInstance.currentRoute.value.fullPath) }
           });

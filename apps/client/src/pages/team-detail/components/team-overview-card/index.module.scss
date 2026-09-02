@@ -1,0 +1,17 @@
+.card {
+  margin-top: 8px;
+
+  :global(.van-cell__value) {
+    color: #1f2937;
+  }
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #1f2937;
+}

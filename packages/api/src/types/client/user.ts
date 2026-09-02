@@ -28,11 +28,11 @@ export interface UserInfo {
   /** 用户状态 */
   walk_status: UserWalkStatus;
   /** QQ 号 */
-  qq?: string;
+  qq: string;
   /** 电话 */
-  tel?: string;
+  tel: string;
   /** 微信号 */
-  wechat?: string;
+  wechat: string;
   /** ID */
   id: number;
   /** 队员姓名 */
@@ -59,7 +59,7 @@ export interface UserSummary {
 }
 
 /** 用户类型 */
-export type UserType = "alumnus" | "student" | "teacher";
+export type UserType = "alumni" | "student" | "teacher";
 
 /** 用户状态 */
 export type UserWalkStatus =
