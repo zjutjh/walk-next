@@ -2,7 +2,7 @@
   <error-boundary>
     <component
       :is="route.meta.layout?.component ?? DefaultLayout"
-      v-bind="route.meta.layout?.props"
+      v-bind="route.meta.layout?.props ?? {}"
     >
       <router-view :key="route.meta.recreateComponentByPath ? route.fullPath : undefined" />
       <router-view v-slot="{ Component }" name="navbar">
