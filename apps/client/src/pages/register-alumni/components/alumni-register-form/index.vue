@@ -90,7 +90,7 @@ import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import type { AlumnusRegisterFormValue } from "../../types";
+import type { AlumniRegisterFormValue } from "../../types";
 import styles from "./index.module.scss";
 
 const props = defineProps<{
@@ -98,14 +98,14 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  submit: [value: AlumnusRegisterFormValue];
+  submit: [value: AlumniRegisterFormValue];
 }>();
 
 const router = useRouter();
 const { t } = useI18n();
 const formRef = useTemplateRef<FormInstance>("formRef");
 
-const formValue = reactive<AlumnusRegisterFormValue>({
+const formValue = reactive<AlumniRegisterFormValue>({
   name: "",
   identity: "",
   tel: "",

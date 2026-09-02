@@ -6,7 +6,7 @@
     <div :class="styles.content">
       <h1 :class="styles.title">{{ t(pageName) }}</h1>
 
-      <alumnus-register-form :loading="isRegisterPending" @submit="handleRegisterSubmit" />
+      <alumni-register-form :loading="isRegisterPending" @submit="handleRegisterSubmit" />
 
       <router-link :class="styles.loginLink" :to="{ name: 'login', query: route.query }" replace>
         {{ t("已有账号？去登录") }}
@@ -26,9 +26,9 @@ import tomatoJamImage from "@/assets/images/tomato-jam.png";
 import Decoration from "@/components/decoration/index.vue";
 import { walkClientService } from "@/utils";
 
-import AlumnusRegisterForm from "./components/alumnus-register-form/index.vue";
+import AlumniRegisterForm from "./components/alumni-register-form/index.vue";
 import styles from "./index.module.scss";
-import type { AlumnusRegisterFormValue } from "./types";
+import type { AlumniRegisterFormValue } from "./types";
 
 const route = useRoute();
 const pageName = route.meta.pageName as string;
@@ -36,7 +36,7 @@ const router = useRouter();
 const { t } = useI18n();
 
 const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
-  mutationFn: (value: AlumnusRegisterFormValue) =>
+  mutationFn: (value: AlumniRegisterFormValue) =>
     walkClientService.AlumRegister({
       name: value.name,
       identity: value.identity,
@@ -60,7 +60,7 @@ const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
   }
 });
 
-const handleRegisterSubmit = (value: AlumnusRegisterFormValue) => {
+const handleRegisterSubmit = (value: AlumniRegisterFormValue) => {
   if (isRegisterPending.value) return;
   mutateRegister(value);
 };

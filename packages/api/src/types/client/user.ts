@@ -59,7 +59,7 @@ export interface UserSummary {
 }
 
 /** 用户类型 */
-export type UserType = "alumnus" | "student" | "teacher";
+export type UserType = "alumni" | "student" | "teacher";
 
 /** 用户状态 */
 export type UserWalkStatus =

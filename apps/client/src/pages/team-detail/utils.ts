@@ -9,7 +9,7 @@ const ROUTE_LABEL_MAP: Record<RouteName, string> = {
 const MEMBER_TYPE_LABEL_MAP: Record<TeamMemberType, string> = {
   student: "学生",
   teacher: "教职工",
-  alumnus: "校友"
+  alumni: "校友"
 };
 
 const MEMBER_ROLE_LABEL_MAP: Record<TeamMemberRole, string> = {

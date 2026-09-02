@@ -79,9 +79,9 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
-        path: "alumnus",
-        name: "register-alumnus",
-        component: () => import("@/pages/register-alumnus/index.vue"),
+        path: "alumni",
+        name: "register-alumni",
+        component: () => import("@/pages/register-alumni/index.vue"),
         meta: {
           pageName: "校友注册"
         }
