@@ -2,13 +2,35 @@ import { QueryClient, queryOptions, useQuery, useQueryClient } from "@tanstack/v
 import { watchImmediate } from "@vueuse/core";
 import type { QueryUserInfoResponse } from "api/types/client";
 import { isNil, merge } from "lodash-es";
-import { storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import type { PartialDeep, SimplifyDeep } from "type-fest";
-import { getCurrentScope, onScopeDispose } from "vue";
+import { computed, getCurrentScope, onScopeDispose, ref } from "vue";
 
-import { CLIENT_QUERY_KEY } from "@/constants";
-import { useClientUserDataStore } from "@/store/client-user-data";
+import { CLIENT_PINIA_PERSIST_KEY, CLIENT_QUERY_KEY } from "@/constants";
 import { walkClientService } from "@/utils";
+
+const useClientUserDataStore = defineStore(
+  "clientUserData",
+  () => {
+    const jwt = ref("");
+    const userInfo = ref<QueryUserInfoResponse>();
+    const isQueryExist = ref(false);
+    const isLoggedIn = computed(() => Boolean(jwt.value));
+
+    return {
+      jwt,
+      userInfo,
+      isQueryExist,
+      isLoggedIn
+    };
+  },
+  {
+    persist: {
+      key: CLIENT_PINIA_PERSIST_KEY.CLIENT_USER_DATA,
+      pick: ["jwt", "userInfo"]
+    }
+  }
+);
 
 export interface ClientUserData {
   isLoggedIn: boolean;
