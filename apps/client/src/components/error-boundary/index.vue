@@ -5,8 +5,13 @@
       <div :class="styles?.errorContainer">
         <span :class="styles?.errorTitle">糟糕！页面出错了<br />Oops! Error Occurred</span>
         <span>
-          以下是报错信息。请通过反馈问卷联系我们解决。<br />
-          Please contact us via the feedback questionnaire for assistance.
+          以下是报错信息。请通过
+          <a :href="FEEDBACK_QA_URL"> 反馈问卷 </a>
+          联系我们解决。
+          <br />
+          Please contact us via the
+          <a :href="FEEDBACK_QA_URL"> feedback questionnaire </a>
+          for assistance.
         </span>
         <div :class="styles?.errorInfo">
           <span>{{ lastError?.message }}</span>
@@ -28,6 +33,8 @@ import { ErrorBoundary, unknownToError, useErrorBoundaryStore } from "shared";
 import { computed } from "vue";
 
 import styles from "./index.module.scss";
+
+const FEEDBACK_QA_URL = import.meta.env.VITE_FEEDBACK_QA_URL;
 
 const { error } = storeToRefs(useErrorBoundaryStore());
 
