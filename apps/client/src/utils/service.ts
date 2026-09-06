@@ -1,6 +1,6 @@
 import WalkClientService from "api/services/client";
 import { type CommonRespWrap, type ServiceOptions } from "api/utils";
-import axios, { AxiosError, type AxiosRequestConfig } from "axios";
+import axios, { type AxiosRequestConfig } from "axios";
 import { RequestError, RESP_CODE } from "shared";
 import { showToast } from "vant";
 
@@ -10,58 +10,36 @@ import { globalQueryClient } from "@/configs/vue-query";
 const SERVICE_TIMEOUT = 15000 as const;
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
-let isHandlingAuthExpired = false;
-let isHandlingRoleError = false;
+let isRedirecting = false;
 
-const redirectToLogin = async () => {
+const redirectTo = async (name: string, query?: Record<string, string>) => {
   const { routerInstance } = await import("@/configs/router");
   const currentRoute = routerInstance.currentRoute.value;
 
-  if (currentRoute.name === "login") return;
+  if (currentRoute.name === name) return;
 
-  await routerInstance.replace({
-    name: "login",
-    query: {
-      fromPath: encodeURIComponent(currentRoute.fullPath)
-    }
-  });
+  await routerInstance.replace({ name, query });
 };
 
-const redirectToTeamInfo = async () => {
-  const { routerInstance } = await import("@/configs/router");
-  const currentRoute = routerInstance.currentRoute.value;
+const handleRedirect = (
+  name: string,
+  message: string,
+  getQuery?: () => Record<string, string> | Promise<Record<string, string>>,
+  resetUserData = false
+) => {
+  if (isRedirecting) return;
+  isRedirecting = true;
 
-  if (currentRoute.name === "team-info") return;
-
-  await routerInstance.replace({ name: "team-info" });
-};
-
-const handleAuthExpired = (code: number) => {
-  useClientUserData(globalQueryClient).resetClientUserData();
-
-  if (isHandlingAuthExpired) return;
-
-  isHandlingAuthExpired = true;
-
-  showToast({
-    message: code === RESP_CODE.NOT_LOGGED_IN ? "未登录" : "登录过期，请重新登录",
-    position: "bottom"
-  });
-
-  void redirectToLogin().finally(() => {
-    isHandlingAuthExpired = false;
-  });
-};
-
-const handleRoleError = (message: string) => {
-  if (isHandlingRoleError) return;
-
-  isHandlingRoleError = true;
-
+  if (resetUserData) {
+    useClientUserData(globalQueryClient).resetClientUserData();
+  }
   showToast({ message, position: "bottom" });
 
-  void redirectToTeamInfo().finally(() => {
-    isHandlingRoleError = false;
+  void (async () => {
+    const query = await getQuery?.();
+    await redirectTo(name, query);
+  })().finally(() => {
+    isRedirecting = false;
   });
 };
 
@@ -71,21 +49,25 @@ axiosInstance.interceptors.response.use(
 
     if (body.code !== RESP_CODE.OK) {
       switch (body.code) {
-        // 未登录或登录过期
         case RESP_CODE.NOT_LOGGED_IN:
         case RESP_CODE.LOGIN_EXPIRED:
-          handleAuthExpired(body.code);
-          throw new RequestError("登录过期，请重新登录", body.code);
-
         case RESP_CODE.DATA_PARSE_ERROR:
-          handleAuthExpired(RESP_CODE.LOGIN_EXPIRED);
-          throw new RequestError("登录过期，请重新登录", RESP_CODE.LOGIN_EXPIRED);
+          handleRedirect(
+            "login",
+            body.code === RESP_CODE.NOT_LOGGED_IN ? "未登录" : "登录过期，请重新登录",
+            async () => {
+              const { routerInstance } = await import("@/configs/router");
+              return { fromPath: encodeURIComponent(routerInstance.currentRoute.value.fullPath) };
+            },
+            true
+          );
+          throw new RequestError("登录过期，请重新登录", body.code);
 
         case RESP_CODE.NOT_CAPTAIN:
         case RESP_CODE.CANNOT_LEAVE_TEAM:
         case RESP_CODE.CANNOT_CHANGE_CAPTAIN:
         case RESP_CODE.TEACHER_CANNOT_JOIN_STUDENT_TEAM:
-          handleRoleError(body.message);
+          handleRedirect("team-info", body.message);
           throw new RequestError(body.message, body.code);
 
         default:
@@ -94,7 +76,7 @@ axiosInstance.interceptors.response.use(
     }
     return response;
   },
-  (axiosErr: AxiosError) => {
+  (axiosErr) => {
     throw RequestError.fromAxiosError(axiosErr);
   }
 );

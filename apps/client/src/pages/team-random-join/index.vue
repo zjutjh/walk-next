@@ -48,7 +48,7 @@ const ROUTE_OPTIONS = [
 const router = useRouter();
 const { t } = useI18n();
 const queryClient = useQueryClient();
-const { updateClientUserData } = useClientUserData();
+const { updateUserInfo } = useClientUserData();
 
 /** 选中路线，通过 URL Query 持久化，刷新后保留 */
 const { urlQuery } = useStoredUrlQuery<{ route: RouteName }>({
@@ -104,7 +104,7 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
       staleTime: 0
     });
 
-    updateClientUserData({ userInfo });
+    updateUserInfo(userInfo);
 
     router.replace({ name: "team-info" });
   },

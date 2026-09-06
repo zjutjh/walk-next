@@ -109,7 +109,7 @@ const TEAM_SUBMIT_MIN_SIZE = 4;
 const router = useRouter();
 const { t } = useI18n();
 const queryClient = useQueryClient();
-const { clientUserInfo, updateClientUserData } = useClientUserData();
+const { clientUserInfo, updateUserInfo } = useClientUserData();
 
 const selectedMemberId = ref<number>();
 const isMemberDetailPopupOpened = ref(false);
@@ -190,7 +190,7 @@ const refreshClientUserData = async () => {
     queryFn: () => walkClientService.QueryUserInfo(undefined)
   });
 
-  updateClientUserData({ userInfo });
+  updateUserInfo(userInfo);
 };
 
 const getSubmitErrorMessage = (error: Error) => {

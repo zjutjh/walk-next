@@ -22,7 +22,7 @@ import type { PasswordJoinFormValue } from "./types";
 const router = useRouter();
 const { t } = useI18n();
 const queryClient = useQueryClient();
-const { updateClientUserData } = useClientUserData();
+const { updateUserInfo } = useClientUserData();
 
 const getJoinErrorMessage = (error: Error) => {
   if (error instanceof RequestError && error.code === RESP_CODE.NO_JOIN_CHANCE) {
@@ -50,7 +50,7 @@ const { mutate: mutateJoinTeam, isPending: isJoinPending } = useMutation({
       queryFn: () => walkClientService.QueryUserInfo(undefined)
     });
 
-    updateClientUserData({ userInfo });
+    updateUserInfo(userInfo);
 
     window.setTimeout(() => {
       router.replace({ name: "team-info" });

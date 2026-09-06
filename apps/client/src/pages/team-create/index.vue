@@ -21,7 +21,7 @@ import type { CreateTeamFormValue } from "./types";
 const router = useRouter();
 const { t } = useI18n();
 const queryClient = useQueryClient();
-const { updateClientUserData } = useClientUserData();
+const { updateUserInfo } = useClientUserData();
 
 const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({
   mutationFn: (value: CreateTeamFormValue) =>
@@ -46,7 +46,7 @@ const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({
       queryFn: () => walkClientService.QueryUserInfo(undefined)
     });
 
-    updateClientUserData({ userInfo });
+    updateUserInfo(userInfo);
 
     window.setTimeout(() => {
       router.replace({ name: "team-info" });

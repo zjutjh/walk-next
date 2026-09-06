@@ -1,9 +1,8 @@
 import { QueryClient, queryOptions, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { watchImmediate } from "@vueuse/core";
 import type { QueryUserInfoResponse } from "api/types/client";
-import { isNil, merge } from "lodash-es";
+import { isNil } from "lodash-es";
 import { defineStore, storeToRefs } from "pinia";
-import type { PartialDeep, SimplifyDeep } from "type-fest";
 import { computed, getCurrentScope, onScopeDispose, ref } from "vue";
 
 import { CLIENT_PINIA_PERSIST_KEY, CLIENT_QUERY_KEY } from "@/constants";
@@ -32,17 +31,6 @@ const useClientUserDataStore = defineStore(
   }
 );
 
-export interface ClientUserData {
-  isLoggedIn: boolean;
-  jwt: string;
-  userInfo?: QueryUserInfoResponse;
-}
-
-const CLIENT_USER_DATA_DEFAULT: ClientUserData = {
-  isLoggedIn: false,
-  jwt: ""
-};
-
 /** 当前用户信息查询配置 */
 export const CLIENT_USER_INFO_QUERY_OPTIONS = queryOptions({
   queryKey: [CLIENT_QUERY_KEY.USER.SELF] as const,
@@ -57,37 +45,21 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
   const userDataStore = useClientUserDataStore();
   const { isLoggedIn, jwt, userInfo: clientUserInfo } = storeToRefs(userDataStore);
 
-  const syncClientUserInfoQueryData = () => {
+  const syncQueryData = () => {
     queryClient.setQueryData<QueryUserInfoResponse>(
       [CLIENT_QUERY_KEY.USER.SELF],
       () => clientUserInfo.value ?? undefined
     );
   };
 
-  const updateClientUserData = (patch: SimplifyDeep<PartialDeep<ClientUserData>>) => {
-    const nextUserData = merge(
-      {
-        ...CLIENT_USER_DATA_DEFAULT,
-        userInfo: clientUserInfo.value
-      },
-      {
-        isLoggedIn: isLoggedIn.value,
-        jwt: jwt.value
-      },
-      patch
-    );
-
-    userDataStore.jwt = patch.isLoggedIn === false ? "" : nextUserData.jwt;
-    userDataStore.userInfo = nextUserData.userInfo;
-    syncClientUserInfoQueryData();
+  const updateUserInfo = (data: QueryUserInfoResponse) => {
+    userDataStore.userInfo = data;
+    syncQueryData();
   };
 
-  /** 登录成功后更新用户数据 */
+  /** 登录成功后更新 JWT */
   const updateClientLoginData = (jwtValue: string) => {
-    updateClientUserData({
-      isLoggedIn: true,
-      jwt: jwtValue
-    });
+    userDataStore.jwt = jwtValue;
   };
 
   /** 重置当前用户数据 */
@@ -102,7 +74,6 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
     if (!getCurrentScope()) {
       throw new Error("Function 'setupClientUserDataQuery' must be called in Vue effectScope.");
     }
-    // 防止重复启动 query
     if (userDataStore.isQueryExist) return;
 
     const { data } = useQuery({
@@ -112,9 +83,7 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
 
     watchImmediate(data, (newData) => {
       if (isNil(newData)) return;
-      updateClientUserData({
-        userInfo: newData
-      });
+      updateUserInfo(newData);
     });
 
     userDataStore.isQueryExist = true;
@@ -127,8 +96,8 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
     isLoggedIn,
     jwt,
     clientUserInfo,
-    updateClientUserData,
     updateClientLoginData,
+    updateUserInfo,
     resetClientUserData,
     setupClientUserDataQuery
   };

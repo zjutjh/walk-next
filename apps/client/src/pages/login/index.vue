@@ -43,7 +43,7 @@ const router = useRouter();
 const route = useRoute();
 const queryClient = useQueryClient();
 const { t } = useI18n();
-const { updateClientLoginData, updateClientUserData } = useClientUserData(queryClient);
+const { updateClientLoginData, updateUserInfo } = useClientUserData(queryClient);
 
 const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
   mutationFn: (value: LoginFormValue) =>
@@ -64,7 +64,7 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
       queryFn: () => walkClientService.QueryUserInfo(undefined)
     });
 
-    updateClientUserData({ userInfo });
+    updateUserInfo(userInfo);
 
     const fromPath = route.query.fromPath;
     if (typeof fromPath === "string" && fromPath) {
