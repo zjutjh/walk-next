@@ -4,7 +4,7 @@
       <van-tabbar-item v-for="item in tabItems" :key="item.to" replace :to="item.to">
         <div class="bottom-nav-item">
           <img :src="item.icon" :alt="item.label" class="bottom-nav-item__icon" />
-          <span class="bottom-nav-item__text">{{ item.label }}</span>
+          <span class="bottom-nav-item__text">{{ $t(item.label) }}</span>
         </div>
       </van-tabbar-item>
     </van-tabbar>
@@ -15,7 +15,6 @@
 import "./index.scss";
 
 import { computed, onBeforeUnmount, onMounted, useTemplateRef } from "vue";
-import { useI18n } from "vue-i18n";
 
 import fingerHeartIcon from "@/assets/images/finger-heart.png";
 import proudIcon from "@/assets/images/proud.png";
@@ -23,8 +22,6 @@ import thumbsUpIcon from "@/assets/images/thumbs-up.png";
 
 /** 视觉缓冲：激活图标向上放大的溢出量与阴影呼吸空间 */
 const NAVBAR_CLEARANCE_BUFFER_PX = 27;
-
-const { t } = useI18n();
 
 const wrapRef = useTemplateRef<HTMLElement>("wrapRef");
 
@@ -54,17 +51,17 @@ onBeforeUnmount(() => {
 const tabItems = computed(() => [
   {
     to: "/profile",
-    label: t("profile"),
+    label: "profile",
     icon: thumbsUpIcon
   },
   {
     to: "/team",
-    label: t("team.info"),
+    label: "team.info",
     icon: fingerHeartIcon
   },
   {
     to: "/settings",
-    label: t("settings"),
+    label: "settings",
     icon: proudIcon
   }
 ]);
