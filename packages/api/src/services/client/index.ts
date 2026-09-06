@@ -40,7 +40,7 @@ export default class WalkClientService<T> extends BaseService<T> {
     req: ClientAPI.AlumRegisterRequest,
     options?: T
   ): Promise<ClientAPI.AlumRegisterResponse> {
-    const url = this.genBaseURL("/user/register/alumnus");
+    const url = this.genBaseURL("/user/register/alumni");
     const method = "POST";
     const data = req;
 
