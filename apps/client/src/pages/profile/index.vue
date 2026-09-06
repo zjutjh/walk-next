@@ -16,6 +16,8 @@
         <div v-else-if="userInfo" :class="styles.content">
           <profile-header :name="userInfo.name" :tel="displayValue(userInfo.tel)" />
 
+          <pass-code :user-id="userInfo.id" />
+
           <quota-summary
             :create-op="userInfo.create_op"
             :join-op="userInfo.join_op"
@@ -48,6 +50,7 @@ import { useRouter } from "vue-router";
 
 import { CLIENT_USER_INFO_QUERY_OPTIONS, confirmDialog, useClientUserData } from "@/composables";
 
+import PassCode from "./components/pass-code/index.vue";
 import ProfileHeader from "./components/profile-header/index.vue";
 import ProfileInfoList from "./components/profile-info-list/index.vue";
 import QuotaSummary from "./components/quota-summary/index.vue";
