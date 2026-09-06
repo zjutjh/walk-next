@@ -11,6 +11,7 @@ const SERVICE_TIMEOUT = 15000 as const;
 
 const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 let isHandlingAuthExpired = false;
+let isHandlingRoleError = false;
 
 const redirectToLogin = async () => {
   const { routerInstance } = await import("@/configs/router");
@@ -24,6 +25,15 @@ const redirectToLogin = async () => {
       fromPath: encodeURIComponent(currentRoute.fullPath)
     }
   });
+};
+
+const redirectToTeamInfo = async () => {
+  const { routerInstance } = await import("@/configs/router");
+  const currentRoute = routerInstance.currentRoute.value;
+
+  if (currentRoute.name === "team-info") return;
+
+  await routerInstance.replace({ name: "team-info" });
 };
 
 const handleAuthExpired = (code: number) => {
@@ -43,6 +53,18 @@ const handleAuthExpired = (code: number) => {
   });
 };
 
+const handleRoleError = (message: string) => {
+  if (isHandlingRoleError) return;
+
+  isHandlingRoleError = true;
+
+  showToast({ message, position: "bottom" });
+
+  void redirectToTeamInfo().finally(() => {
+    isHandlingRoleError = false;
+  });
+};
+
 axiosInstance.interceptors.response.use(
   (response) => {
     const body: CommonRespWrap<unknown> = response.data;
@@ -58,6 +80,13 @@ axiosInstance.interceptors.response.use(
         case RESP_CODE.DATA_PARSE_ERROR:
           handleAuthExpired(RESP_CODE.LOGIN_EXPIRED);
           throw new RequestError("登录过期，请重新登录", RESP_CODE.LOGIN_EXPIRED);
+
+        case RESP_CODE.NOT_CAPTAIN:
+        case RESP_CODE.CANNOT_LEAVE_TEAM:
+        case RESP_CODE.CANNOT_CHANGE_CAPTAIN:
+        case RESP_CODE.TEACHER_CANNOT_JOIN_STUDENT_TEAM:
+          handleRoleError(body.message);
+          throw new RequestError(body.message, body.code);
 
         default:
           throw new RequestError(body.message, body.code);
