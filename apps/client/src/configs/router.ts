@@ -255,7 +255,7 @@ routerInstance.beforeEach((to) => {
 
   // 拦截无效路由
   if (to.matched.length === 0) {
-    return redirect(isLoggedIn.value ? { name: "team-info" } : { name: "register" });
+    return redirect(isLoggedIn.value ? { name: "team-info" } : { name: "login" });
   }
 
   if (!isLoggedIn.value && !to.meta.allowNoAuth) {
