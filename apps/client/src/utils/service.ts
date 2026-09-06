@@ -95,11 +95,6 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (axiosErr: AxiosError) => {
-    if (axiosErr.response?.status === 401) {
-      handleAuthExpired(RESP_CODE.LOGIN_EXPIRED);
-      throw new RequestError("登录过期，请重新登录", RESP_CODE.LOGIN_EXPIRED);
-    }
-
     throw RequestError.fromAxiosError(axiosErr);
   }
 );
