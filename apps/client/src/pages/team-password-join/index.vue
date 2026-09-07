@@ -52,9 +52,7 @@ const { mutate: mutateJoinTeam, isPending: isJoinPending } = useMutation({
 
     updateUserInfo(userInfo);
 
-    setTimeout(() => {
-      router.replace({ name: "team-info" });
-    }, 3000);
+    router.replace({ name: "team-info" });
   },
   onError: (error) => {
     showFailToast(getJoinErrorMessage(error));

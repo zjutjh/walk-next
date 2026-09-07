@@ -133,9 +133,7 @@ const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = use
     isTeamEditPopupOpened.value = false;
     await refreshTeamData();
 
-    setTimeout(() => {
-      router.replace({ name: "team-info" });
-    }, 3000);
+    router.replace({ name: "team-info" });
   },
   onError: (error) => {
     showErrorToast(error.message || t("更新失败，请稍后重试"));

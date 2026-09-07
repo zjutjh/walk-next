@@ -48,9 +48,7 @@ const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({
 
     updateUserInfo(userInfo);
 
-    setTimeout(() => {
-      router.replace({ name: "team-info" });
-    }, 3000);
+    router.replace({ name: "team-info" });
   },
   onError: (error: unknown) => {
     const message = error instanceof Error ? error.message : t("创建失败，请稍后重试");
