@@ -1,6 +1,10 @@
 .page {
   height: 100%;
 
+  .loading-container__overlay {
+    border-radius: 0;
+  }
+
   .iframe {
     display: block;
     width: 100%;

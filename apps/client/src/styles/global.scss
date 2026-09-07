@@ -32,7 +32,8 @@ html {
     background: transparent;
   }
 
-  .van-card {
+  .van-card,
+  .loading-container__overlay {
     @include card-container;
   }
 
