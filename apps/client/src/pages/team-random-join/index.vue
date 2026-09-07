@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { RequestError, useStoredUrlQuery } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, onMounted, ref } from "vue";
@@ -77,12 +77,9 @@ const {
       // eslint-disable-next-line camelcase
       route_name: urlQuery.value.route
     }),
-  // 切换筛选时保留旧数据在屏，新数据到达后由列表组件播放换场动画
-  placeholderData: keepPreviousData,
-  // 随机列表再拉一次也只是另一批随机队伍，缓存永不过期即可。
-  // 关键作用：阻止 refetchOnMount/refetchOnWindowFocus 在动画播放中
-  // 换成新随机数据，否则飞入会播两次、列表会突然重排
-  staleTime: Infinity
+  // 随机列表每次都应请求新数据，不复用旧缓存；gcTime: 0 使切换路线后旧路线缓存立即回收，
+  // 避免切回时命中旧缓存导致飞入的是旧数据且无 loading
+  gcTime: 0
 });
 
 const visibleTeams = computed(
@@ -98,7 +95,7 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
       position: "top"
     });
 
-    // 人数与加入次数已变动，绕过 staleTime: Infinity 强制拉取最新用户信息
+    // 人数与加入次数已变动，拉取最新用户信息
     const userInfo = await queryClient.fetchQuery({
       ...CLIENT_USER_INFO_QUERY_OPTIONS,
       staleTime: 0

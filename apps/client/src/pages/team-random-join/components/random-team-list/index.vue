@@ -5,7 +5,7 @@
     <error-empty :error="props.error" :disabled="props.loading" @btn-click="emit('retry')">
       <loading-container
         :class="styles.loadingContainer"
-        :loading="props.loading"
+        :loading="props.loading && !isFlyingOut"
         :text="t('refresh.loading')"
       >
         <van-empty
