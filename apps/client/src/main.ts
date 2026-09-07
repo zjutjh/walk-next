@@ -28,6 +28,10 @@ addEventListener("online", () => {
   }
 });
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js");
+}
+
 async function bootstrap() {
   createApp(App)
     .use(routerInstance)
