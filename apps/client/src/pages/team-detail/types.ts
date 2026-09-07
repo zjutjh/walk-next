@@ -1,4 +1,4 @@
-import type { UserRole, UserType, UserWalkStatus } from "api/types/client";
+import type { UserRole, UserType } from "api/types/client";
 
 export type RouteName = "pf-half" | "pf-full" | "mgs";
 
@@ -22,5 +22,3 @@ export interface TeamEditFormValue {
 export type TeamMemberRole = UserRole;
 
 export type TeamMemberType = UserType;
-
-export type TeamMemberWalkStatus = UserWalkStatus;

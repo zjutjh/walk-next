@@ -1,3 +1,5 @@
+import type { WalkStatus } from "./walk";
+
 /** 用户性别 */
 export const enum UserGender {
   Unknown = 0,
@@ -26,7 +28,7 @@ export interface UserInfo {
   /** 团队ID */
   team_id: number;
   /** 用户状态 */
-  walk_status: UserWalkStatus;
+  walk_status: WalkStatus;
   /** QQ 号 */
   qq: string;
   /** 电话 */
@@ -60,13 +62,3 @@ export interface UserSummary {
 
 /** 用户类型 */
 export type UserType = "alumni" | "student" | "teacher";
-
-/** 用户状态 */
-export type UserWalkStatus =
-  | "not_start"
-  | "pending"
-  | "abandoned"
-  | "in_progress"
-  | "withdrawn"
-  | "violated"
-  | "completed";

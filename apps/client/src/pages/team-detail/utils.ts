@@ -1,4 +1,6 @@
-import type { RouteName, TeamMemberRole, TeamMemberType, TeamMemberWalkStatus } from "./types";
+import type { WalkStatus } from "api/types/client";
+
+import type { RouteName, TeamMemberRole, TeamMemberType } from "./types";
 
 const ROUTE_LABEL_MAP: Record<RouteName, string> = {
   "pf-half": "屏峰半程",
@@ -18,17 +20,7 @@ const MEMBER_ROLE_LABEL_MAP: Record<TeamMemberRole, string> = {
   unbind: "未组队"
 };
 
-const WALK_STATUS_LABEL_MAP: Record<TeamMemberWalkStatus, string> = {
-  not_start: "未开始",
-  pending: "待确认",
-  abandoned: "已放弃",
-  in_progress: "进行中",
-  withdrawn: "已退赛",
-  violated: "违规",
-  completed: "已完成"
-};
-
-const TEAM_STATUS_LABEL_MAP: Partial<Record<string, string>> = {
+const WALK_STATUS_LABEL_MAP: Record<WalkStatus, string> = {
   not_start: "未开始",
   pending: "待确认",
   abandoned: "已放弃",
@@ -49,6 +41,4 @@ export const getMemberTypeLabel = (type: TeamMemberType) => MEMBER_TYPE_LABEL_MA
 
 export const getMemberRoleLabel = (role: TeamMemberRole) => MEMBER_ROLE_LABEL_MAP[role];
 
-export const getWalkStatusLabel = (status: TeamMemberWalkStatus) => WALK_STATUS_LABEL_MAP[status];
-
-export const getTeamStatusLabel = (status: string) => TEAM_STATUS_LABEL_MAP[status] ?? status;
+export const getWalkStatusLabel = (status: WalkStatus) => WALK_STATUS_LABEL_MAP[status];

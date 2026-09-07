@@ -1,13 +1,6 @@
 import type { TeamRandomListItem, TeamSummary } from "./team";
-import type {
-  UserContact,
-  UserGender,
-  UserInfo,
-  UserRole,
-  UserSummary,
-  UserType,
-  UserWalkStatus
-} from "./user";
+import type { UserContact, UserGender, UserInfo, UserRole, UserSummary, UserType } from "./user";
+import type { WalkStatus } from "./walk";
 
 /** 用户登录 请求 */
 export interface LoginRequest {
@@ -160,7 +153,7 @@ export interface QueryTeamDetailResponse {
   /** 队伍标语 */
   slogan: string;
   /** 队伍状态 */
-  status: string;
+  status: WalkStatus;
   /** 是否已提交 */
   submitted: boolean;
 }
@@ -205,7 +198,7 @@ export interface QueryTeamMemberResponse {
   /** 电话 */
   tel: string;
   /** 用户状态 */
-  walk_status: UserWalkStatus;
+  walk_status: WalkStatus;
   /** 微信号 */
   wechat: string;
 }

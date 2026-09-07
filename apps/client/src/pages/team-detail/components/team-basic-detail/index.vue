@@ -34,7 +34,7 @@ import type { QueryTeamDetailResponse } from "api/types/client";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-import { getRouteLabel, getTeamStatusLabel } from "../../utils";
+import { getRouteLabel, getWalkStatusLabel } from "../../utils";
 import styles from "./index.module.scss";
 
 const props = defineProps<{
@@ -51,7 +51,7 @@ const { t } = useI18n();
 
 const routeLabel = computed(() => t(getRouteLabel(props.team.route_name)));
 
-const teamStatusLabel = computed(() => t(getTeamStatusLabel(props.team.status)));
+const teamStatusLabel = computed(() => t(getWalkStatusLabel(props.team.status)));
 
 const handleEditClick = () => {
   emit("edit");
