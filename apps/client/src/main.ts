@@ -22,9 +22,9 @@ routerInstance.onError((error) => {
     hasChunkLoadError = true;
   }
 });
-window.addEventListener("online", () => {
+addEventListener("online", () => {
   if (hasChunkLoadError) {
-    window.location.reload();
+    location.reload();
   }
 });
 

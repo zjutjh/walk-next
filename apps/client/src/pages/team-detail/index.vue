@@ -36,11 +36,6 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import type {
-  QueryTeamDetailResponse,
-  QueryTeamOverviewResponse,
-  UpdateTeamInfoResponse
-} from "api/types/client";
 import { ErrorEmpty, LoadingContainer } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
@@ -66,21 +61,19 @@ const isTeamEditPopupOpened = ref(false);
 
 const isCaptain = computed(() => clientUserInfo.value?.role === "captain");
 
-const { data: teamOverview, refetch: refetchOverview } = useQuery<QueryTeamOverviewResponse, Error>(
-  {
-    queryKey: [CLIENT_QUERY_KEY.TEAM.OVERVIEW],
-    queryFn: () => walkClientService.QueryTeamOverview(undefined)
-  }
-);
+const { data: teamOverview, refetch: refetchOverview } = useQuery({
+  queryKey: [CLIENT_QUERY_KEY.TEAM.OVERVIEW],
+  queryFn: () => walkClientService.QueryTeamOverview()
+});
 
 const {
   data: teamDetail,
   isLoading: isTeamDetailLoading,
   error: teamDetailError,
   refetch: refetchTeamDetail
-} = useQuery<QueryTeamDetailResponse, Error>({
+} = useQuery({
   queryKey: [CLIENT_QUERY_KEY.TEAM.DETAIL],
-  queryFn: () => walkClientService.QueryTeamDetail(undefined)
+  queryFn: () => walkClientService.QueryTeamDetail()
 });
 
 const sortedMembers = computed(() => {
@@ -88,7 +81,7 @@ const sortedMembers = computed(() => {
 
   return members
     .map((member, index) => ({ member, index }))
-    .sort((left, right) => {
+    .toSorted((left, right) => {
       if (left.member.role === right.member.role) return left.index - right.index;
       if (left.member.role === "captain") return -1;
       if (right.member.role === "captain") return 1;
@@ -120,12 +113,8 @@ const showErrorToast = (message: string) => {
   });
 };
 
-const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = useMutation<
-  UpdateTeamInfoResponse,
-  Error,
-  TeamEditFormValue
->({
-  mutationFn: (value) =>
+const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = useMutation({
+  mutationFn: (value: TeamEditFormValue) =>
     walkClientService.UpdateTeamInfo({
       name: value.name,
       slogan: value.slogan,
@@ -144,7 +133,7 @@ const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = use
     isTeamEditPopupOpened.value = false;
     await refreshTeamData();
 
-    window.setTimeout(() => {
+    setTimeout(() => {
       router.replace({ name: "team-info" });
     }, 3000);
   },

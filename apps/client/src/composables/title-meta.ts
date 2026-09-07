@@ -20,10 +20,10 @@ export function useTitleMeta(options?: UseTitleMetaOptions) {
   const pageNameTitle = computed(() => {
     const slice = route.matched.map((item) => item.meta.pageName);
 
-    const proceed = compact(slice).reverse().concat(["精弘毅行"]);
+    const proceed = [...compact(slice).toReversed(), "精弘毅行"];
 
     return proceed.map((pageName) => t(pageName)).join(" | ");
   });
 
-  useTitle(options?.title || pageNameTitle);
+  useTitle(options?.title ?? pageNameTitle);
 }

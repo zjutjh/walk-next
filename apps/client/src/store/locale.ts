@@ -7,7 +7,7 @@ import type { ValidLanguage } from "@/constants/valid-languages";
 export const useLocaleStore = defineStore(
   "locale",
   () => {
-    const locale = ref<ValidLanguage | undefined>(undefined);
+    const locale = ref<ValidLanguage>();
     return { locale };
   },
   {

@@ -91,7 +91,7 @@ export const request: ServiceOptions<AxiosRequestConfig>["request"] = async (req
     data: req.data,
     ...options,
     headers: {
-      ...(jwt.value ? { Authorization: `Bearer ${jwt.value}` } : {}),
+      ...(jwt.value && { Authorization: `Bearer ${jwt.value}` }),
       ...options?.headers
     }
   });

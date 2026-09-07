@@ -4,9 +4,9 @@
       <van-image :class="styles.decorationImg" :src="decorationImgUrl" />
 
       <van-cell :title="t('反馈')" to="/feedback" is-link />
-      <van-cell :title="t('语言')" is-link @click="handleLanguageClick">{{
-        locale ? LANG_DISPLAY_NAME[locale] : ""
-      }}</van-cell>
+      <van-cell :title="t('语言')" is-link @click="handleLanguageClick">
+        {{ locale ? LANG_DISPLAY_NAME[locale] : "" }}
+      </van-cell>
       <van-cell :title="t('用户协议')" to="/terms-of-service" is-link />
       <van-cell :title="t('隐私政策')" to="/privacy-policy" is-link />
       <van-cell :title="t('报名须知与免责协议')" to="/registration-terms" is-link />

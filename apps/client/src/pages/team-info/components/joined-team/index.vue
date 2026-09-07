@@ -80,17 +80,6 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import type {
-  DisbandTeamResponse,
-  LeaveTeamResponse,
-  QueryTeamDetailResponse,
-  QueryTeamMemberResponse,
-  QueryTeamOverviewResponse,
-  RemoveTeamMemberResponse,
-  SubmitTeamResponse,
-  UndoTeamSubmissionResponse,
-  UpdateTeamCaptainResponse
-} from "api/types/client";
 import { ErrorEmpty, LoadingContainer, RequestError, RESP_CODE } from "shared";
 import { showFailToast, showSuccessToast, showToast } from "vant";
 import { computed, ref } from "vue";
@@ -127,17 +116,14 @@ const {
   data: teamOverview,
   isLoading: isOverviewLoading,
   error: overviewError
-} = useQuery<QueryTeamOverviewResponse, Error>({
+} = useQuery({
   queryKey: [CLIENT_QUERY_KEY.TEAM.OVERVIEW],
-  queryFn: () => walkClientService.QueryTeamOverview(undefined)
+  queryFn: () => walkClientService.QueryTeamOverview()
 });
 
-const { data: teamDetail, isLoading: isTeamDetailLoading } = useQuery<
-  QueryTeamDetailResponse,
-  Error
->({
+const { data: teamDetail, isLoading: isTeamDetailLoading } = useQuery({
   queryKey: [CLIENT_QUERY_KEY.TEAM.DETAIL],
-  queryFn: () => walkClientService.QueryTeamDetail(undefined)
+  queryFn: () => walkClientService.QueryTeamDetail()
 });
 
 const {
@@ -145,7 +131,7 @@ const {
   isFetching: isSelectedMemberDetailFetching,
   error: selectedMemberDetailError,
   refetch: refetchSelectedMemberDetail
-} = useQuery<QueryTeamMemberResponse, Error>({
+} = useQuery({
   queryKey: computed(() => [CLIENT_QUERY_KEY.TEAM.MEMBER, selectedMemberId.value] as const),
   enabled: () => selectedMemberId.value !== undefined,
   queryFn: () => {
@@ -160,7 +146,7 @@ const sortedMembers = computed(() => {
 
   return members
     .map((member, index) => ({ member, index }))
-    .sort((left, right) => {
+    .toSorted((left, right) => {
       if (left.member.role === right.member.role) return left.index - right.index;
       if (left.member.role === "captain") return -1;
       if (right.member.role === "captain") return 1;
@@ -190,7 +176,7 @@ const refreshTeamData = async () => {
 const refreshClientUserData = async () => {
   const userInfo = await queryClient.fetchQuery({
     queryKey: [CLIENT_QUERY_KEY.USER.SELF],
-    queryFn: () => walkClientService.QueryUserInfo(undefined)
+    queryFn: () => walkClientService.QueryUserInfo()
   });
 
   updateUserInfo(userInfo);
@@ -219,11 +205,8 @@ const showErrorToast = (message: string) => {
   });
 };
 
-const { mutate: mutateSubmitTeam, isPending: isSubmitTeamPending } = useMutation<
-  SubmitTeamResponse,
-  Error
->({
-  mutationFn: () => walkClientService.SubmitTeam(undefined),
+const { mutate: mutateSubmitTeam, isPending: isSubmitTeamPending } = useMutation({
+  mutationFn: () => walkClientService.SubmitTeam(),
   onSuccess: async () => {
     showSuccessToast({
       message: t("提交成功"),
@@ -237,11 +220,8 @@ const { mutate: mutateSubmitTeam, isPending: isSubmitTeamPending } = useMutation
   }
 });
 
-const { mutate: mutateUndoTeamSubmission, isPending: isUndoTeamSubmissionPending } = useMutation<
-  UndoTeamSubmissionResponse,
-  Error
->({
-  mutationFn: () => walkClientService.UndoTeamSubmission(undefined),
+const { mutate: mutateUndoTeamSubmission, isPending: isUndoTeamSubmissionPending } = useMutation({
+  mutationFn: () => walkClientService.UndoTeamSubmission(),
   onSuccess: async () => {
     showSuccessToast({
       message: t("取消提交成功"),
@@ -255,11 +235,8 @@ const { mutate: mutateUndoTeamSubmission, isPending: isUndoTeamSubmissionPending
   }
 });
 
-const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutation<
-  DisbandTeamResponse,
-  Error
->({
-  mutationFn: () => walkClientService.DisbandTeam(undefined),
+const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutation({
+  mutationFn: () => walkClientService.DisbandTeam(),
   onSuccess: async () => {
     showSuccessToast({
       message: t("解散成功"),
@@ -274,11 +251,8 @@ const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutati
   }
 });
 
-const { mutate: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation<
-  LeaveTeamResponse,
-  Error
->({
-  mutationFn: () => walkClientService.LeaveTeam(undefined),
+const { mutate: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation({
+  mutationFn: () => walkClientService.LeaveTeam(),
   onSuccess: async () => {
     showSuccessToast({ message: t("退出成功"), duration: 3000, position: "top" });
     await refreshClientUserData();
@@ -289,12 +263,8 @@ const { mutate: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation<
   }
 });
 
-const { mutate: mutateRemoveMember, isPending: isRemoveMemberPending } = useMutation<
-  RemoveTeamMemberResponse,
-  Error,
-  number
->({
-  mutationFn: (memberId) => walkClientService.RemoveTeamMember({ id: memberId }),
+const { mutate: mutateRemoveMember, isPending: isRemoveMemberPending } = useMutation({
+  mutationFn: (memberId: number) => walkClientService.RemoveTeamMember({ id: memberId }),
   onSuccess: async () => {
     showSuccessToast({
       message: t("删除成功"),
@@ -309,12 +279,8 @@ const { mutate: mutateRemoveMember, isPending: isRemoveMemberPending } = useMuta
   }
 });
 
-const { mutate: mutateTransferCaptain, isPending: isTransferCaptainPending } = useMutation<
-  UpdateTeamCaptainResponse,
-  Error,
-  number
->({
-  mutationFn: (memberId) => walkClientService.UpdateTeamCaptain({ id: memberId }),
+const { mutate: mutateTransferCaptain, isPending: isTransferCaptainPending } = useMutation({
+  mutationFn: (memberId: number) => walkClientService.UpdateTeamCaptain({ id: memberId }),
   onSuccess: async () => {
     showSuccessToast({
       message: t("移交成功"),

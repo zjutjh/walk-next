@@ -43,12 +43,12 @@ const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({
 
     const userInfo = await queryClient.fetchQuery({
       queryKey: [CLIENT_QUERY_KEY.USER.SELF],
-      queryFn: () => walkClientService.QueryUserInfo(undefined)
+      queryFn: () => walkClientService.QueryUserInfo()
     });
 
     updateUserInfo(userInfo);
 
-    window.setTimeout(() => {
+    setTimeout(() => {
       router.replace({ name: "team-info" });
     }, 3000);
   },

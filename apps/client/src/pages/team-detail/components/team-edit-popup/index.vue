@@ -105,7 +105,7 @@ import type { ActionSheetAction, FieldRule, FormInstance } from "vant";
 import { computed, reactive, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-import type { MatchValue, OpenedTeamEditSelect, RouteName, TeamEditFormValue } from "../../types";
+import type { MatchValue, OpenedTeamEditSelect, TeamEditFormValue } from "../../types";
 import { getRouteLabel, isRouteName } from "../../utils";
 import styles from "./index.module.scss";
 
@@ -146,8 +146,8 @@ const formValue = reactive({
   name: "",
   slogan: "",
   password: "",
-  allowMatch: "" as MatchValue | "",
-  routeName: "" as RouteName | ""
+  allowMatch: "",
+  routeName: ""
 });
 
 const selectErrors = reactive({

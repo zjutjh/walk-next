@@ -61,7 +61,7 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
 
     const userInfo = await queryClient.fetchQuery({
       queryKey: [CLIENT_QUERY_KEY.USER.SELF],
-      queryFn: () => walkClientService.QueryUserInfo(undefined)
+      queryFn: () => walkClientService.QueryUserInfo()
     });
 
     updateUserInfo(userInfo);

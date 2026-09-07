@@ -1,1 +1,1 @@
-export const MAXIMUM_TEAM_SIZE: number = 6;
+export const MAXIMUM_TEAM_SIZE = 6;

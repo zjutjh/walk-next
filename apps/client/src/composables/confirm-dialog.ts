@@ -23,9 +23,9 @@ export const confirmDialog = (options: ConfirmDialogOptions) => {
   dialogOptions.value = options;
   isVisible.value = true;
 
-  return new Promise<boolean>((resolve) => {
-    pendingResolver = resolve;
-  });
+  const { promise, resolve } = Promise.withResolvers();
+  pendingResolver = resolve;
+  return promise;
 };
 
 const settle = (isConfirmed: boolean) => {

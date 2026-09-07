@@ -170,7 +170,7 @@ const stuIdRules = computed<FieldRule[]>(() => [{ required: true, message: stuId
 const identityRules = computed<FieldRule[]>(() => [
   { required: true, message: t("请输入身份证号码") },
   {
-    pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+    pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}([\dX])$)/i,
     message: t("请输入正确的身份证号码")
   }
 ]);
@@ -219,8 +219,8 @@ const handleSubmit = async () => {
     identity: formValue.identity,
     tel: formValue.tel,
     password: formValue.password,
-    qq: formValue.qq || undefined,
-    wechat: formValue.wechat || undefined
+    qq: formValue.qq,
+    wechat: formValue.wechat
   });
 };
 </script>

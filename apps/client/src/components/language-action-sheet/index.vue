@@ -25,12 +25,14 @@ const { locale } = useUserLocale();
 const isActionSheetVisible = defineModel<boolean>("visible", { required: true });
 
 /** 语言选择弹层的可用选项列表 */
-const actionSheetActions = computed<LanguageActionSheetAction[]>(() =>
-  VALID_LANG.map((langCode) => ({
-    name: LANG_DISPLAY_NAME[langCode],
-    disabled: langCode === locale.value,
-    langCode: langCode
-  }))
+const actionSheetActions = computed(() =>
+  VALID_LANG.map(
+    (langCode): LanguageActionSheetAction => ({
+      name: LANG_DISPLAY_NAME[langCode],
+      disabled: langCode === locale.value,
+      langCode: langCode
+    })
+  )
 );
 
 /** 选择语言 */

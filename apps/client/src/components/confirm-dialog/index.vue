@@ -28,7 +28,8 @@
         {{ dialogOptions.message }}
       </p>
       <div
-        :class="['confirm-dialog__footer', { 'confirm-dialog__footer--single': isSingleAction }]"
+        class="confirm-dialog__footer"
+        :class="[{ 'confirm-dialog__footer--single': isSingleAction }]"
       >
         <van-button
           class="confirm-dialog__action"
