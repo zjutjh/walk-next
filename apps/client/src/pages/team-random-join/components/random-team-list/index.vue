@@ -5,7 +5,7 @@
     <error-empty :error="props.error" :disabled="props.loading" @btn-click="emit('retry')">
       <loading-container
         :class="styles.loadingContainer"
-        :loading="props.loading && !isFlyingOut"
+        :loading="overlayVisible"
         :text="t('refresh.loading')"
       >
         <van-empty
@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { ErrorEmpty, LoadingContainer } from "shared";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import type { RandomJoinTeam } from "../../types";
@@ -74,11 +74,11 @@ const isFlyingOut = ref(false);
 /** 飞出期间到达的新数据，飞出结束后统一换上 */
 let pendingTeams: RandomJoinTeam[] | undefined;
 
-/** 两批队伍是否存在交集：有交集视为同一路线的数据刷新（原地更新，不播换场） */
-const hasSharedTeam = (a: RandomJoinTeam[], b: RandomJoinTeam[]) => {
-  const teamIds = new Set(b.map((team) => team.id));
-  return a.some((team) => teamIds.has(team.id));
-};
+/** 飞出期间隐藏 loading 遮罩，让用户看到旧卡飞出 */
+const overlayVisible = computed(() => props.loading && !isFlyingOut.value);
+
+const hasSharedTeam = (a: RandomJoinTeam[], b: RandomJoinTeam[]) =>
+  a.some((team) => b.some((x) => x.id === team.id));
 
 watch(
   () => props.teams,
@@ -89,20 +89,19 @@ watch(
       return;
     }
 
-    // 首次填充或同一路线的刷新：原地更新
+    // 首次填充或同一路线数据刷新：原地更新，不播换场
     if (displayedTeams.value.length === 0 || hasSharedTeam(displayedTeams.value, teams)) {
       displayedTeams.value = teams;
       return;
     }
 
-    // 切换了筛选：旧卡先飞出，动画结束（handleFlyOutEnd）再换入新列表
+    // 切换路线：旧卡飞出，动画结束后换入新列表触发飞入
     isFlyingOut.value = true;
     pendingTeams = teams;
   },
   { immediate: true }
 );
 
-/** 最后一张卡（延迟最长）飞出结束时换上新列表，触发飞入 */
 const handleFlyOutEnd = (index: number) => {
   if (!isFlyingOut.value || index !== displayedTeams.value.length - 1) return;
 
