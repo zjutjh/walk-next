@@ -26,7 +26,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { RequestError, useStoredUrlQuery } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -65,6 +65,19 @@ onMounted(() => {
     document.querySelector(".van-nav-bar")?.getBoundingClientRect().bottom ?? 0;
 });
 
+/** 切回缓存窗口：切走某路线 1 秒内切回时复用缓存、不重新拉取 */
+const REJOIN_CACHE_WINDOW_MS = 1000;
+
+/** 各路线最近一次被切走的时间戳（非响应式，仅供 staleTime 判断） */
+const routeLastLeftAt: Partial<Record<string, number>> = {};
+
+watch(
+  () => urlQuery.value.route,
+  (_route, prevRoute) => {
+    routeLastLeftAt[prevRoute] = Date.now();
+  }
+);
+
 const {
   data: randomTeamListData,
   isLoading: isRandomTeamListLoading,
@@ -77,9 +90,15 @@ const {
       // eslint-disable-next-line camelcase
       route_name: urlQuery.value.route
     }),
-  // 随机列表每次都应请求新数据，不复用旧缓存；gcTime: 0 使切换路线后旧路线缓存立即回收，
-  // 避免切回时命中旧缓存导致飞入的是旧数据且无 loading
-  gcTime: 0
+  // 倾向每次请求新数据；但切走 1 秒内切回时视为新鲜（按切走时刻判断），复用缓存不发请求；
+  // gcTime 配合保留缓存，切回时直接展示旧数据、无 loading
+  staleTime: (query) => {
+    const leftAt = routeLastLeftAt[String(query.queryKey[1])];
+    return leftAt !== undefined && Date.now() - leftAt < REJOIN_CACHE_WINDOW_MS
+      ? Number.POSITIVE_INFINITY
+      : 0;
+  },
+  gcTime: REJOIN_CACHE_WINDOW_MS
 });
 
 const visibleTeams = computed(
