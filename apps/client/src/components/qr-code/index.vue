@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { useQRCode } from "@vueuse/integrations";
+import { useQRCode } from "@vueuse/integrations/useQRCode";
 import { toRef } from "vue";
 
 const props = defineProps<{
