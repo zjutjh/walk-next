@@ -118,7 +118,7 @@ const isCaptain = computed(() => clientUserInfo.value?.role === "captain");
 
 const isMember = computed(() => clientUserInfo.value?.role === "member");
 
-const isLeaveTeamVisible = computed(() => isMember.value && teamDetail.value?.submitted === false);
+const isLeaveTeamVisible = computed(() => isMember.value); // 暂时无条件展示 && teamDetail.value?.submitted === false
 
 const {
   data: teamOverview,
