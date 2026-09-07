@@ -9,7 +9,10 @@ import {
   type RouteRecordRaw
 } from "vue-router";
 
+import navbar from "@/components/navbar/index.vue";
 import { useClientUserData } from "@/composables";
+import profilePage from "@/pages/profile/index.vue";
+import teamInfoPage from "@/pages/team-info/index.vue";
 
 import { globalQueryClient } from "./vue-query";
 
@@ -122,8 +125,8 @@ const routes: RouteRecordRaw[] = [
         path: "",
         name: "team-info",
         components: {
-          default: () => import("@/pages/team-info/index.vue"),
-          navbar: () => import("@/components/navbar/index.vue")
+          default: teamInfoPage,
+          navbar
         },
         meta: {
           pageName: "team.info",
@@ -180,8 +183,8 @@ const routes: RouteRecordRaw[] = [
         path: "",
         name: "profile",
         components: {
-          default: () => import("@/pages/profile/index.vue"),
-          navbar: () => import("@/components/navbar/index.vue")
+          default: profilePage,
+          navbar
         },
         meta: {
           pageName: "profile",
@@ -208,7 +211,7 @@ const routes: RouteRecordRaw[] = [
     name: "settings",
     components: {
       default: () => import("@/pages/settings/index.vue"),
-      navbar: () => import("@/components/navbar/index.vue")
+      navbar
     },
     meta: {
       pageName: "settings",

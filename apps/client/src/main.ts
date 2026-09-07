@@ -14,6 +14,20 @@ initializeRootFontSize();
 
 import App from "./app.vue";
 
+// 断网时动态导入 chunk 失败，浏览器会缓存该失败结果，重连后 import() 仍返回缓存的失败；
+// 追踪 chunk 加载错误，联网时刷新页面绕过缓存，避免离线时无限刷新
+let hasChunkLoadError = false;
+routerInstance.onError((error) => {
+  if (error instanceof TypeError) {
+    hasChunkLoadError = true;
+  }
+});
+window.addEventListener("online", () => {
+  if (hasChunkLoadError) {
+    window.location.reload();
+  }
+});
+
 async function bootstrap() {
   createApp(App)
     .use(routerInstance)
