@@ -12,6 +12,8 @@
         :text="t('refresh.loading')"
       >
         <template v-if="teamOverview && !isOverviewLoading">
+          <team-pass-code v-if="teamDetail?.submitted" :team-id="teamDetail.id" />
+
           <team-overview-card :team="teamOverview.team" @detail="handleDetailClick" />
 
           <team-member-list :members="sortedMembers" @member-click="handleMemberClick" />
@@ -100,6 +102,7 @@ import { CLIENT_QUERY_KEY } from "@/constants";
 import TeamMemberDetailPopup from "@/pages/team-detail/components/team-member-detail-popup/index.vue";
 import TeamMemberList from "@/pages/team-detail/components/team-member-list/index.vue";
 import TeamOverviewCard from "@/pages/team-detail/components/team-overview-card/index.vue";
+import TeamPassCode from "@/pages/team-info/components/team-pass-code/index.vue";
 import { walkClientService } from "@/utils";
 
 import styles from "./index.module.scss";
