@@ -34,9 +34,9 @@ if ("serviceWorker" in navigator) {
 
 async function bootstrap() {
   createApp(App)
+    .use(createPinia().use(piniaPluginPersistedstate))
     .use(routerInstance)
     .use(VueQueryPlugin, { queryClient: globalQueryClient })
-    .use(createPinia().use(piniaPluginPersistedstate))
     .use(await initI18n())
     .mount("#app");
 }
