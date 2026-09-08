@@ -24,3 +24,5 @@ dist-ssr
 .claude
 .agents
 .vercel
+
+**/AGENTS.local.md
