@@ -7,6 +7,7 @@
         :class="styles.fieldInput"
         :rules="nameRules"
         name="name"
+        maxlength="128"
         :placeholder="t('请输入姓名')"
         autocomplete="name"
         clearable
@@ -20,6 +21,7 @@
         :class="styles.fieldInput"
         :rules="identityRules"
         name="identity"
+        maxlength="128"
         :placeholder="t('请输入身份证号码')"
         autocomplete="off"
         clearable
@@ -49,6 +51,7 @@
         :rules="passwordRules"
         :type="isPasswordVisible ? 'text' : 'password'"
         name="password"
+        maxlength="60"
         :placeholder="t('请输入密码')"
         autocomplete="new-password"
         clearable

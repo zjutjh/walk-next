@@ -17,6 +17,7 @@
         :label="t('微信')"
         :placeholder="t('请输入微信')"
         :name="t('微信')"
+        maxlength="64"
         autocomplete="off"
         clearable
       />
@@ -25,6 +26,7 @@
         :label="t('QQ')"
         :placeholder="t('请输入QQ')"
         :name="t('QQ')"
+        maxlength="20"
         inputmode="numeric"
         autocomplete="off"
         clearable

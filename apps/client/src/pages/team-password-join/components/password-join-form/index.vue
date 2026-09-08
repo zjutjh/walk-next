@@ -19,6 +19,7 @@
         :type="isPasswordVisible ? 'text' : 'password'"
         :label="t('团队密码')"
         name="password"
+        maxlength="64"
         :placeholder="t('请输入团队密码')"
         autocomplete="off"
         clearable

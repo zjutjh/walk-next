@@ -23,6 +23,7 @@
         :rules="passwordRules"
         :type="isPasswordVisible ? 'text' : 'password'"
         name="password"
+        maxlength="60"
         :placeholder="t('请输入密码')"
         autocomplete="current-password"
         clearable

@@ -18,8 +18,7 @@
             :rules="nameRules"
             :label="t('团队名称')"
             name="name"
-            maxlength="20"
-            show-word-limit
+            maxlength="64"
             :placeholder="t('请输入名称')"
             autocomplete="off"
           />
@@ -29,7 +28,7 @@
             :rules="sloganRules"
             :label="t('团队口号')"
             name="slogan"
-            maxlength="20"
+            maxlength="128"
             show-word-limit
             :placeholder="t('请输入口号')"
             autocomplete="off"
@@ -40,6 +39,7 @@
             :rules="passwordRules"
             :label="t('团队密码')"
             name="password"
+            maxlength="64"
             :placeholder="t('请输入密码')"
             autocomplete="off"
           />
