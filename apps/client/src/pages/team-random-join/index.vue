@@ -16,8 +16,10 @@
       :error="randomTeamListError"
       :joining-team-id="joiningTeamId"
       :join-loading="isRandomJoinPending"
+      :is-refetching="isRandomTeamListRefetching"
       @join="handleJoinClick"
       @retry="refetchRandomTeamList"
+      @refresh="refetchRandomTeamList"
     />
   </div>
 </template>
@@ -81,6 +83,7 @@ watch(
 const {
   data: randomTeamListData,
   isLoading: isRandomTeamListLoading,
+  isRefetching: isRandomTeamListRefetching,
   error: randomTeamListError,
   refetch: refetchRandomTeamList
 } = useQuery({

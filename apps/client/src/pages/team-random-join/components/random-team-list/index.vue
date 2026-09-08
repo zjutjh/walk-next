@@ -3,42 +3,48 @@
     <p :class="styles.countText">{{ t("共找到{n}支队伍", { n: displayedTeams.length }) }}</p>
 
     <error-empty :error="props.error" :disabled="props.loading" @btn-click="emit('retry')">
-      <loading-container
-        :class="styles.loadingContainer"
-        :loading="overlayVisible"
-        :text="t('refresh.loading')"
+      <van-pull-refresh
+        :model-value="props.isRefetching"
+        :disabled="props.loading"
+        @refresh="emit('refresh')"
       >
-        <van-empty
-          v-if="displayedTeams.length === 0 && !props.loading"
-          :description="t('暂无可加入队伍')"
-        />
-
-        <!-- 换场分两段：旧卡播完飞出动画（class 驱动，卡片不脱离文档流），
-             最后一张卡 animationend 后换上新列表，由 TransitionGroup 播飞入。
-             不要让 TransitionGroup 直接处理整列表替换：飞出卡片 absolute 后
-             静态位置塌陷，会全部堆叠到第一排 -->
-        <transition-group
-          v-else-if="displayedTeams.length > 0"
-          appear
-          tag="div"
-          :class="styles.cardList"
-          :enter-active-class="styles.cardEnterActive"
-          :enter-from-class="styles.cardEnterFrom"
-          :leave-active-class="styles.cardLeaveActive"
-          :move-class="styles.cardMove"
+        <loading-container
+          :class="styles.loadingContainer"
+          :loading="overlayVisible"
+          :text="t('refresh.loading')"
         >
-          <random-team-card
-            v-for="(team, index) in displayedTeams"
-            :key="team.id"
-            :class="isFlyingOut ? styles.cardFlyOut : undefined"
-            :style="{ '--card-index': `${index}` }"
-            :team="team"
-            :loading="props.joiningTeamId === team.id && props.joinLoading"
-            @join="emit('join', $event)"
-            @animationend="handleFlyOutEnd(index)"
+          <van-empty
+            v-if="displayedTeams.length === 0 && !props.loading"
+            :description="t('暂无可加入队伍')"
           />
-        </transition-group>
-      </loading-container>
+
+          <!-- 换场分两段：旧卡播完飞出动画（class 驱动，卡片不脱离文档流），
+               最后一张卡 animationend 后换上新列表，由 TransitionGroup 播飞入。
+               不要让 TransitionGroup 直接处理整列表替换：飞出卡片 absolute 后
+               静态位置塌陷，会全部堆叠到第一排 -->
+          <transition-group
+            v-else-if="displayedTeams.length > 0"
+            appear
+            tag="div"
+            :class="styles.cardList"
+            :enter-active-class="styles.cardEnterActive"
+            :enter-from-class="styles.cardEnterFrom"
+            :leave-active-class="styles.cardLeaveActive"
+            :move-class="styles.cardMove"
+          >
+            <random-team-card
+              v-for="(team, index) in displayedTeams"
+              :key="team.id"
+              :class="isFlyingOut ? styles.cardFlyOut : undefined"
+              :style="{ '--card-index': `${index}` }"
+              :team="team"
+              :loading="props.joiningTeamId === team.id && props.joinLoading"
+              @join="emit('join', $event)"
+              @animationend="handleFlyOutEnd(index)"
+            />
+          </transition-group>
+        </loading-container>
+      </van-pull-refresh>
     </error-empty>
   </section>
 </template>
@@ -58,11 +64,13 @@ const props = defineProps<{
   error: Error | null;
   joiningTeamId: number | undefined;
   joinLoading: boolean;
+  isRefetching: boolean;
 }>();
 
 const emit = defineEmits<{
   join: [teamId: number];
   retry: [];
+  refresh: [];
 }>();
 
 const { t } = useI18n();
