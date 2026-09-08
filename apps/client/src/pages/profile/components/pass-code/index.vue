@@ -1,7 +1,7 @@
 <template>
-  <section :class="styles.section" :aria-label="t('通行码')">
+  <section :class="styles.section" :aria-label="t('个人通行码')">
     <h2 :class="styles.title" @click="isExpanded = !isExpanded">
-      {{ t("通行码") }}
+      {{ t("个人通行码") }}
       <van-icon :class="styles.arrow" :name="isExpanded ? 'arrow-up' : 'arrow-down'" />
     </h2>
     <div :class="[styles.wrapper, isExpanded ? styles.expanded : styles.collapsed]">

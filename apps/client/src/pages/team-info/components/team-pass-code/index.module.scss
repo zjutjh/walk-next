@@ -1,9 +1,9 @@
+@use "@/styles/mixins.scss" as ui;
+
 .section {
-  margin: 16px 0;
+  @include ui.card-container;
+
   padding: 16px;
-  border-radius: 12px;
-  background: var(--van-background-2);
-  text-align: center;
 }
 
 .title {
