@@ -16,6 +16,14 @@
         <div v-else-if="userInfo" :class="styles.content">
           <profile-header :name="userInfo.name" :tel="displayValue(userInfo.tel)" />
 
+          <van-notice-bar
+            v-if="userInfo.role === 'unbind'"
+            mode="link"
+            left-icon="friends-o"
+            :text="t('尚未加入团队')"
+            @click="handleNavigateTeam"
+          />
+
           <pass-code :user-id="userInfo.id" />
 
           <quota-summary
@@ -91,6 +99,10 @@ function displayValue(value: string) {
 
 function handleNavigateEdit() {
   return router.push({ name: "profile-edit" });
+}
+
+function handleNavigateTeam() {
+  return router.push({ name: "team-info" });
 }
 
 async function handleQuotaHelp() {
