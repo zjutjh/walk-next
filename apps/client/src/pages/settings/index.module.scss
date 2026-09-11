@@ -3,6 +3,9 @@
   color: #1f2937;
 
   .decorationImg {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     pointer-events: none;
     user-select: none;
     padding: {
