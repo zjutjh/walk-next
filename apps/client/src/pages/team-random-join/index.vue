@@ -21,6 +21,8 @@
       @retry="refetchRandomTeamList"
       @refresh="refetchRandomTeamList"
     />
+
+    <van-icon :class="refreshBtnClass" name="replay" @click="refetchRandomTeamList" />
   </div>
 </template>
 
@@ -107,6 +109,11 @@ const {
 const visibleTeams = computed(
   () => randomTeamListData.value?.teams.filter((team) => team.num < MAXIMUM_TEAM_SIZE) ?? []
 );
+
+const refreshBtnClass = computed(() => [
+  styles.refreshBtn,
+  isRandomTeamListRefetching.value ? styles.refreshing : ""
+]);
 
 const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation({
   mutationFn: (teamId: number) => walkClientService.RandomJoinTeam({ id: teamId }),

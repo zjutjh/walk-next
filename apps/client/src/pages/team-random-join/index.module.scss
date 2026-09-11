@@ -20,3 +20,39 @@
   line-height: 1.4;
   color: #7b8493;
 }
+
+.refreshBtn {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  font-size: 22px;
+  color: #1f2937;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  &.refreshing {
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
