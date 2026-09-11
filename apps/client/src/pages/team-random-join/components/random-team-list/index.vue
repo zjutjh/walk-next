@@ -4,7 +4,7 @@
 
     <error-empty :error="props.error" :disabled="props.loading" @btn-click="emit('retry')">
       <van-pull-refresh
-        :model-value="props.isRefetching"
+        :model-value="props.isRefetching && !props.isButtonRefetching"
         :disabled="props.loading"
         @refresh="emit('refresh')"
       >
@@ -65,6 +65,7 @@ const props = defineProps<{
   joiningTeamId: number | undefined;
   joinLoading: boolean;
   isRefetching: boolean;
+  isButtonRefetching: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -83,7 +84,9 @@ const isFlyingOut = ref(false);
 let pendingTeams: RandomJoinTeam[] | undefined;
 
 /** 飞出期间隐藏 loading 遮罩，让用户看到旧卡飞出 */
-const overlayVisible = computed(() => props.loading && !isFlyingOut.value);
+const overlayVisible = computed(
+  () => (props.loading || props.isButtonRefetching) && !isFlyingOut.value
+);
 
 const hasSharedTeam = (a: RandomJoinTeam[], b: RandomJoinTeam[]) =>
   a.some((team) => b.some((x) => x.id === team.id));

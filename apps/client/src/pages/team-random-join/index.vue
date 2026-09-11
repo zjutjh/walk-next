@@ -17,12 +17,13 @@
       :joining-team-id="joiningTeamId"
       :join-loading="isRandomJoinPending"
       :is-refetching="isRandomTeamListRefetching"
+      :is-button-refetching="isButtonRefetching"
       @join="handleJoinClick"
       @retry="refetchRandomTeamList"
       @refresh="refetchRandomTeamList"
     />
 
-    <van-icon :class="refreshBtnClass" name="replay" @click="refetchRandomTeamList" />
+    <van-icon :class="refreshBtnClass" name="replay" @click="handleButtonRefresh" />
   </div>
 </template>
 
@@ -60,6 +61,7 @@ const { urlQuery } = useStoredUrlQuery<{ route: RouteName }>({
 });
 
 const joiningTeamId = ref<number>();
+const isButtonRefetching = ref(false);
 
 // 吸顶时 fixed 定位相对视口，偏移量需为 navbar 底边（含刘海安全区），避免盖住导航栏
 const stickyOffsetTop = ref(0);
@@ -142,6 +144,12 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
     });
   }
 });
+
+const handleButtonRefresh = async () => {
+  isButtonRefetching.value = true;
+  await refetchRandomTeamList();
+  isButtonRefetching.value = false;
+};
 
 const handleJoinClick = (teamId: number) => {
   if (isRandomJoinPending.value) return;
