@@ -4,6 +4,7 @@
       <van-collapse-item name="code" :border="false" :is-link="false">
         <template #title>
           <h2 :class="styles.title">
+            <van-icon v-if="icon" :name="icon" />
             {{ title }}
             <van-icon :class="styles.arrow" :name="isExpanded ? 'arrow-up' : 'arrow-down'" />
           </h2>
@@ -25,9 +26,10 @@ const props = withDefaults(
   defineProps<{
     title: string;
     label: string;
+    icon?: string;
     expanded?: boolean;
   }>(),
-  { expanded: true }
+  { expanded: true, icon: "" }
 );
 
 const activeNames = ref<string[]>(props.expanded ? ["code"] : []);

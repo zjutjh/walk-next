@@ -1,5 +1,10 @@
 <template>
-  <pass-code :title="t('团队通行码')" :label="t('团队通行码')" :expanded="props.submitted">
+  <pass-code
+    :title="t('团队通行码')"
+    :label="t('团队通行码')"
+    icon="scan"
+    :expanded="props.submitted"
+  >
     <template v-if="props.submitted">
       <qr-code :value="qrCodeValue" :class="styles.qrCode" />
       <p :class="styles.number">

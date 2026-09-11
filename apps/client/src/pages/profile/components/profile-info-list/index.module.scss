@@ -3,6 +3,9 @@
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin: 0 0 10px;
   padding: 0 4px;
   color: #283224;

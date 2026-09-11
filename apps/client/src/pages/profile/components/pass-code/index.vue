@@ -1,5 +1,5 @@
 <template>
-  <pass-code :title="t('个人通行码')" :label="t('个人通行码')">
+  <pass-code :title="t('个人通行码')" :label="t('个人通行码')" icon="scan">
     <qr-code :value="qrCodeValue" :class="styles.qrCode" />
     <p :class="styles.number">
       <span>{{ t("序号") }}</span>

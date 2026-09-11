@@ -1,7 +1,10 @@
 <template>
   <section :class="styles.section" :aria-label="t('剩余组队次数')">
     <div :class="styles.heading">
-      <h2 :class="styles.title">{{ t("剩余组队次数") }}</h2>
+      <h2 :class="styles.title">
+        <van-icon name="friends-o" />
+        {{ t("剩余组队次数") }}
+      </h2>
       <button
         type="button"
         :class="styles.helpButton"
