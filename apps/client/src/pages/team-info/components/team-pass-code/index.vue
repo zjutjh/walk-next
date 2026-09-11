@@ -1,35 +1,31 @@
 <template>
-  <section :class="styles.section" :aria-label="t('团队通行码')">
-    <h2 :class="styles.title" @click="isExpanded = !isExpanded">
-      {{ t("团队通行码") }}
-      <van-icon :class="styles.arrow" :name="isExpanded ? 'arrow-up' : 'arrow-down'" />
-    </h2>
-    <div :class="[styles.wrapper, isExpanded ? styles.expanded : styles.collapsed]">
-      <div :class="styles.card">
-        <qr-code :value="qrCodeValue" :class="styles.qrCode" />
-        <p :class="styles.number">
-          <span>{{ t("团队编号") }}</span>
-          <strong>{{ props.teamId }}</strong>
-        </p>
-      </div>
-    </div>
-  </section>
+  <pass-code :title="t('团队通行码')" :label="t('团队通行码')" :expanded="props.submitted">
+    <template v-if="props.submitted">
+      <qr-code :value="qrCodeValue" :class="styles.qrCode" />
+      <p :class="styles.number">
+        <span>{{ t("团队编号") }}</span>
+        <strong>{{ props.teamId }}</strong>
+      </p>
+    </template>
+    <p v-else :class="styles.hint">
+      {{ t("提交队伍后即可查看二维码") }}
+    </p>
+  </pass-code>
 </template>
 
 <script setup lang="ts">
 import { ClientQrCodeType } from "api/types/client";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
+import PassCode from "@/components/pass-code/index.vue";
 import QrCode from "@/components/qr-code/index.vue";
 
 import styles from "./index.module.scss";
 
-const props = defineProps<{ teamId: number }>();
+const props = defineProps<{ teamId: number; submitted: boolean }>();
 
 const { t } = useI18n();
-
-const isExpanded = ref(true);
 
 const qrCodeValue = computed(() =>
   JSON.stringify({ type: ClientQrCodeType.Team, team_id: props.teamId })

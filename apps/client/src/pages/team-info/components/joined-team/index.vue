@@ -12,7 +12,11 @@
         :text="t('refresh.loading')"
       >
         <template v-if="teamOverview && !isOverviewLoading">
-          <team-pass-code v-if="teamDetail?.submitted" :team-id="teamDetail.id" />
+          <team-pass-code
+            v-if="teamDetail"
+            :team-id="teamDetail.id"
+            :submitted="teamDetail.submitted"
+          />
 
           <team-overview-card :team="teamOverview.team" @detail="handleDetailClick" />
 
