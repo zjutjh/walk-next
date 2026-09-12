@@ -99,11 +99,9 @@ const containerEl = computed(() => loadingContainerRef.value?.$el as HTMLElement
 // 加载圈 fixed 钉在「遮罩 ∩ 视口」的垂直中心；useElementBounding 随滚动与尺寸变化自动更新
 const { top, bottom } = useElementBounding(containerEl);
 const { height: viewportHeight } = useWindowSize();
-const spinnerCenter = computed(() => {
-  const visibleTop = Math.max(top.value, 0);
-  const visibleBottom = Math.min(bottom.value, viewportHeight.value);
-  return visibleBottom > visibleTop ? `${(visibleTop + visibleBottom) / 2}px` : undefined;
-});
+const spinnerCenter = computed(
+  () => `${(Math.max(top.value, 0) + Math.min(bottom.value, viewportHeight.value)) / 2}px`
+);
 
 const hasSharedTeam = (a: RandomJoinTeam[], b: RandomJoinTeam[]) =>
   a.some((team) => b.some((x) => x.id === team.id));
