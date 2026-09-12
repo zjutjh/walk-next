@@ -5,7 +5,7 @@
     <error-empty :error="props.error" :disabled="props.loading" @btn-click="emit('retry')">
       <van-pull-refresh
         :model-value="props.isRefetching && !props.isButtonRefetching"
-        :disabled="props.loading"
+        :disabled="props.loading || props.isButtonRefetching"
         @refresh="emit('refresh')"
       >
         <loading-container
