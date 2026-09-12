@@ -1,5 +1,7 @@
 # Walk-Next — AGENTS.md
 
+@AGENTS.local.md
+
 精弘毅行系统是承担毅行活动报名、点位打卡、数据管理与统计等业务的移动端Web应用，使用 Vue3 开发
 
 ## 1. AI 行为准则
