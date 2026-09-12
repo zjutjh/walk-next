@@ -11,7 +11,7 @@
         <loading-container
           ref="loadingContainerRef"
           :class="styles.loadingContainer"
-          :style="{ '--loading-center': spinnerCenterCss }"
+          :style="{ '--loading-center': spinnerCenter }"
           :loading="overlayVisible"
           :text="t('refresh.loading')"
         >
@@ -52,9 +52,10 @@
 </template>
 
 <script setup lang="ts">
+import { useEventListener, useResizeObserver } from "@vueuse/core";
 import { ErrorEmpty, LoadingContainer } from "shared";
 import type { ComponentPublicInstance } from "vue";
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import type { RandomJoinTeam } from "../../types";
@@ -91,19 +92,10 @@ const overlayVisible = computed(
   () => (props.loading || props.isButtonRefetching) && !isFlyingOut.value
 );
 
-/** loading-container 根元素（遮罩的覆盖范围） */
+/** loading-container 根元素（遮罩的覆盖范围）与其所在滚动容器 */
 const loadingContainerRef = ref<ComponentPublicInstance>();
-/** 加载圈垂直位置：相对遮罩顶部的「遮罩 ∩ 滚动可视区」中心偏移，未测量时 undefined（CSS 回退遮罩中部） */
-const spinnerCenter = ref<number>();
 
-const spinnerCenterCss = computed(() =>
-  spinnerCenter.value === undefined ? undefined : `${spinnerCenter.value}px`
-);
-
-let containerEl: HTMLElement | undefined;
-let scrollParent: HTMLElement | null = null;
-let resizeObserver: ResizeObserver | undefined;
-let rafId = 0;
+const containerEl = computed(() => loadingContainerRef.value?.$el as HTMLElement | undefined);
 
 /** 向上找最近的纵向滚动容器（本应用为布局的 .content）。只认 overflow 样式、
  * 不要求当下已可滚动：挂载时列表还是空的，页面还没有滚动条 */
@@ -116,49 +108,30 @@ const getScrollParent = (el: HTMLElement): HTMLElement | null => {
   return null;
 };
 
-/** 把加载圈钉在「遮罩 ∩ 滚动可视区」的垂直中心（rAF 合帧） */
-const updateSpinnerCenter = () => {
-  cancelAnimationFrame(rafId);
-  rafId = requestAnimationFrame(() => {
-    if (!containerEl || !scrollParent || !overlayVisible.value) return;
+const scrollParentEl = computed(() => {
+  const el = containerEl.value;
+  return el ? getScrollParent(el) : null;
+});
 
-    const containerRect = containerEl.getBoundingClientRect();
-    const visibleRect = scrollParent.getBoundingClientRect();
-    const top = Math.max(containerRect.top, visibleRect.top);
-    const bottom = Math.min(containerRect.bottom, visibleRect.bottom);
-    if (bottom > top) spinnerCenter.value = (top + bottom) / 2 - containerRect.top;
-  });
+/** 加载圈垂直位置：相对遮罩顶部的「遮罩 ∩ 滚动可视区」中心偏移（CSS 变量值） */
+const spinnerCenter = ref<string>();
+
+const updateSpinnerCenter = () => {
+  const container = containerEl.value;
+  const scroller = scrollParentEl.value;
+  if (!container || !scroller || !overlayVisible.value) return;
+
+  const containerRect = container.getBoundingClientRect();
+  const visibleRect = scroller.getBoundingClientRect();
+  const top = Math.max(containerRect.top, visibleRect.top);
+  const bottom = Math.min(containerRect.bottom, visibleRect.bottom);
+  if (bottom > top) spinnerCenter.value = `${(top + bottom) / 2 - containerRect.top}px`;
 };
 
-onMounted(() => {
-  containerEl = loadingContainerRef.value?.$el as HTMLElement | undefined;
-  scrollParent = containerEl ? getScrollParent(containerEl) : null;
-  // 找不到滚动容器说明遮罩恒完全可见，交集 = 遮罩，CSS 回退值（遮罩中部）即正确
-  if (!containerEl || !scrollParent) return;
-
-  scrollParent.addEventListener("scroll", updateSpinnerCenter, { passive: true });
-  window.addEventListener("resize", updateSpinnerCenter);
-  // 列表换场/数据更新会改变遮罩高度，交集随之变化
-  resizeObserver = new ResizeObserver(updateSpinnerCenter);
-  resizeObserver.observe(containerEl);
-  updateSpinnerCenter();
-});
-
-onBeforeUnmount(() => {
-  scrollParent?.removeEventListener("scroll", updateSpinnerCenter);
-  window.removeEventListener("resize", updateSpinnerCenter);
-  resizeObserver?.disconnect();
-  cancelAnimationFrame(rafId);
-});
-
-watch(overlayVisible, async (visible) => {
-  if (!visible) {
-    spinnerCenter.value = undefined;
-    return;
-  }
-  await nextTick();
-  updateSpinnerCenter();
-});
+useEventListener(scrollParentEl, "scroll", updateSpinnerCenter, { passive: true });
+useEventListener("resize", updateSpinnerCenter);
+useResizeObserver(containerEl, updateSpinnerCenter);
+watch(overlayVisible, () => nextTick().then(updateSpinnerCenter), { immediate: true });
 
 const hasSharedTeam = (a: RandomJoinTeam[], b: RandomJoinTeam[]) =>
   a.some((team) => b.some((x) => x.id === team.id));
