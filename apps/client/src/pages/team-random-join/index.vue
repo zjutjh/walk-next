@@ -126,12 +126,16 @@ const scrollContainer = computed(() => pageRef.value?.closest("main") ?? null);
 
 const { y: scrollY } = useScroll(scrollContainer);
 
+const isPullRefreshing = computed(
+  () => isRandomTeamListRefetching.value && !isButtonRefetching.value
+);
+
 const refreshBtnClass = computed(() => [
   styles.refreshBtn,
   isRandomTeamListRefetching.value ? styles.refreshing : ""
 ]);
 
-const isRefreshBtnVisible = computed(() => scrollY.value > 50);
+const isRefreshBtnVisible = computed(() => scrollY.value > 50 && !isPullRefreshing.value);
 
 const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation({
   mutationFn: (teamId: number) => walkClientService.RandomJoinTeam({ id: teamId }),
