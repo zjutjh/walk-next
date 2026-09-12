@@ -1,25 +1,17 @@
-.section {
-  min-width: 0;
+.card {
 }
 
-.title {
+.sectionTitle {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin: 0 0 10px;
-  padding: 0 4px;
-  color: #283224;
   font-size: 16px;
-  font-weight: 700;
   line-height: 1.4;
-}
-
-.list {
-  margin: 0;
-  overflow: hidden;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 :global(.van-button) {
   width: calc(100% - 32px);
-  margin: 0 auto;
+  margin: 12px auto 0;
 }

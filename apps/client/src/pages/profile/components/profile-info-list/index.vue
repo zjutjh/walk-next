@@ -1,17 +1,18 @@
 <template>
-  <section :class="styles.section" :aria-label="t('profile')">
-    <h2 :class="styles.title">
-      <van-icon name="user-o" />
-      {{ t("profile") }}
-    </h2>
-    <van-cell-group inset :class="styles.list">
-      <van-cell v-for="item in props.items" :key="item.label" :title="item.label">
-        <template #value>
-          <span :class="styles.value">{{ item.value }}</span>
-        </template>
-      </van-cell>
-    </van-cell-group>
-  </section>
+  <van-cell-group inset :class="styles.card" :aria-label="t('profile')">
+    <template #title>
+      <div :class="styles.sectionTitle">
+        <van-icon name="user-o" />
+        <span>{{ t("profile") }}</span>
+      </div>
+    </template>
+
+    <van-cell v-for="item in props.items" :key="item.label" :title="item.label">
+      <template #value>
+        <span :class="styles.value">{{ item.value }}</span>
+      </template>
+    </van-cell>
+  </van-cell-group>
 </template>
 
 <script setup lang="ts">

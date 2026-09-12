@@ -1,22 +1,14 @@
-.section {
-  min-width: 0;
+.card {
 }
 
-.title {
+.sectionTitle {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin: 0 0 10px;
-  padding: 0 4px;
-  color: #1f2937;
   font-size: 16px;
-  font-weight: 600;
   line-height: 1.4;
-}
-
-.list {
-  margin-top: 8px;
-  overflow: hidden;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .value {

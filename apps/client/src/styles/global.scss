@@ -20,6 +20,10 @@ html {
     overflow: hidden;
   }
 
+  .van-cell-group__title--inset {
+    padding: 0 12px;
+  }
+
   .van-cell--clickable:active {
     background: color-mix(
       in srgb,
