@@ -37,7 +37,9 @@
   font-size: 22px;
   color: #1f2937;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition:
+    transform 0.2s,
+    opacity 0.3s;
 
   &:active {
     transform: scale(0.92);
@@ -46,6 +48,16 @@
   &.refreshing {
     animation: spin 0.8s linear infinite;
   }
+}
+
+:global(.fade-enter-active),
+:global(.fade-leave-active) {
+  transition: opacity 0.3s;
+}
+
+:global(.fade-enter-from),
+:global(.fade-leave-to) {
+  opacity: 0;
 }
 
 @keyframes spin {

@@ -1,5 +1,5 @@
 <template>
-  <div :class="styles.page">
+  <div ref="pageRef" :class="styles.page">
     <p :class="styles.subtitle">{{ t("team.join.hint") }}</p>
 
     <van-sticky :offset-top="stickyOffsetTop">
@@ -23,15 +23,23 @@
       @refresh="refetchRandomTeamList"
     />
 
-    <van-icon :class="refreshBtnClass" name="replay" @click="handleButtonRefresh" />
+    <Transition name="fade">
+      <van-icon
+        v-if="isRefreshBtnVisible"
+        :class="refreshBtnClass"
+        name="replay"
+        @click="handleButtonRefresh"
+      />
+    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useScroll } from "@vueuse/core";
 import { RequestError, useStoredUrlQuery } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -112,10 +120,18 @@ const visibleTeams = computed(
   () => randomTeamListData.value?.teams.filter((team) => team.num < MAXIMUM_TEAM_SIZE) ?? []
 );
 
+const pageRef = useTemplateRef<HTMLElement>("pageRef");
+
+const scrollContainer = computed(() => pageRef.value?.closest("main") ?? null);
+
+const { y: scrollY } = useScroll(scrollContainer);
+
 const refreshBtnClass = computed(() => [
   styles.refreshBtn,
   isRandomTeamListRefetching.value ? styles.refreshing : ""
 ]);
+
+const isRefreshBtnVisible = computed(() => scrollY.value > 50);
 
 const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation({
   mutationFn: (teamId: number) => walkClientService.RandomJoinTeam({ id: teamId }),
