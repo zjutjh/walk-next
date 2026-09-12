@@ -16,11 +16,22 @@
 
     :global(.loading-container__overlay) {
       z-index: 98;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
 
       :global(.van-loading) {
-        position: absolute;
+        position: fixed;
         left: 50%;
-        top: var(--loading-center, 50%);
+        top: var(--loading-center, 50vh);
         transform: translate(-50%, -50%);
       }
     }

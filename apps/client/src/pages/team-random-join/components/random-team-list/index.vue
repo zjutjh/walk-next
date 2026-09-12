@@ -52,10 +52,10 @@
 </template>
 
 <script setup lang="ts">
-import { useEventListener, useResizeObserver } from "@vueuse/core";
+import { useElementBounding, useWindowSize } from "@vueuse/core";
 import { ErrorEmpty, LoadingContainer } from "shared";
 import type { ComponentPublicInstance } from "vue";
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import type { RandomJoinTeam } from "../../types";
@@ -92,46 +92,18 @@ const overlayVisible = computed(
   () => (props.loading || props.isButtonRefetching) && !isFlyingOut.value
 );
 
-/** loading-container 根元素（遮罩的覆盖范围）与其所在滚动容器 */
+/** loading-container 根元素（遮罩的覆盖范围） */
 const loadingContainerRef = ref<ComponentPublicInstance>();
-
 const containerEl = computed(() => loadingContainerRef.value?.$el as HTMLElement | undefined);
 
-/** 向上找最近的纵向滚动容器（本应用为布局的 .content）。只认 overflow 样式、
- * 不要求当下已可滚动：挂载时列表还是空的，页面还没有滚动条 */
-const getScrollParent = (el: HTMLElement): HTMLElement | null => {
-  for (let node = el.parentElement; node; node = node.parentElement) {
-    if (["auto", "scroll", "overlay"].includes(window.getComputedStyle(node).overflowY)) {
-      return node;
-    }
-  }
-  return null;
-};
-
-const scrollParentEl = computed(() => {
-  const el = containerEl.value;
-  return el ? getScrollParent(el) : null;
+// 加载圈 fixed 钉在「遮罩 ∩ 视口」的垂直中心；useElementBounding 随滚动与尺寸变化自动更新
+const { top, bottom } = useElementBounding(containerEl);
+const { height: viewportHeight } = useWindowSize();
+const spinnerCenter = computed(() => {
+  const visibleTop = Math.max(top.value, 0);
+  const visibleBottom = Math.min(bottom.value, viewportHeight.value);
+  return visibleBottom > visibleTop ? `${(visibleTop + visibleBottom) / 2}px` : undefined;
 });
-
-/** 加载圈垂直位置：相对遮罩顶部的「遮罩 ∩ 滚动可视区」中心偏移（CSS 变量值） */
-const spinnerCenter = ref<string>();
-
-const updateSpinnerCenter = () => {
-  const container = containerEl.value;
-  const scroller = scrollParentEl.value;
-  if (!container || !scroller || !overlayVisible.value) return;
-
-  const containerRect = container.getBoundingClientRect();
-  const visibleRect = scroller.getBoundingClientRect();
-  const top = Math.max(containerRect.top, visibleRect.top);
-  const bottom = Math.min(containerRect.bottom, visibleRect.bottom);
-  if (bottom > top) spinnerCenter.value = `${(top + bottom) / 2 - containerRect.top}px`;
-};
-
-useEventListener(scrollParentEl, "scroll", updateSpinnerCenter, { passive: true });
-useEventListener("resize", updateSpinnerCenter);
-useResizeObserver(containerEl, updateSpinnerCenter);
-watch(overlayVisible, () => nextTick().then(updateSpinnerCenter), { immediate: true });
 
 const hasSharedTeam = (a: RandomJoinTeam[], b: RandomJoinTeam[]) =>
   a.some((team) => b.some((x) => x.id === team.id));
