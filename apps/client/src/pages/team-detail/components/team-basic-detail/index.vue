@@ -1,6 +1,10 @@
 <template>
-  <section :class="styles.content">
-    <van-cell-group inset :class="styles.card">
+  <section :class="styles.section">
+    <h2 :class="styles.title">
+      <van-icon name="friends-o" />
+      {{ t("基本信息") }}
+    </h2>
+    <van-cell-group inset :class="styles.list">
       <van-cell :title="t('团队名称')" :value="props.team.name" />
       <van-cell :title="t('团队口号')" :value="props.team.slogan || t('暂无口号')" />
       <van-cell :title="t('团队编号')" :value="String(props.team.id)" />

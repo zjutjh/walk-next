@@ -9,7 +9,10 @@
     @click-overlay="handleCloseClick"
   >
     <section :class="styles.content">
-      <h2 :class="styles.title">{{ t("队员信息") }}</h2>
+      <h2 :class="styles.title">
+        <van-icon name="user-o" />
+        {{ t("队员信息") }}
+      </h2>
 
       <error-empty :error="props.error" :disabled="props.loading" @btn-click="handleRetryClick">
         <loading-container
@@ -17,7 +20,7 @@
           :loading="props.loading"
           :text="t('refresh.loading')"
         >
-          <van-cell-group v-if="props.member && !props.loading" inset>
+          <van-cell-group v-if="props.member && !props.loading" inset :class="styles.list">
             <van-cell :title="t('姓名')" :value="props.member.name" />
             <van-cell :title="t('人员性质')" :value="memberTypeLabel" />
             <van-cell :title="t('队内身份')" :value="memberRoleLabel" />

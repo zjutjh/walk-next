@@ -1,23 +1,22 @@
-.content {
-  padding: 24px 0 0;
+.section {
+  min-width: 0;
+}
 
-  .card {
-    margin-bottom: 32px;
+.title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 0 4px;
+  color: #283224;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+}
 
-    :global(.van-cell) {
-      padding-top: 14px;
-      padding-bottom: 14px;
-    }
-
-    :global(.van-cell__title) {
-      color: #4b5563;
-    }
-
-    :global(.van-cell__value) {
-      color: #111827;
-      font-weight: 600;
-    }
-  }
+.list {
+  margin: 0;
+  overflow: hidden;
 }
 
 :global(.van-button) {
