@@ -22,3 +22,7 @@ dist-ssr
 *.sln
 *.sw?
 .claude
+.agents
+.vercel
+
+**/AGENTS.local.md

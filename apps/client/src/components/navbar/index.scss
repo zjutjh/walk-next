@@ -1,0 +1,126 @@
+/* 底部悬浮导航。
+   祖先链上不可设置 overflow: hidden——item 阴影与激活态放大的图标需要自由溢出。 */
+.bottom-nav-wrap {
+  --nav-ease: cubic-bezier(0.2, 0.95, 0.22, 1);
+
+  position: fixed;
+  inset-inline: 0;
+  bottom: calc(9px + env(safe-area-inset-bottom, 0px));
+  z-index: 120;
+  width: calc(100% - 16px);
+  max-width: 520px;
+  /* 左右同时约束时依赖 auto 边距居中 */
+  margin-inline: auto;
+  /* 容器不拦截点击，只有胶囊本体可点 */
+  pointer-events: none;
+
+  /* 显隐动画：由 app.vue 中 <transition name="navbar"> 触发 */
+  &.navbar-enter-active,
+  &.navbar-leave-active {
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  &.navbar-enter-from,
+  &.navbar-leave-to {
+    transform: translateY(calc(100% + 9px + env(safe-area-inset-bottom, 0px)));
+    opacity: 0;
+  }
+
+  &.navbar-leave-active {
+    pointer-events: none;
+
+    .bottom-nav {
+      pointer-events: none;
+    }
+  }
+
+  /* 胶囊容器（覆盖 van-tabbar 默认的固定定位与高度） */
+  .bottom-nav {
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 8px;
+    background: linear-gradient(
+      180deg,
+      rgb(206 224 166 / 88%) 0%,
+      rgb(197 220 153 / 82%) 100%
+    );
+    box-shadow: 0 5px 14px rgb(62 87 28 / 16%);
+    backdrop-filter: blur(2px);
+    pointer-events: auto;
+
+    &.van-tabbar {
+      position: static;
+    }
+
+    .van-tabbar-item {
+      height: auto;
+      padding: 0;
+      color: #2a2f26;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgb(43 56 22 / 12%);
+
+      &--active {
+        color: #20251f;
+        box-shadow: 0 4px 10px rgb(43 56 22 / 20%);
+
+        .bottom-nav-item__icon {
+          transform: scale(2);
+          filter: drop-shadow(0 4px 6px rgb(34 50 18 / 22%));
+        }
+
+        .bottom-nav-item__text {
+          transform: scale(1.12);
+        }
+      }
+    }
+
+    /* 隐藏 vant 图标槽位，使用自定义图文 */
+    .van-tabbar-item__icon {
+      display: none;
+    }
+
+    .van-tabbar-item__text {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      color: inherit;
+    }
+
+    .bottom-nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+      height: 40px;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.05;
+      color: inherit;
+      white-space: nowrap;
+    }
+
+    .bottom-nav-item__icon {
+      display: block;
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      transform-origin: 50% 100%;
+      transition:
+        transform 300ms var(--nav-ease),
+        filter 300ms var(--nav-ease);
+    }
+
+    .bottom-nav-item__text {
+      letter-spacing: 0.01em;
+      transition: transform 300ms var(--nav-ease);
+    }
+  }
+}

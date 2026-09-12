@@ -1,0 +1,13 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.loadingContainer {
+  min-height: 220px;
+}
+
+.editButton {
+  margin-top: 2px;
+}

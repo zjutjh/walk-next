@@ -1,0 +1,51 @@
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "vue-tsc -b",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@intlify/unplugin-vue-i18n": "^11.2.5",
+    "@mdx-js/rollup": "^3.1.1",
+    "@mdx-js/vue": "^3.1.1",
+    "@tanstack/vue-query": "catalog:frontend",
+    "@vueuse/core": "catalog:frontend",
+    "@vueuse/integrations": "catalog:frontend",
+    "api": "workspace:*",
+    "axios": "catalog:frontend",
+    "lodash-es": "catalog:frontend",
+    "pinia": "catalog:frontend",
+    "pinia-plugin-persistedstate": "catalog:frontend",
+    "qrcode": "catalog:frontend",
+    "sass-embedded": "catalog:infra",
+    "shared": "workspace:*",
+    "vant": "catalog:frontend",
+    "vue": "catalog:frontend",
+    "vue-i18n": "^11.4.8",
+    "vue-router": "catalog:frontend"
+  },
+  "devDependencies": {
+    "@iconify-json/ic": "catalog:frontend",
+    "@types/lodash-es": "catalog:types",
+    "@types/node": "catalog:types",
+    "@types/postcss-pxtorem": "catalog:types",
+    "@types/qrcode": "catalog:types",
+    "@vant/auto-import-resolver": "catalog:infra",
+    "@vitejs/plugin-vue": "catalog:infra",
+    "@vue/tsconfig": "catalog:infra",
+    "postcss-pxtorem": "catalog:infra",
+    "type-fest": "catalog:types",
+    "typescript": "catalog:infra",
+    "unplugin-auto-import": "catalog:infra",
+    "unplugin-icons": "catalog:infra",
+    "unplugin-vue-components": "catalog:infra",
+    "vite": "catalog:infra",
+    "vite-plugin-vue-devtools": "^8.2.1",
+    "vue-tsc": "catalog:infra"
+  }
+}

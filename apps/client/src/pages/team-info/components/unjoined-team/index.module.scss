@@ -1,0 +1,8 @@
+.page {
+  box-sizing: border-box;
+  color: #1f2937;
+
+  :global(.van-empty) {
+    --van-empty-padding: 25px 0;
+  }
+}

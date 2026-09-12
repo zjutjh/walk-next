@@ -11,6 +11,8 @@
   "scripts": {
     "dev:admin": "pnpm -C apps/admin dev",
     "build:admin": "pnpm -C apps/admin build",
+    "dev:client": "pnpm -C apps/client dev",
+    "build:client": "pnpm -C apps/client build",
     "lint": "eslint",
     "postinstall": "simple-git-hooks",
     "typecheck": "pnpm -r typecheck"

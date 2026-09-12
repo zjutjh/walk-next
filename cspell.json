@@ -1,14 +1,28 @@
 {
   "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
-  "language": "en",
   "dictionaries": ["typescript", "node", "html", "css", "bash", "npm"],
+  "ignorePaths": [
+    "apps/client/src/locales",
+    "node_modules/**",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "**/dist/**",
+    "**/public/**"
+  ],
+  "language": "en",
   "words": [
     "Apifox",
+    "Jinghong",
+    "Pingfeng",
+    "ValiError",
+    "Weixin",
     "autorenew",
     "checkin",
     "dbaeumer",
     "dingtalk",
     "iconify",
+    "intlify",
+    "lokalise",
     "njsproj",
     "ntvs",
     "nums",
@@ -16,19 +30,12 @@
     "persistedstate",
     "picklist",
     "pxtorem",
+    "qrcode",
     "retryable",
     "swipeable",
     "unplugin",
-    "ValiError",
     "vueuse",
     "wechat",
     "zjutjh"
-  ],
-  "ignorePaths": [
-    "node_modules/**",
-    "pnpm-lock.yaml",
-    "pnpm-workspace.yaml",
-    "**/dist/**",
-    "**/public/**"
   ]
 }
