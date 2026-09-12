@@ -13,6 +13,17 @@
 
   .loadingContainer {
     min-height: 240px;
+
+    :global(.loading-container__overlay) {
+      z-index: 98;
+
+      :global(.van-loading) {
+        position: absolute;
+        left: 50%;
+        top: var(--loading-center, 50%);
+        transform: translate(-50%, -50%);
+      }
+    }
   }
 
   .cardList {
