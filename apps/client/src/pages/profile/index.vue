@@ -20,6 +20,7 @@
             v-if="userInfo.role === 'unbind'"
             mode="link"
             left-icon="friends-o"
+            :class="styles.noticeBar"
             :text="t('尚未加入团队')"
             @click="handleNavigateTeam"
           />
