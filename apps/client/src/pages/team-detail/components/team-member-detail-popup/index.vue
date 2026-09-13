@@ -34,9 +34,8 @@
         </loading-container>
       </error-empty>
 
-      <div v-if="props.member" :class="styles.actionArea">
+      <div v-if="props.member && props.canManageMember" :class="styles.actionArea">
         <van-button
-          v-if="props.canManageMember"
           block
           round
           type="danger"
@@ -48,7 +47,6 @@
         </van-button>
 
         <van-button
-          v-if="props.canManageMember"
           block
           round
           type="primary"
@@ -57,10 +55,6 @@
           @click="handleTransferClick"
         >
           {{ t("移交队长") }}
-        </van-button>
-
-        <van-button block round plain :disabled="props.actionLoading" @click="handleCloseClick">
-          {{ t("取消") }}
         </van-button>
       </div>
     </section>
