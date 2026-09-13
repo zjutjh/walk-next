@@ -69,19 +69,19 @@ signup:
 队员信息: Team member information
 修改信息: Edit Information
 当前位置: Your location
-德馨府广场: Dexinfu Square
-滑板公园: Slider Park
-兆丰公园: Zhaofeng Park
-天安云谷: Deqing Tian'an Cloud Valley
-东苕溪: Dongtiao Xi
+mgsxq: Dexinfu Square
+hbgy: Slider Park
+zfgy: Zhaofeng Park
+tayg: Deqing Tian'an Cloud Valley
+dtx: Dongtiao Xi
 浙江工业大学: Zhejiang University of Technology
-金莲寺: Jinlian Temple
-老焦山: Laojiaoshan
-屏峰山: Pingfeng Mountain
-屏峰善院: Pingfeng Temple
-白龙潭: Bailongtan
-慈母桥: Cimuqiao
-古樟树公园: Guzhangshu Park
+jls: Jinlian Temple
+ljs: Laojiaoshan
+pfs: Pingfeng Mountain
+pfsy: Pingfeng Temple
+blt: Bailongtan
+cmq: Cimuqiao
+gzsgy: Guzhangshu Park
 refresh:
   pull: Pull to refresh...
   release: Release to refresh...
@@ -98,7 +98,6 @@ refresh:
 个人通行码: Personal passcode
 团队通行码: Team passcode
 未提交: Unsubmitted
-提交队伍后即可查看二维码: QR code will be available after submission
 settings: Settings
 请输入微信: Please enter your Wexin ID
 请输入QQ: Please enter your QQ number
@@ -120,7 +119,9 @@ settings: Settings
 校友注册: Alumni Sign Up
 密码加入: Join with Password
 随机加入: Random Join
-创建团队: Create team
+创建团队: Create Team
 团队详情: Team Details
 再想想: Reconsider
-"共找到{n}支队伍": "Found {n} team | Found {n} teams"
+共找到{n}支队伍: Found {n} team | Found {n} teams
+pfxq: Zhejiang University of Technology
+提交队伍后即可查看二维码: The QR code will be available after the team is submitted
