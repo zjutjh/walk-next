@@ -7,6 +7,15 @@
             <van-icon v-if="icon" :name="icon" />
             {{ title }}
             <span v-if="hint" :class="styles.hint">{{ hint }}</span>
+            <button
+              v-if="props.help"
+              type="button"
+              :class="styles.helpButton"
+              :aria-label="$t('帮助')"
+              @click.stop="emit('help')"
+            >
+              <van-icon name="question-o" />
+            </button>
           </h2>
         </template>
         <div :class="styles.card">
@@ -29,9 +38,14 @@ const props = withDefaults(
     icon?: string;
     expanded?: boolean;
     hint?: string;
+    help?: boolean;
   }>(),
-  { expanded: true, icon: "", hint: "" }
+  { expanded: true, icon: "", hint: "", help: false }
 );
+
+const emit = defineEmits<{
+  help: [];
+}>();
 
 const activeNames = ref<string[]>(props.expanded ? ["code"] : []);
 

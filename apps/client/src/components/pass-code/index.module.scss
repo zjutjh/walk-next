@@ -29,6 +29,18 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.helpButton {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: #68745d;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
 .hint {
   margin-left: auto;
   color: var(--van-gray-5);
