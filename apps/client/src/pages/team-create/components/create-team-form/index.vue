@@ -67,6 +67,7 @@
     :actions="matchActions"
     :title="t('是否随机队友')"
     :cancel-text="t('取消')"
+    :closeable="false"
     close-on-click-action
     @select="handleMatchSelect"
     @cancel="closeSelect"
@@ -78,6 +79,7 @@
     :actions="routeActions"
     :title="t('路线选择')"
     :cancel-text="t('取消')"
+    :closeable="false"
     close-on-click-action
     @select="handleRouteSelect"
     @cancel="closeSelect"
