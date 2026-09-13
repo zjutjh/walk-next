@@ -38,7 +38,12 @@ const initialTeamId = computed(() => {
 
 const initialPassword = computed(() => {
   const password = route.query.password;
-  return typeof password === "string" ? atob(password) : "";
+  if (typeof password !== "string") return "";
+  try {
+    return decodeURIComponent(atob(password));
+  } catch {
+    return "";
+  }
 });
 
 const getJoinErrorMessage = (error: Error) => {

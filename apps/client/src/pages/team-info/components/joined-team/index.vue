@@ -354,9 +354,14 @@ const handleShareClick = async () => {
   const url = new URL(window.location.href);
   url.pathname = "/team/join/password";
   url.searchParams.set("id", String(id));
-  url.searchParams.set("password", btoa(password));
+  url.searchParams.set("password", btoa(encodeURIComponent(password)));
 
-  await navigator.clipboard.writeText(url.toString());
+  try {
+    await navigator.clipboard.writeText(url.toString());
+  } catch {
+    showErrorToast(t("复制失败，请手动分享"));
+    return;
+  }
 
   await confirmDialog({
     title: t("分享队伍"),
