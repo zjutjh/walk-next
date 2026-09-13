@@ -1,13 +1,12 @@
 <template>
   <section :class="styles.section" :aria-label="label">
     <van-collapse v-model="activeNames" :border="false">
-      <van-collapse-item name="code" :border="false" :is-link="false">
+      <van-collapse-item name="code" :border="false">
         <template #title>
           <h2 :class="styles.title">
             <van-icon v-if="icon" :name="icon" />
             {{ title }}
             <span v-if="hint" :class="styles.hint">{{ hint }}</span>
-            <van-icon :class="styles.arrow" :name="isExpanded ? 'arrow-up' : 'arrow-down'" />
           </h2>
         </template>
         <div :class="styles.card">
@@ -19,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 import styles from "./index.module.scss";
 
@@ -42,6 +41,4 @@ watch(
     activeNames.value = expanded ? ["code"] : [];
   }
 );
-
-const isExpanded = computed(() => activeNames.value.includes("code"));
 </script>
