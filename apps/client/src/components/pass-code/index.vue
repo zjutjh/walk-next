@@ -6,6 +6,7 @@
           <h2 :class="styles.title">
             <van-icon v-if="icon" :name="icon" />
             {{ title }}
+            <span v-if="hint" :class="styles.hint">{{ hint }}</span>
             <van-icon :class="styles.arrow" :name="isExpanded ? 'arrow-up' : 'arrow-down'" />
           </h2>
         </template>
@@ -28,8 +29,9 @@ const props = withDefaults(
     label: string;
     icon?: string;
     expanded?: boolean;
+    hint?: string;
   }>(),
-  { expanded: true, icon: "" }
+  { expanded: true, icon: "", hint: "" }
 );
 
 const activeNames = ref<string[]>(props.expanded ? ["code"] : []);

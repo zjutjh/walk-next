@@ -34,6 +34,14 @@
   color: var(--van-gray-5);
 }
 
+.hint {
+  margin-left: auto;
+  margin-right: 4px;
+  color: var(--van-gray-5);
+  font-size: 12px;
+  font-weight: 400;
+}
+
 .card {
   display: flex;
   flex-direction: column;

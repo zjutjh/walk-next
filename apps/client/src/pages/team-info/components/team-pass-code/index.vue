@@ -4,6 +4,7 @@
     :label="t('团队通行码')"
     icon="scan"
     :expanded="props.submitted"
+    :hint="props.submitted ? '' : t('提交队伍后即可查看二维码')"
   >
     <template v-if="props.submitted">
       <qr-code :value="qrCodeValue" :class="styles.qrCode" />
