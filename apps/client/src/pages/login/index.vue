@@ -68,7 +68,7 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
 
     const fromPath = route.query.fromPath;
     if (typeof fromPath === "string" && fromPath) {
-      await router.replace({ path: decodeURIComponent(fromPath) });
+      await router.replace(decodeURIComponent(fromPath));
     } else {
       await router.replace({ name: "team-info" });
     }
