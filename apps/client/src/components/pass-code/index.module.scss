@@ -30,6 +30,7 @@
 }
 
 .helpButton {
+  margin-left: auto;
   display: grid;
   place-items: center;
   width: 28px;
@@ -42,7 +43,8 @@
 }
 
 .hint {
-  margin-left: auto;
+  flex: 1;
+  text-align: right;
   color: var(--van-gray-5);
   font-size: 12px;
   font-weight: 400;
