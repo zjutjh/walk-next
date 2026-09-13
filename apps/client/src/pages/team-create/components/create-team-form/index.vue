@@ -32,30 +32,26 @@
         autocomplete="off"
       />
 
-      <create-select-field
+      <van-field
+        :model-value="selectedMatchLabel"
+        :error-message="selectErrors.allowMatch"
         :label="t('是否随机队友')"
         :placeholder="t('请选择')"
-        :options="MATCH_OPTIONS"
-        :selected-value="formValue.allowMatch"
-        :value-label="selectedMatchLabel"
-        :error="selectErrors.allowMatch"
-        :opened="openedSelect === 'match'"
-        @toggle="toggleSelect('match')"
-        @close="closeSelect"
-        @select="handleMatchSelect"
+        readonly
+        clickable
+        is-link
+        @click="toggleSelect('match')"
       />
 
-      <create-select-field
+      <van-field
+        :model-value="selectedRouteLabel"
+        :error-message="selectErrors.routeName"
         :label="t('路线选择')"
         :placeholder="t('请选择')"
-        :options="ROUTE_OPTIONS"
-        :selected-value="formValue.routeName"
-        :value-label="selectedRouteLabel"
-        :error="selectErrors.routeName"
-        :opened="openedSelect === 'route'"
-        @toggle="toggleSelect('route')"
-        @close="closeSelect"
-        @select="handleRouteSelect"
+        readonly
+        clickable
+        is-link
+        @click="toggleSelect('route')"
       />
     </van-cell-group>
 
@@ -65,15 +61,36 @@
       </van-button>
     </div>
   </van-form>
+
+  <van-action-sheet
+    :show="openedSelect === 'match'"
+    :actions="matchActions"
+    :title="t('是否随机队友')"
+    :cancel-text="t('取消')"
+    close-on-click-action
+    @select="handleMatchSelect"
+    @cancel="closeSelect"
+    @update:show="handleShowUpdate"
+  />
+
+  <van-action-sheet
+    :show="openedSelect === 'route'"
+    :actions="routeActions"
+    :title="t('路线选择')"
+    :cancel-text="t('取消')"
+    close-on-click-action
+    @select="handleRouteSelect"
+    @cancel="closeSelect"
+    @update:show="handleShowUpdate"
+  />
 </template>
 
 <script setup lang="ts">
-import type { FieldRule, FormInstance } from "vant";
+import type { ActionSheetAction, FieldRule, FormInstance } from "vant";
 import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 import type { CreateTeamFormValue, MatchValue, OpenedSelect, RouteName } from "../../types";
-import CreateSelectField from "../create-select-field/index.vue";
 import styles from "./index.module.scss";
 
 const props = defineProps<{
@@ -130,6 +147,20 @@ const selectedRouteLabel = computed(() => {
   return option ? t(option.label) : "";
 });
 
+const matchActions = computed<ActionSheetAction[]>(() =>
+  MATCH_OPTIONS.map((option) => ({
+    name: t(option.label),
+    color: option.value === formValue.allowMatch ? "#1989fa" : undefined
+  }))
+);
+
+const routeActions = computed<ActionSheetAction[]>(() =>
+  ROUTE_OPTIONS.map((option) => ({
+    name: t(option.label),
+    color: option.value === formValue.routeName ? "#1989fa" : undefined
+  }))
+);
+
 const isMatchValue = (value: string): value is MatchValue =>
   MATCH_OPTIONS.some((option) => option.value === value);
 
@@ -144,18 +175,24 @@ const closeSelect = () => {
   openedSelect.value = "";
 };
 
-const handleMatchSelect = (value: string) => {
-  if (!isMatchValue(value)) return;
-  formValue.allowMatch = value;
-  selectErrors.allowMatch = "";
-  openedSelect.value = "";
+const handleShowUpdate = (show: boolean) => {
+  if (show) return;
+  closeSelect();
 };
 
-const handleRouteSelect = (value: string) => {
-  if (!isRouteName(value)) return;
-  formValue.routeName = value;
+/** 按索引取选项，避免翻译后的 `action.name` 与原始 label 匹配不上 */
+const handleMatchSelect = (_action: ActionSheetAction, index: number) => {
+  const selectedOption = MATCH_OPTIONS[index];
+  if (!selectedOption || !isMatchValue(selectedOption.value)) return;
+  formValue.allowMatch = selectedOption.value;
+  selectErrors.allowMatch = "";
+};
+
+const handleRouteSelect = (_action: ActionSheetAction, index: number) => {
+  const selectedOption = ROUTE_OPTIONS[index];
+  if (!selectedOption || !isRouteName(selectedOption.value)) return;
+  formValue.routeName = selectedOption.value;
   selectErrors.routeName = "";
-  openedSelect.value = "";
 };
 
 const validateSelects = () => {
