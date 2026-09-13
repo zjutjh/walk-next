@@ -1,5 +1,5 @@
 <template>
-  <pass-code :title="t('个人通行码')" :label="t('个人通行码')" icon="scan">
+  <pass-code :title="t('个人通行码')" :label="t('个人通行码')" icon="qr">
     <qr-code :value="qrCodeValue" :class="styles.qrCode" />
     <p :class="styles.number">
       <span>{{ t("序号") }}</span>
@@ -23,6 +23,7 @@ const props = defineProps<{ userId: number }>();
 const { t } = useI18n();
 
 const qrCodeValue = computed(() =>
+  // eslint-disable-next-line camelcase
   JSON.stringify({ type: ClientQrCodeType.Member, user_id: props.userId })
 );
 </script>

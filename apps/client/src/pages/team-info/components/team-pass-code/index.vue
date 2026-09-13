@@ -2,7 +2,7 @@
   <pass-code
     :title="t('团队通行码')"
     :label="t('团队通行码')"
-    icon="scan"
+    :icon="props.submitted ? 'qr' : 'qr-invalid'"
     :expanded="props.submitted"
     :hint="props.submitted ? '' : t('提交队伍后即可查看二维码')"
     help
@@ -37,6 +37,7 @@ const props = defineProps<{ teamId: number; submitted: boolean }>();
 const { t } = useI18n();
 
 const qrCodeValue = computed(() =>
+  // eslint-disable-next-line camelcase
   JSON.stringify({ type: ClientQrCodeType.Team, team_id: props.teamId })
 );
 
