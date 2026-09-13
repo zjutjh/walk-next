@@ -85,7 +85,7 @@
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { ErrorEmpty, LoadingContainer, RequestError, RESP_CODE } from "shared";
-import { showFailToast, showSuccessToast, showToast } from "vant";
+import { showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -347,8 +347,23 @@ const handleTransferCaptainClick = async (memberId: number) => {
   mutateTransferCaptain(memberId);
 };
 
-const handleShareClick = () => {
-  showToast({ message: t("分享队伍功能将在二期开放"), position: "bottom" });
+const handleShareClick = async () => {
+  if (!teamDetail.value) return;
+
+  const { id, password } = teamDetail.value;
+  const url = new URL(window.location.href);
+  url.pathname = "/team/join/password";
+  url.searchParams.set("id", String(id));
+  url.searchParams.set("password", btoa(password));
+
+  await navigator.clipboard.writeText(url.toString());
+
+  await confirmDialog({
+    title: t("分享队伍"),
+    message: t("已将队伍链接复制到剪贴板，发送给队员即可邀请加入队伍。"),
+    actionText: t("确认"),
+    dismissText: null
+  });
 };
 
 const handleDisbandClick = async () => {

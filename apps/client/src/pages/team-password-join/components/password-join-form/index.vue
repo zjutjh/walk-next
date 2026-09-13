@@ -55,6 +55,8 @@ import styles from "./index.module.scss";
 
 const props = defineProps<{
   loading: boolean;
+  initialTeamId?: string;
+  initialPassword?: string;
 }>();
 
 const emit = defineEmits<{
@@ -65,8 +67,8 @@ const { t } = useI18n();
 const formRef = useTemplateRef<FormInstance>("formRef");
 
 const formValue = reactive({
-  teamId: "",
-  password: ""
+  teamId: props.initialTeamId ?? "",
+  password: props.initialPassword ?? ""
 });
 
 const isPasswordVisible = ref(false);
