@@ -45,4 +45,8 @@ html {
   .van-button--primary:not(.van-button--plain):not(.van-button--small) {
     @include custom-button;
   }
+
+  input:focus {
+    font-size: 18px;
+  }
 }
