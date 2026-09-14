@@ -27,20 +27,23 @@ const handleRedirect = (
   getQuery?: () => Record<string, string> | Promise<Record<string, string>>,
   resetUserData = false
 ) => {
-  if (isRedirecting) return;
-  isRedirecting = true;
-
   if (resetUserData) {
     useClientUserData(globalQueryClient).resetClientUserData();
   }
+
+  if (isRedirecting) return;
+  isRedirecting = true;
+
   showToast({ message, position: "bottom" });
 
   void (async () => {
     const query = await getQuery?.();
     await redirectTo(name, query);
-  })().finally(() => {
-    isRedirecting = false;
-  });
+  })()
+    .catch(console.error)
+    .finally(() => {
+      isRedirecting = false;
+    });
 };
 
 axiosInstance.interceptors.response.use(
