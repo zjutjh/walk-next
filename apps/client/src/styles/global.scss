@@ -12,6 +12,12 @@ input[type="password"] {
   }
 }
 
+@supports (-webkit-touch-callout: none) {
+  input:focus {
+    font-size: 18px;
+  }
+}
+
 html {
   .van-cell-group--inset {
     @include card-container;
@@ -44,9 +50,5 @@ html {
   .van-button--default:not(.van-button--plain):not(.van-button--small),
   .van-button--primary:not(.van-button--plain):not(.van-button--small) {
     @include custom-button;
-  }
-
-  input:focus {
-    font-size: 18px;
   }
 }
