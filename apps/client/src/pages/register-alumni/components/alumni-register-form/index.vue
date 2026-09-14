@@ -69,6 +69,32 @@
       </van-field>
     </div>
 
+    <div :class="styles.fieldGroup">
+      <label :class="styles.fieldLabel">{{ t("确认密码") }}</label>
+      <van-field
+        v-model="confirmPassword"
+        :class="styles.fieldInput"
+        :rules="confirmPasswordRules"
+        :type="isPasswordVisible ? 'text' : 'password'"
+        name="confirmPassword"
+        maxlength="60"
+        :placeholder="t('请再次输入密码')"
+        autocomplete="new-password"
+        clearable
+      >
+        <template #right-icon>
+          <button
+            :class="styles.eyeButton"
+            type="button"
+            :aria-label="t('切换密码显示')"
+            @click.stop="handlePasswordVisibleClick"
+          >
+            <van-icon :name="isPasswordVisible ? 'eye-o' : 'closed-eye'" />
+          </button>
+        </template>
+      </van-field>
+    </div>
+
     <div :class="styles.agreementRow">
       <van-checkbox v-model="isAgreed" shape="round">
         <span>{{ t("您已阅读并同意") }}</span>
@@ -117,6 +143,7 @@ const formValue = reactive<AlumniRegisterFormValue>({
 
 const isPasswordVisible = ref(false);
 const isAgreed = ref(false);
+const confirmPassword = ref("");
 
 const nameRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入姓名") }]);
 
@@ -134,6 +161,14 @@ const telRules = computed<FieldRule[]>(() => [
 ]);
 
 const passwordRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入密码") }]);
+
+const confirmPasswordRules = computed<FieldRule[]>(() => [
+  { required: true, message: t("请再次输入密码") },
+  {
+    validator: (value: string) => value === formValue.password,
+    message: t("两次输入的密码不一致")
+  }
+]);
 
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;
