@@ -31,6 +31,16 @@
         autocomplete="off"
         clearable
       />
+      <van-field
+        v-model="formValue.identity"
+        :rules="identityRules"
+        :label="t('身份证号')"
+        name="identity"
+        maxlength="18"
+        :placeholder="t('请输入身份证号码')"
+        autocomplete="off"
+        clearable
+      />
     </van-cell-group>
 
     <div :class="styles.submitArea">
@@ -52,6 +62,7 @@ import { buildInitialFormValue, normalizeFormValue } from "../../utils";
 import styles from "./index.module.scss";
 
 const TEL_PATTERN = /^1[3-9]\d{9}$/;
+const IDENTITY_PATTERN = /(^\d{15}$)|(^\d{18}$)|(^\d{17}([\dX])$)/i;
 
 const props = defineProps<{
   loading: boolean;
@@ -69,6 +80,10 @@ const formValue = reactive(buildInitialFormValue());
 const telRules = computed<FieldRule[]>(() => [
   { required: true, message: t("请输入电话号码") },
   { pattern: TEL_PATTERN, message: t("请输入11位有效电话号码") }
+]);
+
+const identityRules = computed<FieldRule[]>(() => [
+  { pattern: IDENTITY_PATTERN, message: t("请输入正确的身份证号码") }
 ]);
 
 watchImmediate(

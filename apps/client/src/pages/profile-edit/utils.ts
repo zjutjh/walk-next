@@ -6,7 +6,9 @@ export function buildInitialFormValue(userInfo?: QueryUserInfoResponse): Profile
   return {
     tel: userInfo?.tel ?? "",
     wechat: userInfo?.wechat ?? "",
-    qq: userInfo?.qq ?? ""
+    qq: userInfo?.qq ?? "",
+    // 用户信息接口不返回身份证号，无法回显
+    identity: ""
   };
 }
 
@@ -14,16 +16,23 @@ export function normalizeFormValue(value: ProfileEditFormValue): ProfileEditForm
   return {
     tel: value.tel.trim(),
     wechat: value.wechat.trim(),
-    qq: value.qq.trim()
+    qq: value.qq.trim(),
+    identity: value.identity.trim()
   };
 }
 
 export function toUpdateUserInfoRequest(value: ProfileEditFormValue): UpdateUserInfoRequest {
-  return {
+  const result: UpdateUserInfoRequest = {
     contact: {
       tel: value.tel,
       wechat: value.wechat,
       qq: value.qq
     }
   };
+
+  if (value.identity) {
+    result.identity = value.identity;
+  }
+
+  return result;
 }
