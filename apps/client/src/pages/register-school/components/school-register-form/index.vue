@@ -66,7 +66,7 @@
         :type="isPasswordVisible ? 'text' : 'password'"
         name="password"
         maxlength="60"
-        :placeholder="t('请输入密码')"
+        :placeholder="t('请输入统一身份认证密码')"
         autocomplete="new-password"
         clearable
       >
