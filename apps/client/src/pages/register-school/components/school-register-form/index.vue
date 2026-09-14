@@ -94,7 +94,10 @@
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">{{ t("QQ（选填）") }}</label>
+      <label :class="styles.fieldLabel">
+        {{ t("QQ") }}
+        <span :class="styles.optionalTag">{{ t("选填") }}</span>
+      </label>
       <van-field
         v-model="formValue.qq"
         :class="styles.fieldInput"
@@ -108,7 +111,10 @@
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">{{ t("微信（选填）") }}</label>
+      <label :class="styles.fieldLabel">
+        {{ t("微信") }}
+        <span :class="styles.optionalTag">{{ t("选填") }}</span>
+      </label>
       <van-field
         v-model="formValue.wechat"
         :class="styles.fieldInput"
