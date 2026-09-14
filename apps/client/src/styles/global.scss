@@ -45,4 +45,10 @@ html {
   .van-button--primary:not(.van-button--plain):not(.van-button--small) {
     @include custom-button;
   }
+
+  @supports (-webkit-touch-callout: none) {
+    input:focus {
+      font-size: 18px !important;
+    }
+  }
 }
