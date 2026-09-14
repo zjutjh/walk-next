@@ -96,6 +96,10 @@
     &::placeholder {
       color: #9e9589;
     }
+
+    &:focus {
+      font-size: 18px;
+    }
   }
 
   :global(.van-field__error-message) {
