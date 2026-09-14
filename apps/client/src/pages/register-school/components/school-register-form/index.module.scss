@@ -19,6 +19,16 @@
     @include ui.eye-button;
   }
 
+  .labelRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .hintButton {
+    @include ui.eye-button;
+  }
+
   .agreementRow {
     @include ui.agreement-checkbox;
   }

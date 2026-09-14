@@ -58,7 +58,17 @@
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">{{ t("密码") }}</label>
+      <div :class="styles.labelRow">
+        <label :class="styles.fieldLabel">{{ t("密码") }}</label>
+        <button
+          :class="styles.hintButton"
+          type="button"
+          :aria-label="t('密码提示')"
+          @click.stop="handlePasswordHintClick"
+        >
+          <van-icon name="question-o" />
+        </button>
+      </div>
       <van-field
         v-model="formValue.password"
         :class="styles.fieldInput"
@@ -134,6 +144,8 @@ import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
+import { confirmDialog } from "@/composables";
+
 import type { SchoolRegisterFormValue } from "../../types";
 import styles from "./index.module.scss";
 
@@ -191,6 +203,14 @@ const passwordRules = computed<FieldRule[]>(() => [{ required: true, message: t(
 
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;
+};
+
+const handlePasswordHintClick = () => {
+  confirmDialog({
+    title: t("密码提示"),
+    message: t("统一身份认证密码是您登录学校统一身份认证系统的密码"),
+    dismissText: null
+  });
 };
 
 const handleNavigateTerms = () => {
