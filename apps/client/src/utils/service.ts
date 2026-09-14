@@ -27,9 +27,7 @@ const handleRedirect = (
   getQuery?: () => Record<string, string> | Promise<Record<string, string>>,
   resetUserData = false
 ) => {
-  if (resetUserData) {
-    useClientUserData(globalQueryClient).resetClientUserData();
-  }
+  if (resetUserData) useClientUserData(globalQueryClient).resetClientUserData();
 
   if (isRedirecting) return;
   isRedirecting = true;
