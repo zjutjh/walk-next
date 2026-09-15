@@ -62,7 +62,7 @@ import { buildInitialFormValue, normalizeFormValue } from "../../utils";
 import styles from "./index.module.scss";
 
 const TEL_PATTERN = /^1[3-9]\d{9}$/;
-const IDENTITY_PATTERN = /(^\d{15}$)|(^\d{18}$)|(^\d{17}([\dX])$)/i;
+const IDENTITY_PATTERN = /^\d{17}[\dX]$/i;
 
 const props = defineProps<{
   loading: boolean;
@@ -83,7 +83,10 @@ const telRules = computed<FieldRule[]>(() => [
 ]);
 
 const identityRules = computed<FieldRule[]>(() => [
-  { pattern: IDENTITY_PATTERN, message: t("请输入正确的身份证号码") }
+  {
+    validator: (value: string) => !value || IDENTITY_PATTERN.test(value),
+    message: t("请输入正确的身份证号码")
+  }
 ]);
 
 watchImmediate(
