@@ -5,6 +5,7 @@ import "vant/es/dialog/style";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import { useEventListener } from "@vueuse/core";
 import { createApp } from "vue";
 
 import { initI18n } from "@/composables";
@@ -22,7 +23,8 @@ routerInstance.onError((error) => {
     hasChunkLoadError = true;
   }
 });
-addEventListener("online", () => {
+
+useEventListener("online", () => {
   if (hasChunkLoadError) {
     location.reload();
   }

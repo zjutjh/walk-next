@@ -1,3 +1,4 @@
+import { useEventListener } from "@vueuse/core";
 import { clamp, round } from "lodash-es";
 
 import {
@@ -25,8 +26,8 @@ export function setRootFontSize() {
  */
 export function initializeRootFontSize() {
   setRootFontSize();
-  window.addEventListener("resize", setRootFontSize);
-  window.addEventListener("pageshow", (e) => {
+  useEventListener("resize", setRootFontSize);
+  useEventListener("pageshow", (e) => {
     if (e.persisted) {
       // 部分手机浏览器执行返回操作时，会从缓存中恢复页面，此时也设置字体
       setRootFontSize();
