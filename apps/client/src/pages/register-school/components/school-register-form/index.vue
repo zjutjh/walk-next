@@ -220,7 +220,7 @@ const handlePasswordHintClick = () => {
 };
 
 const handleNavigateTerms = () => {
-  router.push({ name: "terms" });
+  router.push({ name: "termsOfService" });
 };
 
 const handleSubmit = async () => {
