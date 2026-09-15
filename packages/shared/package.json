@@ -9,7 +9,6 @@
     }
   },
   "scripts": {
-    "test": "vitest",
     "typecheck": "vue-tsc --noEmit"
   },
   "peerDependencies": {
