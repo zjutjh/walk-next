@@ -15,6 +15,7 @@ export const TEL_RULES: FieldRule[] = [
 /** 校验身份证号正则 */
 export const IDENTITY_PATTERN = /^\d{17}[\dX]$/i;
 
+/** 校验身份证号规则 */
 export const IDENTITY_RULES: FieldRule[] = [
   {
     validator: (value: string) => !value || IDENTITY_PATTERN.test(value),
