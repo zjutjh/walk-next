@@ -5,7 +5,7 @@
     "types": [
       "vite/client",
       "@intlify/unplugin-vue-i18n/messages",
-      "unplugin-icons/types/vue"
+      "unplugin-icons/types/vue3"
     ],
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "allowArbitraryExtensions": true,
