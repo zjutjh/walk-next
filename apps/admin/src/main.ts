@@ -8,10 +8,11 @@ import zhCn from "dayjs/locale/zh-cn";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { ready } from "qr-scanner-wechat";
+import { initializeRootFontSize } from "shared";
 import { createApp } from "vue";
 
 import App from "@/app.vue";
-import { globalQueryClient, initializeRootFontSize, routerInstance } from "@/configs";
+import { globalQueryClient, routerInstance } from "@/configs";
 
 initializeRootFontSize();
 

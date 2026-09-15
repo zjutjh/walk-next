@@ -1,7 +1,5 @@
 import { round } from "lodash-es";
-
-import { getUiScaleRatio } from "@/configs";
-import { BASE_ROOT_FONT_SIZE, MAX_REM_UNIT_PRECISION } from "@/constants";
+import { BASE_ROOT_FONT_SIZE, getUiScaleRatio, MAX_REM_UNIT_PRECISION } from "shared";
 
 /**
  * 手动将 px 转换为 rem，需要动态计算元素尺寸才用，一般不用
