@@ -3,7 +3,7 @@
     <van-cell-group inset>
       <van-field
         v-model="formValue.tel"
-        :rules="telRules"
+        :rules="TEL_RULES"
         :label="t('电话号码')"
         name="tel"
         type="tel"
@@ -33,7 +33,7 @@
       />
       <van-field
         v-model="formValue.identity"
-        :rules="identityRules"
+        :rules="IDENTITY_RULES"
         :label="t('身份证号')"
         name="identity"
         maxlength="18"
@@ -53,16 +53,14 @@
 
 <script setup lang="ts">
 import { watchImmediate } from "@vueuse/core";
-import type { FieldRule } from "vant";
-import { computed, reactive } from "vue";
+import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
+
+import { IDENTITY_RULES, TEL_RULES } from "@/constants/validation";
 
 import type { ProfileEditFormValue } from "../../types";
 import { buildInitialFormValue, normalizeFormValue } from "../../utils";
 import styles from "./index.module.scss";
-
-const TEL_PATTERN = /^1[3-9]\d{9}$/;
-const IDENTITY_PATTERN = /^\d{17}[\dX]$/i;
 
 const props = defineProps<{
   loading: boolean;
@@ -76,18 +74,6 @@ const emit = defineEmits<{
 const { t } = useI18n();
 
 const formValue = reactive(buildInitialFormValue());
-
-const telRules = computed<FieldRule[]>(() => [
-  { required: true, message: t("请输入电话号码") },
-  { pattern: TEL_PATTERN, message: t("请输入11位有效电话号码") }
-]);
-
-const identityRules = computed<FieldRule[]>(() => [
-  {
-    validator: (value: string) => !value || IDENTITY_PATTERN.test(value),
-    message: t("请输入正确的身份证号码")
-  }
-]);
 
 watchImmediate(
   () => props.initialValue,

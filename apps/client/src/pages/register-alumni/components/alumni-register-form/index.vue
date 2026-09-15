@@ -19,7 +19,7 @@
       <van-field
         v-model="formValue.identity"
         :class="styles.fieldInput"
-        :rules="identityRules"
+        :rules="IDENTITY_RULES"
         name="identity"
         maxlength="128"
         :placeholder="t('请输入身份证号码')"
@@ -33,7 +33,7 @@
       <van-field
         v-model="formValue.tel"
         :class="styles.fieldInput"
-        :rules="telRules"
+        :rules="TEL_RULES"
         name="tel"
         type="tel"
         maxlength="11"
@@ -119,6 +119,8 @@ import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
+import { IDENTITY_RULES, TEL_RULES } from "@/constants/validation";
+
 import type { AlumniRegisterFormValue } from "../../types";
 import styles from "./index.module.scss";
 
@@ -146,19 +148,6 @@ const isAgreed = ref(false);
 const confirmPassword = ref("");
 
 const nameRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入姓名") }]);
-
-const identityRules = computed<FieldRule[]>(() => [
-  { required: true, message: t("请输入身份证号码") },
-  {
-    pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}([\dX])$)/i,
-    message: t("请输入正确的身份证号码")
-  }
-]);
-
-const telRules = computed<FieldRule[]>(() => [
-  { required: true, message: t("请输入电话号码") },
-  { pattern: /^1[3-9]\d{9}$/, message: t("请输入正确的电话号码") }
-]);
 
 const passwordRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入密码") }]);
 
