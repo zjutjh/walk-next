@@ -22,6 +22,7 @@
     "pinia": "catalog:frontend",
     "pinia-plugin-persistedstate": "catalog:frontend",
     "qrcode": "catalog:frontend",
+    "rehype-slug": "^6.0.0",
     "sass-embedded": "catalog:infra",
     "shared": "workspace:*",
     "vant": "catalog:frontend",

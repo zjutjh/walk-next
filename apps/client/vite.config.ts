@@ -3,6 +3,7 @@ import mdx from "@mdx-js/rollup";
 import { VantResolver } from "@vant/auto-import-resolver";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
+import rehypeSlug from "rehype-slug";
 import AutoImport from "unplugin-auto-import/vite";
 import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
@@ -21,7 +22,8 @@ export default defineConfig(({ mode }) => {
       {
         enforce: "pre",
         ...mdx({
-          jsxImportSource: "vue"
+          jsxImportSource: "vue",
+          rehypePlugins: [rehypeSlug]
         })
       },
       vue(),
