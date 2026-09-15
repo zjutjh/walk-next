@@ -29,7 +29,7 @@
             :class="styles.eyeButton"
             type="button"
             :aria-label="t('切换密码显示')"
-            @click.stop="handlePasswordVisibleClick"
+            @click.stop="handlePasswordVisibleClick()"
           >
             <van-icon :name="isPasswordVisible ? 'eye-o' : 'closed-eye'" />
           </button>
@@ -46,8 +46,9 @@
 </template>
 
 <script setup lang="ts">
+import { useToggle } from "@vueuse/core";
 import type { FormInstance } from "vant";
-import { reactive, ref, useTemplateRef } from "vue";
+import { reactive, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { createRequiredRuleWithMessage } from "@/utils/validation";
@@ -73,11 +74,7 @@ const formValue = reactive({
   password: props.initialPassword ?? ""
 });
 
-const isPasswordVisible = ref(false);
-
-const handlePasswordVisibleClick = () => {
-  isPasswordVisible.value = !isPasswordVisible.value;
-};
+const [isPasswordVisible, handlePasswordVisibleClick] = useToggle();
 
 const handleSubmit = async () => {
   formValue.teamId = formValue.teamId.trim();
