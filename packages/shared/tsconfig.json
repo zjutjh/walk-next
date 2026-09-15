@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "types": ["vite/client", "./node_modules/unplugin-icons/types/vue3.d.ts"],
+    "types": ["vite/client", "unplugin-icons/types/vue3"],
     "module": "ESNext",
     "strict": true,
     "declaration": true,
@@ -17,6 +17,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "__test__"],
-  "exclude": ["**/node_modules"]
+  "include": ["src"]
 }
