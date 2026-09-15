@@ -47,11 +47,10 @@
 
 <script setup lang="ts">
 import { useToggle } from "@vueuse/core";
+import { createRequiredRuleWithMessage } from "shared";
 import type { FormInstance } from "vant";
 import { reactive, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
-
-import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { PasswordJoinFormValue } from "../../types";
 import styles from "./index.module.scss";

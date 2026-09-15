@@ -15,4 +15,5 @@ export * from "./constants/ui";
 export * from "./utils/error";
 export * from "./utils/px-to-rem";
 export * from "./utils/request-error";
+export * from "./utils/validation.ts";
 export * from "./utils/vue-query";

@@ -113,6 +113,7 @@
 </template>
 
 <script setup lang="ts">
+import { createRequiredRuleWithMessage } from "shared";
 import type { FieldRule, FormInstance } from "vant";
 import { showToast } from "vant";
 import { computed, reactive, ref, useTemplateRef } from "vue";
@@ -120,7 +121,6 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { IDENTITY_RULES, TEL_RULES } from "@/constants/validation";
-import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { AlumniRegisterFormValue } from "../../types";
 import styles from "./index.module.scss";

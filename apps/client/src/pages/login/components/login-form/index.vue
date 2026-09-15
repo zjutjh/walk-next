@@ -59,6 +59,7 @@
 </template>
 
 <script setup lang="ts">
+import { createRequiredRuleWithMessage } from "shared";
 import type { FormInstance } from "vant";
 import { showToast } from "vant";
 import { reactive, ref, useTemplateRef } from "vue";
@@ -66,7 +67,6 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { TEL_RULES } from "@/constants/validation";
-import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { LoginFormValue } from "../../types";
 import styles from "./index.module.scss";

@@ -88,11 +88,10 @@
 </template>
 
 <script setup lang="ts">
+import { createRequiredRuleWithMessage } from "shared";
 import type { ActionSheetAction, FormInstance } from "vant";
 import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
-
-import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { CreateTeamFormValue, MatchValue, OpenedSelect, RouteName } from "../../types";
 import styles from "./index.module.scss";

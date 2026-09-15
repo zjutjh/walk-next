@@ -83,7 +83,13 @@ import { useArraySome } from "@vueuse/core";
 import type { AdminAPI } from "api/types/admin";
 import { CanceledError } from "axios";
 import type { PromptDialogFieldConfig } from "shared";
-import { PromptDialog, RequestError, useRouterState, useStoredUrlQuery } from "shared";
+import {
+  createRequiredRuleWithMessage,
+  PromptDialog,
+  RequestError,
+  useRouterState,
+  useStoredUrlQuery
+} from "shared";
 import { is } from "valibot";
 import { showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { ref } from "vue";
@@ -125,7 +131,7 @@ const TEAM_ID_DIALOG_CONFIG: Record<keyof typeof teamIdDialogValue.value, Prompt
       label: "团队ID",
       placeholder: "请输入团队ID",
       type: "digit",
-      rules: [{ required: true, message: "请输入团队ID" }]
+      rules: createRequiredRuleWithMessage("请输入团队ID")
     }
   };
 

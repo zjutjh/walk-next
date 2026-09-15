@@ -10,7 +10,7 @@
   >
     <van-field
       v-model="formValue.account"
-      :rules="ACCOUNT_RULES"
+      :rules="createRequiredRuleWithMessage('请输入账号')"
       size="large"
       label="账号"
       placeholder="请输入账号"
@@ -24,7 +24,7 @@
     <van-field
       ref="passwordFieldRef"
       v-model="formValue.password"
-      :rules="PASSWORD_RULES"
+      :rules="createRequiredRuleWithMessage('请输入密码')"
       size="large"
       label="密码"
       placeholder="请输入密码"
@@ -52,7 +52,8 @@
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
 import { isNil } from "lodash-es";
-import type { FieldRule, FieldValidateError, FormInstance } from "vant";
+import { createRequiredRuleWithMessage } from "shared";
+import type { FieldValidateError, FormInstance } from "vant";
 import { showFailToast, showSuccessToast } from "vant";
 import { ref, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -79,11 +80,6 @@ const formValue = ref({
 
 /** 登录请求或校验错误 */
 const error = ref<Error | null>(null);
-
-/** 账号校验规则 */
-const ACCOUNT_RULES: FieldRule[] = [{ required: true, message: "请输入账号" }];
-/** 密码校验规则 */
-const PASSWORD_RULES: FieldRule[] = [{ required: true, message: "请输入密码" }];
 
 // 登录
 const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({

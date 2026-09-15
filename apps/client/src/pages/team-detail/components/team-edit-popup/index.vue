@@ -103,11 +103,10 @@
 
 <script setup lang="ts">
 import type { QueryTeamDetailResponse } from "api/types/client";
+import { createRequiredRuleWithMessage } from "shared";
 import type { ActionSheetAction, FormInstance } from "vant";
 import { computed, reactive, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-
-import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { MatchValue, OpenedTeamEditSelect, TeamEditFormValue } from "../../types";
 import { getRouteLabel, isRouteName } from "../../utils";

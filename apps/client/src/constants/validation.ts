@@ -1,3 +1,4 @@
+import { createRequiredRuleWithMessage } from "shared";
 import type { FieldRule } from "vant";
 import { useI18n } from "vue-i18n";
 
@@ -8,7 +9,7 @@ export const TEL_PATTERN = /^1[3-9]\d{9}$/;
 
 /** 校验电话号码规则 */
 export const TEL_RULES: FieldRule[] = [
-  { required: true, message: t("请输入电话号码") },
+  ...createRequiredRuleWithMessage(t("请输入电话号码")),
   { pattern: TEL_PATTERN, message: t("请输入正确的电话号码") }
 ];
 
