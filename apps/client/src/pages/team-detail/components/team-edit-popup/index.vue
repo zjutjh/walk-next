@@ -15,7 +15,7 @@
         <van-cell-group inset>
           <van-field
             v-model="formValue.name"
-            :rules="nameRules"
+            :rules="createRequiredRuleWithMessage(t('请输入团队名称'))"
             :label="t('团队名称')"
             name="name"
             maxlength="64"
@@ -25,7 +25,7 @@
 
           <van-field
             v-model="formValue.slogan"
-            :rules="sloganRules"
+            :rules="createRequiredRuleWithMessage(t('请输入团队口号'))"
             :label="t('团队口号')"
             name="slogan"
             maxlength="128"
@@ -36,7 +36,7 @@
 
           <van-field
             v-model="formValue.password"
-            :rules="passwordRules"
+            :rules="createRequiredRuleWithMessage(t('请输入团队密码'))"
             :label="t('团队密码')"
             name="password"
             maxlength="64"
@@ -103,9 +103,11 @@
 
 <script setup lang="ts">
 import type { QueryTeamDetailResponse } from "api/types/client";
-import type { ActionSheetAction, FieldRule, FormInstance } from "vant";
+import type { ActionSheetAction, FormInstance } from "vant";
 import { computed, reactive, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+
+import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { MatchValue, OpenedTeamEditSelect, TeamEditFormValue } from "../../types";
 import { getRouteLabel, isRouteName } from "../../utils";
@@ -134,12 +136,6 @@ const ROUTE_OPTIONS = [
 ] as const;
 
 const { t } = useI18n();
-
-const nameRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入团队名称") }]);
-const sloganRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入团队口号") }]);
-const passwordRules = computed<FieldRule[]>(() => [
-  { required: true, message: t("请输入团队密码") }
-]);
 
 const formRef = useTemplateRef<FormInstance>("formRef");
 const openedSelect = ref<OpenedTeamEditSelect>("");

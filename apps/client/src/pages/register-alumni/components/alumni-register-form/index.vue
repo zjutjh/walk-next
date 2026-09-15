@@ -5,7 +5,7 @@
       <van-field
         v-model="formValue.name"
         :class="styles.fieldInput"
-        :rules="nameRules"
+        :rules="createRequiredRuleWithMessage(t('请输入姓名'))"
         name="name"
         maxlength="128"
         :placeholder="t('请输入姓名')"
@@ -48,7 +48,7 @@
       <van-field
         v-model="formValue.password"
         :class="styles.fieldInput"
-        :rules="passwordRules"
+        :rules="createRequiredRuleWithMessage(t('请输入密码'))"
         :type="isPasswordVisible ? 'text' : 'password'"
         name="password"
         maxlength="60"
@@ -120,6 +120,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { IDENTITY_RULES, TEL_RULES } from "@/constants/validation";
+import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { AlumniRegisterFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -147,12 +148,8 @@ const isPasswordVisible = ref(false);
 const isAgreed = ref(false);
 const confirmPassword = ref("");
 
-const nameRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入姓名") }]);
-
-const passwordRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入密码") }]);
-
 const confirmPasswordRules = computed<FieldRule[]>(() => [
-  { required: true, message: t("请再次输入密码") },
+  ...createRequiredRuleWithMessage(t("请再次输入密码")),
   {
     validator: (value: string) => value === formValue.password,
     message: t("两次输入的密码不一致")

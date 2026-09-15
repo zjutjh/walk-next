@@ -3,7 +3,7 @@
     <van-cell-group inset>
       <van-field
         v-model="formValue.teamId"
-        :rules="teamIdRules"
+        :rules="createRequiredRuleWithMessage(t('请输入团队编号'))"
         :label="t('团队编号')"
         name="teamId"
         :placeholder="t('请输入团队编号')"
@@ -15,7 +15,7 @@
 
       <van-field
         v-model="formValue.password"
-        :rules="passwordRules"
+        :rules="createRequiredRuleWithMessage(t('请输入团队密码'))"
         :type="isPasswordVisible ? 'text' : 'password'"
         :label="t('团队密码')"
         name="password"
@@ -46,9 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import type { FieldRule, FormInstance } from "vant";
-import { computed, reactive, ref, useTemplateRef } from "vue";
+import type { FormInstance } from "vant";
+import { reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
+
+import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { PasswordJoinFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -72,11 +74,6 @@ const formValue = reactive({
 });
 
 const isPasswordVisible = ref(false);
-
-const teamIdRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入团队编号") }]);
-const passwordRules = computed<FieldRule[]>(() => [
-  { required: true, message: t("请输入团队密码") }
-]);
 
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;

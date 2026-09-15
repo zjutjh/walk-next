@@ -20,7 +20,7 @@
       <van-field
         v-model="formValue.password"
         :class="styles.fieldInput"
-        :rules="passwordRules"
+        :rules="createRequiredRuleWithMessage(t('请输入密码'))"
         :type="isPasswordVisible ? 'text' : 'password'"
         name="password"
         maxlength="60"
@@ -59,13 +59,14 @@
 </template>
 
 <script setup lang="ts">
-import type { FieldRule, FormInstance } from "vant";
+import type { FormInstance } from "vant";
 import { showToast } from "vant";
-import { computed, reactive, ref, useTemplateRef } from "vue";
+import { reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { TEL_RULES } from "@/constants/validation";
+import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { LoginFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -89,8 +90,6 @@ const formValue = reactive<LoginFormValue>({
 
 const isPasswordVisible = ref(false);
 const isAgreed = ref(false);
-
-const passwordRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入密码") }]);
 
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;

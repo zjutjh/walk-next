@@ -5,7 +5,7 @@
       <van-field
         v-model="formValue.name"
         :class="styles.fieldInput"
-        :rules="nameRules"
+        :rules="createRequiredRuleWithMessage(t('请输入姓名'))"
         name="name"
         maxlength="128"
         :placeholder="t('请输入姓名')"
@@ -19,7 +19,7 @@
       <van-field
         v-model="formValue.stuId"
         :class="styles.fieldInput"
-        :rules="stuIdRules"
+        :rules="createRequiredRuleWithMessage(stuIdPrompt)"
         name="stuId"
         maxlength="32"
         :placeholder="stuIdPrompt"
@@ -72,7 +72,7 @@
       <van-field
         v-model="formValue.password"
         :class="styles.fieldInput"
-        :rules="passwordRules"
+        :rules="createRequiredRuleWithMessage(t('请输入密码'))"
         :type="isPasswordVisible ? 'text' : 'password'"
         name="password"
         maxlength="60"
@@ -144,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FieldRule, FormInstance } from "vant";
+import type { FormInstance } from "vant";
 import { showToast } from "vant";
 import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -152,6 +152,7 @@ import { useRouter } from "vue-router";
 
 import { confirmDialog } from "@/composables";
 import { IDENTITY_RULES, TEL_RULES } from "@/constants/validation";
+import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { SchoolRegisterFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -188,12 +189,6 @@ const stuIdLabel = computed(() => (isStudent.value ? t("学号") : t("工号")))
 
 /** 学号/工号的占位提示，同时用作必填校验文案 */
 const stuIdPrompt = computed(() => (isStudent.value ? t("请输入学号") : t("请输入工号")));
-
-const nameRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入姓名") }]);
-
-const stuIdRules = computed<FieldRule[]>(() => [{ required: true, message: stuIdPrompt.value }]);
-
-const passwordRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入密码") }]);
 
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;

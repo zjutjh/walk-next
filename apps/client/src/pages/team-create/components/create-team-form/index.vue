@@ -3,7 +3,7 @@
     <van-cell-group inset>
       <van-field
         v-model="formValue.name"
-        :rules="nameRules"
+        :rules="createRequiredRuleWithMessage(t('请输入团队名称'))"
         :label="t('团队名称')"
         name="name"
         maxlength="64"
@@ -13,7 +13,7 @@
 
       <van-field
         v-model="formValue.slogan"
-        :rules="sloganRules"
+        :rules="createRequiredRuleWithMessage(t('请输入团队口号'))"
         :label="t('团队口号')"
         name="slogan"
         maxlength="128"
@@ -24,7 +24,7 @@
 
       <van-field
         v-model="formValue.password"
-        :rules="passwordRules"
+        :rules="createRequiredRuleWithMessage(t('请输入团队密码'))"
         :label="t('团队密码')"
         name="password"
         maxlength="64"
@@ -88,9 +88,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ActionSheetAction, FieldRule, FormInstance } from "vant";
+import type { ActionSheetAction, FormInstance } from "vant";
 import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
+
+import { createRequiredRuleWithMessage } from "@/utils/validation";
 
 import type { CreateTeamFormValue, MatchValue, OpenedSelect, RouteName } from "../../types";
 import styles from "./index.module.scss";
@@ -132,12 +134,6 @@ const selectErrors = reactive({
   allowMatch: "",
   routeName: ""
 });
-
-const nameRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入团队名称") }]);
-const sloganRules = computed<FieldRule[]>(() => [{ required: true, message: t("请输入团队口号") }]);
-const passwordRules = computed<FieldRule[]>(() => [
-  { required: true, message: t("请输入团队密码") }
-]);
 
 const selectedMatchLabel = computed(() => {
   const option = MATCH_OPTIONS.find((item) => item.value === formValue.allowMatch);
