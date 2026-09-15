@@ -43,8 +43,9 @@
       :loading="isLoginPending"
       block
       @click="handleSubmit"
-      >登录</van-button
     >
+      登录
+    </van-button>
   </van-form>
 </template>
 
