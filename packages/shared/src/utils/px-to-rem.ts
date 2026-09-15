@@ -8,9 +8,7 @@ import {
   MIN_UI_SCALE_RATIO
 } from "../constants/ui";
 
-/**
- * 获取UI缩放比例，限制了上下限
- */
+/** 获取UI缩放比例，限制了上下限 */
 export function getUiScaleRatio() {
   const scaleRatio = (document.documentElement.clientWidth || window.innerWidth) / DESIGN_WIDTH;
   return clamp(scaleRatio, MIN_UI_SCALE_RATIO, MAX_UI_SCALE_RATIO);
@@ -21,9 +19,7 @@ export function setRootFontSize() {
   document.documentElement.style.fontSize = `${size}px`;
 }
 
-/**
- * 初始化根节点 fontSize，在应用加载最开始调用
- */
+/** 初始化根节点 fontSize，在应用加载最开始调用 */
 export function initializeRootFontSize() {
   setRootFontSize();
   useEventListener("resize", setRootFontSize);
