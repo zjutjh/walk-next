@@ -3,6 +3,7 @@
   "dictionaries": ["typescript", "node", "html", "css", "bash", "npm"],
   "ignorePaths": [
     "apps/client/src/locales",
+    "apps/client/src/mdx",
     "node_modules/**",
     "pnpm-lock.yaml",
     "pnpm-workspace.yaml",
