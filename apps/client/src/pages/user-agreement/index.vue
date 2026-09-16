@@ -7,6 +7,9 @@
 
 <script setup lang="ts">
 import userAgreementMd from "@/mdx/user-agreement.mdx";
+import { useAgreementStore } from "@/store/agreement";
 
 import styles from "./index.module.scss";
+
+useAgreementStore().markSeen();
 </script>

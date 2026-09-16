@@ -15,6 +15,10 @@
     }
   }
 
+  .agreementCell :global(.van-cell__value) {
+    overflow: visible;
+  }
+
   .buttonContainer {
     display: flex;
     flex-direction: column;

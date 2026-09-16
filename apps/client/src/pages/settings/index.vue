@@ -7,8 +7,15 @@
       <van-cell :title="t('语言')" is-link @click="handleLanguageClick">
         {{ locale ? LANG_DISPLAY_NAME[locale] : "" }}
       </van-cell>
-      <van-cell :title="t('用户协议与隐私政策')" to="/user-agreement" is-link>
-        {{ AGREEMENT_DATE }}
+      <van-cell
+        :class="styles.agreementCell"
+        :title="t('用户协议与隐私政策')"
+        to="/user-agreement"
+        is-link
+      >
+        <van-badge :dot="!agreementStore.isSeen">
+          {{ AGREEMENT_DATE }}
+        </van-badge>
       </van-cell>
       <van-cell :title="t('报名须知与免责协议')" to="/registration-terms" is-link>
         {{ EVENT_SESSION }}
@@ -35,6 +42,7 @@ import decorationImgUrl from "@/assets/images/setting-page-banner.jpg";
 import LanguageActionSheet from "@/components/language-action-sheet/index.vue";
 import { confirmDialog, useClientUserData, useUserLocale } from "@/composables";
 import { AGREEMENT_DATE, EVENT_SESSION, LANG_DISPLAY_NAME } from "@/constants";
+import { useAgreementStore } from "@/store/agreement";
 
 import styles from "./index.module.scss";
 
@@ -42,6 +50,7 @@ const router = useRouter();
 const { locale } = useUserLocale();
 const { t } = useI18n();
 const { resetClientUserData } = useClientUserData();
+const agreementStore = useAgreementStore();
 
 /** 语言选择弹层是否可见 */
 const isLanguageActionSheetVisible = ref(false);
