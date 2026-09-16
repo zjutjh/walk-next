@@ -48,7 +48,9 @@ const { updateClientLoginData, updateUserInfo } = useClientUserData(queryClient)
 const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
   mutationFn: (value: LoginFormValue) =>
     walkClientService.Login({
-      tel: value.tel,
+      // eslint-disable-next-line camelcase
+      account_type: /^\d{11}$/.test(value.account) ? "tel" : "stu_id",
+      account: value.account,
       password: value.password
     }),
   onSuccess: async (data) => {

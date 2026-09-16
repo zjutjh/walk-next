@@ -1,16 +1,15 @@
 <template>
   <van-form ref="formRef" :class="styles.form" :disabled="props.loading" @submit="handleSubmit">
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">{{ t("电话号码") }}</label>
+      <label :class="styles.fieldLabel">{{ t("账号") }}</label>
       <van-field
-        v-model="formValue.tel"
+        v-model="formValue.account"
         :class="styles.fieldInput"
-        :rules="telRules"
-        name="tel"
-        type="tel"
-        maxlength="11"
-        :placeholder="t('请输入电话号码')"
-        autocomplete="tel"
+        :rules="accountRules"
+        name="account"
+        maxlength="32"
+        :placeholder="t('请输入手机号或学工号')"
+        autocomplete="username"
         clearable
       />
     </div>
@@ -66,7 +65,7 @@ import { reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { getTelRules } from "@/constants/validation";
+import { TEL_PATTERN } from "@/constants/validation";
 
 import type { LoginFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -81,11 +80,18 @@ const emit = defineEmits<{
 
 const router = useRouter();
 const { t } = useI18n();
-const telRules = getTelRules(t);
 const formRef = useTemplateRef<FormInstance>("formRef");
 
+const accountRules = [
+  ...createRequiredRuleWithMessage(t("请输入手机号或学工号")),
+  {
+    validator: (value: string) => !value || value.length !== 11 || TEL_PATTERN.test(value),
+    message: t("请输入正确的电话号码")
+  }
+];
+
 const formValue = reactive<LoginFormValue>({
-  tel: "",
+  account: "",
   password: ""
 });
 
@@ -101,7 +107,7 @@ const handleNavigateTerms = () => {
 };
 
 const handleSubmit = async () => {
-  formValue.tel = formValue.tel.trim();
+  formValue.account = formValue.account.trim();
   formValue.password = formValue.password.trim();
 
   try {
@@ -119,7 +125,7 @@ const handleSubmit = async () => {
   }
 
   emit("submit", {
-    tel: formValue.tel,
+    account: formValue.account,
     password: formValue.password
   });
 };

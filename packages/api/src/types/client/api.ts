@@ -4,10 +4,12 @@ import type { WalkStatus } from "./walk";
 
 /** 用户登录 请求 */
 export interface LoginRequest {
+  /** 账号类型：手机号或学工号 */
+  account_type: "tel" | "stu_id";
+  /** 账号 */
+  account: string;
   /** 密码 */
   password: string;
-  /** 手机号码 */
-  tel: string;
 }
 
 /** 用户登录 响应 */

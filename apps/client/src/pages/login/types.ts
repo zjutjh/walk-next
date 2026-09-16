@@ -1,4 +1,4 @@
 export interface LoginFormValue {
-  tel: string;
+  account: string;
   password: string;
 }
