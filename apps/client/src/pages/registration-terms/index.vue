@@ -1,6 +1,7 @@
 <template>
   <div :class="styles.page">
     <registration-terms-md />
+    <van-back-top />
   </div>
 </template>
 
