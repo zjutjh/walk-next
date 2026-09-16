@@ -212,9 +212,8 @@ const handleSubmit = async () => {
     return;
   }
 
-  if (!isSelectValid || !isMatchValue(formValue.allowMatch) || !isRouteName(formValue.routeName)) {
+  if (!isSelectValid || !isMatchValue(formValue.allowMatch) || !isRouteName(formValue.routeName))
     return;
-  }
 
   emit("submit", {
     name: formValue.name,

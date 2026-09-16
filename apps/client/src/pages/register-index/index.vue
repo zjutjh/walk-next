@@ -72,8 +72,6 @@ const selectOption = (routeName: string) => {
 };
 
 const confirmSelection = () => {
-  if (selectedOption.value) {
-    router.replace({ name: selectedOption.value, query: route.query });
-  }
+  if (selectedOption.value) router.replace({ name: selectedOption.value, query: route.query });
 };
 </script>

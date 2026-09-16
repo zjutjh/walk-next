@@ -71,9 +71,8 @@ export const useClientUserData = (queryClient: QueryClient = useQueryClient()) =
 
   /** 启动 query，需要在顶层组件调用 */
   const setupClientUserDataQuery = () => {
-    if (!getCurrentScope()) {
+    if (!getCurrentScope())
       throw new Error("Function 'setupClientUserDataQuery' must be called in Vue effectScope.");
-    }
     if (userDataStore.isQueryExist) return;
 
     const { data } = useQuery({

@@ -20,20 +20,14 @@ initializeRootFontSize();
 // 追踪 chunk 加载错误，联网时刷新页面绕过缓存，避免离线时无限刷新
 let hasChunkLoadError = false;
 routerInstance.onError((error) => {
-  if (error instanceof TypeError) {
-    hasChunkLoadError = true;
-  }
+  if (error instanceof TypeError) hasChunkLoadError = true;
 });
 
 useEventListener("online", () => {
-  if (hasChunkLoadError) {
-    location.reload();
-  }
+  if (hasChunkLoadError) location.reload();
 });
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js");
-}
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js");
 
 async function bootstrap() {
   createApp(App)

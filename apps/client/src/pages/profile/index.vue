@@ -81,9 +81,7 @@ const userInfo = computed(() => queriedUserInfo.value ?? clientUserInfo.value);
 
 const profileInfoItems = computed<ProfileInfoItem[]>(() => {
   const info = userInfo.value;
-  if (!info) {
-    return [];
-  }
+  if (!info) return [];
 
   return [
     { label: t("姓名"), value: displayValue(info.name) },

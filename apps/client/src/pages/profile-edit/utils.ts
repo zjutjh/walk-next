@@ -30,9 +30,7 @@ export function toUpdateUserInfoRequest(value: ProfileEditFormValue): UpdateUser
     }
   };
 
-  if (value.identity) {
-    result.identity = value.identity;
-  }
+  if (value.identity) result.identity = value.identity;
 
   return result;
 }

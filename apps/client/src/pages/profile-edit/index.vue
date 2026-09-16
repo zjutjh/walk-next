@@ -65,9 +65,7 @@ const { isPending: isUpdatePending, mutate: mutateUpdateUserInfo } = useMutation
 });
 
 async function handleFormSubmit(value: ProfileEditFormValue) {
-  if (isUpdatePending.value) {
-    return;
-  }
+  if (isUpdatePending.value) return;
 
   const isConfirmed = await confirmDialog({
     title: t("确认"),
