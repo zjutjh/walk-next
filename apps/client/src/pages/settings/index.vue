@@ -7,9 +7,11 @@
       <van-cell :title="t('语言')" is-link @click="handleLanguageClick">
         {{ locale ? LANG_DISPLAY_NAME[locale] : "" }}
       </van-cell>
-      <van-cell :title="t('用户协议与隐私政策')" to="/user-agreement" is-link> 2026/9/15 </van-cell>
+      <van-cell :title="t('用户协议与隐私政策')" to="/user-agreement" is-link>
+        {{ AGREEMENT_DATE }}
+      </van-cell>
       <van-cell :title="t('报名须知与免责协议')" to="/registration-terms" is-link>
-        第十六届
+        {{ EVENT_SESSION }}
       </van-cell>
     </van-cell-group>
 
@@ -32,7 +34,7 @@ import { useRouter } from "vue-router";
 import decorationImgUrl from "@/assets/images/setting-page-banner.jpg";
 import LanguageActionSheet from "@/components/language-action-sheet/index.vue";
 import { confirmDialog, useClientUserData, useUserLocale } from "@/composables";
-import { LANG_DISPLAY_NAME } from "@/constants";
+import { AGREEMENT_DATE, EVENT_SESSION, LANG_DISPLAY_NAME } from "@/constants";
 
 import styles from "./index.module.scss";
 
