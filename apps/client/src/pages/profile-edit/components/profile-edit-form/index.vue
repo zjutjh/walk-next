@@ -3,7 +3,7 @@
     <van-cell-group inset>
       <van-field
         v-model="formValue.tel"
-        :rules="TEL_RULES"
+        :rules="telRules"
         :label="t('电话号码')"
         name="tel"
         type="tel"
@@ -33,7 +33,7 @@
       />
       <van-field
         v-model="formValue.identity"
-        :rules="IDENTITY_RULES"
+        :rules="identityRules"
         :label="t('身份证号')"
         name="identity"
         maxlength="18"
@@ -56,7 +56,7 @@ import { watchImmediate } from "@vueuse/core";
 import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
 
-import { IDENTITY_RULES, TEL_RULES } from "@/constants/validation";
+import { useIdentityRules, useTelRules } from "@/constants/validation";
 
 import type { ProfileEditFormValue } from "../../types";
 import { buildInitialFormValue, normalizeFormValue } from "../../utils";
@@ -72,6 +72,8 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const telRules = useTelRules();
+const identityRules = useIdentityRules();
 
 const formValue = reactive(buildInitialFormValue());
 

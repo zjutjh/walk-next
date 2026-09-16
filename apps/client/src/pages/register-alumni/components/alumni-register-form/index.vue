@@ -19,7 +19,7 @@
       <van-field
         v-model="formValue.identity"
         :class="styles.fieldInput"
-        :rules="IDENTITY_RULES"
+        :rules="identityRules"
         name="identity"
         maxlength="128"
         :placeholder="t('请输入身份证号码')"
@@ -33,7 +33,7 @@
       <van-field
         v-model="formValue.tel"
         :class="styles.fieldInput"
-        :rules="TEL_RULES"
+        :rules="telRules"
         name="tel"
         type="tel"
         maxlength="11"
@@ -120,7 +120,7 @@ import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { IDENTITY_RULES, TEL_RULES } from "@/constants/validation";
+import { useIdentityRules, useTelRules } from "@/constants/validation";
 
 import type { AlumniRegisterFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -135,6 +135,8 @@ const emit = defineEmits<{
 
 const router = useRouter();
 const { t } = useI18n();
+const telRules = useTelRules();
+const identityRules = useIdentityRules();
 const formRef = useTemplateRef<FormInstance>("formRef");
 
 const formValue = reactive<AlumniRegisterFormValue>({
