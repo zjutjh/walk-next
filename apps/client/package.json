@@ -12,7 +12,6 @@
   "dependencies": {
     "@intlify/unplugin-vue-i18n": "^11.2.5",
     "@mdx-js/rollup": "^3.1.1",
-    "@mdx-js/vue": "^3.1.1",
     "@tanstack/vue-query": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
     "@vueuse/integrations": "catalog:frontend",
@@ -23,6 +22,7 @@
     "pinia-plugin-persistedstate": "catalog:frontend",
     "qrcode": "catalog:frontend",
     "rehype-slug": "^6.0.0",
+    "remark-heading-id": "^1.0.1",
     "sass-embedded": "catalog:infra",
     "shared": "workspace:*",
     "vant": "catalog:frontend",

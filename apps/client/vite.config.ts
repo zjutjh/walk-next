@@ -4,6 +4,7 @@ import { VantResolver } from "@vant/auto-import-resolver";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
 import rehypeSlug from "rehype-slug";
+import remarkHeadingId from "remark-heading-id";
 import AutoImport from "unplugin-auto-import/vite";
 import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
@@ -23,6 +24,7 @@ export default defineConfig(({ mode }) => {
         enforce: "pre",
         ...mdx({
           jsxImportSource: "vue",
+          remarkPlugins: [remarkHeadingId],
           rehypePlugins: [rehypeSlug]
         })
       },
