@@ -66,7 +66,7 @@ import { reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { useTelRules } from "@/constants/validation";
+import { getTelRules } from "@/constants/validation";
 
 import type { LoginFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -81,7 +81,7 @@ const emit = defineEmits<{
 
 const router = useRouter();
 const { t } = useI18n();
-const telRules = useTelRules();
+const telRules = getTelRules(t);
 const formRef = useTemplateRef<FormInstance>("formRef");
 
 const formValue = reactive<LoginFormValue>({

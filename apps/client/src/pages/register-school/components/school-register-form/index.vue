@@ -152,7 +152,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import { confirmDialog } from "@/composables";
-import { useIdentityRules, useTelRules } from "@/constants/validation";
+import { getIdentityRules, getTelRules } from "@/constants/validation";
 
 import type { SchoolRegisterFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -168,8 +168,8 @@ const emit = defineEmits<{
 
 const router = useRouter();
 const { t } = useI18n();
-const telRules = useTelRules();
-const identityRules = useIdentityRules();
+const telRules = getTelRules(t);
+const identityRules = getIdentityRules(t);
 const formRef = useTemplateRef<FormInstance>("formRef");
 
 const formValue = reactive<SchoolRegisterFormValue>({

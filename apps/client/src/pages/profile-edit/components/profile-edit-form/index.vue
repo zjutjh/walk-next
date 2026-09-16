@@ -56,7 +56,7 @@ import { watchImmediate } from "@vueuse/core";
 import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
 
-import { useIdentityRules, useTelRules } from "@/constants/validation";
+import { getIdentityRules, getTelRules } from "@/constants/validation";
 
 import type { ProfileEditFormValue } from "../../types";
 import { buildInitialFormValue, normalizeFormValue } from "../../utils";
@@ -72,8 +72,8 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const telRules = useTelRules();
-const identityRules = useIdentityRules();
+const telRules = getTelRules(t);
+const identityRules = getIdentityRules(t);
 
 const formValue = reactive(buildInitialFormValue());
 
