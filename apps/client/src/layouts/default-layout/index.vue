@@ -73,13 +73,7 @@ const { isNavigationPending } = useRouterState();
 const pageTitle = computed(() => route.meta.pageName);
 
 const handleBackClick = () => {
-  const { back } = router.options.history.state;
-  // 原生锚点（MDX 目录的 <a href="#xxx">）只改 URL，不触发 popstate，
-  // router 感知不到（route.hash 为空）；它会克隆出一条仅多 hash 的历史记录，
-  // 直接 back 只会去掉 hash 停留本页，需多退一步跳过它
-  const hasInvisibleHash = window.location.hash !== "" && window.location.hash !== route.hash;
-
-  if (back) router.go(hasInvisibleHash ? -2 : -1);
+  if (router.options.history.state.back) router.back();
   else {
     const matched = route.matched;
     if (matched.length >= 2) {
