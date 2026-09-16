@@ -8,7 +8,9 @@ export default defineComponent({
     return () =>
       h(
         defineAsyncComponent(() =>
-          import(`./${useUserLocale().locale.value}.mdx`).catch(() => import("./zh-Hans.mdx"))
+          import(`./locales/${useUserLocale().locale.value}.mdx`).catch(
+            () => import("./locales/zh-Hans.mdx")
+          )
         )
       );
   }
