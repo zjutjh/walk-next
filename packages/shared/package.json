@@ -6,6 +6,9 @@
   "exports": {
     ".": {
       "import": "./src/index.ts"
+    },
+    "./constants/ui": {
+      "import": "./src/constants/ui.ts"
     }
   },
   "scripts": {

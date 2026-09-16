@@ -1,5 +1,5 @@
 import pxToRemPlugin from "postcss-pxtorem";
-import { BASE_ROOT_FONT_SIZE, DESIGN_WIDTH, MAX_REM_UNIT_PRECISION } from "shared";
+import { BASE_ROOT_FONT_SIZE, DESIGN_WIDTH, MAX_REM_UNIT_PRECISION } from "shared/constants/ui";
 
 /**
  * Vant 组件库的设计稿宽度
