@@ -130,7 +130,7 @@
       <van-checkbox v-model="isAgreed" shape="round">
         <span>{{ t("您已阅读并同意") }}</span>
         <span :class="styles.termsLink" @click.stop="handleNavigateTerms">
-          {{ t("《隐私政策》") }}
+          {{ t("《用户协议与隐私政策》") }}
         </span>
       </van-checkbox>
     </div>
@@ -205,7 +205,7 @@ const handlePasswordHintClick = () => {
 };
 
 const handleNavigateTerms = () => {
-  router.push({ name: "termsOfService" });
+  router.push({ name: "userAgreement" });
 };
 
 const handleSubmit = async () => {
@@ -225,7 +225,7 @@ const handleSubmit = async () => {
 
   if (!isAgreed.value) {
     showToast({
-      message: t("请阅读并同意《隐私政策》"),
+      message: t("请阅读并同意《用户协议与隐私政策》"),
       position: "bottom"
     });
     return;

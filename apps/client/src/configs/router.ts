@@ -92,20 +92,11 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: "/terms-of-service",
-    name: "termsOfService",
-    component: () => import("@/pages/terms-of-service/index.vue"),
+    path: "/user-agreement",
+    name: "userAgreement",
+    component: () => import("@/pages/user-agreement/index.vue"),
     meta: {
-      pageName: "用户协议",
-      allowNoAuth: true
-    }
-  },
-  {
-    path: "/privacy-policy",
-    name: "privacyPolicy",
-    component: () => import("@/pages/privacy-policy/index.vue"),
-    meta: {
-      pageName: "隐私政策",
+      pageName: "用户协议与隐私政策",
       allowNoAuth: true
     }
   },
