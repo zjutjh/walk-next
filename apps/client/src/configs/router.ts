@@ -280,7 +280,7 @@ routerInstance.beforeEach((to) => {
 });
 
 // 后置路由守卫
-routerInstance.afterEach((_to, _from, failure) => {
+routerInstance.afterEach((to, _from, failure) => {
   const { decPendingNavigationCount } = useRouterState();
 
   /**
@@ -289,6 +289,21 @@ routerInstance.afterEach((_to, _from, failure) => {
   if (!isNavigationFailure(failure, NavigationFailureType.duplicated)) {
     // 更新全局路由状态
     decPendingNavigationCount();
+  }
+
+  // hash 定位：等待异步内容渲染后滚动到目标元素
+  if (to.hash) {
+    const hash = to.hash;
+    let attempts = 0;
+    const tryScroll = () => {
+      const el = document.querySelector(hash);
+      if (el) {
+        el.scrollIntoView();
+        return;
+      }
+      if (++attempts <= 10) setTimeout(tryScroll, 200);
+    };
+    tryScroll();
   }
 });
 
