@@ -27,7 +27,8 @@ useEventListener("online", () => {
   if (hasChunkLoadError) location.reload();
 });
 
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js");
+if (import.meta.env.PROD && "serviceWorker" in navigator)
+  navigator.serviceWorker.register("/sw.js");
 
 async function bootstrap() {
   createApp(App)
