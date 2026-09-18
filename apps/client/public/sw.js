@@ -17,18 +17,18 @@ const touch = (r) => openMeta().then((m) => m.put(r.url, new Response(Date.now()
 
 const load = (r) =>
   fetch(r).then((res) => {
-    if (res.ok) {
-      const clone = res.clone();
-      open().then((c) => c.put(r, clone).then(() => touch(r)));
-    }
-    return res;
+    if (!res.ok) return res;
+    const clone = res.clone();
+    return open()
+      .then((c) => c.put(r, clone))
+      .then(() => touch(r))
+      .then(() => res);
   });
 
 const fromCache = (r) =>
-  caches.match(r).then((c) => {
-    if (!c) return load(r);
-    return stale(r).then((s) => (s ? caches.delete(r.url).then(() => load(r)) : c));
-  });
+  open()
+    .then((c) => c.match(r))
+    .then((c) => (c ? stale(r).then((s) => (s ? load(r) : c)) : load(r)));
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
