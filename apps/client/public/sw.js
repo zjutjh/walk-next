@@ -2,6 +2,7 @@
 
 const sw = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (self));
 
+// #region 缓存工具
 const CACHE = "jh-walk-cache-v1";
 const META = "jh-walk-meta-v1";
 const SWEEP_KEY = "jh-walk-sweep-at";
@@ -54,7 +55,9 @@ const maybeSweep = () =>
   age(SWEEP_KEY)
     .then((t) => Date.now() - t >= SWEEP_EVERY && sweep())
     .catch(() => {});
+// #endregion
 
+// #region 生命周期
 sw.addEventListener("install", (e) => {
   e.waitUntil(
     open()
@@ -74,7 +77,9 @@ sw.addEventListener("activate", (e) => {
       .then(() => sw.clients.claim())
   );
 });
+// #endregion
 
+// #region 请求拦截
 sw.addEventListener("fetch", (e) => {
   const r = e.request;
   if (
@@ -99,3 +104,4 @@ sw.addEventListener("fetch", (e) => {
 
   e.respondWith(fromCache(r));
 });
+// #endregion
