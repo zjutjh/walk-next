@@ -123,6 +123,7 @@ const emit = defineEmits<{
   submit: [value: TeamEditFormValue];
 }>();
 
+// #region 选项与表单状态
 const MATCH_OPTIONS = [
   { label: "不随机", value: "false" },
   { label: "随机匹配", value: "true" }
@@ -151,7 +152,9 @@ const selectErrors = reactive({
   allowMatch: "",
   routeName: ""
 });
+// #endregion
 
+// #region 派生状态与回填
 const isMatchValue = (value: string): value is MatchValue =>
   MATCH_OPTIONS.some((option) => option.value === value);
 
@@ -192,7 +195,9 @@ watch(
   },
   { immediate: true }
 );
+// #endregion
 
+// #region 交互与提交
 const handleCloseClick = () => {
   emit("close");
 };
@@ -256,4 +261,5 @@ const handleSubmit = async () => {
     routeName: formValue.routeName
   });
 };
+// #endregion
 </script>

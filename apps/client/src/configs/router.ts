@@ -16,6 +16,7 @@ import teamInfoPage from "@/pages/team-info/index.vue";
 
 import { globalQueryClient } from "./vue-query";
 
+// #region 路由表
 const routes: RouteRecordRaw[] = [
   {
     path: "/login",
@@ -228,7 +229,9 @@ const routes: RouteRecordRaw[] = [
     }
   }
 ];
+// #endregion
 
+// #region 路由实例与守卫
 export const routerInstance = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_PATH),
   routes
@@ -305,3 +308,4 @@ routerInstance.onError((error) => {
   const { resetPendingNavigationCount } = useRouterState();
   resetPendingNavigationCount();
 });
+// #endregion

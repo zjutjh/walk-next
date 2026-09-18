@@ -52,6 +52,7 @@ import RandomTeamList from "./components/random-team-list/index.vue";
 import styles from "./index.module.scss";
 import type { RouteName } from "./types";
 
+// #region 路线筛选与列表查询
 const ROUTE_OPTIONS = [
   { name: "pf-half", title: "屏峰半程", distanceKm: 11 },
   { name: "pf-full", title: "屏峰全程", distanceKm: 16 },
@@ -119,7 +120,9 @@ const {
 const visibleTeams = computed(
   () => randomTeamListData.value?.teams.filter((team) => team.num < MAXIMUM_TEAM_SIZE) ?? []
 );
+// #endregion
 
+// #region 滚动与刷新
 const pageRef = useTemplateRef<HTMLElement>("pageRef");
 
 const scrollContainer = computed(() => pageRef.value?.closest("main") ?? null);
@@ -136,7 +139,9 @@ const refreshBtnClass = computed(() => [
 ]);
 
 const isRefreshBtnVisible = computed(() => scrollY.value > 50 && !isPullRefreshing.value);
+// #endregion
 
+// #region 加入队伍
 const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation({
   mutationFn: (teamId: number) => walkClientService.RandomJoinTeam({ id: teamId }),
   onSuccess: async () => {
@@ -177,4 +182,5 @@ const handleJoinClick = (teamId: number) => {
   joiningTeamId.value = teamId;
   mutateRandomJoinTeam(teamId);
 };
+// #endregion
 </script>

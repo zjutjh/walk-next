@@ -100,6 +100,7 @@ import { walkClientService } from "@/utils";
 
 import styles from "./index.module.scss";
 
+// #region 队伍与队员数据
 const TEAM_SUBMIT_MIN_SIZE = 4;
 
 const router = useRouter();
@@ -166,7 +167,9 @@ const selectedMemberSummary = computed(() =>
 const canManageSelectedMember = computed(
   () => isCaptain.value && selectedMemberSummary.value?.role === "member"
 );
+// #endregion
 
+// #region 数据刷新与提示
 const refreshTeamData = async () => {
   await Promise.all([
     queryClient.invalidateQueries({
@@ -208,7 +211,9 @@ const showErrorToast = (message: string) => {
     position: "top"
   });
 };
+// #endregion
 
+// #region 队伍操作
 const { mutate: mutateSubmitTeam, isPending: isSubmitTeamPending } = useMutation({
   mutationFn: () => walkClientService.SubmitTeam(),
   onSuccess: async () => {
@@ -302,7 +307,9 @@ const { mutate: mutateTransferCaptain, isPending: isTransferCaptainPending } = u
 const isMemberActionPending = computed(
   () => isRemoveMemberPending.value || isTransferCaptainPending.value
 );
+// #endregion
 
+// #region 事件处理
 const reload = () => {
   location.reload();
 };
@@ -418,4 +425,5 @@ const handleSubmissionClick = async () => {
 
   mutateSubmitTeam();
 };
+// #endregion
 </script>

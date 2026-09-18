@@ -166,6 +166,7 @@ const emit = defineEmits<{
   submit: [value: SchoolRegisterFormValue];
 }>();
 
+// #region 表单状态
 const router = useRouter();
 const { t } = useI18n();
 const telRules = getTelRules(t);
@@ -191,7 +192,9 @@ const stuIdLabel = computed(() => (isStudent.value ? t("学号") : t("工号")))
 
 /** 学号/工号的占位提示，同时用作必填校验文案 */
 const stuIdPrompt = computed(() => (isStudent.value ? t("请输入学号") : t("请输入工号")));
+// #endregion
 
+// #region 交互与提交
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;
 };
@@ -241,4 +244,5 @@ const handleSubmit = async () => {
     wechat: formValue.wechat
   });
 };
+// #endregion
 </script>

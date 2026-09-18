@@ -106,6 +106,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
+// #region 选项与表单状态
 const MATCH_OPTIONS = [
   { label: "不随机", value: "false" },
   { label: "随机匹配", value: "true" }
@@ -163,7 +164,9 @@ const isMatchValue = (value: string): value is MatchValue =>
 
 const isRouteName = (value: string): value is RouteName =>
   ROUTE_OPTIONS.some((option) => option.value === value);
+// #endregion
 
+// #region 交互与提交
 const toggleSelect = (selectName: OpenedSelect) => {
   openedSelect.value = openedSelect.value === selectName ? "" : selectName;
 };
@@ -223,4 +226,5 @@ const handleSubmit = async () => {
     routeName: formValue.routeName
   });
 };
+// #endregion
 </script>

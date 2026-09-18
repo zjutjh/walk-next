@@ -133,6 +133,7 @@ const emit = defineEmits<{
   submit: [value: AlumniRegisterFormValue];
 }>();
 
+// #region 表单状态
 const router = useRouter();
 const { t } = useI18n();
 const telRules = getTelRules(t);
@@ -157,7 +158,9 @@ const confirmPasswordRules = computed<FieldRule[]>(() => [
     message: t("两次输入的密码不一致")
   }
 ]);
+// #endregion
 
+// #region 交互与提交
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;
 };
@@ -193,4 +196,5 @@ const handleSubmit = async () => {
     password: formValue.password
   });
 };
+// #endregion
 </script>
