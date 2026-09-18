@@ -51,7 +51,13 @@ self.addEventListener("activate", (e) => {
 
 self.addEventListener("fetch", (e) => {
   const r = e.request;
-  if (!r.url.startsWith("http") || r.url.includes("/api/") || r.method !== "GET") return;
+  if (
+    !r.url.startsWith("http") ||
+    r.url.includes("/api/") ||
+    r.url.includes("/admin/") ||
+    r.method !== "GET"
+  )
+    return;
 
   if (r.mode === "navigate") {
     e.respondWith(
