@@ -1,19 +1,22 @@
-/// <reference lib="webworker" />
+﻿/// <reference lib="webworker" />
+
+const sw = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (self));
 
 const CACHE = "jh-walk-cache-v1";
 const META = "jh-walk-meta-v1";
-const TTL = 7 * 24 * 60 * 60 * 1000;
+const SWEEP_KEY = "jh-walk-sweep-at";
+const TTL = 30 * 24 * 60 * 60 * 1000;
+const SWEEP_EVERY = 24 * 60 * 60 * 1000;
 const open = () => caches.open(CACHE);
 const openMeta = () => caches.open(META);
 
-const stale = (r) =>
-  openMeta()
-    .then((m) => m.match(r.url))
-    .then((r) => r.json())
-    .then((t) => Date.now() - t >= TTL)
-    .catch(() => true);
+const touch = (url) => openMeta().then((m) => m.put(url, new Response(Date.now())));
 
-const touch = (r) => openMeta().then((m) => m.put(r.url, new Response(Date.now())));
+const age = (url) =>
+  openMeta()
+    .then((m) => m.match(url))
+    .then((res) => res.json())
+    .catch(() => 0);
 
 const load = (r) =>
   fetch(r).then((res) => {
@@ -21,35 +24,52 @@ const load = (r) =>
     const clone = res.clone();
     return open()
       .then((c) => c.put(r, clone))
-      .then(() => touch(r))
+      .then(() => touch(r.url))
       .then(() => res);
   });
 
 const fromCache = (r) =>
-  open()
-    .then((c) => c.match(r))
-    .then((c) => (c ? stale(r).then((s) => (s ? load(r) : c)) : load(r)));
+  open().then(async (c) => {
+    const cached = await c.match(r);
+    if (!cached) return load(r);
+    await touch(r.url);
+    return Date.now() - (await age(r.url)) >= TTL ? load(r).catch(() => cached) : cached;
+  });
 
-self.addEventListener("install", (e) => {
+const sweep = async () => {
+  const [c, m] = await Promise.all([open(), openMeta()]);
+  await Promise.all(
+    (await m.matchAll()).map(async (res) => {
+      if (Date.now() - (await res.json().catch(() => 0)) < TTL) return;
+      await Promise.all([c.delete(res.url), m.delete(res.url)]);
+    })
+  );
+  await touch(SWEEP_KEY);
+};
+
+const maybeSweep = () => age(SWEEP_KEY).then((t) => Date.now() - t >= SWEEP_EVERY && sweep());
+
+sw.addEventListener("install", (e) => {
   e.waitUntil(
     open()
       .then((c) => c.add("/"))
-      .then(() => self.skipWaiting())
+      .then(() => touch("/"))
+      .then(() => sw.skipWaiting())
   );
 });
 
-self.addEventListener("activate", (e) => {
+sw.addEventListener("activate", (e) => {
   e.waitUntil(
     caches
       .keys()
       .then((ks) =>
         Promise.all(ks.filter((k) => k !== CACHE && k !== META).map((k) => caches.delete(k)))
       )
-      .then(() => self.clients.claim())
+      .then(() => sw.clients.claim())
   );
 });
 
-self.addEventListener("fetch", (e) => {
+sw.addEventListener("fetch", (e) => {
   const r = e.request;
   if (
     !r.url.startsWith("http") ||
@@ -60,15 +80,14 @@ self.addEventListener("fetch", (e) => {
     return;
 
   if (r.mode === "navigate") {
-    e.respondWith(
-      fetch(r)
-        .then((res) =>
-          open()
-            .then((c) => c.put("/", res.clone()))
-            .then(() => res)
-        )
-        .catch(() => caches.match("/"))
+    const nav = fetch(r).then((res) =>
+      open()
+        .then((c) => c.put("/", res.clone()))
+        .then(() => touch("/"))
+        .then(() => res)
     );
+    e.respondWith(nav.catch(() => caches.match("/")));
+    e.waitUntil(nav.catch(() => undefined).then(maybeSweep));
     return;
   }
 
