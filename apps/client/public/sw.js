@@ -10,7 +10,10 @@ const SWEEP_EVERY = 24 * 60 * 60 * 1000;
 const open = () => caches.open(CACHE);
 const openMeta = () => caches.open(META);
 
-const touch = (url) => openMeta().then((m) => m.put(url, new Response(Date.now())));
+const touch = (url) =>
+  openMeta()
+    .then((m) => m.put(url, new Response(Date.now())))
+    .catch(() => {});
 
 const age = (url) =>
   openMeta()
@@ -33,7 +36,7 @@ const fromCache = (r) =>
     const cached = await c.match(r);
     if (!cached) return load(r);
     await touch(r.url);
-    return Date.now() - (await age(r.url)) >= TTL ? load(r).catch(() => cached) : cached;
+    return cached;
   });
 
 const sweep = async () => {
@@ -41,13 +44,16 @@ const sweep = async () => {
   await Promise.all(
     (await m.matchAll()).map(async (res) => {
       if (Date.now() - (await res.json().catch(() => 0)) < TTL) return;
-      await Promise.all([c.delete(res.url), m.delete(res.url)]);
+      await Promise.all([c.delete(res.url), m.delete(res.url)]).catch(() => {});
     })
   );
   await touch(SWEEP_KEY);
 };
 
-const maybeSweep = () => age(SWEEP_KEY).then((t) => Date.now() - t >= SWEEP_EVERY && sweep());
+const maybeSweep = () =>
+  age(SWEEP_KEY)
+    .then((t) => Date.now() - t >= SWEEP_EVERY && sweep())
+    .catch(() => {});
 
 sw.addEventListener("install", (e) => {
   e.waitUntil(
