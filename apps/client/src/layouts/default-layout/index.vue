@@ -1,6 +1,6 @@
 <template>
   <div :class="styles.layout">
-    <!-- 背景装饰图 -->
+    <!-- #region 背景装饰图 -->
     <img
       :src="bgTop"
       alt=""
@@ -19,6 +19,7 @@
         props.bgDecorationVariant === 'default' ? styles.topOnly : ''
       ]"
     />
+    <!-- #endregion -->
 
     <!-- 顶部Logo -->
     <img v-if="props.showLogo" :src="logo" alt="Logo" :class="styles.topLogo" />
