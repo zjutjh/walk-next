@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 import ConfirmDialog from "@/components/confirm-dialog/index.vue";
 import ErrorBoundary from "@/components/error-boundary/index.vue";
@@ -26,7 +26,6 @@ import { useClientUserData, useTitleMeta } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 
 const route = useRoute();
-const router = useRouter();
 const { setupClientUserDataQuery } = useClientUserData();
 
 useEventListener(document, "click", (event) => {
@@ -37,12 +36,17 @@ useEventListener(document, "click", (event) => {
   if (!link) return;
 
   const hash = link.getAttribute("href");
-  const targetElement = hash && document.getElementById(hash.slice(1));
-  if (!targetElement) return;
+  if (!hash) return;
 
   event.preventDefault();
-  router.replace({ hash });
-  targetElement.scrollIntoView();
+  history.replaceState(history.state, "", `${location.pathname}${location.search}${hash}`);
+
+  const scrollToTarget = () => {
+    const el = document.querySelector(hash);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+  scrollToTarget();
+  setTimeout(scrollToTarget, 100);
 });
 
 useTitleMeta();
