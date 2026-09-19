@@ -13,6 +13,7 @@ import navbar from "@/components/navbar/index.vue";
 import { useClientUserData } from "@/composables";
 import profilePage from "@/pages/profile/index.vue";
 import teamInfoPage from "@/pages/team-info/index.vue";
+import { scrollToHash } from "@/utils";
 
 import { globalQueryClient } from "./vue-query";
 
@@ -286,19 +287,7 @@ routerInstance.afterEach((to, _from, failure) => {
   }
 
   // hash 定位：等待异步内容渲染后滚动到目标元素
-  if (to.hash) {
-    const hash = to.hash;
-    let attempts = 0;
-    const tryScroll = () => {
-      const el = document.querySelector(hash);
-      if (el) {
-        el.scrollIntoView();
-        return;
-      }
-      if (++attempts <= 10) setTimeout(tryScroll, 200);
-    };
-    tryScroll();
-  }
+  if (!failure && to.hash) scrollToHash(to.hash);
 });
 
 // 路由内部逻辑错误处理

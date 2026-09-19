@@ -24,6 +24,7 @@ import ConfirmDialog from "@/components/confirm-dialog/index.vue";
 import ErrorBoundary from "@/components/error-boundary/index.vue";
 import { useClientUserData, useTitleMeta } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
+import { scrollToHash } from "@/utils";
 
 const route = useRoute();
 const { setupClientUserDataQuery } = useClientUserData();
@@ -40,13 +41,7 @@ useEventListener(document, "click", (event) => {
 
   event.preventDefault();
   history.replaceState(history.state, "", `${location.pathname}${location.search}${hash}`);
-
-  const scrollToTarget = () => {
-    const el = document.querySelector(hash);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
-  scrollToTarget();
-  setTimeout(scrollToTarget, 100);
+  scrollToHash(hash, { behavior: "smooth" });
 });
 
 useTitleMeta();
