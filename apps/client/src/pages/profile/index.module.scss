@@ -1,0 +1,32 @@
+@use "@/styles/mixins" as ui;
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.noticeBar {
+  @include ui.card-container;
+
+  padding: 8px 16px;
+  font-weight: 600;
+  color: #9c6414;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(240, 166, 60, 0.25);
+  border: 2px solid rgba(240, 166, 60, 0.6);
+
+  :global(.van-notice-bar__left-icon),
+  :global(.van-notice-bar__right-icon) {
+    color: #bb520d;
+  }
+}
+
+.loadingContainer {
+  min-height: 220px;
+}
+
+.editButton {
+  margin-top: 2px;
+}

@@ -1,0 +1,21 @@
+.qrCode {
+  display: block;
+  width: 180px;
+  height: 180px;
+}
+
+.number {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  height: 24px;
+  margin: 0;
+  color: var(--van-gray-6);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.number strong {
+  color: var(--van-text-color);
+  font-size: 20px;
+}

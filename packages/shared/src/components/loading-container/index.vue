@@ -16,8 +16,9 @@
         :color="props.color"
         :text-size="props.textSize"
         :text-color="props.textColor"
-        ><slot name="text">{{ props.text }}</slot></van-loading
       >
+        <slot name="text">{{ props.text }}</slot>
+      </van-loading>
     </div>
   </div>
 </template>

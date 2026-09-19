@@ -1,0 +1,54 @@
+@use "@/styles/mixins" as ui;
+
+.form {
+  @include ui.form-container;
+
+  .fieldGroup {
+    @include ui.field-group;
+
+    .fieldLabel {
+      @include ui.field-label;
+    }
+
+    .optionalTag {
+      font-size: 12px;
+      font-weight: 400;
+      color: #999;
+      margin-left: 4px;
+    }
+
+    .fieldInput {
+      @include ui.custom-input;
+    }
+  }
+
+  .eyeButton {
+    @include ui.eye-button;
+  }
+
+  .labelRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .hintButton {
+    @include ui.eye-button;
+  }
+
+  .agreementRow {
+    @include ui.agreement-checkbox;
+  }
+
+  .termsLink {
+    font-weight: 500;
+    color: #734a23;
+    cursor: pointer;
+  }
+
+  .submitArea {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
+}
