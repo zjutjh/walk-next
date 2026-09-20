@@ -32,8 +32,11 @@
     justify-content: space-between;
   }
 
-  .hintButton {
-    @include ui.eye-button;
+  .helpButton {
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    color: #9e9589;
   }
 
   .agreementRow {

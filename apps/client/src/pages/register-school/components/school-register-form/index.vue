@@ -60,14 +60,11 @@
     <div :class="styles.fieldGroup">
       <div :class="styles.labelRow">
         <label :class="styles.fieldLabel">{{ t("密码") }}</label>
-        <button
-          :class="styles.hintButton"
-          type="button"
-          :aria-label="t('密码提示')"
-          @click.stop="handlePasswordHintClick"
-        >
-          <van-icon name="question-o" />
-        </button>
+        <help-button
+          :class="styles.helpButton"
+          :title="t('密码提示')"
+          :message="t('统一身份认证密码是您登录学校统一身份认证系统的密码')"
+        />
       </div>
       <van-field
         v-model="formValue.password"
@@ -151,7 +148,7 @@ import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { confirmDialog } from "@/composables";
+import HelpButton from "@/components/help-button/index.vue";
 import { getIdentityRules, getTelRules } from "@/constants/validation";
 
 import type { SchoolRegisterFormValue } from "../../types";
@@ -197,14 +194,6 @@ const stuIdPrompt = computed(() => (isStudent.value ? t("请输入学号") : t("
 // #region 交互与提交
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;
-};
-
-const handlePasswordHintClick = () => {
-  confirmDialog({
-    title: t("密码提示"),
-    message: t("统一身份认证密码是您登录学校统一身份认证系统的密码"),
-    dismissText: null
-  });
 };
 
 const handleNavigateTerms = () => {

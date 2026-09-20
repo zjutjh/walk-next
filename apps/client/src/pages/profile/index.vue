@@ -27,11 +27,7 @@
 
           <pass-code :user-id="userInfo.id" />
 
-          <quota-summary
-            :create-op="userInfo.create_op"
-            :join-op="userInfo.join_op"
-            @help="handleQuotaHelp"
-          />
+          <quota-summary :create-op="userInfo.create_op" :join-op="userInfo.join_op" />
 
           <profile-info-list :items="profileInfoItems" />
 
@@ -57,7 +53,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import { CLIENT_USER_INFO_QUERY_OPTIONS, confirmDialog, useClientUserData } from "@/composables";
+import { CLIENT_USER_INFO_QUERY_OPTIONS, useClientUserData } from "@/composables";
 
 import PassCode from "./components/pass-code/index.vue";
 import ProfileHeader from "./components/profile-header/index.vue";
@@ -102,13 +98,5 @@ function handleNavigateEdit() {
 
 function handleNavigateTeam() {
   return router.push({ name: "team-info" });
-}
-
-async function handleQuotaHelp() {
-  await confirmDialog({
-    title: t("剩余次数说明"),
-    message: t("剩余次数说明内容"),
-    dismissText: null
-  });
 }
 </script>

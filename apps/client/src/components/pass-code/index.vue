@@ -7,15 +7,12 @@
             <van-icon v-if="icon" :name="icon" />
             {{ title }}
             <span v-if="hint" :class="styles.hint">{{ hint }}</span>
-            <button
+            <help-button
               v-if="props.help"
-              type="button"
               :class="styles.helpButton"
-              :aria-label="$t('帮助')"
-              @click.stop="emit('help')"
-            >
-              <van-icon name="question-o" />
-            </button>
+              :title="props.helpTitle"
+              :message="props.helpMessage"
+            />
           </h2>
         </template>
         <div :class="styles.card">
@@ -29,6 +26,8 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 
+import HelpButton from "@/components/help-button/index.vue";
+
 import styles from "./index.module.scss";
 
 const props = withDefaults(
@@ -39,13 +38,11 @@ const props = withDefaults(
     expanded?: boolean;
     hint?: string;
     help?: boolean;
+    helpTitle?: string;
+    helpMessage?: string;
   }>(),
-  { expanded: true, icon: "", hint: "", help: false }
+  { expanded: true, icon: "", hint: "", help: false, helpTitle: "", helpMessage: "" }
 );
-
-const emit = defineEmits<{
-  help: [];
-}>();
 
 const activeNames = ref<string[]>(props.expanded ? ["code"] : []);
 

@@ -5,14 +5,7 @@
         <van-icon name="friends-o" />
         {{ t("剩余组队次数") }}
       </h2>
-      <button
-        type="button"
-        :class="styles.helpButton"
-        :aria-label="t('剩余次数说明')"
-        @click="emit('help')"
-      >
-        <van-icon name="question-o" />
-      </button>
+      <help-button :title="t('剩余次数说明')" :message="t('剩余次数说明内容')" />
     </div>
 
     <div :class="styles.grid">
@@ -31,15 +24,13 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 
+import HelpButton from "@/components/help-button/index.vue";
+
 import styles from "./index.module.scss";
 
 const props = defineProps<{
   createOp: number;
   joinOp: number;
-}>();
-
-const emit = defineEmits<{
-  help: [];
 }>();
 
 const { t } = useI18n();
