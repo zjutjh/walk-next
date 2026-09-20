@@ -15,8 +15,4 @@ export interface DefaultLayoutProps {
    * @default "default"
    */
   bgDecorationVariant?: "default" | "topAndBottom";
-  /** 是否隐藏背景装饰图
-   * @default false
-   */
-  hideBgDecoration?: boolean;
 }

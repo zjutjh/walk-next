@@ -1,3 +1,4 @@
+import type { Component } from "vue";
 import "vue-router";
 
 import type { UserRole } from "api/types/client";
@@ -13,7 +14,7 @@ declare module "vue-router" {
     pageName?: string;
     /** Layout */
     layout?: {
-      component?: never;
+      component?: Component;
       props?: DefaultLayoutProps;
     };
     /** 不需要登录即可访问 */
