@@ -1,7 +1,7 @@
-import type { Component } from "vue";
 import "vue-router";
 
 import type { UserRole } from "api/types/client";
+import type { Component } from "vue";
 
 import type { DefaultLayoutProps } from "@/layouts/default-layout/types";
 
@@ -14,7 +14,7 @@ declare module "vue-router" {
     pageName?: string;
     /** Layout */
     layout?: {
-      component?: Component;
+      component?: Component | (() => Promise<{ default: Component }>);
       props?: DefaultLayoutProps;
     };
     /** 不需要登录即可访问 */

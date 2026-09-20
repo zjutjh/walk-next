@@ -11,7 +11,6 @@ import {
 
 import navbar from "@/components/navbar/index.vue";
 import { useClientUserData } from "@/composables";
-import PlainLayout from "@/layouts/plain-layout/index.vue";
 import profilePage from "@/pages/profile/index.vue";
 import teamInfoPage from "@/pages/team-info/index.vue";
 import { scrollToHash } from "@/utils";
@@ -102,7 +101,7 @@ const routes: RouteRecordRaw[] = [
       pageName: "用户协议与隐私政策",
       allowNoAuth: true,
       layout: {
-        component: PlainLayout
+        component: () => import("@/layouts/plain-layout/index.vue")
       }
     }
   },
@@ -114,7 +113,7 @@ const routes: RouteRecordRaw[] = [
       pageName: "报名须知与免责协议",
       allowNoAuth: true,
       layout: {
-        component: PlainLayout
+        component: () => import("@/layouts/plain-layout/index.vue")
       }
     }
   },
