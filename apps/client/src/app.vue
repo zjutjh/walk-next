@@ -2,9 +2,9 @@
   <error-boundary>
     <component :is="layoutComponent" v-bind="route.meta.layout?.props ?? {}">
       <router-view :key="route.meta.recreateComponentByPath ? route.fullPath : undefined" />
-      <router-view v-slot="{ Component }" name="navbar">
+      <router-view v-slot="{ Component: NavBar }" name="navbar">
         <transition name="navbar">
-          <component :is="Component" v-if="Component" />
+          <component :is="NavBar" v-if="NavBar" />
         </transition>
       </router-view>
     </component>
@@ -30,9 +30,8 @@ const { setupClientUserDataQuery } = useClientUserData();
 const layoutComponent = computed<Component>(() => {
   const layout = route.meta.layout?.component;
   if (!layout) return DefaultLayout;
-  if (typeof layout === "function") {
+  if (typeof layout === "function")
     return defineAsyncComponent(layout as () => Promise<{ default: Component }>);
-  }
   return layout;
 });
 
