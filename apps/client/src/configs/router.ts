@@ -99,7 +99,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/user-agreement/index.vue"),
     meta: {
       pageName: "用户协议与隐私政策",
-      allowNoAuth: true
+      allowNoAuth: true,
+      layout: {
+        props: {
+          hideBgDecoration: true
+        }
+      }
     }
   },
   {
@@ -108,7 +113,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/registration-terms/index.vue"),
     meta: {
       pageName: "报名须知与免责协议",
-      allowNoAuth: true
+      allowNoAuth: true,
+      layout: {
+        props: {
+          hideBgDecoration: true
+        }
+      }
     }
   },
   {

@@ -1,24 +1,26 @@
 <template>
   <div :class="styles.layout">
     <!-- #region 背景装饰图 -->
-    <img
-      :src="bgTop"
-      alt=""
-      :class="[
-        styles.bgDecoration,
-        styles.top,
-        props.bgDecorationVariant === 'default' ? styles.topOnly : ''
-      ]"
-    />
-    <img
-      :src="bgBottom"
-      alt=""
-      :class="[
-        styles.bgDecoration,
-        styles.bottom,
-        props.bgDecorationVariant === 'default' ? styles.topOnly : ''
-      ]"
-    />
+    <template v-if="!props.hideBgDecoration">
+      <img
+        :src="bgTop"
+        alt=""
+        :class="[
+          styles.bgDecoration,
+          styles.top,
+          props.bgDecorationVariant === 'default' ? styles.topOnly : ''
+        ]"
+      />
+      <img
+        :src="bgBottom"
+        alt=""
+        :class="[
+          styles.bgDecoration,
+          styles.bottom,
+          props.bgDecorationVariant === 'default' ? styles.topOnly : ''
+        ]"
+      />
+    </template>
     <!-- #endregion -->
 
     <!-- 顶部Logo -->
@@ -63,7 +65,8 @@ const props = withDefaults(defineProps<DefaultLayoutProps>(), {
   showNavbar: true,
   showLogo: false,
   noPadding: false,
-  bgDecorationVariant: "default"
+  bgDecorationVariant: "default",
+  hideBgDecoration: false
 });
 
 const route = useRoute();
