@@ -22,11 +22,7 @@ import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import styles from "./index.module.scss";
-
-export interface PlainLayoutProps {
-  showNavbar?: boolean;
-  noPadding?: boolean;
-}
+import type { PlainLayoutProps } from "./types";
 
 const props = withDefaults(defineProps<PlainLayoutProps>(), {
   showNavbar: true,
