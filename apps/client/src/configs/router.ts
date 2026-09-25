@@ -229,6 +229,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       pageName: "反馈",
       layout: {
+        component: () => import("@/layouts/plain-layout/index.vue"),
         props: {
           noPadding: true
         }

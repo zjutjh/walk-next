@@ -10,7 +10,7 @@
       @click-left="handleBackClick"
     />
 
-    <main :class="styles.content">
+    <main :class="[styles.content, props.noPadding ? styles.noPadding : '']">
       <slot />
     </main>
   </div>
@@ -25,10 +25,12 @@ import styles from "./index.module.scss";
 
 export interface PlainLayoutProps {
   showNavbar?: boolean;
+  noPadding?: boolean;
 }
 
 const props = withDefaults(defineProps<PlainLayoutProps>(), {
-  showNavbar: true
+  showNavbar: true,
+  noPadding: false
 });
 
 const route = useRoute();
