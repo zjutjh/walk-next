@@ -1,0 +1,34 @@
+.popup {
+  max-height: 86vh;
+
+  .content {
+    box-sizing: border-box;
+    padding: 22px 16px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 10px;
+    color: #283224;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .list {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .loadingContainer {
+    min-height: 168px;
+  }
+
+  .actionArea {
+    margin: 20px 0 0;
+    display: grid;
+    gap: 12px;
+  }
+}

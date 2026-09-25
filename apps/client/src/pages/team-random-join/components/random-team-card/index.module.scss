@@ -1,0 +1,43 @@
+@use "@/styles/mixins" as ui;
+
+.teamCard {
+  @include ui.card-container;
+
+  transition: transform 0.2s ease;
+
+  &:active {
+    transform: scale(0.99);
+  }
+
+  & + & {
+    margin-top: 12px;
+  }
+
+  :global(.van-card__content) {
+    min-height: 72px;
+  }
+
+  :global(.van-card__title) {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #1f2937;
+  }
+
+  :global(.van-card__desc) {
+    margin-top: 6px;
+    color: #646566;
+  }
+
+  .memberCount {
+    font-size: 13px;
+    color: #4b5563;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+  }
+}

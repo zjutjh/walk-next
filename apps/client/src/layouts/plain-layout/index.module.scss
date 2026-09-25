@@ -1,0 +1,30 @@
+@use "@/styles/mixins" as ui;
+
+.layout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: #fff;
+
+  .navbar {
+    flex-shrink: 0;
+    --van-nav-bar-icon-color: var(--van-text-color-2);
+  }
+
+  .content {
+    @include ui.page-container;
+
+    z-index: 1;
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+    padding-bottom: var(--navbar-space, 16px);
+
+    &.noPadding {
+      padding: 0;
+    }
+  }
+}
