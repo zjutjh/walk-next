@@ -1,6 +1,6 @@
-﻿/// <reference lib="webworker" />
+/// <reference lib="webworker" />
 
-const sw = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (self));
+const sw = self as unknown as ServiceWorkerGlobalScope;
 
 // #region 缓存工具
 const CACHE = "jh-walk-cache-v1";
@@ -11,18 +11,18 @@ const SWEEP_EVERY = 24 * 60 * 60 * 1000;
 const open = () => caches.open(CACHE);
 const openMeta = () => caches.open(META);
 
-const touch = (url) =>
+const touch = (url: string): Promise<void> =>
   openMeta()
-    .then((m) => m.put(url, new Response(Date.now())))
-    .catch(() => {});
+    .then((m) => m.put(url, new Response(String(Date.now()))))
+    .catch(() => undefined);
 
-const age = (url) =>
+const age = (url: string): Promise<number> =>
   openMeta()
     .then((m) => m.match(url))
-    .then((res) => res.json())
+    .then((res) => res?.json() ?? 0)
     .catch(() => 0);
 
-const load = (r) =>
+const load = (r: Request): Promise<Response> =>
   fetch(r).then((res) => {
     if (!res.ok) return res;
     const clone = res.clone();
@@ -32,29 +32,36 @@ const load = (r) =>
       .then(() => res);
   });
 
-const fromCache = (r) =>
-  open().then(async (c) => {
-    const cached = await c.match(r);
-    if (!cached) return load(r);
-    await touch(r.url);
-    return cached;
-  });
-
-const sweep = async () => {
-  const [c, m] = await Promise.all([open(), openMeta()]);
-  await Promise.all(
-    (await m.matchAll()).map(async (res) => {
-      if (Date.now() - (await res.json().catch(() => 0)) < TTL) return;
-      await Promise.all([c.delete(res.url), m.delete(res.url)]).catch(() => {});
-    })
+const fromCache = (r: Request): Promise<Response> =>
+  open().then((c) =>
+    c.match(r).then((cached) => (cached ? touch(r.url).then(() => cached) : load(r)))
   );
-  await touch(SWEEP_KEY);
-};
 
-const maybeSweep = () =>
+const sweep = (): Promise<void> =>
+  Promise.all([open(), openMeta()]).then(([c, m]) =>
+    m
+      .matchAll()
+      .then((entries) =>
+        Promise.all(
+          entries.map((res) =>
+            res
+              .json()
+              .catch(() => 0)
+              .then((t) =>
+                Date.now() - t < TTL
+                  ? undefined
+                  : Promise.all([c.delete(res.url), m.delete(res.url)]).catch(() => undefined)
+              )
+          )
+        )
+      )
+      .then(() => touch(SWEEP_KEY))
+  );
+
+const maybeSweep = (): Promise<void> =>
   age(SWEEP_KEY)
-    .then((t) => Date.now() - t >= SWEEP_EVERY && sweep())
-    .catch(() => {});
+    .then((t) => (Date.now() - t >= SWEEP_EVERY ? sweep() : undefined))
+    .catch(() => undefined);
 // #endregion
 
 // #region 生命周期
@@ -80,7 +87,7 @@ sw.addEventListener("activate", (e) => {
 // #endregion
 
 // #region 请求拦截
-sw.addEventListener("fetch", (e) => {
+sw.addEventListener("fetch", (e: FetchEvent) => {
   const r = e.request;
   if (
     !r.url.startsWith("http") ||
@@ -97,7 +104,7 @@ sw.addEventListener("fetch", (e) => {
         .then(() => touch("/"))
         .then(() => res)
     );
-    e.respondWith(nav.catch(() => caches.match("/")));
+    e.respondWith(nav.catch(() => caches.match("/").then((c) => c ?? fetch(r))));
     e.waitUntil(nav.catch(() => undefined).then(maybeSweep));
     return;
   }

@@ -60,7 +60,16 @@ export default defineConfig(({ mode }) => {
       }
     },
     build: {
-      target: "es2015"
+      target: "es2015",
+      rollupOptions: {
+        input: {
+          index: path.resolve(__dirname, "index.html"),
+          sw: path.resolve(__dirname, "./sw.ts")
+        },
+        output: {
+          entryFileNames: (c) => (c.name === "sw" ? "sw.js" : "assets/[name]-[hash].js")
+        }
+      }
     }
   };
 });
