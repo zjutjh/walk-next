@@ -30,7 +30,6 @@
     "eslint-plugin-format": "catalog:infra",
     "eslint-plugin-prettier": "catalog:infra",
     "eslint-plugin-vue": "catalog:infra",
-    "jiti": "catalog:infra",
     "lint-staged": "catalog:infra",
     "prettier": "catalog:infra",
     "simple-git-hooks": "catalog:infra",

@@ -34,7 +34,6 @@ catalogs:
     eslint-plugin-format: ^1.4.0
     eslint-plugin-prettier: ^5.5.5
     eslint-plugin-vue: ^10.8.0
-    jiti: ^2.6.1
     lint-staged: ^16.2.7
     postcss-pxtorem: ^6.1.0
     prettier: ^3.8.1

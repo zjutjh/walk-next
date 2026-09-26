@@ -94,9 +94,6 @@ catalogs:
     eslint-plugin-vue:
       specifier: ^10.8.0
       version: 10.8.0
-    jiti:
-      specifier: ^2.6.1
-      version: 2.6.1
     lint-staged:
       specifier: ^16.2.7
       version: 16.2.7
@@ -181,9 +178,6 @@ importers:
       eslint-plugin-vue:
         specifier: catalog:infra
         version: 10.8.0(@stylistic/eslint-plugin@5.9.0(eslint@10.0.1(jiti@2.6.1)))(@typescript-eslint/parser@8.56.0(eslint@10.0.1(jiti@2.6.1))(typescript@5.9.3))(eslint@10.0.1(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@10.0.1(jiti@2.6.1)))
-      jiti:
-        specifier: catalog:infra
-        version: 2.6.1
       lint-staged:
         specifier: catalog:infra
         version: 16.2.7
@@ -1176,7 +1170,6 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-x64-musl@2.5.1':
     resolution: {integrity: sha512-n0E2EQbatQ3bXhcH2D1XIAANAcTZkQICBPVaxMeaCVBtOpBZpWJuf7LwyWPSBDITb7In8mqQgJ7gH8CILCURXg==}
@@ -6394,7 +6387,8 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  jiti@2.6.1: {}
+  jiti@2.6.1:
+    optional: true
 
   js-tokens@4.0.0: {}
 
