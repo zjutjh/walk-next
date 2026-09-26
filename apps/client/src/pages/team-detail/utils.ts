@@ -21,9 +21,11 @@ const MEMBER_ROLE_LABEL_MAP: Record<TeamMemberRole, string> = {
 };
 
 const WALK_STATUS_LABEL_MAP: Record<WalkStatus, string> = {
+  // eslint-disable-next-line camelcase
   not_start: "未开始",
   pending: "待确认",
   abandoned: "已放弃",
+  // eslint-disable-next-line camelcase
   in_progress: "进行中",
   withdrawn: "已退赛",
   violated: "违规",
