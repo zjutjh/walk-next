@@ -12,6 +12,8 @@
         :text="t('refresh.loading')"
       >
         <template v-if="teamOverview && !isOverviewLoading">
+          <team-progress />
+
           <team-pass-code
             v-if="teamDetail"
             :team-id="teamDetail.id"
@@ -96,6 +98,7 @@ import TeamMemberDetailPopup from "@/pages/team-detail/components/team-member-de
 import TeamMemberList from "@/pages/team-detail/components/team-member-list/index.vue";
 import TeamOverviewCard from "@/pages/team-detail/components/team-overview-card/index.vue";
 import TeamPassCode from "@/pages/team-info/components/team-pass-code/index.vue";
+import TeamProgress from "@/pages/team-info/components/team-progress/index.vue";
 import { walkClientService } from "@/utils";
 
 import styles from "./index.module.scss";

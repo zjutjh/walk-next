@@ -1,0 +1,124 @@
+.section {
+  padding: 16px;
+  border: 1px solid #e8ece6;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgb(40 50 36 / 6%);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.icon {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: #eef5e9;
+  color: #4f763e;
+  font-size: 22px;
+}
+
+.title {
+  margin: 0;
+  color: #283224;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.description {
+  margin: 4px 0 0;
+  color: #6b7468;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.stages {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: #a1a9a0;
+  text-align: center;
+}
+
+.stage:not(:last-child)::after {
+  position: absolute;
+  top: 11px;
+  left: calc(50% + 14px);
+  width: calc(100% - 28px);
+  height: 1px;
+  background: #dfe5dc;
+  content: "";
+}
+
+.stageMarker {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  box-sizing: border-box;
+  border: 1px solid #dfe5dc;
+  border-radius: 50%;
+  background: #fff;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.stageTitle {
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.currentStage {
+  color: #4f763e;
+  font-weight: 700;
+}
+
+.currentStage .stageMarker {
+  border-color: #4f763e;
+  background: #4f763e;
+  color: #fff;
+}
+
+.completedStage {
+  color: #71866a;
+}
+
+.completedStage .stageMarker {
+  border-color: #9bb391;
+  color: #71866a;
+}
+
+.completedStage:not(:last-child)::after {
+  background: #9bb391;
+}
+
+@media (max-width: 360px) {
+  .section {
+    padding: 14px 12px;
+  }
+
+  .stageTitle {
+    font-size: 10px;
+  }
+}
