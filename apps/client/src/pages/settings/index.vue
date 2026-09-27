@@ -5,7 +5,7 @@
 
       <van-cell :title="t('反馈')" to="/feedback" is-link />
       <van-cell :title="t('语言')" is-link @click="handleLanguageClick">
-        {{ locale ? LANG_DISPLAY_NAME[locale] : "" }}
+        {{ locale ? LANG_META[locale].name : "" }}
       </van-cell>
       <van-cell
         :class="styles.agreementCell"
@@ -41,7 +41,7 @@ import { useRouter } from "vue-router";
 import decorationImgUrl from "@/assets/images/setting-page-banner.jpg";
 import LanguageActionSheet from "@/components/language-action-sheet/index.vue";
 import { confirmDialog, useClientUserData, useUserLocale } from "@/composables";
-import { AGREEMENT_DATE, EVENT_SESSION, LANG_DISPLAY_NAME } from "@/constants";
+import { AGREEMENT_DATE, EVENT_SESSION, LANG_META } from "@/constants";
 import { useAgreementStore } from "@/store/agreement";
 
 import styles from "./index.module.scss";

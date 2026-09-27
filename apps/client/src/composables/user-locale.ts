@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 import { computed, nextTick, type WritableComputedRef } from "vue";
 import { type Composer, createI18n, type I18n, type I18nOptions, useI18n } from "vue-i18n";
 
-import { LANG_MAP, VALID_LANG, type ValidLanguage } from "@/constants";
+import { LANG_MAP, LANG_META, VALID_LANG, type ValidLanguage } from "@/constants";
 import { useLocaleStore } from "@/store/locale";
 
 const getInitLocale = (): string => {
@@ -31,8 +31,9 @@ export const loadLocaleMessages = async (i18n: Composer, locale: ValidLanguage):
 
 export const initI18n = async (): Promise<I18n> => {
   const locale = getInitLocale();
+  const lang = VALID_LANG.find((prefix) => locale.startsWith(prefix)) ?? "en";
   const messages = await import(
-    /* webpackChunkName: "locale-[request]" */ `../locales/${VALID_LANG.find((prefix) => locale.startsWith(prefix))}.yaml`
+    /* webpackChunkName: "locale-[request]" */ `../locales/${lang}.yaml`
   );
   const i18n: I18n = createI18n({
     locale,

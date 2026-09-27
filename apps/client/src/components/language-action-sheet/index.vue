@@ -14,7 +14,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { useUserLocale } from "@/composables";
-import { LANG_DISPLAY_NAME, VALID_LANG } from "@/constants";
+import { LANG_META, VALID_LANG } from "@/constants";
 
 import type { LanguageActionSheetAction } from "./types";
 
@@ -28,7 +28,7 @@ const isActionSheetVisible = defineModel<boolean>("visible", { required: true })
 const actionSheetActions = computed(() =>
   VALID_LANG.map(
     (langCode): LanguageActionSheetAction => ({
-      name: LANG_DISPLAY_NAME[langCode],
+      name: LANG_META[langCode].name,
       disabled: langCode === locale.value,
       langCode: langCode
     })
