@@ -1,5 +1,6 @@
 // import messages from "@intlify/unplugin-vue-i18n/messages"; // 全量词条
 import { storeToRefs } from "pinia";
+import { Locale } from "vant";
 import { computed, nextTick, type WritableComputedRef } from "vue";
 import { type Composer, createI18n, type I18n, type I18nOptions, useI18n } from "vue-i18n";
 
@@ -43,6 +44,7 @@ export const initI18n = async (): Promise<I18n> => {
     // messages
     messages: { [locale]: messages.default }
   } satisfies I18nOptions);
+  Locale.use(LANG_META[lang].vant);
   document.querySelector("html")?.setAttribute("lang", locale);
   return i18n;
 };
@@ -57,6 +59,7 @@ export const useUserLocale = (): {
       if (!i18n.availableLocales.includes(newLocale)) await loadLocaleMessages(i18n, newLocale);
       i18n.locale.value = newLocale;
       useLocaleStore().locale = newLocale;
+      Locale.use(LANG_META[newLocale].vant);
       document.querySelector("html")?.setAttribute("lang", newLocale);
     }
   });
