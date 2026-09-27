@@ -51,6 +51,32 @@ export interface QueryUserInfoResponse {
   wechat: string;
 }
 
+/** 通知信息 */
+export interface NoticeItem {
+  /** 通知展示文案 */
+  content: string;
+  /** 通知ID */
+  id: number;
+}
+
+/** 获取未读通知列表 请求 */
+export type QueryNoticeListRequest = undefined;
+
+/** 获取未读通知列表 响应 */
+export interface QueryNoticeListResponse {
+  /** 未读通知，按产生时间升序排列 */
+  notices: NoticeItem[];
+}
+
+/** 确认通知 请求 */
+export interface AckNoticeRequest {
+  /** 已确认的通知ID */
+  notice_id: number;
+}
+
+/** 确认通知 响应 */
+export type AckNoticeResponse = null;
+
 /** 修改用户信息 请求 */
 export interface UpdateUserInfoRequest {
   /** 联系方式 */

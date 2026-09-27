@@ -23,6 +23,27 @@ export default class WalkClientService<T> extends BaseService<T> {
     return this.request({ url, method, params }, options);
   }
 
+  /** 获取未读通知列表 */
+  QueryNoticeList(
+    req?: ClientAPI.QueryNoticeListRequest,
+    options?: T
+  ): Promise<ClientAPI.QueryNoticeListResponse> {
+    const url = this.genBaseURL("/user/notices");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
+  /** 确认通知 */
+  AckNotice(req: ClientAPI.AckNoticeRequest, options?: T): Promise<ClientAPI.AckNoticeResponse> {
+    const url = this.genBaseURL("/user/notices/ack");
+    const method = "POST";
+    const data = req;
+
+    return this.request({ url, method, data }, options);
+  }
+
   /** 修改用户信息 */
   UpdateUserInfo(
     req: ClientAPI.UpdateUserInfoRequest,

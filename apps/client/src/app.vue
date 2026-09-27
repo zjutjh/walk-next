@@ -20,7 +20,7 @@ import { useRoute } from "vue-router";
 
 import ConfirmDialog from "@/components/confirm-dialog/index.vue";
 import ErrorBoundary from "@/components/error-boundary/index.vue";
-import { useClientUserData, useTitleMeta } from "@/composables";
+import { setupClientNoticeQuery, useClientUserData, useTitleMeta } from "@/composables";
 import DefaultLayout from "@/layouts/default-layout/index.vue";
 import { scrollToHash } from "@/utils";
 
@@ -52,4 +52,5 @@ useEventListener(document, "click", (event) => {
 
 useTitleMeta();
 setupClientUserDataQuery();
+setupClientNoticeQuery();
 </script>
