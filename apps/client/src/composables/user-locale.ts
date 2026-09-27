@@ -23,9 +23,7 @@ const getInitLocale = (): string => {
 };
 
 export const loadLocaleMessages = async (i18n: Composer, locale: ValidLanguage): Promise<void> => {
-  const messages = await import(
-    /* webpackChunkName: "locale-[request]" */ `../locales/${locale}.yaml`
-  );
+  const messages = await import(`../locales/${locale}.yaml`);
   i18n.setLocaleMessage(locale, messages.default);
   return nextTick();
 };
@@ -33,9 +31,7 @@ export const loadLocaleMessages = async (i18n: Composer, locale: ValidLanguage):
 export const initI18n = async (): Promise<I18n> => {
   const locale = getInitLocale();
   const lang = VALID_LANG.find((prefix) => locale.startsWith(prefix)) ?? "en";
-  const messages = await import(
-    /* webpackChunkName: "locale-[request]" */ `../locales/${lang}.yaml`
-  );
+  const messages = await import(`../locales/${lang}.yaml`);
   const i18n: I18n = createI18n({
     locale,
     fallbackLocale: "zh-Hans",
