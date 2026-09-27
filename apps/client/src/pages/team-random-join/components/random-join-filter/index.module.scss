@@ -21,6 +21,7 @@
 
   .routeButtons {
     --van-button-small-height: 48px;
+    --van-button-small-padding: 10px 8px;
     --van-button-radius: 12px;
     --van-button-primary-background: linear-gradient(135deg, #be8f58, #d4a76a);
     --van-button-primary-border-color: transparent;
@@ -32,20 +33,19 @@
     display: flex;
     gap: 12px;
 
+    :global(.van-sticky--fixed) & {
+      --van-button-small-height: 40px;
+      --van-button-small-padding: 7px 8px;
+    }
+
     :global(.van-button) {
       flex: 1;
-      padding: 10px 8px;
       font-weight: 500;
       transition: all 0.2s ease;
 
       &:active {
         transform: scale(0.98);
       }
-    }
-
-    :global(.van-sticky--fixed) & :global(.van-button) {
-      height: 40px;
-      padding: 7px 8px;
     }
 
     :global(.van-button--default) {

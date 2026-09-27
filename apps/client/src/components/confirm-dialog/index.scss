@@ -54,6 +54,9 @@
 
   &__footer {
     /* 按钮主题经 Vant CSS 变量注入：灰色确认 / 绿色再想想，单确认模式自动复用绿色 */
+    --van-button-small-height: 40px;
+    --van-button-small-font-size: 15px;
+    --van-button-radius: 999px;
     --van-button-default-color: #3d4759;
     --van-button-default-background: #cccccc;
     --van-button-default-border-color: transparent;
@@ -69,13 +72,7 @@
   &__action,
   &__dismiss {
     flex: 1;
-    height: 40px;
+    font-weight: 500;
     border: none;
-    border-radius: 999px;
-
-    .van-button__text {
-      font-size: 15px;
-      font-weight: 500;
-    }
   }
 }

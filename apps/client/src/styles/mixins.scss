@@ -67,8 +67,12 @@
 
 /// 圆角描边输入框（校验错误提示置于外侧下方）
 @mixin custom-input {
-  padding: 0;
-  background: transparent;
+  --van-cell-vertical-padding: 0;
+  --van-cell-horizontal-padding: 0;
+  --van-cell-background: transparent;
+  --van-field-input-text-color: #333;
+  --van-field-placeholder-text-color: #9e9589;
+  --van-field-error-message-font-size: 12px;
 
   &::after {
     display: none !important;
@@ -77,7 +81,6 @@
   :global(.van-field__value) {
     display: flex;
     flex-direction: column;
-    overflow: visible;
   }
 
   :global(.van-field__body) {
@@ -91,33 +94,31 @@
 
   :global(.van-field__control) {
     font-size: 15px;
-    color: #333;
-
-    &::placeholder {
-      color: #9e9589;
-    }
   }
 
   :global(.van-field__error-message) {
     margin-top: 4px;
     padding-left: 2px;
-    font-size: 12px;
     line-height: 1.4;
-    color: var(--van-danger-color, #ee0a24);
   }
 }
 
 /// 白底棕边阴影按钮
 @mixin custom-button {
+  --van-button-default-color: #734a23;
+  --van-button-default-background: #fff;
+  --van-button-default-border-color: #be8f58;
+  --van-button-primary-color: #734a23;
+  --van-button-primary-background: #fff;
+  --van-button-primary-border-color: #be8f58;
+  --van-button-border-width: 1.5px;
+  --van-button-radius: 12px;
+
   min-width: 150px;
   height: 44px;
   font-size: 18px;
   font-weight: 600;
-  color: #734a23;
   cursor: pointer;
-  background: #fff;
-  border: 1.5px solid #be8f58;
-  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(190, 143, 88, 0.25);
   transition: all 0.2s ease;
 
@@ -125,12 +126,6 @@
     background: #fcf8f3;
     box-shadow: 0 2px 6px rgba(190, 143, 88, 0.2);
     transform: translateY(1px);
-  }
-
-  .van-button__text {
-    font-size: 18px;
-    font-weight: 600;
-    color: #734a23;
   }
 }
 
@@ -156,20 +151,10 @@
   font-size: 13px;
   color: #777;
 
-  :global(.van-checkbox__icon) {
-    font-size: 16px;
-  }
-
-  :global(.van-checkbox__icon--checked .van-icon) {
-    background-color: #be8f58;
-    border-color: #be8f58;
-  }
-
-  :global(.van-checkbox__label) {
-    margin-left: 6px;
-    font-size: 13px;
-    color: #666;
-  }
+  --van-checkbox-size: 16px;
+  --van-checkbox-checked-icon-color: #be8f58;
+  --van-checkbox-label-margin: 6px;
+  --van-checkbox-label-color: #666;
 }
 
 /// 装饰图片通用样式

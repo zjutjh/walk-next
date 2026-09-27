@@ -38,17 +38,18 @@
 
   /* 胶囊容器（覆盖 van-tabbar 默认的固定定位与高度） */
   .bottom-nav {
-    box-sizing: border-box;
-    width: 100%;
-    height: auto;
-    padding: 10px;
-    gap: 10px;
-    border-radius: 8px;
-    background: linear-gradient(
+    --van-tabbar-height: auto;
+    --van-tabbar-background: linear-gradient(
       180deg,
       rgb(206 224 166 / 88%) 0%,
       rgb(197 220 153 / 82%) 100%
     );
+
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 8px;
     box-shadow: 0 5px 14px rgb(62 87 28 / 16%);
     backdrop-filter: blur(2px);
     pointer-events: auto;
@@ -58,15 +59,16 @@
     }
 
     .van-tabbar-item {
+      --van-tabbar-item-text-color: #2a2f26;
+      --van-tabbar-item-active-color: #20251f;
+
       height: auto;
       padding: 0;
-      color: #2a2f26;
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgb(43 56 22 / 12%);
 
       &--active {
-        color: #20251f;
         box-shadow: 0 4px 10px rgb(43 56 22 / 20%);
 
         .bottom-nav-item__icon {

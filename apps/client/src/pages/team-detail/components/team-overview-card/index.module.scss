@@ -1,7 +1,5 @@
 .card {
-  :global(.van-cell__value) {
-    color: #1f2937;
-  }
+  --van-cell-value-color: #1f2937;
 }
 
 .sectionTitle {

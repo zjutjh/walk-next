@@ -3,6 +3,10 @@
 .teamCard {
   @include ui.card-container;
 
+  --van-card-text-color: #1f2937;
+  --van-card-title-line-height: 1.4;
+  --van-card-desc-color: #646566;
+
   transition: transform 0.2s ease;
 
   &:active {
@@ -19,13 +23,10 @@
 
   :global(.van-card__title) {
     font-size: 16px;
-    line-height: 1.4;
-    color: #1f2937;
   }
 
   :global(.van-card__desc) {
     margin-top: 6px;
-    color: #646566;
   }
 
   .memberCount {

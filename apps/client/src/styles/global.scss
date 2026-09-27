@@ -2,6 +2,13 @@
 
 body {
   font-size: initial;
+
+  --van-cell-background: transparent;
+  --van-cell-active-color: color-mix(
+    in srgb,
+    var(--van-active-color) 20%,
+    transparent
+  );
 }
 
 // 隐藏Edge/IE自带的密码明文按钮，避免与自定义的显示密码按钮冲突
@@ -22,18 +29,6 @@ html {
 
   .van-cell-group__title--inset {
     padding: 0 12px;
-  }
-
-  .van-cell--clickable:active {
-    background: color-mix(
-      in srgb,
-      var(--van-cell-active-color) 20%,
-      transparent
-    );
-  }
-
-  .van-cell {
-    background: transparent;
   }
 
   .van-card,
