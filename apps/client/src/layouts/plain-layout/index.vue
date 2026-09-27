@@ -1,7 +1,7 @@
 <template>
   <div :class="styles.layout">
     <van-nav-bar
-      v-if="props.showNavbar"
+      v-if="props.showNavbar && pageTitle"
       :title="pageTitle"
       left-arrow
       safe-area-inset-top
