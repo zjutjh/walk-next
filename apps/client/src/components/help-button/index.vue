@@ -3,7 +3,7 @@
     type="button"
     :class="styles.helpButton"
     :aria-label="props.ariaLabel"
-    @click="handleClick"
+    @click.stop="handleClick"
   >
     <van-icon :name="props.icon" />
   </button>
