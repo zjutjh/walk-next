@@ -1,5 +1,12 @@
 <template>
-  <section :class="styles.section" :aria-label="label">
+  <section
+    :class="[styles.section, isTitlePressing ? styles.titlePressing : undefined]"
+    :aria-label="label"
+    @pointerdown.capture="handlePointerDown"
+    @pointerup="isTitlePressing = false"
+    @pointercancel="isTitlePressing = false"
+    @pointerleave="isTitlePressing = false"
+  >
     <van-collapse v-model="activeNames" :border="false">
       <van-collapse-item name="code" :border="false">
         <template #title>
@@ -7,12 +14,9 @@
             <van-icon v-if="icon" :name="icon" />
             {{ title }}
             <span v-if="hint" :class="styles.hint">{{ hint }}</span>
-            <help-button
-              v-if="props.help"
-              :class="styles.helpButton"
-              :title="props.helpTitle"
-              :message="props.helpMessage"
-            />
+            <span v-if="props.help" :class="styles.helpButton">
+              <help-button :title="props.helpTitle" :message="props.helpMessage" />
+            </span>
           </h2>
         </template>
         <div :class="styles.card">
@@ -45,6 +49,12 @@ const props = withDefaults(
 );
 
 const activeNames = ref<string[]>(props.expanded ? ["code"] : []);
+const isTitlePressing = ref(false);
+
+function handlePointerDown(event: PointerEvent) {
+  isTitlePressing.value =
+    event.target instanceof Element && !event.target.closest(`.${styles.helpButton}`);
+}
 
 watch(
   () => props.expanded,

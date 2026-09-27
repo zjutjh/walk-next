@@ -14,6 +14,10 @@
   :global(.van-collapse-item__title) {
     cursor: pointer;
     align-items: center;
+    background: transparent;
+    transition:
+      opacity 100ms ease,
+      transform 100ms ease;
   }
 }
 
@@ -27,6 +31,13 @@
   font-weight: 700;
   line-height: 1.4;
   -webkit-tap-highlight-color: transparent;
+}
+
+.titlePressing {
+  :global(.van-collapse-item__title) {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
 }
 
 .helpButton {
