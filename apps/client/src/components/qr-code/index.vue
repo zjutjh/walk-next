@@ -11,6 +11,9 @@ const props = defineProps<{
   value: string;
 }>();
 
-/** 将二维码内容渲染为 data-url */
-const qrDataUrl = useQRCode(toRef(() => props.value));
+/** 将二维码内容渲染为 data-url；默认 scale 4 只有 132px 左右，被 180px 容器放大后会糊 */
+const qrDataUrl = useQRCode(
+  toRef(() => props.value),
+  { scale: 20 }
+);
 </script>
