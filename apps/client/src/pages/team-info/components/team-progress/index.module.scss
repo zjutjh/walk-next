@@ -40,77 +40,19 @@
 }
 
 .stages {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 4px;
-  margin: 18px 0 0;
-  padding: 0;
-  list-style: none;
-}
+  margin-top: 18px;
 
-.stage {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-  color: #a1a9a0;
-  text-align: center;
-}
-
-.stage:not(:last-child)::after {
-  position: absolute;
-  top: 11px;
-  left: calc(50% + 14px);
-  width: calc(100% - 28px);
-  height: 1px;
-  background: #dfe5dc;
-  content: "";
-}
-
-.stageMarker {
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  box-sizing: border-box;
-  border: 1px solid #dfe5dc;
-  border-radius: 50%;
-  background: #fff;
-  font-size: 12px;
-  line-height: 1;
+  --van-step-active-color: #4f763e;
+  --van-step-text-color: #a1a9a0;
+  --van-step-finish-text-color: #71866a;
+  --van-step-line-color: #dfe5dc;
+  --van-step-finish-line-color: #9bb391;
 }
 
 .stageTitle {
   overflow-wrap: anywhere;
   font-size: 11px;
   line-height: 1.3;
-}
-
-.currentStage {
-  color: #4f763e;
-  font-weight: 700;
-}
-
-.currentStage .stageMarker {
-  border-color: #4f763e;
-  background: #4f763e;
-  color: #fff;
-}
-
-.completedStage {
-  color: #71866a;
-}
-
-.completedStage .stageMarker {
-  border-color: #9bb391;
-  color: #71866a;
-}
-
-.completedStage:not(:last-child)::after {
-  background: #9bb391;
 }
 
 @media (max-width: 360px) {

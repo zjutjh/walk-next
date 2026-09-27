@@ -8,25 +8,11 @@
       </div>
     </div>
 
-    <ol :class="styles.stages">
-      <li
-        v-for="(stage, index) in WALK_STAGES"
-        :key="stage.title"
-        :class="[
-          styles.stage,
-          {
-            [styles.currentStage!]: index === CURRENT_STAGE_INDEX,
-            [styles.completedStage!]: index < CURRENT_STAGE_INDEX
-          }
-        ]"
-      >
-        <span :class="styles.stageMarker">
-          <van-icon v-if="index < CURRENT_STAGE_INDEX" name="success" />
-          <span v-else>{{ index + 1 }}</span>
-        </span>
+    <van-steps :class="styles.stages" :active="CURRENT_STAGE_INDEX">
+      <van-step v-for="stage in WALK_STAGES" :key="stage.title">
         <span :class="styles.stageTitle">{{ t(stage.title) }}</span>
-      </li>
-    </ol>
+      </van-step>
+    </van-steps>
   </section>
 </template>
 
