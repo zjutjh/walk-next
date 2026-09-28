@@ -11,11 +11,10 @@ import {
 
 import navbar from "@/components/navbar/index.vue";
 import { useClientUserData } from "@/composables";
+import { globalQueryClient } from "@/configs";
 import profilePage from "@/pages/profile/index.vue";
 import teamInfoPage from "@/pages/team-info/index.vue";
 import { scrollToHash } from "@/utils";
-
-import { globalQueryClient } from "./vue-query";
 
 // #region 路由表
 const routes: RouteRecordRaw[] = [
