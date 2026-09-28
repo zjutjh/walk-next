@@ -30,7 +30,7 @@ export const loadLocaleMessages = async (i18n: Composer, locale: ValidLanguage):
 
 export const initI18n = async (): Promise<I18n> => {
   const locale = getInitLocale();
-  const lang = VALID_LANG.find((prefix) => locale.startsWith(prefix)) ?? "en";
+  const lang: ValidLanguage = VALID_LANG.find((prefix) => locale.startsWith(prefix)) ?? "en";
   const messages = await import(`../locales/${lang}.yaml`);
   const i18n: I18n = createI18n({
     locale,
