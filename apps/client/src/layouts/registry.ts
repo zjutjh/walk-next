@@ -33,7 +33,7 @@ const modules = import.meta.glob<AsyncComponentLoader>("./*/index.vue");
 const result: Record<string, AsyncComponentLoader> = {};
 for (const [path, loader] of Object.entries(modules)) {
   const name = path.split("/")[1];
-  if (name) result[name] = loader;
+  if (name && name !== "default-layout") result[name] = loader;
 }
 
 export const layouts = result as Record<
