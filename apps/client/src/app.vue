@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
-import { type Component, computed, defineAsyncComponent } from "vue";
+import { type AsyncComponentLoader, type Component, computed, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 
 import ConfirmDialog from "@/components/confirm-dialog/index.vue";
@@ -30,8 +30,7 @@ const { setupClientUserDataQuery } = useClientUserData();
 const layoutComponent = computed<Component>(() => {
   const layout = route.meta.layout?.component;
   if (!layout) return DefaultLayout;
-  if (typeof layout === "function")
-    return defineAsyncComponent(layout as () => Promise<{ default: Component }>);
+  if (typeof layout === "function") return defineAsyncComponent(layout as AsyncComponentLoader);
   return layout;
 });
 
