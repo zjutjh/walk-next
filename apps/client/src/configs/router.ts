@@ -100,9 +100,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       pageName: "用户协议与隐私政策",
       allowNoAuth: true,
-      layout: {
-        component: () => import("@/layouts/plain-layout/index.vue")
-      }
+      layout: { name: "plain-layout" }
     }
   },
   {
@@ -112,9 +110,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       pageName: "报名须知与免责协议",
       allowNoAuth: true,
-      layout: {
-        component: () => import("@/layouts/plain-layout/index.vue")
-      }
+      layout: { name: "plain-layout" }
     }
   },
   {
@@ -229,7 +225,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       pageName: "反馈",
       layout: {
-        component: () => import("@/layouts/plain-layout/index.vue"),
+        name: "plain-layout",
         props: {
           noPadding: true
         }

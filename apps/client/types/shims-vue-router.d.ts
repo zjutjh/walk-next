@@ -1,10 +1,8 @@
 import "vue-router";
 
 import type { UserRole } from "api/types/client";
-import type { AsyncComponentLoader, Component } from "vue";
 
-import type { DefaultLayoutProps } from "@/layouts/default-layout/types";
-import type { PlainLayoutProps } from "@/layouts/plain-layout/types";
+import type { RouteLayout } from "@/layouts/registry";
 
 // To ensure it is treated as a module, add at least one `export` statement
 export {};
@@ -14,10 +12,7 @@ declare module "vue-router" {
     /** 页面名称（i18n 词条 key） */
     pageName?: string;
     /** Layout */
-    layout?: {
-      component?: Component | AsyncComponentLoader;
-      props?: DefaultLayoutProps | PlainLayoutProps;
-    };
+    layout?: RouteLayout;
     /** 不需要登录即可访问 */
     allowNoAuth?: boolean;
     /** 路由参数变化时强制重建组件 */

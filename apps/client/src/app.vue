@@ -15,23 +15,22 @@
 
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
-import { type AsyncComponentLoader, type Component, computed, defineAsyncComponent } from "vue";
+import { type Component, computed, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 
 import ConfirmDialog from "@/components/confirm-dialog/index.vue";
 import ErrorBoundary from "@/components/error-boundary/index.vue";
 import { setupClientNoticeQuery, useClientUserData, useTitleMeta } from "@/composables";
-import DefaultLayout from "@/layouts/default-layout/index.vue";
+import { DefaultLayout, layouts } from "@/layouts/registry";
 import { scrollToHash } from "@/utils";
 
 const route = useRoute();
 const { setupClientUserDataQuery } = useClientUserData();
 
 const layoutComponent = computed<Component>(() => {
-  const layout = route.meta.layout?.component;
-  if (!layout) return DefaultLayout;
-  if (typeof layout === "function") return defineAsyncComponent(layout as AsyncComponentLoader);
-  return layout;
+  const name = route.meta.layout?.name ?? "default-layout";
+  if (name === "default-layout") return DefaultLayout;
+  return defineAsyncComponent(layouts[name]);
 });
 
 useEventListener(document, "click", (event) => {
