@@ -9,8 +9,8 @@ import {
 } from "vue-router";
 
 import { useClientUserData } from "@/composables";
-import { globalQueryClient } from "@/configs";
-import { scrollToHash } from "@/utils";
+import { globalQueryClient } from "@/configs/vue-query";
+import { scrollToHash } from "@/utils/scroll-to-hash";
 
 import routes from "./routes";
 

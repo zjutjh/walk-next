@@ -5,6 +5,7 @@ import { RequestError, RESP_CODE } from "shared";
 import { showToast } from "vant";
 
 import { useClientUserData } from "@/composables";
+import { routerInstance } from "@/configs/router";
 import { globalQueryClient } from "@/configs/vue-query";
 
 const SERVICE_TIMEOUT = 15000 as const;
@@ -13,7 +14,6 @@ const axiosInstance = axios.create({ timeout: SERVICE_TIMEOUT });
 let isRedirecting = false;
 
 const redirectTo = async (name: string, query?: Record<string, string>) => {
-  const { routerInstance } = await import("@/configs/router");
   const currentRoute = routerInstance.currentRoute.value;
 
   if (currentRoute.name === name) return;
@@ -56,10 +56,9 @@ axiosInstance.interceptors.response.use(
           handleRedirect(
             "login",
             body.code === RESP_CODE.NOT_LOGGED_IN ? "未登录" : "登录过期，请重新登录",
-            async () => {
-              const { routerInstance } = await import("@/configs/router");
-              return { fromPath: encodeURIComponent(routerInstance.currentRoute.value.fullPath) };
-            },
+            () => ({
+              fromPath: encodeURIComponent(routerInstance.currentRoute.value.fullPath)
+            }),
             true
           );
           throw new RequestError("登录过期，请重新登录", body.code);
