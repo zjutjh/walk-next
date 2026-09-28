@@ -1,9 +1,9 @@
 <template>
-  <van-cell-group inset :class="styles.card" :aria-label="t('profile')">
+  <van-cell-group inset :class="styles.card" :aria-label="$t('profile')">
     <template #title>
       <div :class="styles.sectionTitle">
         <van-icon name="user-o" />
-        <span>{{ t("profile") }}</span>
+        <span>{{ $t("profile") }}</span>
       </div>
     </template>
 
@@ -16,14 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-
 import type { ProfileInfoItem } from "../../types";
 import styles from "./index.module.scss";
 
 const props = defineProps<{
   items: readonly ProfileInfoItem[];
 }>();
-
-const { t } = useI18n();
 </script>

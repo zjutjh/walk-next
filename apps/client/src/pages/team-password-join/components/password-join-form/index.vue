@@ -3,10 +3,10 @@
     <van-cell-group inset>
       <van-field
         v-model="formValue.teamId"
-        :rules="createRequiredRuleWithMessage(t('请输入团队编号'))"
-        :label="t('团队编号')"
+        :rules="createRequiredRuleWithMessage($t('请输入团队编号'))"
+        :label="$t('团队编号')"
         name="teamId"
-        :placeholder="t('请输入团队编号')"
+        :placeholder="$t('请输入团队编号')"
         type="digit"
         inputmode="numeric"
         autocomplete="off"
@@ -15,12 +15,12 @@
 
       <van-field
         v-model="formValue.password"
-        :rules="createRequiredRuleWithMessage(t('请输入团队密码'))"
+        :rules="createRequiredRuleWithMessage($t('请输入团队密码'))"
         :type="isPasswordVisible ? 'text' : 'password'"
-        :label="t('团队密码')"
+        :label="$t('团队密码')"
         name="password"
         maxlength="64"
-        :placeholder="t('请输入团队密码')"
+        :placeholder="$t('请输入团队密码')"
         autocomplete="off"
         clearable
       >
@@ -28,7 +28,7 @@
           <button
             :class="styles.eyeButton"
             type="button"
-            :aria-label="t('切换密码显示')"
+            :aria-label="$t('切换密码显示')"
             @click.stop="handlePasswordVisibleClick()"
           >
             <van-icon :name="isPasswordVisible ? 'eye-o' : 'closed-eye'" />
@@ -39,7 +39,7 @@
 
     <div :class="styles.submitArea">
       <van-button block round type="primary" native-type="submit" :loading="props.loading">
-        {{ t("立即加入") }}
+        {{ $t("立即加入") }}
       </van-button>
     </div>
   </van-form>
@@ -50,7 +50,6 @@ import { useToggle } from "@vueuse/core";
 import { createRequiredRuleWithMessage } from "shared";
 import type { FormInstance } from "vant";
 import { reactive, useTemplateRef } from "vue";
-import { useI18n } from "vue-i18n";
 
 import type { PasswordJoinFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -65,7 +64,6 @@ const emit = defineEmits<{
   submit: [value: PasswordJoinFormValue];
 }>();
 
-const { t } = useI18n();
 const formRef = useTemplateRef<FormInstance>("formRef");
 
 const formValue = reactive({

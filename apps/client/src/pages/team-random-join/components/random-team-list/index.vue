@@ -1,6 +1,6 @@
 <template>
   <section :class="styles.teamList">
-    <p :class="styles.countText">{{ t("共找到{n}支队伍", { n: displayedTeams.length }) }}</p>
+    <p :class="styles.countText">{{ $t("共找到{n}支队伍", { n: displayedTeams.length }) }}</p>
 
     <error-empty :error="props.error" :disabled="props.loading" @btn-click="emit('retry')">
       <van-pull-refresh
@@ -13,11 +13,11 @@
           :class="styles.loadingContainer"
           :style="{ '--loading-center': spinnerCenter }"
           :loading="overlayVisible"
-          :text="t('refresh.loading')"
+          :text="$t('refresh.loading')"
         >
           <van-empty
             v-if="displayedTeams.length === 0 && !props.loading"
-            :description="t('暂无可加入队伍')"
+            :description="$t('暂无可加入队伍')"
           />
 
           <!-- 换场分两段：旧卡播完飞出动画（class 驱动，卡片不脱离文档流），
@@ -56,7 +56,6 @@ import { useElementBounding, useWindowSize } from "@vueuse/core";
 import { ErrorEmpty, LoadingContainer } from "shared";
 import type { ComponentPublicInstance } from "vue";
 import { computed, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
 
 import type { RandomJoinTeam } from "../../types";
 import RandomTeamCard from "../random-team-card/index.vue";
@@ -77,8 +76,6 @@ const emit = defineEmits<{
   retry: [];
   refresh: [];
 }>();
-
-const { t } = useI18n();
 
 /** 实际渲染的列表：切换筛选时先让旧卡片飞出，完毕后再换成新数据飞入 */
 const displayedTeams = ref<RandomJoinTeam[]>([]);

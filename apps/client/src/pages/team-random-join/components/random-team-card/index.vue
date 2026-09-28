@@ -2,16 +2,16 @@
   <van-card
     :class="styles.teamCard"
     :title="props.team.name"
-    :desc="props.team.slogan || t('暂无口号')"
+    :desc="props.team.slogan || $t('暂无口号')"
   >
     <template #tags>
-      <van-tag round type="success">{{ t("无需申请") }}</van-tag>
+      <van-tag round type="success">{{ $t("无需申请") }}</van-tag>
     </template>
 
     <template #footer>
       <div :class="styles.footer">
         <span :class="styles.memberCount">
-          {{ t("{n}/{m} 人", { n: props.team.num, m: MAXIMUM_TEAM_SIZE }) }}
+          {{ $t("{n}/{m} 人", { n: props.team.num, m: MAXIMUM_TEAM_SIZE }) }}
         </span>
         <van-button
           round
@@ -20,7 +20,7 @@
           :loading="props.loading"
           @click="emit('join', props.team.id)"
         >
-          {{ t("加入队伍") }}
+          {{ $t("加入队伍") }}
         </van-button>
       </div>
     </template>
@@ -28,8 +28,6 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-
 import { MAXIMUM_TEAM_SIZE } from "@/constants";
 
 import type { RandomJoinTeam } from "../../types";
@@ -43,6 +41,4 @@ const props = defineProps<{
 const emit = defineEmits<{
   join: [teamId: number];
 }>();
-
-const { t } = useI18n();
 </script>

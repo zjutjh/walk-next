@@ -37,7 +37,7 @@
           size="small"
           @click="settle(true)"
         >
-          {{ dialogOptions.actionText ?? t("确认") }}
+          {{ dialogOptions.actionText ?? $t("确认") }}
         </van-button>
         <van-button
           v-if="!isSingleAction"
@@ -46,7 +46,7 @@
           size="small"
           @click="settle(false)"
         >
-          {{ dialogOptions.dismissText ?? t("再想想") }}
+          {{ dialogOptions.dismissText ?? $t("再想想") }}
         </van-button>
       </div>
     </div>
@@ -57,11 +57,9 @@
 import "./index.scss";
 
 import { computed } from "vue";
-import { useI18n } from "vue-i18n";
 
 import { useConfirmDialog } from "@/composables";
 
-const { t } = useI18n();
 const { isVisible, dialogOptions, settle } = useConfirmDialog();
 
 /** 纯提示模式：dismissText 为 null 时仅保留确认按钮 */

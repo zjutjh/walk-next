@@ -5,7 +5,7 @@
     <decoration :src="tomatoJamImage" top="250px" left="0" width="150px" max-width="37.5vw" />
 
     <div :class="styles.content">
-      <h1 :class="styles.title">{{ t("请选择您的身份") }}</h1>
+      <h1 :class="styles.title">{{ $t("请选择您的身份") }}</h1>
 
       <div :class="styles.cardContainer">
         <div :class="styles.cardList">
@@ -16,11 +16,11 @@
             @click="selectOption(option.route)"
           >
             <img :src="option.image" :alt="option.label" :class="styles.cardImage" />
-            <span :class="styles.cardName">{{ t(option.name) }}</span>
+            <span :class="styles.cardName">{{ $t(option.name) }}</span>
             <div :class="styles.cardOverlay" />
             <span :class="styles.cardLabel">
               <img :src="tomatoJamImage" :class="styles.cardIcon" />
-              {{ t(option.label) }}
+              {{ $t(option.label) }}
             </span>
           </div>
         </div>
@@ -31,11 +31,11 @@
         :disabled="!selectedOption"
         @click="confirmSelection"
       >
-        {{ t("确认") }}
+        {{ $t("确认") }}
       </button>
 
       <router-link :class="styles.loginLink" :to="{ name: 'login', query: route.query }" replace>
-        {{ t("已有账号？去登录") }}
+        {{ $t("已有账号？去登录") }}
       </router-link>
     </div>
   </div>
@@ -43,7 +43,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import hero1 from "@/assets/images/hero-1.jpg";
@@ -57,7 +56,6 @@ import styles from "./index.module.scss";
 
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n();
 
 const selectedOption = ref<string | null>(null);
 

@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => {
         compiler: "vue3"
       }),
       AutoImport({
-        resolvers: [VantResolver(), IconsResolver()],
+        resolvers: [IconsResolver()],
         dts: "types/auto-imports.d.ts"
       }),
       Components({

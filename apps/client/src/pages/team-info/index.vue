@@ -3,14 +3,14 @@
     <loading-container
       :class="styles.loadingPage"
       :loading="!isUserInfoReady"
-      :text="t('refresh.loading')"
+      :text="$t('refresh.loading')"
     >
       <template v-if="isUserInfoReady">
         <unjoined-team-home v-if="isUnjoined" />
         <joined-team v-else-if="isJoined" />
 
         <div v-else :class="styles.placeholderPage">
-          <van-empty :description="t('暂无团队状态')" />
+          <van-empty :description="$t('暂无团队状态')" />
         </div>
       </template>
     </loading-container>
@@ -20,7 +20,6 @@
 <script setup lang="ts">
 import { LoadingContainer } from "shared";
 import { computed } from "vue";
-import { useI18n } from "vue-i18n";
 
 import { useClientUserData } from "@/composables";
 
@@ -28,7 +27,6 @@ import JoinedTeam from "./components/joined-team/index.vue";
 import UnjoinedTeamHome from "./components/unjoined-team/index.vue";
 import styles from "./index.module.scss";
 
-const { t } = useI18n();
 const { clientUserInfo } = useClientUserData();
 
 const isUserInfoReady = computed(() => Boolean(clientUserInfo.value));
