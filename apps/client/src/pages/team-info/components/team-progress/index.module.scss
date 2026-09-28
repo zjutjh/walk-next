@@ -1,9 +1,11 @@
+@use "@/styles/mixins.scss" as ui;
+
 .section {
+  @include ui.card-container;
+
+  position: relative;
+  height: 125px;
   padding: 16px;
-  border: 1px solid #e8ece6;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 4px 14px rgb(40 50 36 / 6%);
 }
 
 .header {
@@ -19,14 +21,14 @@
   padding: 10px;
   box-sizing: border-box;
   border-radius: 50%;
-  background: #eef5e9;
-  color: #4f763e;
+  background: rgba(190, 143, 88, 0.12);
+  color: #734a23;
   font-size: 22px;
 }
 
 .title {
   margin: 0;
-  color: #283224;
+  color: #1f2937;
   font-size: 17px;
   font-weight: 700;
   line-height: 1.4;
@@ -34,19 +36,28 @@
 
 .description {
   margin: 4px 0 0;
-  color: #6b7468;
+  color: #8a94a6;
   font-size: 12px;
   line-height: 1.6;
 }
 
 .stages {
-  margin-top: 18px;
+  position: absolute;
+  right: 16px;
+  bottom: 0;
+  left: 16px;
+  width: auto;
 
-  --van-step-active-color: #4f763e;
+  --van-steps-background: transparent;
+  --van-step-active-color: #be8f58;
   --van-step-text-color: #a1a9a0;
-  --van-step-finish-text-color: #71866a;
-  --van-step-line-color: #dfe5dc;
-  --van-step-finish-line-color: #9bb391;
+  --van-step-finish-text-color: #734a23;
+  --van-step-line-color: #e8e0d8;
+  --van-step-finish-line-color: #d4b896;
+
+  :global(.van-step__circle-container) {
+    background-color: transparent;
+  }
 }
 
 .stageTitle {
@@ -58,6 +69,11 @@
 @media (max-width: 360px) {
   .section {
     padding: 14px 12px;
+  }
+
+  .stages {
+    right: 12px;
+    left: 12px;
   }
 
   .stageTitle {
