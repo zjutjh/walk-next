@@ -52,8 +52,10 @@ const activeNames = ref<string[]>(props.expanded ? ["code"] : []);
 const isTitlePressing = ref(false);
 
 function handlePointerDown(event: PointerEvent) {
+  const target = event.target instanceof Element ? event.target : null;
   isTitlePressing.value =
-    event.target instanceof Element && !event.target.closest(`.${styles.helpButton}`);
+    Boolean(target?.closest(".van-collapse-item__title")) &&
+    !target?.closest(`.${styles.helpButton}`);
 }
 
 watch(
