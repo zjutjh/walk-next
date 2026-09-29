@@ -103,6 +103,7 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useClipboard, useShare } from "@vueuse/core";
 import { ErrorEmpty, LoadingContainer, RequestError, RESP_CODE } from "shared";
 import { type ShareSheetOption, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
@@ -365,32 +366,33 @@ const shareUrl = computed(() => {
   return url.toString();
 });
 
+const { copy } = useClipboard();
+const { share, isSupported: isShareSupported } = useShare(
+  computed(() => ({
+    title: t("分享队伍"),
+    text: teamDetail.value?.name,
+    url: shareUrl.value
+  }))
+);
+
 const shareOptions = computed<ShareSheetOption[]>(() => [
   { name: t("复制链接"), icon: "link-o" },
   { name: t("展示二维码"), icon: "qr" },
-  ...(typeof navigator.share === "function" ? [{ name: t("系统分享"), icon: "share-o" }] : [])
+  ...(isShareSupported.value ? [{ name: t("系统分享"), icon: "share-o" }] : [])
 ]);
 
 const handleShareClick = () => {
   isShareSheetShow.value = true;
 };
 
-const handleCopyLink = async () => {
-  try {
-    await navigator.clipboard.writeText(shareUrl.value);
-    showSuccessToast({ message: t("复制成功") });
-  } catch {
-    showErrorToast(t("复制失败，请手动分享"));
-  }
+const handleCopyLink = () => {
+  copy(shareUrl.value);
+  showSuccessToast({ message: t("复制成功") });
 };
 
 const handleNativeShare = async () => {
   try {
-    await navigator.share({
-      title: t("分享队伍"),
-      text: teamDetail.value?.name,
-      url: shareUrl.value
-    });
+    await share();
   } catch (error) {
     // 用户主动取消分享时不提示
     if (error instanceof DOMException && error.name === "AbortError") return;
@@ -403,7 +405,7 @@ const handleShareSelect = async (option: ShareSheetOption) => {
 
   if (option.icon === "qr") isQrPopupShow.value = true;
   else if (option.icon === "share-o") await handleNativeShare();
-  else if (option.icon === "link-o") await handleCopyLink();
+  else if (option.icon === "link-o") handleCopyLink();
 };
 
 const handleDisbandClick = async () => {
