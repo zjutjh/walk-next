@@ -372,7 +372,6 @@ const shareOptions = computed<ShareSheetOption[]>(() => [
 ]);
 
 const handleShareClick = () => {
-  if (!teamDetail.value) return;
   isShareSheetShow.value = true;
 };
 
@@ -386,8 +385,6 @@ const handleCopyLink = async () => {
 };
 
 const handleNativeShare = async () => {
-  if (!shareUrl.value) return;
-
   try {
     await navigator.share({
       title: t("分享队伍"),
