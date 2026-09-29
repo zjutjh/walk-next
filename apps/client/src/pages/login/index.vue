@@ -66,11 +66,9 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
     updateUserInfo(userInfo);
 
     const fromPath = route.query.fromPath;
-    if (typeof fromPath === "string" && fromPath) {
+    if (typeof fromPath === "string" && fromPath)
       await router.replace(decodeURIComponent(fromPath));
-    } else {
-      await router.replace({ name: "team-info" });
-    }
+    else await router.replace({ name: "team-info" });
   },
   onError: (error: unknown) => {
     const message = error instanceof Error ? error.message : t("登录失败，请稍后重试");
