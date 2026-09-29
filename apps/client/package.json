@@ -27,7 +27,7 @@
     "shared": "workspace:*",
     "vant": "catalog:frontend",
     "vue": "catalog:frontend",
-    "vue-i18n": "^11.4.8",
+    "vue-i18n": "^11.4.12",
     "vue-router": "catalog:frontend"
   },
   "devDependencies": {
