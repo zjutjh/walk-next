@@ -51,7 +51,7 @@
 
     <div :class="styles.submitArea">
       <van-button native-type="submit" :loading="props.loading">
-        {{ t("提交") }}
+        {{ t("登录") }}
       </van-button>
     </div>
   </van-form>
