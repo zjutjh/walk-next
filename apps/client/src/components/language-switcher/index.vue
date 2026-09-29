@@ -15,15 +15,19 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
+
 import { useUserLocale } from "@/composables";
+import { LANG_META, VALID_LANG } from "@/constants";
 
 import styles from "./index.module.scss";
 
 const { locale } = useUserLocale();
 
-const languageOptions = [
-  { label: "中", value: "zh-Hans" },
-  { label: "繁", value: "zh-Hant" },
-  { label: "EN", value: "en" }
-] as const;
+const languageOptions = computed(() =>
+  VALID_LANG.map((value) => ({
+    label: LANG_META[value].short,
+    value
+  }))
+);
 </script>
