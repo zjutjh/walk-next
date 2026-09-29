@@ -147,8 +147,7 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
   onSuccess: async () => {
     showSuccessToast({
       message: t("加入成功！"),
-      duration: 3000,
-      position: "top"
+      duration: 3000
     });
 
     // 人数与加入次数已变动，拉取最新用户信息
@@ -164,8 +163,7 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
   onError: (error) => {
     joiningTeamId.value = undefined;
     showFailToast({
-      message: (error instanceof RequestError && error.message) || t("加入失败，请稍后重试"),
-      position: "top"
+      message: (error instanceof RequestError && error.message) || t("加入失败，请稍后重试")
     });
   }
 });

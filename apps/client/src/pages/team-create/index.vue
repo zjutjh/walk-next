@@ -37,8 +37,7 @@ const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({
   onSuccess: async () => {
     showSuccessToast({
       message: t("创建成功！"),
-      duration: 3000,
-      position: "top"
+      duration: 3000
     });
 
     const userInfo = await queryClient.fetchQuery({
@@ -54,8 +53,7 @@ const { mutate: mutateCreateTeam, isPending: isCreatePending } = useMutation({
     const message = error instanceof Error ? error.message : t("创建失败，请稍后重试");
 
     showFailToast({
-      message,
-      position: "top"
+      message
     });
   }
 });

@@ -55,8 +55,7 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
     }),
   onSuccess: async (data) => {
     showSuccessToast({
-      message: t("登录成功"),
-      position: "top"
+      message: t("登录成功")
     });
 
     updateClientLoginData(data.jwt);
@@ -78,8 +77,7 @@ const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
   onError: (error: unknown) => {
     const message = error instanceof Error ? error.message : t("登录失败，请稍后重试");
     showFailToast({
-      message,
-      position: "top"
+      message
     });
   }
 });

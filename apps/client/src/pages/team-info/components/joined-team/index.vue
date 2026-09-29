@@ -422,17 +422,9 @@ const handleNativeShare = async () => {
 const handleShareSelect = async (option: ShareSheetOption) => {
   isShareSheetShow.value = false;
 
-  if (option.icon === "qr") {
-    isQrPopupShow.value = true;
-    return;
-  }
-
-  if (option.icon === "share-o") {
-    await handleNativeShare();
-    return;
-  }
-
-  if (option.icon === "link-o") await handleCopyLink();
+  if (option.icon === "qr") isQrPopupShow.value = true;
+  else if (option.icon === "share-o") await handleNativeShare();
+  else if (option.icon === "link-o") await handleCopyLink();
 };
 
 const handleDisbandClick = async () => {

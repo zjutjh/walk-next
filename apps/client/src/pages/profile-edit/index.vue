@@ -59,7 +59,7 @@ const { isPending: isUpdatePending, mutate: mutateUpdateUserInfo } = useMutation
   mutationFn: (value: ProfileEditFormValue) =>
     walkClientService.UpdateUserInfo(toUpdateUserInfoRequest(value)),
   onError: (updateError) => {
-    showFailToast({ message: updateError.message || t("更新失败"), position: "top" });
+    showFailToast({ message: updateError.message || t("更新失败") });
   },
   onSuccess: handleUpdateSuccess
 });
@@ -82,7 +82,7 @@ async function handleUpdateSuccess() {
   const refreshedUserInfo = await queryClient.fetchQuery(CLIENT_USER_INFO_QUERY_OPTIONS);
   updateUserInfo(refreshedUserInfo);
 
-  showSuccessToast({ message: t("更新成功"), position: "top" });
+  showSuccessToast({ message: t("更新成功") });
   return router.replace({ name: "profile" });
 }
 </script>

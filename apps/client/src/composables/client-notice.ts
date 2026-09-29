@@ -60,8 +60,7 @@ export const setupClientNoticeQuery = () => {
         });
       } catch (error) {
         showFailToast({
-          message: error instanceof Error ? error.message : t("通知确认失败，请稍后重试"),
-          position: "top"
+          message: error instanceof Error ? error.message : t("通知确认失败，请稍后重试")
         });
       } finally {
         isShowingNotices = false;

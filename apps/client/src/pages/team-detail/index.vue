@@ -108,8 +108,7 @@ const refreshTeamData = async () => {
 const showErrorToast = (message: string) => {
   showFailToast({
     message,
-    duration: 3000,
-    position: "top"
+    duration: 3000
   });
 };
 
@@ -127,8 +126,7 @@ const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = use
   onSuccess: async () => {
     showSuccessToast({
       message: t("更新成功"),
-      duration: 3000,
-      position: "top"
+      duration: 3000
     });
     isTeamEditPopupOpened.value = false;
     await refreshTeamData();

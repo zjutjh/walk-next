@@ -39,7 +39,7 @@ routerInstance.beforeEach((to) => {
   }
 
   if (!isLoggedIn.value && !to.meta.allowNoAuth) {
-    showToast({ message: "未登录", position: "bottom" });
+    showToast({ message: "未登录" });
     return redirect({ name: "login", query: { fromPath: encodeURIComponent(to.fullPath) } });
   }
 

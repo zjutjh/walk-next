@@ -32,7 +32,7 @@ const handleRedirect = (
   if (isRedirecting) return;
   isRedirecting = true;
 
-  showToast({ message, position: "bottom" });
+  showToast({ message });
 
   void (async () => {
     const query = await getQuery?.();
