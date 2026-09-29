@@ -67,17 +67,13 @@ const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
       : walkClientService.StudentRegister(payload);
   },
   onSuccess: () => {
-    showSuccessToast({
-      message: t("注册成功")
-    });
+    showSuccessToast({ message: t("注册成功") });
 
     router.replace({ name: "login", query: route.query });
   },
   onError: (error: unknown) => {
     const message = error instanceof Error ? error.message : t("注册失败，请稍后重试");
-    showFailToast({
-      message
-    });
+    showFailToast({ message });
   }
 });
 

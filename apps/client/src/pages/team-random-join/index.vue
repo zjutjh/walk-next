@@ -145,10 +145,7 @@ const isRefreshBtnVisible = computed(() => scrollY.value > 50 && !isPullRefreshi
 const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMutation({
   mutationFn: (teamId: number) => walkClientService.RandomJoinTeam({ id: teamId }),
   onSuccess: async () => {
-    showSuccessToast({
-      message: t("加入成功！"),
-      duration: 3000
-    });
+    showSuccessToast({ message: t("加入成功！") });
 
     // 人数与加入次数已变动，拉取最新用户信息
     const userInfo = await queryClient.fetchQuery({

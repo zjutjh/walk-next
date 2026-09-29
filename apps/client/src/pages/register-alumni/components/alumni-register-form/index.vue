@@ -182,9 +182,7 @@ const handleSubmit = async () => {
   }
 
   if (!isAgreed.value) {
-    showToast({
-      message: t("请阅读并同意《用户协议与隐私政策》")
-    });
+    showToast({ message: t("请阅读并同意《用户协议与隐私政策》") });
     return;
   }
 

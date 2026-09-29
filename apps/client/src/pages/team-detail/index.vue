@@ -106,10 +106,7 @@ const refreshTeamData = async () => {
 };
 
 const showErrorToast = (message: string) => {
-  showFailToast({
-    message,
-    duration: 3000
-  });
+  showFailToast({ message });
 };
 
 const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = useMutation({
@@ -124,10 +121,7 @@ const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = use
       route_name: value.routeName
     }),
   onSuccess: async () => {
-    showSuccessToast({
-      message: t("更新成功"),
-      duration: 3000
-    });
+    showSuccessToast({ message: t("更新成功") });
     isTeamEditPopupOpened.value = false;
     await refreshTeamData();
 

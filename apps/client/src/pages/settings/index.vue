@@ -71,9 +71,7 @@ const handleLogoutClick = async () => {
 
   resetClientUserData();
 
-  showSuccessToast({
-    message: t("已退出登录")
-  });
+  showSuccessToast({ message: t("已退出登录") });
 
   await router.replace({ name: "login" });
 };

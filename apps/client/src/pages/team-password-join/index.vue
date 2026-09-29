@@ -62,10 +62,7 @@ const { mutate: mutateJoinTeam, isPending: isJoinPending } = useMutation({
       password: value.password
     }),
   onSuccess: async () => {
-    showSuccessToast({
-      message: t("加入成功！"),
-      duration: 3000
-    });
+    showSuccessToast({ message: t("加入成功！") });
 
     const userInfo = await queryClient.fetchQuery({
       queryKey: [CLIENT_QUERY_KEY.USER.SELF],

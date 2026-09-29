@@ -226,10 +226,7 @@ const getSubmitErrorMessage = (error: Error) => {
 };
 
 const showErrorToast = (message: string) => {
-  showFailToast({
-    message,
-    duration: 3000
-  });
+  showFailToast({ message });
 };
 // #endregion
 
@@ -237,10 +234,7 @@ const showErrorToast = (message: string) => {
 const { mutate: mutateSubmitTeam, isPending: isSubmitTeamPending } = useMutation({
   mutationFn: () => walkClientService.SubmitTeam(),
   onSuccess: async () => {
-    showSuccessToast({
-      message: t("提交成功"),
-      duration: 3000
-    });
+    showSuccessToast({ message: t("提交成功") });
     await refreshTeamData();
   },
   onError: (error) => {
@@ -251,10 +245,7 @@ const { mutate: mutateSubmitTeam, isPending: isSubmitTeamPending } = useMutation
 const { mutate: mutateUndoTeamSubmission, isPending: isUndoTeamSubmissionPending } = useMutation({
   mutationFn: () => walkClientService.UndoTeamSubmission(),
   onSuccess: async () => {
-    showSuccessToast({
-      message: t("取消提交成功"),
-      duration: 3000
-    });
+    showSuccessToast({ message: t("取消提交成功") });
     await refreshTeamData();
   },
   onError: (error) => {
@@ -265,10 +256,7 @@ const { mutate: mutateUndoTeamSubmission, isPending: isUndoTeamSubmissionPending
 const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutation({
   mutationFn: () => walkClientService.DisbandTeam(),
   onSuccess: async () => {
-    showSuccessToast({
-      message: t("解散成功"),
-      duration: 3000
-    });
+    showSuccessToast({ message: t("解散成功") });
     await refreshClientUserData();
     await router.replace({ name: "team-info" });
   },
@@ -280,7 +268,7 @@ const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutati
 const { mutate: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation({
   mutationFn: () => walkClientService.LeaveTeam(),
   onSuccess: async () => {
-    showSuccessToast({ message: t("退出成功"), duration: 3000 });
+    showSuccessToast({ message: t("退出成功") });
     await refreshClientUserData();
     await router.replace({ name: "team-info" });
   },
@@ -292,10 +280,7 @@ const { mutate: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation({
 const { mutate: mutateRemoveMember, isPending: isRemoveMemberPending } = useMutation({
   mutationFn: (memberId: number) => walkClientService.RemoveTeamMember({ id: memberId }),
   onSuccess: async () => {
-    showSuccessToast({
-      message: t("删除成功"),
-      duration: 3000
-    });
+    showSuccessToast({ message: t("删除成功") });
     handleMemberPopupClose();
     await refreshTeamData();
   },
@@ -307,10 +292,7 @@ const { mutate: mutateRemoveMember, isPending: isRemoveMemberPending } = useMuta
 const { mutate: mutateTransferCaptain, isPending: isTransferCaptainPending } = useMutation({
   mutationFn: (memberId: number) => walkClientService.UpdateTeamCaptain({ id: memberId }),
   onSuccess: async () => {
-    showSuccessToast({
-      message: t("移交成功"),
-      duration: 3000
-    });
+    showSuccessToast({ message: t("移交成功") });
     handleMemberPopupClose();
     await Promise.all([refreshTeamData(), refreshClientUserData()]);
   },
@@ -397,7 +379,7 @@ const handleShareClick = () => {
 const handleCopyLink = async () => {
   try {
     await navigator.clipboard.writeText(shareUrl.value);
-    showSuccessToast({ message: t("复制成功"), duration: 3000 });
+    showSuccessToast({ message: t("复制成功") });
   } catch {
     showErrorToast(t("复制失败，请手动分享"));
   }
