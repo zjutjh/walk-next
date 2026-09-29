@@ -54,6 +54,8 @@
         {{ t("登录") }}
       </van-button>
     </div>
+
+    <button type="button" :class="styles.helpLink" @click="emit('help')">戳这解答</button>
   </van-form>
 </template>
 
@@ -76,6 +78,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   submit: [value: LoginFormValue];
+  help: [];
 }>();
 
 const router = useRouter();

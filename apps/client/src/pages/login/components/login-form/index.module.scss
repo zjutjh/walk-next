@@ -35,4 +35,19 @@
     justify-content: center;
     margin-top: 8px;
   }
+
+  .helpLink {
+    align-self: center;
+    padding: 0;
+    font-size: 14px;
+    color: #734a23;
+    text-decoration: underline;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    &:active {
+      opacity: 0.7;
+    }
+  }
 }
