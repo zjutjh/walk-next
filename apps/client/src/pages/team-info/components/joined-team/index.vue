@@ -105,13 +105,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { useClipboard, useShare } from "@vueuse/core";
 import { ErrorEmpty, LoadingContainer, RequestError, RESP_CODE } from "shared";
-import { type ShareSheetOption, showFailToast, showSuccessToast } from "vant";
+import { type ShareSheetOption, showDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import QrCode from "@/components/qr-code/index.vue";
-import { confirmDialog, useClientUserData } from "@/composables";
+import { useClientUserData } from "@/composables";
 import { CLIENT_QUERY_KEY } from "@/constants";
 import TeamMemberDetailPopup from "@/pages/team-detail/components/team-member-detail-popup/index.vue";
 import TeamMemberList from "@/pages/team-detail/components/team-member-list/index.vue";
@@ -331,23 +331,27 @@ const handleMemberPopupClose = () => {
 };
 
 const handleRemoveMemberClick = async (memberId: number) => {
-  const isConfirmed = await confirmDialog({
+  const isConfirmed = await showDialog({
     title: t("删除队员"),
-    message: t("确认将该队员移出队伍吗？")
-  });
+    message: t("确认将该队员移出队伍吗？"),
+    showCancelButton: true,
+    theme: "round-button"
+  }).catch(() => undefined);
 
-  if (!isConfirmed) return;
+  if (isConfirmed !== "confirm") return;
 
   mutateRemoveMember(memberId);
 };
 
 const handleTransferCaptainClick = async (memberId: number) => {
-  const isConfirmed = await confirmDialog({
+  const isConfirmed = await showDialog({
     title: t("移交队长"),
-    message: t("确认将队长移交给该队员吗？移交后你将变为队员。")
-  });
+    message: t("确认将队长移交给该队员吗？移交后你将变为队员。"),
+    showCancelButton: true,
+    theme: "round-button"
+  }).catch(() => undefined);
 
-  if (!isConfirmed) return;
+  if (isConfirmed !== "confirm") return;
 
   mutateTransferCaptain(memberId);
 };
@@ -400,23 +404,27 @@ const handleShareSelect = async (option: ShareSheetOption) => {
 };
 
 const handleDisbandClick = async () => {
-  const isConfirmed = await confirmDialog({
+  const isConfirmed = await showDialog({
     title: t("解散队伍"),
-    message: t("确认解散当前队伍吗？解散后所有队员都需要重新加入队伍。")
-  });
+    message: t("确认解散当前队伍吗？解散后所有队员都需要重新加入队伍。"),
+    showCancelButton: true,
+    theme: "round-button"
+  }).catch(() => undefined);
 
-  if (!isConfirmed) return;
+  if (isConfirmed !== "confirm") return;
 
   mutateDisbandTeam();
 };
 
 const handleLeaveTeamClick = async () => {
-  const isConfirmed = await confirmDialog({
+  const isConfirmed = await showDialog({
     title: t("退出队伍"),
-    message: t("确认退出当前队伍吗？退出后需要重新加入队伍。")
-  });
+    message: t("确认退出当前队伍吗？退出后需要重新加入队伍。"),
+    showCancelButton: true,
+    theme: "round-button"
+  }).catch(() => undefined);
 
-  if (!isConfirmed) return;
+  if (isConfirmed !== "confirm") return;
 
   mutateLeaveTeam();
 };
@@ -428,12 +436,14 @@ const handleSubmissionClick = async () => {
   }
 
   if (teamDetail.value.submitted) {
-    const isConfirmed = await confirmDialog({
+    const isConfirmed = await showDialog({
       title: t("取消提交"),
-      message: t("确认取消当前队伍提交状态吗？")
+      message: t("确认取消当前队伍提交状态吗？"),
+      showCancelButton: true,
+      theme: "round-button"
     });
 
-    if (!isConfirmed) return;
+    if (isConfirmed !== "confirm") return;
 
     mutateUndoTeamSubmission();
     return;

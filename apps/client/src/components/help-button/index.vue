@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { confirmDialog } from "@/composables";
+import { showDialog } from "vant";
 
 import styles from "./index.module.scss";
 
@@ -25,10 +25,11 @@ const props = withDefaults(
 );
 
 async function handleClick() {
-  await confirmDialog({
+  await showDialog({
     title: props.title,
     message: props.message,
-    dismissText: null
+    showCancelButton: false,
+    theme: "round-button"
   });
 }
 </script>

@@ -8,8 +8,6 @@
         </transition>
       </router-view>
     </component>
-
-    <confirm-dialog />
   </error-boundary>
 </template>
 
@@ -18,7 +16,6 @@ import { useEventListener } from "@vueuse/core";
 import { type Component, computed, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 
-import ConfirmDialog from "@/components/confirm-dialog/index.vue";
 import ErrorBoundary from "@/components/error-boundary/index.vue";
 import { setupClientNoticeQuery, useClientUserData, useTitleMeta } from "@/composables";
 import { DefaultLayout, layouts } from "@/layouts/registry";

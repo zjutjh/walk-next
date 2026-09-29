@@ -33,14 +33,14 @@
 </template>
 
 <script setup lang="ts">
-import { showSuccessToast } from "vant";
+import { showDialog, showSuccessToast } from "vant";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import decorationImgUrl from "@/assets/images/setting-page-banner.jpg";
 import LanguageActionSheet from "@/components/language-action-sheet/index.vue";
-import { confirmDialog, useClientUserData, useUserLocale } from "@/composables";
+import { useClientUserData, useUserLocale } from "@/composables";
 import { AGREEMENT_DATE, EVENT_SESSION, LANG_META } from "@/constants";
 import { useAgreementStore } from "@/store/agreement";
 
@@ -61,13 +61,15 @@ const handleLanguageClick = () => {
 
 /** 点击退出登录 */
 const handleLogoutClick = async () => {
-  const isConfirmed = await confirmDialog({
+  const isConfirmed = await showDialog({
     title: t("您是否确认退出？"),
-    actionText: t("确认"),
-    dismissText: t("再想想")
-  });
+    confirmButtonText: t("确认"),
+    cancelButtonText: t("再想想"),
+    showCancelButton: true,
+    theme: "round-button"
+  }).catch(() => undefined);
 
-  if (!isConfirmed) return;
+  if (isConfirmed !== "confirm") return;
 
   resetClientUserData();
 

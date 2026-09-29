@@ -1,5 +1,5 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { showFailToast } from "vant";
+import { showDialog, showFailToast } from "vant";
 import { watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
@@ -8,7 +8,6 @@ import { CLIENT_QUERY_KEY } from "@/constants";
 import { walkClientService } from "@/utils";
 
 import { useClientUserData } from "./client-user-data";
-import { confirmDialog } from "./confirm-dialog";
 
 const CLIENT_NOTICE_QUERY_OPTIONS = queryOptions({
   queryKey: [CLIENT_QUERY_KEY.USER.NOTICE_LIST] as const,
@@ -46,11 +45,12 @@ export const setupClientNoticeQuery = () => {
 
       try {
         for (const notice of data.notices) {
-          await confirmDialog({
+          await showDialog({
             title: t("通知"),
             message: notice.content,
-            actionText: t("我知道了"),
-            dismissText: null
+            confirmButtonText: t("我知道了"),
+            showCancelButton: false,
+            theme: "round-button"
           });
           await acknowledgeNotice(notice.id);
         }

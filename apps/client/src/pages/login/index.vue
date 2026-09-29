@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { RequestError, RESP_CODE } from "shared";
-import { showFailToast, showSuccessToast } from "vant";
+import { showDialog, showFailToast, showSuccessToast } from "vant";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -35,7 +35,7 @@ import { useRoute, useRouter } from "vue-router";
 import thumbsUpImage from "@/assets/images/thumbs-up.png";
 import Decoration from "@/components/decoration/index.vue";
 import LanguageSwitcher from "@/components/language-switcher/index.vue";
-import { confirmDialog, useClientUserData } from "@/composables";
+import { useClientUserData } from "@/composables";
 import { CLIENT_QUERY_KEY } from "@/constants";
 import { walkClientService } from "@/utils";
 
@@ -51,12 +51,13 @@ const { updateClientLoginData, updateUserInfo } = useClientUserData(queryClient)
 const wrongPasswordCount = ref(0);
 
 const showLoginHelp = () => {
-  void confirmDialog({
+  void showDialog({
     title: "登录答疑",
     message:
       "1. “手机号”是指什么手机号\n· 注册时留下的手机号\n\n2. 密码是指什么密码\n· 如果你是在校学生/教职工，你的密码是统一认证的密码\n· 如果你是校友，密码是你注册时预设的密码\n\n3. 有问题可以去哪里求助\n· 加入精弘毅行群 630490686，询问相关工作人员",
-    actionText: "知道了",
-    dismissText: null
+    confirmButtonText: "知道了",
+    showCancelButton: false,
+    theme: "round-button"
   });
 };
 
