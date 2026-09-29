@@ -17,3 +17,14 @@
   display: grid;
   gap: 14px;
 }
+
+.qrPopup {
+  display: flex;
+  padding: 24px;
+}
+
+.qrCode {
+  display: block;
+  width: 200px;
+  height: 200px;
+}

@@ -25,7 +25,13 @@
           <team-member-list :members="sortedMembers" @member-click="handleMemberClick" />
 
           <section v-if="isCaptain" :class="styles.actionArea">
-            <van-button block round type="primary" @click="handleShareClick">
+            <van-button
+              block
+              round
+              type="primary"
+              :disabled="!teamDetail"
+              @click="handleShareClick"
+            >
               {{ t("分享队伍") }}
             </van-button>
             <van-button
@@ -81,17 +87,29 @@
       @remove="handleRemoveMemberClick"
       @transfer="handleTransferCaptainClick"
     />
+
+    <van-share-sheet
+      v-model:show="isShareSheetShow"
+      :title="t('分享队伍')"
+      :options="shareOptions"
+      @select="handleShareSelect"
+    />
+
+    <van-popup v-model:show="isQrPopupShow" round :class="styles.qrPopup">
+      <qr-code :value="shareUrl" :class="styles.qrCode" />
+    </van-popup>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { ErrorEmpty, LoadingContainer, RequestError, RESP_CODE } from "shared";
-import { showFailToast, showSuccessToast } from "vant";
+import { type ShareSheetOption, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
+import QrCode from "@/components/qr-code/index.vue";
 import { confirmDialog, useClientUserData } from "@/composables";
 import { CLIENT_QUERY_KEY } from "@/constants";
 import TeamMemberDetailPopup from "@/pages/team-detail/components/team-member-detail-popup/index.vue";
@@ -210,8 +228,7 @@ const getSubmitErrorMessage = (error: Error) => {
 const showErrorToast = (message: string) => {
   showFailToast({
     message,
-    duration: 3000,
-    position: "top"
+    duration: 3000
   });
 };
 // #endregion
@@ -222,8 +239,7 @@ const { mutate: mutateSubmitTeam, isPending: isSubmitTeamPending } = useMutation
   onSuccess: async () => {
     showSuccessToast({
       message: t("提交成功"),
-      duration: 3000,
-      position: "top"
+      duration: 3000
     });
     await refreshTeamData();
   },
@@ -237,8 +253,7 @@ const { mutate: mutateUndoTeamSubmission, isPending: isUndoTeamSubmissionPending
   onSuccess: async () => {
     showSuccessToast({
       message: t("取消提交成功"),
-      duration: 3000,
-      position: "top"
+      duration: 3000
     });
     await refreshTeamData();
   },
@@ -252,8 +267,7 @@ const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutati
   onSuccess: async () => {
     showSuccessToast({
       message: t("解散成功"),
-      duration: 3000,
-      position: "top"
+      duration: 3000
     });
     await refreshClientUserData();
     await router.replace({ name: "team-info" });
@@ -266,7 +280,7 @@ const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutati
 const { mutate: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation({
   mutationFn: () => walkClientService.LeaveTeam(),
   onSuccess: async () => {
-    showSuccessToast({ message: t("退出成功"), duration: 3000, position: "top" });
+    showSuccessToast({ message: t("退出成功"), duration: 3000 });
     await refreshClientUserData();
     await router.replace({ name: "team-info" });
   },
@@ -280,8 +294,7 @@ const { mutate: mutateRemoveMember, isPending: isRemoveMemberPending } = useMuta
   onSuccess: async () => {
     showSuccessToast({
       message: t("删除成功"),
-      duration: 3000,
-      position: "top"
+      duration: 3000
     });
     handleMemberPopupClose();
     await refreshTeamData();
@@ -296,8 +309,7 @@ const { mutate: mutateTransferCaptain, isPending: isTransferCaptainPending } = u
   onSuccess: async () => {
     showSuccessToast({
       message: t("移交成功"),
-      duration: 3000,
-      position: "top"
+      duration: 3000
     });
     handleMemberPopupClose();
     await Promise.all([refreshTeamData(), refreshClientUserData()]);
@@ -357,28 +369,70 @@ const handleTransferCaptainClick = async (memberId: number) => {
   mutateTransferCaptain(memberId);
 };
 
-const handleShareClick = async () => {
-  if (!teamDetail.value) return;
+const isShareSheetShow = ref(false);
+const isQrPopupShow = ref(false);
+
+const shareUrl = computed(() => {
+  if (!teamDetail.value) return "";
 
   const { id, password } = teamDetail.value;
   const url = new URL(window.location.href);
   url.pathname = "/team/join/password";
   url.searchParams.set("id", String(id));
   url.searchParams.set("password", btoa(encodeURIComponent(password)));
+  return url.toString();
+});
 
+const shareOptions = computed<ShareSheetOption[]>(() => [
+  { name: t("复制链接"), icon: "link-o" },
+  { name: t("展示二维码"), icon: "qr" },
+  ...(typeof navigator.share === "function" ? [{ name: t("系统分享"), icon: "share-o" }] : [])
+]);
+
+const handleShareClick = () => {
+  if (!teamDetail.value) return;
+  isShareSheetShow.value = true;
+};
+
+const handleCopyLink = async () => {
   try {
-    await navigator.clipboard.writeText(url.toString());
+    await navigator.clipboard.writeText(shareUrl.value);
+    showSuccessToast({ message: t("复制成功"), duration: 3000 });
   } catch {
     showErrorToast(t("复制失败，请手动分享"));
+  }
+};
+
+const handleNativeShare = async () => {
+  if (!shareUrl.value) return;
+
+  try {
+    await navigator.share({
+      title: t("分享队伍"),
+      text: teamDetail.value?.name,
+      url: shareUrl.value
+    });
+  } catch (error) {
+    // 用户主动取消分享时不提示
+    if (error instanceof DOMException && error.name === "AbortError") return;
+    showErrorToast(t("分享失败，请稍后重试"));
+  }
+};
+
+const handleShareSelect = async (option: ShareSheetOption) => {
+  isShareSheetShow.value = false;
+
+  if (option.icon === "qr") {
+    isQrPopupShow.value = true;
     return;
   }
 
-  await confirmDialog({
-    title: t("分享队伍"),
-    message: t("已将队伍链接复制到剪贴板，发送给队员即可邀请加入队伍。"),
-    actionText: t("确认"),
-    dismissText: null
-  });
+  if (option.icon === "share-o") {
+    await handleNativeShare();
+    return;
+  }
+
+  if (option.icon === "link-o") await handleCopyLink();
 };
 
 const handleDisbandClick = async () => {
