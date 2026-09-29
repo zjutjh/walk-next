@@ -30,7 +30,7 @@
               round
               type="primary"
               :disabled="!teamDetail"
-              @click="handleShareClick"
+              @click="isShareSheetShow = true"
             >
               {{ t("分享队伍") }}
             </van-button>
@@ -377,35 +377,26 @@ const { share, isSupported: isShareSupported } = useShare(
 
 const shareOptions = computed<ShareSheetOption[]>(() => [
   { name: t("复制链接"), icon: "link-o" },
-  { name: t("展示二维码"), icon: "qr" },
+  { name: t("二维码"), icon: "qr" },
   ...(isShareSupported.value ? [{ name: t("系统分享"), icon: "share-o" }] : [])
 ]);
-
-const handleShareClick = () => {
-  isShareSheetShow.value = true;
-};
-
-const handleCopyLink = () => {
-  copy(shareUrl.value);
-  showSuccessToast({ message: t("复制成功") });
-};
-
-const handleNativeShare = async () => {
-  try {
-    await share();
-  } catch (error) {
-    // 用户主动取消分享时不提示
-    if (error instanceof DOMException && error.name === "AbortError") return;
-    showErrorToast(t("分享失败，请稍后重试"));
-  }
-};
 
 const handleShareSelect = async (option: ShareSheetOption) => {
   isShareSheetShow.value = false;
 
   if (option.icon === "qr") isQrPopupShow.value = true;
-  else if (option.icon === "share-o") await handleNativeShare();
-  else if (option.icon === "link-o") handleCopyLink();
+  else if (option.icon === "share-o")
+    try {
+      await share();
+    } catch (error) {
+      // 用户主动取消分享时不提示
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      showErrorToast(t("分享失败，请稍后重试"));
+    }
+  else if (option.icon === "link-o") {
+    copy(shareUrl.value);
+    showSuccessToast({ message: t("复制成功") });
+  }
 };
 
 const handleDisbandClick = async () => {
