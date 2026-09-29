@@ -7,6 +7,7 @@
       width="400px"
       max-width="75vw"
     />
+    <language-switcher />
     <div :class="styles.content">
       <h1 :class="styles.title">{{ t("登录") }}</h1>
 
@@ -31,6 +32,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import thumbsUpImage from "@/assets/images/thumbs-up.png";
 import Decoration from "@/components/decoration/index.vue";
+import LanguageSwitcher from "@/components/language-switcher/index.vue";
 import { useClientUserData } from "@/composables";
 import { CLIENT_QUERY_KEY } from "@/constants";
 import { walkClientService } from "@/utils";
