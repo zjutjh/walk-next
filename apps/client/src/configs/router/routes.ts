@@ -3,6 +3,7 @@ import type { RouteRecordRaw } from "vue-router";
 import navbar from "@/components/navbar/index.vue";
 import profilePage from "@/pages/profile/index.vue";
 import teamInfoPage from "@/pages/team-info/index.vue";
+
 const routes: RouteRecordRaw[] = [
   {
     path: "/login",

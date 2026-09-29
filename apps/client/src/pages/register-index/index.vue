@@ -59,7 +59,7 @@ const router = useRouter();
 
 const selectedOption = ref<string | null>(null);
 
-const identityOptions = [
+const identityOptions: { name: string; label: string; image: string; route: string }[] = [
   { name: "学生", label: "我是学生", image: hero1, route: "register-student" },
   { name: "教职工", label: "我是教职工", image: hero2, route: "register-teacher" },
   { name: "校友", label: "我是校友", image: hero3, route: "register-alumni" }
