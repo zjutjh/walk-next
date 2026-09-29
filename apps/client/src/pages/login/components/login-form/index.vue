@@ -55,7 +55,10 @@
       </van-button>
     </div>
 
-    <button type="button" :class="styles.helpLink" @click="emit('help')">戳这解答</button>
+    <button type="button" :class="styles.helpLink" @click="emit('help')">
+      <van-icon name="question-o" />
+      <span>戳这解答</span>
+    </button>
   </van-form>
 </template>
 
