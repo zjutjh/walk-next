@@ -28,7 +28,6 @@ function handleClick() {
   void showDialog({
     title: props.title,
     message: props.message,
-    showCancelButton: false,
     theme: "round-button"
   }).catch(() => undefined);
 }

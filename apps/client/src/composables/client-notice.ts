@@ -54,7 +54,6 @@ export const setupClientNoticeQuery = () => {
             title: t("通知"),
             message: notice.content,
             confirmButtonText: t("我知道了"),
-            showCancelButton: false,
             theme: "round-button",
             beforeClose: (action) =>
               action === "confirm"
