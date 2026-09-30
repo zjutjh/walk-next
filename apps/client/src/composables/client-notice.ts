@@ -55,13 +55,16 @@ export const setupClientNoticeQuery = () => {
             message: notice.content,
             confirmButtonText: t("我知道了"),
             theme: "round-button",
-            beforeClose: (action) =>
-              action === "confirm"
-                ? acknowledgeNotice(notice.id).then(
-                    () => true,
-                    () => false
-                  )
-                : true
+            beforeClose: async (action) => {
+              if (action !== "confirm") return true;
+
+              try {
+                await acknowledgeNotice(notice.id);
+                return true;
+              } catch {
+                return false;
+              }
+            }
           }).catch(() => undefined);
         }
 
