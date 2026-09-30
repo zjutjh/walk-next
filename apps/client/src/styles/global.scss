@@ -78,8 +78,8 @@ html {
           no-repeat;
         filter: drop-shadow(2px 0 #f0fff1) drop-shadow(-2px 0 #f0fff1)
           drop-shadow(0 2px #f0fff1) drop-shadow(0 -2px #f0fff1)
-          drop-shadow(1.5px 1.5px #f0fff1) drop-shadow(-1.5px 1.5px #f0fff1)
-          drop-shadow(1.5px -1.5px #f0fff1) drop-shadow(-1.5px -1.5px #f0fff1);
+          drop-shadow(2px 2px #f0fff1) drop-shadow(-2px 2px #f0fff1)
+          drop-shadow(2px -2px #f0fff1) drop-shadow(-2px -2px #f0fff1);
         pointer-events: none;
         user-select: none;
       }
