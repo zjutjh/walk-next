@@ -63,7 +63,7 @@ export const setupClientNoticeQuery = () => {
                     () => false
                   )
                 : true
-          });
+          }).catch(() => undefined);
         }
 
         await queryClient.invalidateQueries({

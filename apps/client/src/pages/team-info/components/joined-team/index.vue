@@ -441,7 +441,7 @@ const handleSubmissionClick = async () => {
       message: t("确认取消当前队伍提交状态吗？"),
       showCancelButton: true,
       theme: "round-button"
-    });
+    }).catch(() => undefined);
 
     if (isConfirmed !== "confirm") return;
 

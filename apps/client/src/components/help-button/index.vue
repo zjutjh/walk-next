@@ -30,6 +30,6 @@ async function handleClick() {
     message: props.message,
     showCancelButton: false,
     theme: "round-button"
-  });
+  }).catch(() => undefined);
 }
 </script>

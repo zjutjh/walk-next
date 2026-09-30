@@ -167,8 +167,11 @@ const { mutate: mutateRandomJoinTeam, isPending: isRandomJoinPending } = useMuta
 
 const handleButtonRefresh = async () => {
   isButtonRefetching.value = true;
-  await refetchRandomTeamList();
-  isButtonRefetching.value = false;
+  try {
+    await refetchRandomTeamList();
+  } finally {
+    isButtonRefetching.value = false;
+  }
 };
 
 const handleJoinClick = (teamId: number) => {

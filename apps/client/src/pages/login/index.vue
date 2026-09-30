@@ -58,7 +58,7 @@ const showLoginHelp = () => {
     confirmButtonText: "知道了",
     showCancelButton: false,
     theme: "round-button"
-  });
+  }).catch(() => undefined);
 };
 
 const { mutate: mutateLogin, isPending: isLoginPending } = useMutation({
