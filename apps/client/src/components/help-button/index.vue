@@ -24,8 +24,8 @@ const props = withDefaults(
   { icon: "question-o", message: "", ariaLabel: "帮助" }
 );
 
-async function handleClick() {
-  await showDialog({
+function handleClick() {
+  void showDialog({
     title: props.title,
     message: props.message,
     showCancelButton: false,

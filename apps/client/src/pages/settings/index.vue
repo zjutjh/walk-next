@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { showDialog, showSuccessToast } from "vant";
+import { showConfirmDialog, showSuccessToast } from "vant";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -60,21 +60,18 @@ const handleLanguageClick = () => {
 };
 
 /** 点击退出登录 */
-const handleLogoutClick = async () => {
-  const isConfirmed = await showDialog({
+const handleLogoutClick = () => {
+  void showConfirmDialog({
     title: t("您是否确认退出？"),
     confirmButtonText: t("确认"),
     cancelButtonText: t("再想想"),
-    showCancelButton: true,
     theme: "round-button"
-  }).catch(() => undefined);
-
-  if (isConfirmed !== "confirm") return;
-
-  resetClientUserData();
-
-  showSuccessToast({ message: t("已退出登录") });
-
-  await router.replace({ name: "login" });
+  })
+    .then(async () => {
+      resetClientUserData();
+      showSuccessToast({ message: t("已退出登录") });
+      await router.replace({ name: "login" });
+    })
+    .catch(() => undefined);
 };
 </script>
