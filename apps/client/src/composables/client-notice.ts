@@ -31,7 +31,12 @@ export const setupClientNoticeQuery = () => {
       walkClientService.AckNotice({
         // eslint-disable-next-line camelcase
         notice_id: noticeId
-      })
+      }),
+    onError: (error: unknown) => {
+      showFailToast({
+        message: error instanceof Error ? error.message : t("通知确认失败，请稍后重试")
+      });
+    }
   });
 
   let isShowingNotices = false;
@@ -50,17 +55,19 @@ export const setupClientNoticeQuery = () => {
             message: notice.content,
             confirmButtonText: t("我知道了"),
             showCancelButton: false,
-            theme: "round-button"
+            theme: "round-button",
+            beforeClose: (action) =>
+              action === "confirm"
+                ? acknowledgeNotice(notice.id).then(
+                    () => true,
+                    () => false
+                  )
+                : true
           });
-          await acknowledgeNotice(notice.id);
         }
 
         await queryClient.invalidateQueries({
           queryKey: CLIENT_NOTICE_QUERY_OPTIONS.queryKey
-        });
-      } catch (error) {
-        showFailToast({
-          message: error instanceof Error ? error.message : t("通知确认失败，请稍后重试")
         });
       } finally {
         isShowingNotices = false;
