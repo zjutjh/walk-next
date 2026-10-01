@@ -92,7 +92,7 @@
       v-model:show="isShareSheetShow"
       :title="t('分享队伍')"
       :options="shareOptions"
-      @select="handleShareSelect"
+      @select="handleShareOperation"
     />
 
     <van-popup v-model:show="isQrPopupShow" round :class="styles.qrPopup">
@@ -369,36 +369,40 @@ const shareUrl = computed(() => {
   return url.toString();
 });
 
-const { copy } = useClipboard();
-const { share, isSupported: isShareSupported } = useShare(
+const { copy } = useClipboard({ legacy: true });
+const share = useShare(
   computed(() => ({
-    title: t("分享队伍"),
+    title: t("分享队伍"), // TODO: 分享话术
     text: teamDetail.value?.name,
     url: shareUrl.value
   }))
 );
 
 const shareOptions = computed<ShareSheetOption[]>(() => [
-  { name: t("复制链接"), icon: "link-o" },
   { name: t("二维码"), icon: "qr" },
-  ...(isShareSupported.value ? [{ name: t("系统分享"), icon: "share-o" }] : [])
+  ...(share.isSupported.value ? [{ name: t("系统分享"), icon: "share-o" }] : []),
+  { name: t("复制链接"), icon: "link-o" }
 ]);
 
-const handleShareSelect = async (option: ShareSheetOption) => {
+const handleShareOperation = async (option: ShareSheetOption) => {
   isShareSheetShow.value = false;
-
-  if (option.icon === "qr") isQrPopupShow.value = true;
-  else if (option.icon === "share-o")
-    try {
-      await share();
-    } catch (error) {
-      // 用户主动取消分享时不提示
-      if (error instanceof DOMException && error.name === "AbortError") return;
-      showErrorToast(t("分享失败，请稍后重试"));
-    }
-  else if (option.icon === "link-o") {
-    copy(shareUrl.value);
-    showSuccessToast({ message: t("复制成功") });
+  switch (option.icon) {
+    case "qr":
+      isQrPopupShow.value = true;
+      break;
+    case "link-o":
+      copy(shareUrl.value);
+      showSuccessToast({ message: t("复制成功") });
+      break;
+    case "share-o":
+      try {
+        await share.share();
+      } catch (error) {
+        // 用户主动取消分享时不提示
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        showErrorToast(t("分享失败，请稍后重试"));
+      }
+      break;
   }
 };
 
