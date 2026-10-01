@@ -308,6 +308,7 @@ const handleMemberPopupClose = () => {
   selectedMemberId.value = undefined;
 };
 
+// MARK: 删除队员
 const handleRemoveMemberClick = (memberId: number) => {
   void showConfirmDialog({
     title: t("删除队员"),
@@ -332,6 +333,7 @@ const handleRemoveMemberClick = (memberId: number) => {
     .catch(() => undefined);
 };
 
+// MARK: 移交队长
 const handleTransferCaptainClick = (memberId: number) => {
   void showConfirmDialog({
     title: t("移交队长"),
@@ -356,6 +358,7 @@ const handleTransferCaptainClick = (memberId: number) => {
     .catch(() => undefined);
 };
 
+// MARK: 分享
 const isShareSheetShow = ref(false);
 const isQrPopupShow = ref(false);
 
@@ -410,6 +413,7 @@ ${shareUrl.value}`
   }
 };
 
+// MARK: 解散
 const handleDisbandClick = () => {
   void showConfirmDialog({
     title: t("解散队伍"),
@@ -434,6 +438,7 @@ const handleDisbandClick = () => {
     .catch(() => undefined);
 };
 
+// MARK: 退出
 const handleLeaveTeamClick = () => {
   void showConfirmDialog({
     title: t("退出队伍"),
@@ -458,6 +463,7 @@ const handleLeaveTeamClick = () => {
     .catch(() => undefined);
 };
 
+// MARK: 提交
 const handleSubmissionClick = () => {
   if (!teamDetail.value) {
     showErrorToast(t("团队详细信息加载中"));
