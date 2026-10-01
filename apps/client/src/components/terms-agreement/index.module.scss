@@ -7,7 +7,7 @@
 .termsLink {
   font-weight: 500;
   color: #734a23;
-  cursor: pointer;
+  text-decoration: none;
 
   // 英文以斜体标示文档名，中文由词条的书名号承担
   html:lang(en) & {
