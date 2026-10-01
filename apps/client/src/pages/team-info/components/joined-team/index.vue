@@ -399,7 +399,7 @@ const handleShareOperation = async (option: ShareSheetOption) => {
         `${TEAM_INVITE_MESSAGE_PREFIX}${teamDetail.value?.name}${TEAM_INVITE_MESSAGE_TEMPLATES[Math.floor(Math.random() * TEAM_INVITE_MESSAGE_TEMPLATES.length)]}
 ${shareUrl.value}`
       );
-      showSuccessToast({ message: t("复制成功") });
+      showSuccessToast({ message: t("已复制\n快去分享给你的伙伴吧！") });
       break;
     case "share-o":
       try {
