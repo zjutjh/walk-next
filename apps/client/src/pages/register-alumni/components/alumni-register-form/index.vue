@@ -97,10 +97,13 @@
 
     <div :class="styles.agreementRow">
       <van-checkbox v-model="isAgreed" shape="round">
-        <span>{{ t("您已阅读并同意") }}</span>
-        <span :class="styles.termsLink" @click.stop="handleNavigateTerms">
-          {{ t("《用户协议与隐私政策》") }}
-        </span>
+        <i18n-t keypath="我已阅读并同意{w}" tag="span" scope="global">
+          <template #w>
+            <span :class="styles.termsLink" @click.stop="handleNavigateTerms">
+              {{ t("《用户协议与隐私政策》") }}
+            </span>
+          </template>
+        </i18n-t>
       </van-checkbox>
     </div>
 
