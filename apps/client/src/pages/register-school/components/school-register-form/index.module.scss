@@ -39,21 +39,6 @@
     color: #9e9589;
   }
 
-  .agreementRow {
-    @include ui.agreement-checkbox;
-  }
-
-  .termsLink {
-    font-weight: 500;
-    color: #734a23;
-    cursor: pointer;
-
-    // 英文以斜体标示文档名，中文由词条的书名号承担
-    html:lang(en) & {
-      font-style: italic;
-    }
-  }
-
   .submitArea {
     display: flex;
     justify-content: center;

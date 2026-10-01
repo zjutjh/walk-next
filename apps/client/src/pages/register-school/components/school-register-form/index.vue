@@ -123,17 +123,7 @@
       />
     </div>
 
-    <div :class="styles.agreementRow">
-      <van-checkbox v-model="isAgreed" shape="round">
-        <i18n-t keypath="我已阅读并同意{w}" tag="span" scope="global">
-          <template #w>
-            <span :class="styles.termsLink" @click.stop="handleNavigateTerms">
-              {{ t("《用户协议与隐私政策》") }}
-            </span>
-          </template>
-        </i18n-t>
-      </van-checkbox>
-    </div>
+    <terms-agreement v-model="isAgreed" />
 
     <div :class="styles.submitArea">
       <van-button native-type="submit" :loading="props.loading">
@@ -149,9 +139,9 @@ import type { FormInstance } from "vant";
 import { showToast } from "vant";
 import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 
 import HelpButton from "@/components/help-button/index.vue";
+import TermsAgreement from "@/components/terms-agreement/index.vue";
 import { getIdentityRules, getTelRules } from "@/constants/validation";
 
 import type { SchoolRegisterFormValue } from "../../types";
@@ -167,7 +157,6 @@ const emit = defineEmits<{
 }>();
 
 // #region 表单状态
-const router = useRouter();
 const { t } = useI18n();
 const telRules = getTelRules(t);
 const identityRules = getIdentityRules(t);
@@ -197,10 +186,6 @@ const stuIdPrompt = computed(() => (isStudent.value ? t("请输入学号") : t("
 // #region 交互与提交
 const handlePasswordVisibleClick = () => {
   isPasswordVisible.value = !isPasswordVisible.value;
-};
-
-const handleNavigateTerms = () => {
-  router.push({ name: "userAgreement" });
 };
 
 const handleSubmit = async () => {
