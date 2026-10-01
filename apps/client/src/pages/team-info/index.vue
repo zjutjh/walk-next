@@ -6,6 +6,8 @@
       :text="$t('refresh.loading')"
     >
       <template v-if="isUserInfoReady">
+        <team-progress />
+
         <unjoined-team-home v-if="isUnjoined" />
         <joined-team v-else-if="isJoined" />
 
@@ -22,6 +24,7 @@ import { LoadingContainer } from "shared";
 import { computed } from "vue";
 
 import { useClientUserData } from "@/composables";
+import TeamProgress from "@/pages/team-info/components/team-progress/index.vue";
 
 import JoinedTeam from "./components/joined-team/index.vue";
 import UnjoinedTeamHome from "./components/unjoined-team/index.vue";
