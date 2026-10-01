@@ -110,7 +110,11 @@ import { useRouter } from "vue-router";
 
 import QrCode from "@/components/qr-code/index.vue";
 import { useClientUserData } from "@/composables";
-import { CLIENT_QUERY_KEY } from "@/constants";
+import {
+  CLIENT_QUERY_KEY,
+  TEAM_INVITE_MESSAGE_PREFIX,
+  TEAM_INVITE_MESSAGE_TEMPLATES
+} from "@/constants";
 import TeamMemberDetailPopup from "@/pages/team-detail/components/team-member-detail-popup/index.vue";
 import TeamMemberList from "@/pages/team-detail/components/team-member-list/index.vue";
 import TeamOverviewCard from "@/pages/team-detail/components/team-overview-card/index.vue";
@@ -388,7 +392,10 @@ const handleShareOperation = async (option: ShareSheetOption) => {
       isQrPopupShow.value = true;
       break;
     case "link-o":
-      copy(shareUrl.value);
+      copy(
+        `${TEAM_INVITE_MESSAGE_PREFIX}${teamDetail.value?.name}${TEAM_INVITE_MESSAGE_TEMPLATES[Math.floor(Math.random() * TEAM_INVITE_MESSAGE_TEMPLATES.length)]}
+${shareUrl.value}`
+      );
       showSuccessToast({ message: t("复制成功") });
       break;
     case "share-o":
