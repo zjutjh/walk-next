@@ -55,13 +55,12 @@ const {
 const userInfo = computed(() => queriedUserInfo.value ?? clientUserInfo.value);
 const initialFormValue = computed(() => buildInitialFormValue(userInfo.value));
 
-const { isPending: isUpdatePending, mutate: mutateUpdateUserInfo } = useMutation({
+const { isPending: isUpdatePending, mutateAsync: mutateUpdateUserInfo } = useMutation({
   mutationFn: (value: ProfileEditFormValue) =>
     walkClientService.UpdateUserInfo(toUpdateUserInfoRequest(value)),
   onError: (updateError) => {
     showFailToast({ message: updateError.message || t("更新失败") });
-  },
-  onSuccess: handleUpdateSuccess
+  }
 });
 
 function handleFormSubmit(value: ProfileEditFormValue) {
@@ -70,18 +69,28 @@ function handleFormSubmit(value: ProfileEditFormValue) {
   void showConfirmDialog({
     title: t("确认"),
     message: t("是否确认保存修改？"),
-    theme: "round-button"
+    theme: "round-button",
+    beforeClose: async (action) => {
+      if (action !== "confirm") return true;
+
+      try {
+        await mutateUpdateUserInfo(value);
+        return true;
+      } catch {
+        return false;
+      }
+    }
   })
-    .then(() => mutateUpdateUserInfo(value))
+    .then(handleUpdateSuccess)
     .catch(() => undefined);
 }
 
 async function handleUpdateSuccess() {
+  showSuccessToast({ message: t("更新成功") });
   await queryClient.invalidateQueries({ queryKey: CLIENT_USER_INFO_QUERY_OPTIONS.queryKey });
   const refreshedUserInfo = await queryClient.fetchQuery(CLIENT_USER_INFO_QUERY_OPTIONS);
   updateUserInfo(refreshedUserInfo);
 
-  showSuccessToast({ message: t("更新成功") });
   return router.replace({ name: "profile" });
 }
 </script>

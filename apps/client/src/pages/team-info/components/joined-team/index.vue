@@ -243,60 +243,37 @@ const { mutate: mutateSubmitTeam, isPending: isSubmitTeamPending } = useMutation
   }
 });
 
-const { mutate: mutateUndoTeamSubmission, isPending: isUndoTeamSubmissionPending } = useMutation({
-  mutationFn: () => walkClientService.UndoTeamSubmission(),
-  onSuccess: async () => {
-    showSuccessToast({ message: t("取消提交成功") });
-    await refreshTeamData();
-  },
-  onError: (error) => {
-    showErrorToast(error.message || t("取消提交失败，请稍后重试"));
-  }
-});
+const { mutateAsync: mutateUndoTeamSubmission, isPending: isUndoTeamSubmissionPending } =
+  useMutation({
+    mutationFn: () => walkClientService.UndoTeamSubmission(),
+    onError: (error) => {
+      showErrorToast(error.message || t("取消提交失败，请稍后重试"));
+    }
+  });
 
-const { mutate: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutation({
+const { mutateAsync: mutateDisbandTeam, isPending: isDisbandTeamPending } = useMutation({
   mutationFn: () => walkClientService.DisbandTeam(),
-  onSuccess: async () => {
-    showSuccessToast({ message: t("解散成功") });
-    await refreshClientUserData();
-    await router.replace({ name: "team-info" });
-  },
   onError: (error) => {
     showErrorToast(error.message || t("解散失败，请稍后重试"));
   }
 });
 
-const { mutate: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation({
+const { mutateAsync: mutateLeaveTeam, isPending: isLeaveTeamPending } = useMutation({
   mutationFn: () => walkClientService.LeaveTeam(),
-  onSuccess: async () => {
-    showSuccessToast({ message: t("退出成功") });
-    await refreshClientUserData();
-    await router.replace({ name: "team-info" });
-  },
   onError: (error) => {
     showErrorToast(error.message || t("退出失败，请稍后重试"));
   }
 });
 
-const { mutate: mutateRemoveMember, isPending: isRemoveMemberPending } = useMutation({
+const { mutateAsync: mutateRemoveMember, isPending: isRemoveMemberPending } = useMutation({
   mutationFn: (memberId: number) => walkClientService.RemoveTeamMember({ id: memberId }),
-  onSuccess: async () => {
-    showSuccessToast({ message: t("删除成功") });
-    handleMemberPopupClose();
-    await refreshTeamData();
-  },
   onError: (error) => {
     showErrorToast(error.message || t("删除失败，请稍后重试"));
   }
 });
 
-const { mutate: mutateTransferCaptain, isPending: isTransferCaptainPending } = useMutation({
+const { mutateAsync: mutateTransferCaptain, isPending: isTransferCaptainPending } = useMutation({
   mutationFn: (memberId: number) => walkClientService.UpdateTeamCaptain({ id: memberId }),
-  onSuccess: async () => {
-    showSuccessToast({ message: t("移交成功") });
-    handleMemberPopupClose();
-    await Promise.all([refreshTeamData(), refreshClientUserData()]);
-  },
   onError: (error) => {
     showErrorToast(error.message || t("移交失败，请稍后重试"));
   }
@@ -334,9 +311,23 @@ const handleRemoveMemberClick = (memberId: number) => {
   void showConfirmDialog({
     title: t("删除队员"),
     message: t("确认将该队员移出队伍吗？"),
-    theme: "round-button"
+    theme: "round-button",
+    beforeClose: async (action) => {
+      if (action !== "confirm") return true;
+
+      try {
+        await mutateRemoveMember(memberId);
+        return true;
+      } catch {
+        return false;
+      }
+    }
   })
-    .then(() => mutateRemoveMember(memberId))
+    .then(async () => {
+      handleMemberPopupClose();
+      showSuccessToast({ message: t("删除成功") });
+      await refreshTeamData();
+    })
     .catch(() => undefined);
 };
 
@@ -344,9 +335,23 @@ const handleTransferCaptainClick = (memberId: number) => {
   void showConfirmDialog({
     title: t("移交队长"),
     message: t("确认将队长移交给该队员吗？移交后你将变为队员。"),
-    theme: "round-button"
+    theme: "round-button",
+    beforeClose: async (action) => {
+      if (action !== "confirm") return true;
+
+      try {
+        await mutateTransferCaptain(memberId);
+        return true;
+      } catch {
+        return false;
+      }
+    }
   })
-    .then(() => mutateTransferCaptain(memberId))
+    .then(async () => {
+      handleMemberPopupClose();
+      showSuccessToast({ message: t("移交成功") });
+      await Promise.all([refreshTeamData(), refreshClientUserData()]);
+    })
     .catch(() => undefined);
 };
 
@@ -401,9 +406,23 @@ const handleDisbandClick = () => {
   void showConfirmDialog({
     title: t("解散队伍"),
     message: t("确认解散当前队伍吗？解散后所有队员都需要重新加入队伍。"),
-    theme: "round-button"
+    theme: "round-button",
+    beforeClose: async (action) => {
+      if (action !== "confirm") return true;
+
+      try {
+        await mutateDisbandTeam();
+        return true;
+      } catch {
+        return false;
+      }
+    }
   })
-    .then(() => mutateDisbandTeam())
+    .then(async () => {
+      showSuccessToast({ message: t("解散成功") });
+      await refreshClientUserData();
+      await router.replace({ name: "team-info" });
+    })
     .catch(() => undefined);
 };
 
@@ -411,9 +430,23 @@ const handleLeaveTeamClick = () => {
   void showConfirmDialog({
     title: t("退出队伍"),
     message: t("确认退出当前队伍吗？退出后需要重新加入队伍。"),
-    theme: "round-button"
+    theme: "round-button",
+    beforeClose: async (action) => {
+      if (action !== "confirm") return true;
+
+      try {
+        await mutateLeaveTeam();
+        return true;
+      } catch {
+        return false;
+      }
+    }
   })
-    .then(() => mutateLeaveTeam())
+    .then(async () => {
+      showSuccessToast({ message: t("退出成功") });
+      await refreshClientUserData();
+      await router.replace({ name: "team-info" });
+    })
     .catch(() => undefined);
 };
 
@@ -427,9 +460,22 @@ const handleSubmissionClick = () => {
     void showConfirmDialog({
       title: t("取消提交"),
       message: t("确认取消当前队伍提交状态吗？"),
-      theme: "round-button"
+      theme: "round-button",
+      beforeClose: async (action) => {
+        if (action !== "confirm") return true;
+
+        try {
+          await mutateUndoTeamSubmission();
+          return true;
+        } catch {
+          return false;
+        }
+      }
     })
-      .then(() => mutateUndoTeamSubmission())
+      .then(async () => {
+        showSuccessToast({ message: t("取消提交成功") });
+        await refreshTeamData();
+      })
       .catch(() => undefined);
     return;
   }
