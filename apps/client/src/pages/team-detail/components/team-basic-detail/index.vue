@@ -26,7 +26,7 @@
     </van-cell>
     <van-cell :title="t('团队性质')" :value="props.teamType" />
     <van-cell :title="t('队伍状态')" :value="teamStatusLabel" />
-    <van-cell :title="t('当前位置')" :value="props.team.latest_point_name || t('未开始')" />
+    <van-cell :title="t('当前位置')" :value="t(props.team.latest_point_name) || t('未开始')" />
   </van-cell-group>
 
   <van-button v-if="props.canEdit" block round type="primary" @click="handleEditClick">
