@@ -1,6 +1,8 @@
-export const TEAM_INVITE_MESSAGE_PREFIX = "【精弘毅行】";
+export const TEAM_INVITE_CARD_TITLE_KEY = "team.invite.card-title";
 
-export const TEAM_INVITE_MESSAGE_TEMPLATES = [
-  "喊你入队啦！一起完成毅行挑战，点击链接加入我们吧👇",
-  "正在招募队友！一起走完全程，等你来加入💪"
-] as const;
+export const TEAM_INVITE_MESSAGE_KEYS = ["team.invite.message-1", "team.invite.message-2"] as const;
+
+export const TEAM_INVITE_LINK_CARD_SUMMARY =
+  "一个人走得快，一群人走得远。精弘网络期待你的加入，共赴毅行！";
+
+export const TEAM_INVITE_DESCRIPTION = "邀请您加入精弘毅行！";

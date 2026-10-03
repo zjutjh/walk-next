@@ -94,14 +94,14 @@
     />
 
     <van-popup v-model:show="isQrPopupShow" round :class="styles.qrPopup">
-      <qr-code :value="shareUrl" :class="styles.qrCode" />
+      <qr-code :value="shareData.url" :class="styles.qrCode" />
     </van-popup>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { useClipboard, useShare } from "@vueuse/core";
+import { useClipboard, useEventListener, useShare, useTimeoutFn } from "@vueuse/core";
 import { ErrorEmpty, LoadingContainer, RequestError, RESP_CODE } from "shared";
 import { type ShareSheetOption, showConfirmDialog, showFailToast, showSuccessToast } from "vant";
 import { computed, ref } from "vue";
@@ -112,8 +112,10 @@ import QrCode from "@/components/qr-code/index.vue";
 import { useClientUserData } from "@/composables";
 import {
   CLIENT_QUERY_KEY,
-  TEAM_INVITE_MESSAGE_PREFIX,
-  TEAM_INVITE_MESSAGE_TEMPLATES
+  TEAM_INVITE_CARD_TITLE_KEY,
+  TEAM_INVITE_DESCRIPTION,
+  TEAM_INVITE_LINK_CARD_SUMMARY,
+  TEAM_INVITE_MESSAGE_KEYS
 } from "@/constants";
 import TeamMemberDetailPopup from "@/pages/team-detail/components/team-member-detail-popup/index.vue";
 import TeamMemberList from "@/pages/team-detail/components/team-member-list/index.vue";
@@ -362,54 +364,108 @@ const handleTransferCaptainClick = (memberId: number) => {
 const isShareSheetShow = ref(false);
 const isQrPopupShow = ref(false);
 
-const shareUrl = computed(() => {
-  if (!teamDetail.value) return "";
+const shareData = computed(() => {
+  let url = "";
+  if (teamDetail.value) {
+    const { id, password } = teamDetail.value;
+    const shareUrl = new URL(window.location.href);
+    shareUrl.pathname = "/team/join/password";
+    shareUrl.searchParams.set("id", String(id));
+    shareUrl.searchParams.set("password", btoa(encodeURIComponent(password)));
+    url = shareUrl.toString();
+  }
 
-  const { id, password } = teamDetail.value;
-  const url = new URL(window.location.href);
-  url.pathname = "/team/join/password";
-  url.searchParams.set("id", String(id));
-  url.searchParams.set("password", btoa(encodeURIComponent(password)));
-  return url.toString();
+  return {
+    url,
+    image: new URL("/logo.png", window.location.origin).toString(),
+    title: t(TEAM_INVITE_CARD_TITLE_KEY, { name: teamDetail.value?.name ?? "" }),
+    text: TEAM_INVITE_LINK_CARD_SUMMARY,
+    desc: TEAM_INVITE_DESCRIPTION
+  };
 });
 
 const { copy } = useClipboard({ legacy: true });
 const share = useShare(
   computed(() => ({
-    title: t("分享队伍"), // TODO: 分享话术
-    text: teamDetail.value?.name,
-    url: shareUrl.value
+    title: shareData.value.title,
+    text: shareData.value.text,
+    url: shareData.value.url
   }))
 );
 
 const shareOptions = computed<ShareSheetOption[]>(() => [
+  { name: t("QQ"), icon: "qq" },
+  { name: t("QQ 空间"), icon: "star-o" },
   { name: t("二维码"), icon: "qr" },
   ...(share.isSupported.value ? [{ name: t("系统分享"), icon: "share-o" }] : []),
   { name: t("复制链接"), icon: "link-o" }
 ]);
 
 const handleShareOperation = async (option: ShareSheetOption) => {
-  isShareSheetShow.value = false;
-  switch (option.icon) {
-    case "qr":
-      isQrPopupShow.value = true;
-      break;
-    case "link-o":
-      copy(
-        `${TEAM_INVITE_MESSAGE_PREFIX}${teamDetail.value?.name}${TEAM_INVITE_MESSAGE_TEMPLATES[Math.floor(Math.random() * TEAM_INVITE_MESSAGE_TEMPLATES.length)]}
-${shareUrl.value}`
-      );
-      showSuccessToast({ message: t("已复制\n快去分享给你的伙伴吧！") });
-      break;
-    case "share-o":
-      try {
-        await share.share();
-      } catch (error) {
-        // 用户主动取消分享时不提示
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        showErrorToast(t("分享失败，请稍后重试"));
-      }
-      break;
+  if (teamDetail.value) {
+    isShareSheetShow.value = false;
+    switch (option.icon) {
+      case "qq":
+        {
+          // 唤起客户端: mqqapi://share/to_fri?src_type=web&version=1&file_type=news&title=标题&url=链接&image_url=图片
+          // 网页分享: https://connect.qq.com/widget/shareqq/?url=链接&title=标题&desc=描述&summary=摘要&pics=图片
+          const mqqUrl =
+            `mqqapi://share/to_fri?src_type=web&version=1&file_type=news` +
+            `&title=${encodeURIComponent(shareData.value.title)}` +
+            `&url=${encodeURIComponent(shareData.value.url)}` +
+            `&image_url=${encodeURIComponent(shareData.value.image)}`;
+
+          const { stop } = useTimeoutFn(() => {
+            const fallbackUrl = new URL("https://connect.qq.com/widget/shareqq/");
+            fallbackUrl.searchParams.set("url", shareData.value.url);
+            fallbackUrl.searchParams.set("title", shareData.value.title);
+            fallbackUrl.searchParams.set("summary", shareData.value.text);
+            fallbackUrl.searchParams.set("pics", shareData.value.image);
+            fallbackUrl.searchParams.set("desc", shareData.value.desc);
+            window.open(fallbackUrl.toString());
+          }, 1500);
+          useEventListener(document, "visibilitychange", () => {
+            if (document.hidden) stop();
+          });
+          window.location.href = mqqUrl;
+        }
+        break;
+      case "star-o":
+        {
+          // QQ空间: http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=链接&title=标题&desc=描述&summary=摘要&site=来源&pics=图片
+          const qzoneShareUrl = new URL(
+            "http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey"
+          );
+          qzoneShareUrl.searchParams.set("url", shareData.value.url);
+          qzoneShareUrl.searchParams.set("title", shareData.value.title);
+          qzoneShareUrl.searchParams.set("summary", shareData.value.text);
+          qzoneShareUrl.searchParams.set("pics", shareData.value.image);
+          qzoneShareUrl.searchParams.set("desc", shareData.value.desc);
+          window.open(qzoneShareUrl.toString());
+        }
+        break;
+      case "qr":
+        isQrPopupShow.value = true;
+        break;
+      case "link-o":
+        {
+          const key =
+            Math.random() < 0.5 ? TEAM_INVITE_MESSAGE_KEYS[0] : TEAM_INVITE_MESSAGE_KEYS[1];
+          const message = t(key, { name: teamDetail.value.name });
+          copy(`${message}\n${shareData.value.url}`);
+        }
+        showSuccessToast({ message: t("已复制\n快去分享给你的伙伴吧！") });
+        break;
+      case "share-o":
+        try {
+          await share.share();
+        } catch (error) {
+          // 用户主动取消分享时不提示
+          if (error instanceof DOMException && error.name === "AbortError") return;
+          showErrorToast(t("分享失败，请稍后重试"));
+        }
+        break;
+    }
   }
 };
 
