@@ -1,0 +1,160 @@
+@use "@/styles/mixins" as ui;
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .title {
+    @include ui.page-title;
+
+    margin: 0;
+  }
+
+  .cardList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .cardContainer {
+    @include ui.card-container;
+    padding: 30px;
+  }
+
+  .card {
+    position: relative;
+    container-type: inline-size;
+    overflow: hidden;
+    border: 1px solid rgba(143, 83, 17, 1);
+    border-radius: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:nth-child(1) .cardName {
+      top: 8cqw;
+      left: 18cqw;
+      transform: rotate(12deg);
+    }
+
+    &:nth-child(2) .cardName {
+      top: 12cqw;
+      left: 18cqw;
+      transform: rotate(-22deg);
+    }
+
+    &:nth-child(3) .cardName {
+      top: 12cqw;
+      left: 40cqw;
+      transform: rotate(14deg);
+    }
+
+    .cardImage {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      aspect-ratio: 16 / 7;
+    }
+
+    .cardName {
+      position: absolute;
+      font-size: 15cqw;
+      font-weight: 600;
+      color: #8f5311;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .cardOverlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      pointer-events: none;
+      transition: background 0.3s ease;
+    }
+
+    .cardLabel {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+      font-size: 28px;
+      font-weight: 800;
+      color: #734a23;
+      text-shadow: 0 1px 4px rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .cardIcon {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      transition: opacity 0.3s ease;
+    }
+  }
+
+  .cardSelected {
+    .cardOverlay {
+      background: transparent;
+    }
+
+    .cardName {
+      opacity: 1;
+    }
+
+    .cardLabel {
+      opacity: 0;
+    }
+
+    .cardIcon {
+      opacity: 0;
+    }
+  }
+
+  .loginLink {
+    @include ui.guide-link;
+  }
+
+  .confirmButton {
+    align-self: center;
+    width: auto;
+    min-width: 150px;
+    padding: 10px 24px;
+    background: #734a23;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:active {
+      background: #5a3a1c;
+    }
+  }
+
+  .confirmButtonDisabled {
+    background: #ccc;
+    cursor: not-allowed;
+
+    &:active {
+      background: #ccc;
+    }
+  }
+}

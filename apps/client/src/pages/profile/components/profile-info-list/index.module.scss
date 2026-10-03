@@ -1,0 +1,21 @@
+.card {
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.value {
+  display: inline-block;
+  max-width: 60vw;
+  overflow: hidden;
+  color: #465142;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,21 @@
+@use "@/styles/mixins" as ui;
+
+.decoration {
+  @include ui.illustration-image;
+  top: var(--decoration-top, auto);
+  right: var(--decoration-right, auto);
+  bottom: var(--decoration-bottom, auto);
+  left: var(--decoration-left, auto);
+  width: var(--decoration-width, 150px);
+  max-width: var(--decoration-max-width, 40vw);
+}
+
+.mirror {
+  transform: scaleX(-1);
+}
+
+.decorationImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
