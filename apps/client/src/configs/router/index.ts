@@ -70,6 +70,7 @@ routerInstance.afterEach((to, _from, failure) => {
 
   // hash 定位：等待异步内容渲染后滚动到目标元素
   if (!failure && to.hash) scrollToHash(to.hash);
+  else if (!failure) document.querySelector("main")?.scrollTo({ top: 0 });
 });
 
 // 路由内部逻辑错误处理
