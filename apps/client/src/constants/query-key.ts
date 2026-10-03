@@ -3,6 +3,8 @@ export const CLIENT_QUERY_KEY = {
   USER: {
     /** 当前用户信息 */
     SELF: "userInfo",
+    /** 当前毅行阶段 */
+    PHASE: "phase",
     /** 未读通知列表 */
     NOTICE_LIST: "noticeList"
   },

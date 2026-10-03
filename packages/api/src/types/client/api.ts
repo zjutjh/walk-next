@@ -1,6 +1,6 @@
 import type { TeamRandomListItem, TeamSummary } from "./team";
 import type { UserContact, UserGender, UserInfo, UserRole, UserSummary, UserType } from "./user";
-import type { WalkStatus } from "./walk";
+import type { WalkPhase, WalkStatus } from "./walk";
 
 /** 用户登录 请求 */
 export interface LoginRequest {
@@ -49,6 +49,15 @@ export interface QueryUserInfoResponse {
   type: UserType;
   /** 微信号 */
   wechat: string;
+}
+
+/** 获取当前阶段 请求 */
+export type QueryPhaseRequest = undefined;
+
+/** 获取当前阶段 响应 */
+export interface QueryPhaseResponse {
+  /** 当前毅行阶段，空字符串表示活动未激活 */
+  phase: WalkPhase;
 }
 
 /** 通知信息 */

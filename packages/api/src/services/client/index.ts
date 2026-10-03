@@ -23,6 +23,18 @@ export default class WalkClientService<T> extends BaseService<T> {
     return this.request({ url, method, params }, options);
   }
 
+  /** 获取当前阶段 */
+  QueryPhase(
+    req?: ClientAPI.QueryPhaseRequest,
+    options?: T
+  ): Promise<ClientAPI.QueryPhaseResponse> {
+    const url = this.genBaseURL("/user/phase");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
   /** 获取未读通知列表 */
   QueryNoticeList(
     req?: ClientAPI.QueryNoticeListRequest,

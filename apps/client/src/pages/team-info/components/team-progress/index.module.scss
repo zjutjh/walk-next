@@ -8,6 +8,17 @@
   padding: 16px;
 }
 
+// 撑满卡片内容区，使加载遮罩覆盖整个卡片
+.loading {
+  height: 100%;
+}
+
+// 错误态内容高于固定高度，放开以容纳空态
+.sectionError {
+  height: auto;
+  min-height: 125px;
+}
+
 .header {
   display: flex;
   align-items: flex-start;

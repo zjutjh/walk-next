@@ -7,3 +7,12 @@ export type WalkStatus =
   | "withdrawn"
   | "violated"
   | "completed";
+
+/** 毅行阶段，空字符串表示活动未激活（未开始或已结束） */
+export type WalkPhase =
+  | ""
+  | "registration"
+  | "submission"
+  | "adjustment"
+  | "preparation"
+  | "activity";
