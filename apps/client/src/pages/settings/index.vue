@@ -28,6 +28,8 @@
       </van-button>
     </div>
 
+    <icp-record />
+
     <language-action-sheet v-model:visible="isLanguageActionSheetVisible" />
   </div>
 </template>
@@ -39,6 +41,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import decorationImgUrl from "@/assets/images/setting-page-banner.jpg";
+import IcpRecord from "@/components/icp-record/index.vue";
 import LanguageActionSheet from "@/components/language-action-sheet/index.vue";
 import { useClientUserData, useUserLocale } from "@/composables";
 import { AGREEMENT_DATE, EVENT_SESSION, LANG_META } from "@/constants";

@@ -21,6 +21,8 @@
         {{ t("signup.guide-link") }}
       </router-link>
     </div>
+
+    <icp-record fixed />
   </div>
 </template>
 
@@ -34,6 +36,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import thumbsUpImage from "@/assets/images/thumbs-up.png";
 import Decoration from "@/components/decoration/index.vue";
+import IcpRecord from "@/components/icp-record/index.vue";
 import LanguageSwitcher from "@/components/language-switcher/index.vue";
 import { useClientUserData } from "@/composables";
 import { CLIENT_QUERY_KEY } from "@/constants";

@@ -5,6 +5,8 @@ interface ImportMetaEnv {
   readonly VITE_BASE_PATH: string;
   /** 反馈问卷 URL */
   readonly VITE_FEEDBACK_QA_URL: string;
+  /** ICP 备案号 */
+  readonly VITE_ICP_RECORD: string;
 }
 
 interface ImportMeta {
