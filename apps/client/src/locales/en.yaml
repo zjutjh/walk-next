@@ -1,20 +1,12 @@
-精弘网络: Jinghong Union
 登录: Sign In
 注册: Sign Up
-毅行: Trailwalk
-团队: Team
-个人: Personal
 电话号码: Phone number
 密码: Password
-统一身份认证: Unified Identity Authentication
 学工号: Student/Staff ID
 姓名: Name
 微信: Weixin
 QQ: QQ
 选填: Optional
-隐私政策: Privacy Policy
-报名须知: Event Guidelines and Disclaimer
-用户协议: Terms of Service
 用户协议与隐私政策: Terms of Service and Privacy Policy
 《用户协议与隐私政策》: Terms of Service and Privacy Policy
 语言: Language
@@ -32,14 +24,10 @@ QQ: QQ
 退出登录: Log Out
 我已阅读并同意{0}: I have read and agree to {0}
 请阅读并同意《用户协议与隐私政策》: Please read and agree to the Terms of Service and Privacy Policy
-屏峰: Pingfeng
-莫干山: Mogan Shan
 分享队伍: Share Team
-分享: Share
 复制链接: Copy Link
 系统分享: System Share
 分享失败，请稍后重试: Sharing failed, please try again later
-解散: Disband
 解散队伍: Disband team
 提交: Submit
 提交队伍: Submit Team
@@ -48,7 +36,6 @@ QQ: QQ
 团队编号: Team ID
 团队密码: Team password
 立即加入: Join Now
-全部: All
 "{n}/{m} 人": "{n}/{m} member | {n}/{m} members"
 team:
   info: Team Info
@@ -61,9 +48,6 @@ signup:
   guide-link: Don't have an account? Sign up here
 状态: Status
 未开始: Not started
-关闭: Close
-路线: Route
-返回: Back
 队员信息: Team member information
 修改信息: Edit Information
 当前位置: Your location
@@ -72,7 +56,6 @@ hbgy: Slider Park
 zfgy: Zhaofeng Park
 tayg: Deqing Tian'an Cloud Valley
 dtx: Dongtiao Xi
-浙江工业大学: Zhejiang University of Technology
 jls: Jinlian Temple
 ljs: Laojiaoshan
 pfs: Pingfeng Mountain
@@ -99,11 +82,6 @@ refresh:
 正式毅行说明: Have a successful trailwalk!
 暂未开放: Not available
 当前不在毅行活动时期内: The trailwalk is not in an active phase.
-港澳: Hong Kong and Macao
-海外: Overseas
-中国台湾: Taiwan, China
-我已阅读并同意: I have read and agreed
-通行码: Passcode
 个人通行码: Personal passcode
 团队通行码: Team passcode
 未提交: Unsubmitted
