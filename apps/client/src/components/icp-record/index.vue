@@ -5,12 +5,14 @@
     target="_blank"
     rel="noopener noreferrer"
   >
-    {{ import.meta.env.VITE_ICP_RECORD }}
+    {{ icpRecord }}
   </a>
 </template>
 
 <script setup lang="ts">
 import "./index.scss";
+
+const icpRecord = import.meta.env.VITE_ICP_RECORD;
 
 const props = withDefaults(
   defineProps<{
