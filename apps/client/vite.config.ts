@@ -14,6 +14,7 @@ import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
+  Object.assign(process.env, loadEnv(mode, process.cwd(), "__VITE_"));
   const env = loadEnv(mode, process.cwd());
 
   return {
