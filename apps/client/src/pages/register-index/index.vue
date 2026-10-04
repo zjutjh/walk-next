@@ -38,6 +38,8 @@
       <router-link :class="styles.loginLink" :to="{ name: 'login', query: route.query }" replace>
         {{ $t("已有账号？去登录") }}
       </router-link>
+
+      <icp-record />
     </div>
   </div>
 </template>
@@ -52,6 +54,7 @@ import hero3 from "@/assets/images/hero-3.jpg";
 import proudImage from "@/assets/images/proud.png";
 import tomatoJamImage from "@/assets/images/tomato-jam.png";
 import Decoration from "@/components/decoration/index.vue";
+import IcpRecord from "@/components/icp-record/index.vue";
 import LanguageSwitcher from "@/components/language-switcher/index.vue";
 
 import styles from "./index.module.scss";
