@@ -387,18 +387,23 @@ const shareData = computed(() => {
 const { copy } = useClipboard({ legacy: true });
 const share = useShare(
   computed(() => ({
-    title: shareData.value.title,
-    text: shareData.value.text,
+    title: t("分享团队"),
+    text: shareData.value.title,
     url: shareData.value.url
   }))
 );
 
-const shareOptions = computed<ShareSheetOption[]>(() => [
-  { name: t("QQ"), icon: "qq" },
-  { name: t("QQ 空间"), icon: "star-o" },
-  { name: t("二维码"), icon: "qr" },
-  ...(share.isSupported.value ? [{ name: t("系统分享"), icon: "share-o" }] : []),
-  { name: t("复制链接"), icon: "link-o" }
+const shareOptions = computed<ShareSheetOption[][]>(() => [
+  [
+    { name: t("QQ"), icon: "qq" },
+    { name: t("QQ 空间"), icon: "star-o" },
+    { name: t("微博"), icon: "weibo" }
+  ],
+  [
+    { name: t("二维码"), icon: "qr" },
+    ...(share.isSupported.value ? [{ name: t("系统分享"), icon: "share-o" }] : []),
+    { name: t("复制链接"), icon: "link-o" }
+  ]
 ]);
 
 const handleShareOperation = async (option: ShareSheetOption) => {
@@ -442,6 +447,17 @@ const handleShareOperation = async (option: ShareSheetOption) => {
           qzoneShareUrl.searchParams.set("pics", shareData.value.image);
           qzoneShareUrl.searchParams.set("desc", shareData.value.desc);
           window.open(qzoneShareUrl.toString());
+        }
+        break;
+      case "weibo":
+        {
+          // 微博: https://service.weibo.com/share/share.php?url=链接&title=标题&pic=图片&appkey=微博应用Key
+          const weiboShareUrl =
+            `https://service.weibo.com/share/share.php` +
+            `?url=${encodeURIComponent(shareData.value.url)}` +
+            `&title=${encodeURIComponent(`${shareData.value.title}\n${shareData.value.text}`)}` +
+            `&pic=${encodeURIComponent(shareData.value.image)}`;
+          window.open(weiboShareUrl);
         }
         break;
       case "qr":
