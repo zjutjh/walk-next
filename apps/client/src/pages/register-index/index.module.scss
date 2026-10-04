@@ -1,14 +1,89 @@
 @use "@/styles/mixins" as ui;
 
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes card-lead-out {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-110%);
+  }
+}
+
+@keyframes card-follow-out {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+
+  30% {
+    opacity: 0.4;
+    transform: translateX(-2%) scale(0.96);
+    filter: blur(2px);
+  }
+
+  60% {
+    opacity: 0.12;
+    transform: translateX(-10%) scale(0.93);
+    filter: blur(4.5px);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-45%) scale(0.92);
+    filter: blur(10px);
+  }
+}
+
+@keyframes drop-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(110vh) rotate(var(--drop-tilt, 4deg));
+  }
+}
+
 .content {
   display: flex;
   flex-direction: column;
   gap: 16px;
 
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - 75px);
+
   .title {
     @include ui.page-title;
 
     margin: 0;
+    padding: 0 16px;
+    animation: rise-in 0.4s ease both;
   }
 
   .cardList {
@@ -18,31 +93,148 @@
   }
 
   .card {
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 18px 20px;
+    padding: 40px 24px;
     background: rgba(255, 255, 255, 0.6);
-    border: 1.5px solid #be8f58;
-    border-radius: 8px;
+    border: 0;
+    border-radius: 0;
     font: inherit;
     text-align: left;
     cursor: pointer;
+    animation: rise-in 0.45s ease both;
+    transition: transform 0.15s ease;
+
+    &:nth-child(1) {
+      animation-delay: 0.06s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.14s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.22s;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  .cardIcon {
+    position: absolute;
+    right: 78px;
+    bottom: -28px;
+    width: 118px;
+    height: 118px;
+    color: #8a6136;
+    opacity: 0.14;
+    pointer-events: none;
   }
 
   .cardName {
-    font-size: 20px;
-    font-weight: 700;
+    position: relative;
+    font-size: 40px;
+    font-weight: 500;
+    letter-spacing: 2px;
     color: #734a23;
   }
 
   .cardArrow {
-    font-size: 16px;
-    color: #be8f58;
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+    color: rgba(190, 143, 88, 0.8);
+    background: rgba(190, 143, 88, 0.12);
+    border-radius: 50%;
   }
 
   .loginLink {
     @include ui.guide-link;
+
+    padding: 0;
+    font-family: inherit;
+    background: transparent;
+    border: 0;
+    transition:
+      opacity 0.2s ease,
+      transform 0.15s ease;
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+
+  &.leavingForward {
+    .title,
+    .loginLink {
+      animation: fade-out 0.3s ease both;
+    }
+
+    .card {
+      animation: card-follow-out 0.5s linear both;
+      animation-delay: 0.15s;
+    }
+
+    .cardLeading {
+      animation: card-lead-out 0.45s cubic-bezier(0.55, 0.05, 0.95, 0.45) both;
+      animation-delay: 0s;
+    }
+  }
+
+  &.leavingBackward {
+    overflow: hidden;
+
+    .title,
+    .loginLink {
+      animation: fade-out 0.15s ease both;
+    }
+
+    .card {
+      --drop-tilt: 15deg;
+      animation: drop-out 0.5s cubic-bezier(0.5, 0, 1, 0.45) both;
+
+      &:nth-child(2) {
+        --drop-tilt: -25deg;
+        animation-delay: 0.15s;
+        animation-duration: 0.55s;
+      }
+
+      &:nth-child(3) {
+        --drop-tilt: 32deg;
+        animation-delay: 0.3s;
+        animation-duration: 0.6s;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &.leavingForward,
+    &.leavingBackward {
+      .title,
+      .card,
+      .loginLink {
+        animation: none;
+      }
+    }
+
+    .title,
+    .card {
+      animation: none;
+    }
+
+    .card,
+    .loginLink {
+      transition: none;
+    }
   }
 }

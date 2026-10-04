@@ -30,7 +30,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/pages/register-index/index.vue"),
         meta: {
           pageName: "注册",
-          layout: { props: { showNavbar: false, showLogo: true, bgDecorationVariant: "default" } }
+          layout: {
+            props: {
+              showNavbar: false,
+              showLogo: true,
+              noPadding: true,
+              bgDecorationVariant: "topAndBottom"
+            }
+          }
         }
       },
       {
