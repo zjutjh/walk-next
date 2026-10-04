@@ -130,6 +130,10 @@
 
     &.noPadding {
       padding: 0;
+
+      &.withLogo {
+        padding-top: calc(env(safe-area-inset-top, 0px) + 75px);
+      }
     }
   }
 }
