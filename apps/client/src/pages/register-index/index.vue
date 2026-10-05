@@ -66,12 +66,12 @@ const goRegister = (name: string) => {
   if (leavingMode.value) return;
   leavingMode.value = "forward";
   leavingRoute.value = name;
-  navigateAfterLeave(name, 700);
+  navigateAfterLeave(name, 580);
 };
 
 const goLogin = () => {
   if (leavingMode.value) return;
   leavingMode.value = "backward";
-  navigateAfterLeave("login", 850);
+  navigateAfterLeave("login", 640);
 };
 </script>

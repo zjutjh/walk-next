@@ -75,15 +75,15 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-
-  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - 75px);
+  padding-top: 75px;
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - 150px);
 
   .title {
     @include ui.page-title;
 
     margin: 0;
     padding: 0 16px;
-    animation: rise-in 0.4s ease both;
+    animation: rise-in 0.34s ease both;
   }
 
   .cardList {
@@ -100,28 +100,29 @@
     justify-content: space-between;
     gap: 12px;
     padding: 40px 24px;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(190, 143, 88, 0.03);
     border: 0;
     border-radius: 0;
     font: inherit;
     text-align: left;
     cursor: pointer;
-    animation: rise-in 0.45s ease both;
+    animation: rise-in 0.38s ease both;
     transition: transform 0.15s ease;
 
     &:nth-child(1) {
-      animation-delay: 0.06s;
+      animation-delay: 0s;
     }
 
     &:nth-child(2) {
-      animation-delay: 0.14s;
+      animation-delay: 0.05s;
     }
 
     &:nth-child(3) {
-      animation-delay: 0.22s;
+      animation-delay: 0.12s;
     }
 
     &:active {
+      background: rgba(190, 143, 88, 0.09);
       transform: scale(0.98);
     }
   }
@@ -133,7 +134,7 @@
     width: 118px;
     height: 118px;
     color: #8a6136;
-    opacity: 0.14;
+    opacity: 0.16;
     pointer-events: none;
   }
 
@@ -177,16 +178,16 @@
   &.leavingForward {
     .title,
     .loginLink {
-      animation: fade-out 0.3s ease both;
+      animation: fade-out 0.25s ease both;
     }
 
     .card {
-      animation: card-follow-out 0.5s linear both;
-      animation-delay: 0.15s;
+      animation: card-follow-out 0.42s linear both;
+      animation-delay: 0.12s;
     }
 
     .cardLeading {
-      animation: card-lead-out 0.45s cubic-bezier(0.55, 0.05, 0.95, 0.45) both;
+      animation: card-lead-out 0.38s cubic-bezier(0.55, 0.05, 0.95, 0.45) both;
       animation-delay: 0s;
     }
   }
@@ -196,23 +197,23 @@
 
     .title,
     .loginLink {
-      animation: fade-out 0.15s ease both;
+      animation: fade-out 0.12s ease both;
     }
 
     .card {
       --drop-tilt: 15deg;
-      animation: drop-out 0.5s cubic-bezier(0.5, 0, 1, 0.45) both;
+      animation: drop-out 0.42s cubic-bezier(0.333, 0, 0.667, 0.333) both;
 
       &:nth-child(2) {
         --drop-tilt: -25deg;
-        animation-delay: 0.15s;
-        animation-duration: 0.55s;
+        animation-delay: 0.08s;
+        animation-duration: 0.44s;
       }
 
       &:nth-child(3) {
         --drop-tilt: 32deg;
-        animation-delay: 0.3s;
-        animation-duration: 0.6s;
+        animation-delay: 0.16s;
+        animation-duration: 0.46s;
       }
     }
   }
