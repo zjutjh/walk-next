@@ -21,7 +21,7 @@
     overscroll-behavior-y: contain;
     -webkit-overflow-scrolling: touch;
     padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
-    padding-bottom: var(--navbar-space, 16px);
+    padding-bottom: var(--bottom-safe-space, 16px);
 
     &.noPadding {
       padding: 0;

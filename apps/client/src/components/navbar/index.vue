@@ -32,13 +32,13 @@ useResizeObserver(wrapRef, ([entry]) => {
   if (!entry) return;
   const height = Math.ceil(entry.target.getBoundingClientRect().height);
   document.documentElement.style.setProperty(
-    "--navbar-space",
+    "--bottom-safe-space",
     `calc(${height}px + ${NAVBAR_CLEARANCE_BUFFER_PX}px + env(safe-area-inset-bottom, 0px))`
   );
 });
 
 onBeforeUnmount(() => {
-  document.documentElement.style.removeProperty("--navbar-space");
+  document.documentElement.style.removeProperty("--bottom-safe-space");
 });
 
 const tabItems = computed(() => [

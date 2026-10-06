@@ -71,7 +71,6 @@
   flex-direction: column;
   gap: 16px;
   padding-top: 75px;
-  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - 150px);
 
   .title {
     @include ui.page-title;

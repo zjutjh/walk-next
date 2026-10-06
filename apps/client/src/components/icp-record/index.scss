@@ -1,3 +1,7 @@
+:root:has(.icp-record--fixed) {
+  --bottom-safe-space: calc(18px + 8px + env(safe-area-inset-bottom, 0px));
+}
+
 /* 网站 ICP 备案号，展示于页面底部 */
 .icp-record {
   display: block;
