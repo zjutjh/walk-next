@@ -1,0 +1,74 @@
+html {
+  .van-dialog {
+    box-sizing: border-box;
+    overflow: visible;
+    padding: 0 24px 24px;
+    background: #f0fff1;
+    border-radius: 16px;
+
+    .van-dialog__content {
+      overflow: visible;
+    }
+
+    .van-dialog__header {
+      box-sizing: border-box;
+      margin: 0 0 16px;
+      padding: 0;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #1f2937;
+
+      &::before {
+        display: block;
+        width: 160px;
+        height: 160px;
+        margin: -120px auto 8px;
+        content: "";
+        background: url("@/assets/images/programmer.png") center / contain
+          no-repeat;
+        filter: drop-shadow(2px 0 #f0fff1) drop-shadow(-2px 0 #f0fff1)
+          drop-shadow(0 2px #f0fff1) drop-shadow(0 -2px #f0fff1)
+          drop-shadow(2px 2px #f0fff1) drop-shadow(-2px 2px #f0fff1)
+          drop-shadow(2px -2px #f0fff1) drop-shadow(-2px -2px #f0fff1);
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+
+    .van-dialog__message {
+      margin: 0 0 28px;
+      padding: 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #6b7280;
+      white-space: pre-line;
+    }
+
+    .van-dialog__footer {
+      gap: 16px;
+      padding: 0;
+      background: transparent;
+    }
+
+    .van-dialog__confirm,
+    .van-dialog__cancel {
+      flex: 1;
+      height: 40px;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      border-radius: 999px;
+    }
+
+    .van-dialog__confirm {
+      color: #fff;
+      background: #87c493;
+    }
+
+    .van-dialog__cancel {
+      color: #3d4759;
+      background: #ccc;
+    }
+  }
+}
