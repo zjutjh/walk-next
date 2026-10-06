@@ -11,63 +11,58 @@
   }
 }
 
-@keyframes fade-out {
+@keyframes vt-card-drop {
   from {
     opacity: 1;
-    transform: translateY(0);
+    translate: 0 0;
+    rotate: 0deg;
   }
 
   to {
     opacity: 0;
-    transform: translateY(-12px);
+    translate: 0 110vh;
+    rotate: var(--vt-tilt);
   }
 }
 
-@keyframes card-lead-out {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-110%);
-  }
-}
-
-@keyframes card-follow-out {
+@keyframes vt-card-follow {
   from {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    translate: 0 0;
+    scale: 1;
     filter: blur(0);
   }
 
   30% {
     opacity: 0.4;
-    transform: translateX(-2%) scale(0.96);
+    translate: -2% 0;
+    scale: 0.96;
     filter: blur(2px);
   }
 
   60% {
     opacity: 0.12;
-    transform: translateX(-10%) scale(0.93);
+    translate: -10% 0;
+    scale: 0.93;
     filter: blur(4.5px);
   }
 
   to {
     opacity: 0;
-    transform: translateX(-45%) scale(0.92);
+    translate: -45% 0;
+    scale: 0.92;
     filter: blur(10px);
   }
 }
 
-@keyframes drop-out {
+@keyframes vt-card-lead {
   from {
     opacity: 1;
-    transform: translateY(0) rotate(0deg);
+    translate: 0 0;
   }
 
   to {
-    opacity: 0;
-    transform: translateY(110vh) rotate(var(--drop-tilt, 4deg));
+    translate: -110% 0;
   }
 }
 
@@ -108,10 +103,6 @@
     cursor: pointer;
     animation: rise-in 0.38s ease both;
     transition: transform 0.15s ease;
-
-    &:nth-child(1) {
-      animation-delay: 0s;
-    }
 
     &:nth-child(2) {
       animation-delay: 0.05s;
@@ -175,59 +166,7 @@
     }
   }
 
-  &.leavingForward {
-    .title,
-    .loginLink {
-      animation: fade-out 0.25s ease both;
-    }
-
-    .card {
-      animation: card-follow-out 0.42s linear both;
-      animation-delay: 0.12s;
-    }
-
-    .cardLeading {
-      animation: card-lead-out 0.38s cubic-bezier(0.55, 0.05, 0.95, 0.45) both;
-      animation-delay: 0s;
-    }
-  }
-
-  &.leavingBackward {
-    overflow: hidden;
-
-    .title,
-    .loginLink {
-      animation: fade-out 0.12s ease both;
-    }
-
-    .card {
-      --drop-tilt: 15deg;
-      animation: drop-out 0.42s cubic-bezier(0.333, 0, 0.667, 0.333) both;
-
-      &:nth-child(2) {
-        --drop-tilt: -25deg;
-        animation-delay: 0.08s;
-        animation-duration: 0.44s;
-      }
-
-      &:nth-child(3) {
-        --drop-tilt: 32deg;
-        animation-delay: 0.16s;
-        animation-duration: 0.46s;
-      }
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    &.leavingForward,
-    &.leavingBackward {
-      .title,
-      .card,
-      .loginLink {
-        animation: none;
-      }
-    }
-
     .title,
     .card {
       animation: none;
@@ -238,4 +177,39 @@
       transition: none;
     }
   }
+}
+
+::view-transition-old(register-drop-0),
+::view-transition-old(register-drop-1),
+::view-transition-old(register-drop-2) {
+  animation: vt-card-drop 0.42s cubic-bezier(0.333, 0, 0.667, 0.333) both;
+}
+
+::view-transition-old(register-drop-0) {
+  --vt-tilt: 15deg;
+}
+
+::view-transition-old(register-drop-1) {
+  --vt-tilt: -25deg;
+  animation-delay: 0.08s;
+}
+
+::view-transition-old(register-drop-2) {
+  --vt-tilt: 32deg;
+  animation-delay: 0.16s;
+}
+
+::view-transition-old(register-lead) {
+  animation: vt-card-lead 0.38s cubic-bezier(0.55, 0.05, 0.95, 0.45) both;
+}
+
+::view-transition-old(register-follow-0),
+::view-transition-old(register-follow-1),
+::view-transition-old(register-follow-2) {
+  animation: vt-card-follow 0.42s linear 0.12s both;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
 }
