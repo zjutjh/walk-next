@@ -70,7 +70,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding-top: 75px;
+  padding: 60px 0 30px;
 
   .title {
     @include ui.page-title;
