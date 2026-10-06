@@ -22,7 +22,7 @@
 
 .title {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
   margin: 0;
   color: #283224;
@@ -40,6 +40,7 @@
 }
 
 .helpButton {
+  align-self: center;
   margin-left: auto;
 }
 
