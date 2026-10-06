@@ -61,19 +61,19 @@ const cardViewName = (target: string, index: number) => {
   return target === leavingRoute.value ? "register-lead" : `register-follow-${index}`;
 };
 
-const leave = (name: string, lead: string | null) => {
+const leave = async (name: string, lead: string | null) => {
   if (isLeaving.value) return;
   isLeaving.value = true;
   leavingRoute.value = lead;
-  void ((func) => {
-    if (isVTSupported.value && preferredMotion.value === "no-preference")
-      return document.startViewTransition(func).finished;
-    return func();
-  })(async () => {
-    await router.replace({ name, query: route.query });
-  }).catch(() => {
+  try {
+    await ((func: () => Promise<unknown>) => {
+      if (isVTSupported.value && preferredMotion.value === "no-preference")
+        return document.startViewTransition(func).finished;
+      return func();
+    })(() => router.replace({ name, query: route.query }));
+  } catch {
     isLeaving.value = false;
     leavingRoute.value = null;
-  });
+  }
 };
 </script>
