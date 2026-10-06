@@ -11,8 +11,10 @@
       <van-collapse-item name="code" :border="false">
         <template #title>
           <h2 :class="styles.title">
-            <van-icon v-if="icon" :name="icon" />
-            {{ title }}
+            <span :class="styles.label">
+              <van-icon v-if="props.icon" :name="props.icon" />
+              {{ title }}
+            </span>
             <span v-if="hint" :class="styles.hint">{{ hint }}</span>
             <span v-if="props.help" :class="styles.helpButton">
               <help-button :title="props.helpTitle" :message="props.helpMessage" />

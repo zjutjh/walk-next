@@ -22,7 +22,7 @@
 
 .title {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 6px;
   margin: 0;
   color: #283224;
@@ -30,6 +30,12 @@
   font-weight: 700;
   line-height: 1.4;
   -webkit-tap-highlight-color: transparent;
+}
+
+.label {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
 }
 
 .titlePressing {
@@ -40,7 +46,6 @@
 }
 
 .helpButton {
-  align-self: center;
   margin-left: auto;
 }
 
