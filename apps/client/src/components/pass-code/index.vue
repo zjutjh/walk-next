@@ -1,12 +1,5 @@
 <template>
-  <section
-    :class="[styles.section, isTitlePressing ? styles.titlePressing : undefined]"
-    :aria-label="label"
-    @pointerdown.capture="handlePointerDown"
-    @pointerup="isTitlePressing = false"
-    @pointercancel="isTitlePressing = false"
-    @pointerleave="isTitlePressing = false"
-  >
+  <section :class="styles.section" :aria-label="label">
     <van-collapse v-model="activeNames" :border="false">
       <van-collapse-item name="code" :border="false">
         <template #title>
@@ -51,14 +44,6 @@ const props = withDefaults(
 );
 
 const activeNames = ref<string[]>(props.expanded ? ["code"] : []);
-const isTitlePressing = ref(false);
-
-function handlePointerDown(event: PointerEvent) {
-  const target = event.target instanceof Element ? event.target : null;
-  isTitlePressing.value =
-    Boolean(target?.closest(".van-collapse-item__title")) &&
-    !target?.closest(`.${styles.helpButton}`);
-}
 
 watch(
   () => props.expanded,

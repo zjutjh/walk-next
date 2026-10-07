@@ -8,6 +8,7 @@
   --van-cell-vertical-padding: 0;
   --van-cell-horizontal-padding: 0;
   --van-cell-background: transparent;
+  --van-cell-active-color: transparent;
   --van-collapse-item-content-padding: 0;
   --van-collapse-item-content-background: transparent;
 
@@ -17,6 +18,11 @@
     transition:
       opacity 100ms ease,
       transform 100ms ease;
+
+    &:active:not(:has(.helpButton:active)) {
+      opacity: 0.6;
+      transform: scale(0.98);
+    }
   }
 }
 
@@ -29,20 +35,12 @@
   font-size: 16px;
   font-weight: 700;
   line-height: 1.4;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .label {
   display: flex;
   align-items: baseline;
   gap: 6px;
-}
-
-.titlePressing {
-  :global(.van-collapse-item__title) {
-    opacity: 0.6;
-    transform: scale(0.98);
-  }
 }
 
 .helpButton {
