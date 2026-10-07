@@ -1,6 +1,6 @@
 <template>
-  <div :class="[styles.decoration, mirror && styles.mirror]" :style="decorationStyle">
-    <img :src="src" alt="" :class="styles.decorationImage" />
+  <div :class="[styles.decoration, props.mirror && styles.mirror]" :style="decorationStyle">
+    <img :src="props.src" alt="" :class="styles.decorationImage" />
   </div>
 </template>
 

@@ -10,7 +10,7 @@
     <qr-code :value="qrCodeValue" :class="styles.qrCode" />
     <p :class="styles.number">
       <span>{{ $t("序号") }}</span>
-      <strong>{{ userId }}</strong>
+      <strong>{{ props.userId }}</strong>
     </p>
   </pass-code>
 </template>

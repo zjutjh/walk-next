@@ -1,14 +1,14 @@
 <template>
-  <section :class="styles.section" :aria-label="label">
+  <section :class="styles.section" :aria-label="props.label">
     <van-collapse v-model="activeNames" :border="false">
       <van-collapse-item name="code" :border="false">
         <template #title>
           <h2 :class="styles.title">
             <span :class="styles.label">
               <van-icon v-if="props.icon" :name="props.icon" />
-              {{ title }}
+              {{ props.title }}
             </span>
-            <span v-if="hint" :class="styles.hint">{{ hint }}</span>
+            <span v-if="props.hint" :class="styles.hint">{{ props.hint }}</span>
             <span v-if="props.help" :class="styles.helpButton">
               <help-button :title="props.helpTitle" :message="props.helpMessage" />
             </span>
