@@ -45,7 +45,8 @@ const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
       name: value.name,
       identity: value.identity,
       tel: value.tel,
-      password: value.password
+      password: value.password,
+      home: value.home
     }),
   onSuccess: () => {
     showSuccessToast({ message: t("注册成功") });

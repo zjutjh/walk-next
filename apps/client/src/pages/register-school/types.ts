@@ -1,3 +1,5 @@
+import type { UserHome } from "api/types/client";
+
 export interface SchoolRegisterFormValue {
   name: string;
   stuId: string;
@@ -6,4 +8,5 @@ export interface SchoolRegisterFormValue {
   password: string;
   qq?: string;
   wechat?: string;
+  home: UserHome;
 }

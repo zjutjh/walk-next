@@ -62,3 +62,6 @@ export interface UserSummary {
 
 /** 用户类型 */
 export type UserType = "alumni" | "student" | "teacher";
+
+/** 用户户籍 */
+export type UserHome = "hong_kong_macao" | "international" | "mainland" | "taiwan";

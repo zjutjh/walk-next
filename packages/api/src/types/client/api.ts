@@ -1,5 +1,13 @@
 import type { TeamRandomListItem, TeamSummary } from "./team";
-import type { UserContact, UserGender, UserInfo, UserRole, UserSummary, UserType } from "./user";
+import type {
+  UserContact,
+  UserGender,
+  UserHome,
+  UserInfo,
+  UserRole,
+  UserSummary,
+  UserType
+} from "./user";
 import type { WalkPhase, WalkStatus } from "./walk";
 
 /** 用户登录 请求 */
@@ -99,7 +107,9 @@ export type UpdateUserInfoResponse = null;
 
 /** 校友注册 请求 */
 export interface AlumRegisterRequest {
-  /** 身份证号 */
+  /** 户籍 */
+  home: UserHome;
+  /** 证件号码 */
   identity: string;
   /** 姓名 */
   name: string;
@@ -118,7 +128,9 @@ export interface StudentRegisterRequest {
   qq?: string;
   /** 微信号 */
   wechat?: string;
-  /** 身份证号 */
+  /** 户籍 */
+  home: UserHome;
+  /** 证件号码 */
   identity: string;
   /** 姓名 */
   name: string;

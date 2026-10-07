@@ -43,6 +43,15 @@ html {
     @include custom-button;
   }
 
+  .van-radio {
+    --van-radio-checked-icon-color: #be8f58;
+    --van-radio-label-color: #333;
+  }
+
+  .van-radio-group--horizontal {
+    --van-padding-sm: 16px;
+  }
+
   @supports (-webkit-touch-callout: none) {
     input:focus {
       font-size: 18px !important;

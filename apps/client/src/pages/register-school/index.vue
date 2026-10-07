@@ -63,7 +63,8 @@ const { mutate: mutateRegister, isPending: isRegisterPending } = useMutation({
       tel: value.tel,
       password: value.password,
       qq: value.qq,
-      wechat: value.wechat
+      wechat: value.wechat,
+      home: value.home
     };
 
     return props.userType === "teacher"
