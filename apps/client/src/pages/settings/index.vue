@@ -1,7 +1,11 @@
 <template>
   <div :class="styles.page">
     <van-cell-group inset>
-      <van-image :class="styles.decorationImg" :src="decorationImgUrl" />
+      <van-image :class="styles.decorationImg" :src="decorationImgUrl">
+        <template #loading>
+          <img :class="styles.loadingLogo" :src="jhLogo" alt="" />
+        </template>
+      </van-image>
 
       <van-cell :title="t('反馈')" to="/feedback" is-link />
       <van-cell :title="t('语言')" is-link @click="handleLanguageClick">
@@ -40,6 +44,7 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
+import jhLogo from "@/assets/images/jh-logo.svg";
 import decorationImgUrl from "@/assets/images/setting-page-banner.jpg";
 import IcpRecord from "@/components/icp-record/index.vue";
 import LanguageActionSheet from "@/components/language-action-sheet/index.vue";
