@@ -10,7 +10,7 @@ export type LangMeta = {
 
 export const LANG_META: Record<ValidLanguage, LangMeta> = {
   "zh-Hans": { name: "简体中文", short: "简", vant: "zh-CN" },
-  "zh-Hant": { name: "繁體中文", short: "繁", vant: "zh-TW" },
+  "zh-Hant": { name: "繁體中文", short: "繁", vant: "zh-HK" },
   en: { name: "English", short: "En", vant: "en-US" }
 } as const;
 

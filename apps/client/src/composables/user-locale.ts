@@ -7,6 +7,16 @@ import { type Composer, createI18n, type I18n, type I18nOptions, useI18n } from 
 import { LANG_MAP, LANG_META, VALID_LANG, type ValidLanguage } from "@/constants";
 import { useLocaleStore } from "@/store/locale";
 
+const useVantLocale = async (lang: ValidLanguage): Promise<void> => {
+  const VANT_MESSAGES = {
+    "zh-Hans": () => Promise.resolve({ default: undefined }),
+    "zh-Hant": () => import("vant/es/locale/lang/zh-HK"),
+    en: () => import("vant/es/locale/lang/en-US")
+  } satisfies Record<ValidLanguage, () => Promise<{ default?: object }>>;
+  const { default: messages } = await VANT_MESSAGES[lang]();
+  Locale.use(LANG_META[lang].vant, messages);
+};
+
 const getInitLocale = (): string => {
   const { locale } = storeToRefs(useLocaleStore());
   if (locale.value) return locale.value;
@@ -40,7 +50,7 @@ export const initI18n = async (): Promise<I18n> => {
     // messages
     messages: { [locale]: messages.default }
   } satisfies I18nOptions);
-  Locale.use(LANG_META[lang].vant);
+  await useVantLocale(lang);
   document.querySelector("html")?.setAttribute("lang", locale);
   return i18n;
 };
@@ -53,9 +63,9 @@ export const useUserLocale = (): {
     get: () => VALID_LANG.find((prefix) => i18n.locale.value.startsWith(prefix)),
     set: async (newLocale: ValidLanguage) => {
       if (!i18n.availableLocales.includes(newLocale)) await loadLocaleMessages(i18n, newLocale);
+      await useVantLocale(newLocale);
       i18n.locale.value = newLocale;
       useLocaleStore().locale = newLocale;
-      Locale.use(LANG_META[newLocale].vant);
       document.querySelector("html")?.setAttribute("lang", newLocale);
     }
   });
