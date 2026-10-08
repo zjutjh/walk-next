@@ -27,3 +27,4 @@ dist-ssr
 
 **/AGENTS.local.md
 skills-lock.json
+**/public/MP_verify_*.txt
