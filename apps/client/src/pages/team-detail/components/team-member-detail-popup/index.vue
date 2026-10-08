@@ -3,7 +3,9 @@
     :show="props.opened"
     position="bottom"
     round
+    closeable
     :class="styles.popup"
+    @click-close-icon="handleCloseClick"
     @click-overlay="handleCloseClick"
   >
     <section :class="styles.content">
