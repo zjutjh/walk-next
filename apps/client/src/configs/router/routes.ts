@@ -106,6 +106,12 @@ const routes: RouteRecordRaw[] = [
         name: "team-detail",
         component: () => import("@/pages/team-detail/index.vue"),
         meta: { pageName: "团队详情", allowedRoles: ["member", "captain"] }
+      },
+      {
+        path: "edit",
+        name: "team-edit",
+        component: () => import("@/pages/team-edit/index.vue"),
+        meta: { pageName: "修改信息", allowedRoles: ["captain"] }
       }
     ]
   },

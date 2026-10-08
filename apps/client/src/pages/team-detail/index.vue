@@ -24,21 +24,12 @@
       </error-empty>
     </template>
   </div>
-
-  <team-edit-popup
-    :opened="isTeamEditPopupOpened"
-    :team="teamDetail"
-    :loading="isUpdateTeamInfoPending"
-    @close="handleTeamEditClose"
-    @submit="handleTeamEditSubmit"
-  />
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useQuery } from "@tanstack/vue-query";
 import { ErrorEmpty, LoadingContainer } from "shared";
-import { showFailToast, showSuccessToast } from "vant";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -47,17 +38,12 @@ import { CLIENT_QUERY_KEY } from "@/constants";
 import { walkClientService } from "@/utils";
 
 import TeamBasicDetail from "./components/team-basic-detail/index.vue";
-import TeamEditPopup from "./components/team-edit-popup/index.vue";
 import styles from "./index.module.scss";
-import type { TeamEditFormValue } from "./types";
 import { getMemberTypeLabel } from "./utils";
 
 const router = useRouter();
 const { t } = useI18n();
-const queryClient = useQueryClient();
 const { clientUserInfo } = useClientUserData();
-
-const isTeamEditPopupOpened = ref(false);
 
 const isCaptain = computed(() => clientUserInfo.value?.role === "captain");
 
@@ -96,57 +82,12 @@ const teamTypeLabel = computed(() => {
   return t("暂无");
 });
 
-const refreshTeamData = async () => {
-  await Promise.all([
-    queryClient.invalidateQueries({
-      queryKey: [CLIENT_QUERY_KEY.TEAM.OVERVIEW]
-    }),
-    queryClient.invalidateQueries({ queryKey: [CLIENT_QUERY_KEY.TEAM.DETAIL] })
-  ]);
-};
-
-const showErrorToast = (message: string) => {
-  showFailToast({ message });
-};
-
-const { mutate: mutateUpdateTeamInfo, isPending: isUpdateTeamInfoPending } = useMutation({
-  mutationFn: (value: TeamEditFormValue) =>
-    walkClientService.UpdateTeamInfo({
-      name: value.name,
-      slogan: value.slogan,
-      password: value.password,
-      // eslint-disable-next-line camelcase
-      allow_match: value.allowMatch,
-      // eslint-disable-next-line camelcase
-      route_name: value.routeName
-    }),
-  onSuccess: async () => {
-    showSuccessToast({ message: t("更新成功") });
-    isTeamEditPopupOpened.value = false;
-    await refreshTeamData();
-
-    router.replace({ name: "team-info" });
-  },
-  onError: (error) => {
-    showErrorToast(error.message || t("更新失败，请稍后重试"));
-  }
-});
-
 const handleTeamDetailRetry = () => {
   void refetchTeamDetail();
   void refetchOverview();
 };
 
 const handleEditTeamClick = () => {
-  isTeamEditPopupOpened.value = true;
-};
-
-const handleTeamEditClose = () => {
-  isTeamEditPopupOpened.value = false;
-};
-
-const handleTeamEditSubmit = (value: TeamEditFormValue) => {
-  if (isUpdateTeamInfoPending.value) return;
-  mutateUpdateTeamInfo(value);
+  void router.push({ name: "team-edit" });
 };
 </script>
