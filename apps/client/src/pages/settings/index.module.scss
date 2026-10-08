@@ -3,8 +3,9 @@
   color: #1f2937;
 
   .decorationImg {
+    --van-image-placeholder-background: transparent;
+
     display: block;
-    width: calc(100% - 32px);
     margin: 10px 16px 0;
     aspect-ratio: 1142 / 482;
     pointer-events: none;
