@@ -1,4 +1,4 @@
-import type { TeamRandomListItem, TeamSummary } from "./team";
+import type { TeamQuotaRouteItem, TeamRandomListItem, TeamSummary } from "./team";
 import type {
   UserContact,
   UserGender,
@@ -261,6 +261,24 @@ export interface QueryTeamOverviewResponse {
   team: TeamSummary;
 }
 
+/** 按 ID 查询团队基本信息 请求 */
+export interface QueryTeamBasicInfoRequest {
+  /** 队伍ID */
+  team_id: number;
+}
+
+/** 按 ID 查询团队基本信息 响应 */
+export interface QueryTeamBasicInfoResponse {
+  /** 队伍名称 */
+  name: string;
+  /** 队伍人数 */
+  num: number;
+  /** 队伍路线 */
+  route_name: string;
+  /** 队伍口号 */
+  slogan: string;
+}
+
 /** 随机加入团队 请求 */
 export interface RandomJoinTeamRequest {
   /** 团队 ID */
@@ -309,24 +327,13 @@ export type UpdateTeamInfoRequest = CreateTeamRequest;
 /** 修改团队 响应 */
 export type UpdateTeamInfoResponse = null;
 
-/** 获取团队变更通知 请求 */
-export type QueryTeamChangeNoticeRequest = undefined;
+/** 查询当天路线名额 请求 */
+export type QueryTeamQuotaRequest = undefined;
 
-/** 获取团队变更通知 响应 */
-export interface QueryTeamChangeNoticeResponse {
-  /** 团队密码是否已修改 */
-  password_changed: boolean;
-  /** 团队路线是否已修改 */
-  route_changed: boolean;
+/** 查询当天路线名额 响应 */
+export interface QueryTeamQuotaResponse {
+  /** 当前是否处于允许提交的时间段 */
+  can_submit: boolean;
+  /** 各路线当天名额状态 */
+  routes: TeamQuotaRouteItem[];
 }
-
-/** 确认团队变更通知 请求 */
-export interface AckTeamChangeNoticeRequest {
-  /** 确认团队密码变更通知 */
-  password_changed?: boolean;
-  /** 确认团队路线变更通知 */
-  route_changed?: boolean;
-}
-
-/** 确认团队变更通知 响应 */
-export type AckTeamChangeNoticeResponse = null;

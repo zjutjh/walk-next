@@ -179,6 +179,18 @@ export default class WalkClientService<T> extends BaseService<T> {
     return this.request({ url, method, params }, options);
   }
 
+  /** 按 ID 查询团队基本信息 */
+  QueryTeamBasicInfo(
+    req: ClientAPI.QueryTeamBasicInfoRequest,
+    options?: T
+  ): Promise<ClientAPI.QueryTeamBasicInfoResponse> {
+    const url = this.genBaseURL("/user/team/info");
+    const method = "GET";
+    const params = req;
+
+    return this.request({ url, method, params }, options);
+  }
+
   /** 随机加入团队 */
   RandomJoinTeam(
     req: ClientAPI.RandomJoinTeamRequest,
@@ -263,27 +275,15 @@ export default class WalkClientService<T> extends BaseService<T> {
     return this.request({ url, method, data }, options);
   }
 
-  /** 获取团队变更通知 */
-  QueryTeamChangeNotice(
-    req?: ClientAPI.QueryTeamChangeNoticeRequest,
+  /** 查询当天路线名额 */
+  QueryTeamQuota(
+    req?: ClientAPI.QueryTeamQuotaRequest,
     options?: T
-  ): Promise<ClientAPI.QueryTeamChangeNoticeResponse> {
-    const url = this.genBaseURL("/user/team/change-notice");
+  ): Promise<ClientAPI.QueryTeamQuotaResponse> {
+    const url = this.genBaseURL("/user/team/quota");
     const method = "GET";
     const params = req;
 
     return this.request({ url, method, params }, options);
-  }
-
-  /** 确认团队变更通知 */
-  AckTeamChangeNotice(
-    req: ClientAPI.AckTeamChangeNoticeRequest,
-    options?: T
-  ): Promise<ClientAPI.AckTeamChangeNoticeResponse> {
-    const url = this.genBaseURL("/user/team/change-notice/ack");
-    const method = "POST";
-    const data = req;
-
-    return this.request({ url, method, data }, options);
   }
 }
