@@ -368,16 +368,19 @@ const shareData = computed(() => {
   let url = "";
   if (teamDetail.value) {
     const { id, password } = teamDetail.value;
-    const shareUrl = new URL(window.location.href);
-    shareUrl.pathname = "/team/join/password";
-    shareUrl.searchParams.set("id", String(id));
-    shareUrl.searchParams.set("password", btoa(encodeURIComponent(password)));
-    url = shareUrl.toString();
+    url = new URL(
+      router.resolve({
+        name: "team-password-join",
+        query: { id: String(id), password: btoa(encodeURIComponent(password)) }
+      }).href,
+      window.location.origin
+    ).toString();
   }
+  const baseUrl = new URL(import.meta.env.BASE_URL, window.location.origin);
 
   return {
     url,
-    image: new URL("/logo.png", window.location.origin).toString(),
+    image: new URL("logo.png", baseUrl).toString(),
     title: t(TEAM_INVITE_CARD_TITLE_KEY, { name: teamDetail.value?.name ?? "" }),
     text: TEAM_INVITE_LINK_CARD_SUMMARY,
     desc: TEAM_INVITE_DESCRIPTION
@@ -468,9 +471,9 @@ const handleShareOperation = async (option: ShareSheetOption) => {
           const key =
             Math.random() < 0.5 ? TEAM_INVITE_MESSAGE_KEYS[0] : TEAM_INVITE_MESSAGE_KEYS[1];
           const message = t(key, { name: teamDetail.value.name });
-          copy(`${message}\n${shareData.value.url}`);
+          await copy(`${message}\n${shareData.value.url}`);
+          showSuccessToast({ message: t("已复制\n快去分享给你的伙伴吧！") });
         }
-        showSuccessToast({ message: t("已复制\n快去分享给你的伙伴吧！") });
         break;
       case "share-o":
         try {
