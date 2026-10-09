@@ -45,13 +45,13 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import jhLogo from "@/assets/images/jh-logo.svg";
-import decorationImgUrl from "@/assets/images/setting-page-banner.jpg";
 import IcpRecord from "@/components/icp-record/index.vue";
 import LanguageActionSheet from "@/components/language-action-sheet/index.vue";
 import { useClientUserData, useUserLocale } from "@/composables";
 import { AGREEMENT_DATE, EVENT_SESSION, LANG_META } from "@/constants";
 import { useAgreementStore } from "@/store/agreement";
 
+import decorationImgUrl from "./banner.jpg";
 import styles from "./index.module.scss";
 
 const router = useRouter();

@@ -52,10 +52,10 @@ import { useRouterState } from "shared";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import bgBottom from "@/assets/images/bg-bottom.svg";
-import bgTop from "@/assets/images/bg-top.svg";
 import logo from "@/assets/images/logo.png";
 
+import bgBottom from "./bg-bottom.svg";
+import bgTop from "./bg-top.svg";
 import styles from "./index.module.scss";
 import type { DefaultLayoutProps } from "./types";
 
