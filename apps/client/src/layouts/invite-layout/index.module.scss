@@ -24,6 +24,7 @@
 
     top: 0;
     right: -45vw;
+    transform: rotate(180deg);
   }
 
   .bgBottomLeft {
@@ -35,7 +36,7 @@
 
   .sideText {
     position: fixed;
-    top: 50%;
+    top: calc(50% + 5.5px);
     z-index: 1;
     font-size: 11px;
     font-weight: 700;
@@ -45,23 +46,23 @@
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
-    transform: rotate(90deg);
+    writing-mode: vertical-rl;
   }
 
   .sideTextLeft {
     left: 8px;
-    transform-origin: 100% 50%;
+    transform: translateY(-100%);
   }
 
   .sideTextRight {
     right: 8px;
-    transform-origin: 0% 50%;
+    transform: rotate(180deg);
   }
 
   .navbar {
     flex-shrink: 0;
     --van-nav-bar-background: transparent;
-    --van-nav-bar-title-color: #925416;
+    --van-nav-bar-title-text-color: #925416;
     --van-nav-bar-icon-color: #925416;
 
     :global(.van-nav-bar__title) {

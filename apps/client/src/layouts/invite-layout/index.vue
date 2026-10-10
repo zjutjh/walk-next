@@ -15,6 +15,7 @@
       :title="pageTitle"
       left-arrow
       safe-area-inset-top
+      :border="false"
       :left-disabled="isNavigationPending"
       :class="styles.navbar"
       @click-left="handleBack"

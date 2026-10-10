@@ -10,16 +10,33 @@
 .actionArea {
   margin-top: 24px;
 
-  :global(.van-button) {
-    --van-button-radius: 8px;
-    --van-button-primary-background: #add81f;
-    --van-button-primary-border-color: #add81f;
-    --van-button-primary-color: #1f2937;
-    --van-button-plain-color: #1f2937;
+  :global(.van-button:not(.van-button--round)) {
+    border-radius: 8px;
+  }
 
+  :global(
+    .van-button--primary:not(.van-button--plain):not(.van-button--small)
+  ) {
     height: 52px;
     font-size: 17px;
     font-weight: 700;
+    color: #1f2937;
+    background: #add81f;
+    border-color: #add81f;
+    box-shadow: none;
+
+    &:active {
+      background: #add81f;
+      box-shadow: none;
+      transform: none;
+    }
+  }
+
+  :global(.van-button--plain.van-button--primary) {
+    height: 52px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1f2937;
   }
 }
 
