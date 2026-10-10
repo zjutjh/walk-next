@@ -17,7 +17,7 @@
       safe-area-inset-top
       :left-disabled="isNavigationPending"
       :class="styles.navbar"
-      @click-left="handleBackClick"
+      @click-left="handleBack"
     />
 
     <main :class="styles.content">
@@ -29,27 +29,16 @@
 <script setup lang="ts">
 import { useRouterState } from "shared";
 import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+
+import { useBackHandler } from "@/composables";
 
 import styles from "./index.module.scss";
 import pattern from "./pattern-dash-line.svg";
 
 const route = useRoute();
-const router = useRouter();
 const { isNavigationPending } = useRouterState();
+const handleBack = useBackHandler();
 
 const pageTitle = computed(() => route.meta.pageName);
-
-const handleBackClick = () => {
-  if (router.options.history.state.back) router.back();
-  else {
-    const matched = route.matched;
-    if (matched.length >= 2) {
-      const fullPath = route.path;
-      const lastSegmentEnd = fullPath.lastIndexOf("/");
-      const parentPath = lastSegmentEnd > 0 ? fullPath.substring(0, lastSegmentEnd) : "/";
-      router.replace(parentPath);
-    } else router.replace("/");
-  }
-};
 </script>
