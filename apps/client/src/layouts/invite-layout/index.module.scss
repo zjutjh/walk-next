@@ -2,6 +2,15 @@
 
 .layout {
   --invite-green: #d9f4b5;
+  --invite-brown: #734a23;
+  --invite-deco-width: 88vw;
+  --invite-deco-max-width: 380px;
+  --invite-deco-hide: clamp(
+    0px,
+    calc(var(--invite-deco-max-width) - 43vw),
+    51%
+  );
+  --invite-deco-top: calc(46px + env(safe-area-inset-top, 0px));
 
   position: relative;
   display: flex;
@@ -12,8 +21,8 @@
   %bg {
     position: fixed;
     z-index: 0;
-    width: 88vw;
-    max-width: 380px;
+    width: var(--invite-deco-width);
+    max-width: var(--invite-deco-max-width);
     pointer-events: none;
     user-select: none;
   }
@@ -21,16 +30,17 @@
   .bgTopRight {
     @extend %bg;
 
-    top: calc(46px + env(safe-area-inset-top, 0px));
-    right: -45vw;
-    transform: rotate(180deg);
+    top: var(--invite-deco-top);
+    right: 0;
+    transform: translateX(var(--invite-deco-hide)) rotate(180deg);
   }
 
   .bgBottomLeft {
     @extend %bg;
 
     bottom: 0;
-    left: -45vw;
+    left: 0;
+    transform: translateX(calc(-1 * var(--invite-deco-hide)));
   }
 
   .sideText {
@@ -61,8 +71,8 @@
   .navbar {
     flex-shrink: 0;
     --van-nav-bar-background: transparent;
-    --van-nav-bar-title-text-color: #925416;
-    --van-nav-bar-icon-color: #925416;
+    --van-nav-bar-title-text-color: var(--invite-brown);
+    --van-nav-bar-icon-color: var(--invite-brown);
 
     :global(.van-nav-bar__title) {
       font-weight: 700;
