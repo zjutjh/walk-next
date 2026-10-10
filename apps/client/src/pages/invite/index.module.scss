@@ -1,0 +1,41 @@
+.page {
+  min-height: 100%;
+  color: #1f2937;
+}
+
+.card {
+  margin: 22px 12px 0;
+}
+
+.actionArea {
+  margin-top: 24px;
+
+  :global(.van-button) {
+    --van-button-radius: 8px;
+    --van-button-primary-background: #add81f;
+    --van-button-primary-border-color: #add81f;
+    --van-button-primary-color: #1f2937;
+    --van-button-plain-color: #1f2937;
+
+    height: 52px;
+    font-size: 17px;
+    font-weight: 700;
+  }
+}
+
+.loginHint {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #4b5563;
+  text-align: center;
+}
+
+.authActions {
+  display: flex;
+  gap: 12px;
+
+  :global(.van-button) {
+    flex: 1;
+  }
+}

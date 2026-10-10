@@ -370,8 +370,9 @@ const shareData = computed(() => {
     const { id, password } = teamDetail.value;
     url = new URL(
       router.resolve({
-        name: "team-password-join",
-        query: { id: String(id), password: btoa(encodeURIComponent(password)) }
+        name: "team-invite-join",
+        // eslint-disable-next-line camelcase
+        query: { team_id: String(id), password: btoa(encodeURIComponent(password)) }
       }).href,
       window.location.origin
     ).toString();

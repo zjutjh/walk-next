@@ -63,6 +63,12 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: "/invite",
+    name: "team-invite-join",
+    component: () => import("@/pages/invite/index.vue"),
+    meta: { pageName: "团队邀请", allowNoAuth: true, layout: { name: "invite-layout" } }
+  },
+  {
     path: "/user-agreement",
     name: "userAgreement",
     component: () => import("@/pages/user-agreement/index.vue"),

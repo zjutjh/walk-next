@@ -14,6 +14,8 @@ export const CLIENT_QUERY_KEY = {
     DETAIL: "teamDetail",
     /** 团队页面基本信息 */
     OVERVIEW: "teamOverview",
+    /** 团队邀请信息 */
+    INFO: "teamInfo",
     /** 队员详情 */
     MEMBER: "teamMember",
     /** 随机组队列表 */

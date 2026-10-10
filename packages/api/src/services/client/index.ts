@@ -185,10 +185,10 @@ export default class WalkClientService<T> extends BaseService<T> {
     options?: T
   ): Promise<ClientAPI.QueryTeamBasicInfoResponse> {
     const url = this.genBaseURL("/user/team/info");
-    const method = "GET";
-    const params = req;
+    const method = "POST";
+    const data = req;
 
-    return this.request({ url, method, params }, options);
+    return this.request({ url, method, data }, options);
   }
 
   /** 随机加入团队 */

@@ -261,22 +261,32 @@ export interface QueryTeamOverviewResponse {
   team: TeamSummary;
 }
 
-/** 按 ID 查询团队基本信息 请求 */
+/** 使用 ID 与加入密码查询团队 请求 */
 export interface QueryTeamBasicInfoRequest {
+  /** 团队加入密码 */
+  password: string;
   /** 队伍ID */
   team_id: number;
 }
 
-/** 按 ID 查询团队基本信息 响应 */
+/** 使用 ID 与加入密码查询团队 响应 */
 export interface QueryTeamBasicInfoResponse {
   /** 队伍名称 */
   name: string;
-  /** 队伍人数 */
-  num: number;
   /** 队伍路线 */
   route_name: string;
   /** 队伍口号 */
   slogan: string;
+  /** 队长姓名 */
+  captain_name: string;
+  /** 队伍是否已满 */
+  is_full: boolean;
+  /** 队伍人数，未登录时不返回 */
+  member_count: number | null;
+  /** 队伍人数上限，未登录时不返回 */
+  max_member_count: number | null;
+  /** 当前毅行阶段，未登录时不返回 */
+  phase: WalkPhase | null;
 }
 
 /** 随机加入团队 请求 */

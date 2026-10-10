@@ -1,0 +1,83 @@
+@use "@/styles/mixins" as ui;
+
+.layout {
+  --invite-green: #c6f090;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background-color: var(--invite-green);
+
+  %bg {
+    position: fixed;
+    z-index: 0;
+    width: 88vw;
+    max-width: 380px;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.35;
+  }
+
+  .bgTopRight {
+    @extend %bg;
+
+    top: 0;
+    right: -45vw;
+  }
+
+  .bgBottomLeft {
+    @extend %bg;
+
+    bottom: 0;
+    left: -45vw;
+  }
+
+  .sideText {
+    position: fixed;
+    top: 50%;
+    z-index: 1;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    color: rgba(146, 84, 22, 0.65);
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    transform: rotate(90deg);
+  }
+
+  .sideTextLeft {
+    left: 8px;
+    transform-origin: 100% 50%;
+  }
+
+  .sideTextRight {
+    right: 8px;
+    transform-origin: 0% 50%;
+  }
+
+  .navbar {
+    flex-shrink: 0;
+    --van-nav-bar-background: transparent;
+    --van-nav-bar-title-color: #925416;
+    --van-nav-bar-icon-color: #925416;
+
+    :global(.van-nav-bar__title) {
+      font-weight: 700;
+    }
+  }
+
+  .content {
+    @include ui.page-container;
+
+    z-index: 1;
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 24px);
+    padding-bottom: var(--bottom-safe-space, 16px);
+  }
+}

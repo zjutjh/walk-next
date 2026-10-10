@@ -1,0 +1,98 @@
+.card {
+  --divider-center: 86.5px;
+  --notch-size: 22px;
+
+  position: relative;
+  padding: 32px 20px 64px;
+  background: #fff;
+  border-radius: 12px;
+  text-align: center;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: var(--divider-center);
+    width: var(--notch-size);
+    height: var(--notch-size);
+    background: var(--invite-green);
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+
+  &::before {
+    left: calc(var(--notch-size) / -2);
+  }
+
+  &::after {
+    right: calc(var(--notch-size) / -2);
+  }
+}
+
+.teamName {
+  margin: 0;
+  overflow: hidden;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+  color: #1f2937;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.divider {
+  height: 0;
+  margin: 18px -20px 0;
+  border-top: 1px dashed #dcdcdc;
+}
+
+.slogan {
+  margin: 26px 0 0;
+  overflow: hidden;
+  font-size: 17px;
+  line-height: 1.4;
+  color: #1f2937;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.invitation {
+  margin: 10px 0 0;
+  font-size: 17px;
+  line-height: 1.4;
+  color: #1f2937;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.badge {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  padding: 8px 6px;
+  border-radius: 8px;
+  background: #e2e2e2;
+}
+
+.badgeValue {
+  display: block;
+  overflow: hidden;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1f1f1f;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badgeLabel {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.3;
+  color: #1f2937;
+}

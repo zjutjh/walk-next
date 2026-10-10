@@ -15,6 +15,10 @@ export interface LayoutRegistry {
     component: AsyncComponentLoader;
     props: PlainLayoutProps;
   };
+  "invite-layout": {
+    component: AsyncComponentLoader;
+    props: Record<string, never>;
+  };
 }
 
 export type LayoutName = keyof LayoutRegistry;
