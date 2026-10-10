@@ -1,0 +1,214 @@
+@use "@/styles/mixins" as ui;
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vt-card-drop {
+  from {
+    opacity: 1;
+    translate: 0 0;
+    rotate: 0deg;
+  }
+
+  to {
+    opacity: 0;
+    translate: 0 110vh;
+    rotate: var(--vt-tilt);
+  }
+}
+
+@keyframes vt-card-follow {
+  from {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    filter: blur(0);
+  }
+
+  30% {
+    opacity: 0.4;
+    translate: -2% 0;
+    scale: 0.96;
+    filter: blur(2px);
+  }
+
+  60% {
+    opacity: 0.12;
+    translate: -10% 0;
+    scale: 0.93;
+    filter: blur(4.5px);
+  }
+
+  to {
+    opacity: 0;
+    translate: -45% 0;
+    scale: 0.92;
+    filter: blur(10px);
+  }
+}
+
+@keyframes vt-card-lead {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  to {
+    translate: -110% 0;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 60px 0 30px;
+
+  .title {
+    @include ui.page-title;
+
+    margin: 0;
+    padding: 0 16px;
+    animation: rise-in 0.34s ease both;
+  }
+
+  .cardList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 40px 24px;
+    background: rgba(190, 143, 88, 0.03);
+    border: 0;
+    border-radius: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    animation: rise-in 0.38s ease both;
+    transition: transform 0.15s ease;
+
+    &:nth-child(2) {
+      animation-delay: 0.05s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.12s;
+    }
+
+    &:active {
+      background: rgba(190, 143, 88, 0.09);
+      transform: scale(0.98);
+    }
+  }
+
+  .cardIcon {
+    position: absolute;
+    right: 78px;
+    bottom: -28px;
+    width: 118px;
+    height: 118px;
+    color: #8a6136;
+    opacity: 0.16;
+    pointer-events: none;
+  }
+
+  .cardName {
+    position: relative;
+    font-size: 40px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #734a23;
+  }
+
+  .cardArrow {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+    color: rgba(190, 143, 88, 0.8);
+    background: rgba(190, 143, 88, 0.12);
+    border-radius: 50%;
+  }
+
+  .loginLink {
+    @include ui.guide-link;
+
+    padding: 0;
+    font-family: inherit;
+    background: transparent;
+    border: 0;
+    transition:
+      opacity 0.2s ease,
+      transform 0.15s ease;
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .title,
+    .card {
+      animation: none;
+    }
+
+    .card,
+    .loginLink {
+      transition: none;
+    }
+  }
+}
+
+::view-transition-old(register-drop-0),
+::view-transition-old(register-drop-1),
+::view-transition-old(register-drop-2) {
+  animation: vt-card-drop 0.42s cubic-bezier(0.333, 0, 0.667, 0.333) both;
+}
+
+::view-transition-old(register-drop-0) {
+  --vt-tilt: 15deg;
+}
+
+::view-transition-old(register-drop-1) {
+  --vt-tilt: -25deg;
+  animation-delay: 0.08s;
+}
+
+::view-transition-old(register-drop-2) {
+  --vt-tilt: 32deg;
+  animation-delay: 0.16s;
+}
+
+::view-transition-old(register-lead) {
+  animation: vt-card-lead 0.38s cubic-bezier(0.55, 0.05, 0.95, 0.45) both;
+}
+
+::view-transition-old(register-follow-0),
+::view-transition-old(register-follow-1),
+::view-transition-old(register-follow-2) {
+  animation: vt-card-follow 0.42s linear 0.12s both;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+}

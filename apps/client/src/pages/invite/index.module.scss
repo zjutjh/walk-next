@@ -1,0 +1,59 @@
+.page {
+  min-height: 100%;
+  color: #1f2937;
+}
+
+.card {
+  margin: 22px 12px 0;
+}
+
+.actionArea {
+  margin-top: 24px;
+
+  %button-base {
+    height: 52px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1f2937;
+  }
+
+  :global(.van-button:not(.van-button--round)) {
+    border-radius: 8px;
+  }
+
+  :global(
+    .van-button--primary:not(.van-button--plain):not(.van-button--small)
+  ) {
+    @extend %button-base;
+
+    background: #add81f;
+    border-color: #add81f;
+    box-shadow: 0 6px 16px rgba(173, 216, 31, 0.35);
+
+    &:active {
+      background: #add81f;
+      transform: none;
+    }
+  }
+
+  :global(.van-button--plain.van-button--primary) {
+    @extend %button-base;
+  }
+}
+
+.loginHint {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #4b5563;
+  text-align: center;
+}
+
+.authActions {
+  display: flex;
+  gap: 12px;
+
+  :global(.van-button) {
+    flex: 1;
+  }
+}

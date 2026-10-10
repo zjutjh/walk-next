@@ -1,0 +1,30 @@
+.page {
+  box-sizing: border-box;
+  color: #1f2937;
+
+  .decorationImg {
+    --van-image-placeholder-background: transparent;
+
+    display: block;
+    margin: 10px 16px 0;
+    aspect-ratio: 1142 / 482;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .loadingLogo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .agreementCell :global(.van-cell__value) {
+    overflow: visible;
+  }
+
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+  }
+}

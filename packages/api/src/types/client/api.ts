@@ -1,20 +1,23 @@
-import type { TeamRandomListItem, TeamSummary } from "./team";
+import type { TeamQuotaRouteItem, TeamRandomListItem, TeamSummary } from "./team";
 import type {
   UserContact,
   UserGender,
+  UserHome,
   UserInfo,
   UserRole,
   UserSummary,
-  UserType,
-  UserWalkStatus
+  UserType
 } from "./user";
+import type { WalkPhase, WalkStatus } from "./walk";
 
 /** 用户登录 请求 */
 export interface LoginRequest {
+  /** 账号类型：手机号或学工号 */
+  account_type: "tel" | "stu_id";
+  /** 账号 */
+  account: string;
   /** 密码 */
   password: string;
-  /** 手机号码 */
-  tel: string;
 }
 
 /** 用户登录 响应 */
@@ -30,50 +33,85 @@ export type QueryUserInfoRequest = undefined;
 
 /** 获取用户信息 响应 */
 export interface QueryUserInfoResponse {
-  /** QQ 号 */
-  qq: string;
-  /** 电话 */
-  tel: string;
-  /** 微信号 */
-  wechat: string;
-  /** ID */
-  id: number;
-  /** 队员姓名 */
-  name: string;
-  /** 队伍中身份 */
-  role: UserRole;
-  /** 人员类型 */
-  type: UserType;
   /** 剩余创建团队次数 */
   create_op: number;
+  /** 性别 0未知 1男 2女 */
+  gender: UserGender;
+  /** 户籍 */
+  home: UserHome;
+  /** ID */
+  id: number;
   /** 剩余加入团队次数 */
   join_op: number;
+  /** 队员姓名 */
+  name: string;
+  /** QQ 号 */
+  qq: string;
+  /** 队伍中身份 */
+  role: UserRole;
   /** 学号或工号 */
   stu_id: string;
   /** 团队ID */
   team_id: number;
-  /** 用户状态 */
-  walk_status: UserWalkStatus;
-  /** 性别 */
-  gender: UserGender;
-  /** 个人通行码，即用户 ID */
-  pass_code: number;
+  /** 电话 */
+  tel: string;
+  /** 人员类型 */
+  type: UserType;
+  /** 微信号 */
+  wechat: string;
 }
+
+/** 获取当前阶段 请求 */
+export type QueryPhaseRequest = undefined;
+
+/** 获取当前阶段 响应 */
+export interface QueryPhaseResponse {
+  /** 当前毅行阶段，空字符串表示活动未激活 */
+  phase: WalkPhase;
+}
+
+/** 通知信息 */
+export interface NoticeItem {
+  /** 通知展示文案 */
+  content: string;
+  /** 通知ID */
+  id: number;
+}
+
+/** 获取未读通知列表 请求 */
+export type QueryNoticeListRequest = undefined;
+
+/** 获取未读通知列表 响应 */
+export interface QueryNoticeListResponse {
+  /** 未读通知，按产生时间升序排列 */
+  notices: NoticeItem[];
+}
+
+/** 确认通知 请求 */
+export interface AckNoticeRequest {
+  /** 已确认的通知ID */
+  notice_id: number;
+}
+
+/** 确认通知 响应 */
+export type AckNoticeResponse = null;
 
 /** 修改用户信息 请求 */
 export interface UpdateUserInfoRequest {
   /** 联系方式 */
   contact: UserContact;
+  /** 户籍 */
+  home?: UserHome;
   /** 身份证号 */
   identity?: string;
 }
 
 /** 修改用户信息 响应 */
-export type UpdateUserInfoResponse = null;
+export type UpdateUserInfoResponse = QueryUserInfoResponse;
 
 /** 校友注册 请求 */
 export interface AlumRegisterRequest {
-  /** 身份证号 */
+  /** 证件号码 */
   identity: string;
   /** 姓名 */
   name: string;
@@ -92,7 +130,9 @@ export interface StudentRegisterRequest {
   qq?: string;
   /** 微信号 */
   wechat?: string;
-  /** 身份证号 */
+  /** 户籍 */
+  home: UserHome;
+  /** 证件号码 */
   identity: string;
   /** 姓名 */
   name: string;
@@ -147,26 +187,26 @@ export type QueryTeamDetailRequest = undefined;
 
 /** 团队详细信息 响应 */
 export interface QueryTeamDetailResponse {
+  /** 是否允许随机匹配 */
+  allow_match: boolean;
+  /** 团队编码 */
+  code: string;
   /** ID */
   id: number;
+  /** 最新经过点位名称 */
+  latest_point_name: string;
   /** 队名 */
   name: string;
+  /** 团队加入密码，普通队员返回空字符串 */
+  password: string;
   /** 所选路线 */
   route_name: string;
   /** 队伍标语 */
   slogan: string;
-  /** 是否允许随机匹配 */
-  allow_match: boolean;
-  /** 最新经过点位名称 */
-  latest_point_name: string;
-  /** 团队加入密码，仅队长返回 */
-  password?: string;
   /** 队伍状态 */
-  status: string;
+  status: WalkStatus;
   /** 是否已提交 */
   submitted: boolean;
-  /** 团队类型 */
-  type: string;
 }
 
 /** 解散团队 请求 */
@@ -204,22 +244,14 @@ export interface QueryTeamMemberResponse {
   id: number;
   /** 队员姓名 */
   name: string;
-  /** 队伍中身份 */
-  role: UserRole;
-  /** 人员类型 */
-  type: UserType;
   /** QQ 号 */
   qq: string;
   /** 电话 */
   tel: string;
+  /** 用户状态 */
+  walk_status: WalkStatus;
   /** 微信号 */
   wechat: string;
-  /** 是否可移除 */
-  can_remove: boolean;
-  /** 是否可转让队长 */
-  can_transfer_captain: boolean;
-  /** 用户状态 */
-  walk_status: UserWalkStatus;
 }
 
 /** 团队页面基本信息 请求 */
@@ -229,6 +261,34 @@ export type QueryTeamOverviewRequest = undefined;
 export interface QueryTeamOverviewResponse {
   members: UserSummary[];
   team: TeamSummary;
+}
+
+/** 使用 ID 与加入密码查询团队 请求 */
+export interface QueryTeamBasicInfoRequest {
+  /** 团队加入密码 */
+  password: string;
+  /** 队伍ID */
+  team_id: number;
+}
+
+/** 使用 ID 与加入密码查询团队 响应 */
+export interface QueryTeamBasicInfoResponse {
+  /** 队伍名称 */
+  name: string;
+  /** 队伍路线 */
+  route_name: string;
+  /** 队伍口号 */
+  slogan: string;
+  /** 队长姓名 */
+  captain_name: string;
+  /** 队伍是否已满 */
+  is_full: boolean;
+  /** 队伍人数，未登录时不返回 */
+  member_count: number | null;
+  /** 队伍人数上限，未登录时不返回 */
+  max_member_count: number | null;
+  /** 当前毅行阶段，未登录时不返回 */
+  phase: WalkPhase | null;
 }
 
 /** 随机加入团队 请求 */
@@ -278,3 +338,14 @@ export type UpdateTeamInfoRequest = CreateTeamRequest;
 
 /** 修改团队 响应 */
 export type UpdateTeamInfoResponse = null;
+
+/** 查询当天路线名额 请求 */
+export type QueryTeamQuotaRequest = undefined;
+
+/** 查询当天路线名额 响应 */
+export interface QueryTeamQuotaResponse {
+  /** 当前是否处于允许提交的时间段 */
+  can_submit: boolean;
+  /** 各路线当天名额状态 */
+  routes: TeamQuotaRouteItem[];
+}

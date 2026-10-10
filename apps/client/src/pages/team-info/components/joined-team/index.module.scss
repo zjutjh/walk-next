@@ -1,0 +1,30 @@
+.page {
+  box-sizing: border-box;
+  color: #1f2937;
+
+  :global(.loading-container) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.loadingContainer {
+  min-height: 240px;
+}
+
+.actionArea {
+  display: grid;
+  gap: 14px;
+}
+
+.qrPopup {
+  display: flex;
+  padding: 20px;
+}
+
+.qrCode {
+  display: block;
+  width: 300px;
+  height: 300px;
+}

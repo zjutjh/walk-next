@@ -1,0 +1,93 @@
+@use "@/styles/mixins" as ui;
+
+.layout {
+  --invite-green: #d9f4b5;
+  --invite-brown: #734a23;
+  --invite-deco-width: 88vw;
+  --invite-deco-max-width: 380px;
+  --invite-deco-hide: clamp(
+    0px,
+    calc(var(--invite-deco-max-width) - 43vw),
+    51%
+  );
+  --invite-deco-top: calc(46px + env(safe-area-inset-top, 0px));
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background-color: var(--invite-green);
+
+  %bg {
+    position: fixed;
+    z-index: 0;
+    width: var(--invite-deco-width);
+    max-width: var(--invite-deco-max-width);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .bgTopRight {
+    @extend %bg;
+
+    top: var(--invite-deco-top);
+    right: 0;
+    transform: translateX(var(--invite-deco-hide)) rotate(180deg);
+  }
+
+  .bgBottomLeft {
+    @extend %bg;
+
+    bottom: 0;
+    left: 0;
+    transform: translateX(calc(-1 * var(--invite-deco-hide)));
+  }
+
+  .sideText {
+    position: fixed;
+    top: calc(50% + 5.5px);
+    z-index: 1;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    color: rgba(146, 84, 22, 0.65);
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    writing-mode: vertical-rl;
+  }
+
+  .sideTextLeft {
+    left: 8px;
+    transform: translateY(-100%);
+  }
+
+  .sideTextRight {
+    right: 8px;
+    transform: rotate(180deg);
+  }
+
+  .navbar {
+    flex-shrink: 0;
+    --van-nav-bar-background: transparent;
+    --van-nav-bar-title-text-color: var(--invite-brown);
+    --van-nav-bar-icon-color: var(--invite-brown);
+
+    :global(.van-nav-bar__title) {
+      font-weight: 700;
+    }
+  }
+
+  .content {
+    @include ui.page-container;
+
+    z-index: 1;
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 24px);
+    padding-bottom: var(--bottom-safe-space, 16px);
+  }
+}
