@@ -1,11 +1,6 @@
 <template>
   <div :class="styles.page">
-    <password-join-form
-      :loading="isJoinPending"
-      :initial-team-id="initialTeamId"
-      :initial-password="initialPassword"
-      @submit="handleJoinSubmit"
-    />
+    <password-join-form :loading="isJoinPending" @submit="handleJoinSubmit" />
   </div>
 </template>
 
@@ -13,9 +8,8 @@
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { RequestError, RESP_CODE } from "shared";
 import { showFailToast, showSuccessToast } from "vant";
-import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 import { useClientUserData } from "@/composables";
 import { CLIENT_QUERY_KEY } from "@/constants";
@@ -26,25 +20,9 @@ import styles from "./index.module.scss";
 import type { PasswordJoinFormValue } from "./types";
 
 const router = useRouter();
-const route = useRoute();
 const { t } = useI18n();
 const queryClient = useQueryClient();
 const { updateUserInfo } = useClientUserData();
-
-const initialTeamId = computed(() => {
-  const id = route.query.id;
-  return typeof id === "string" ? id : "";
-});
-
-const initialPassword = computed(() => {
-  const password = route.query.password;
-  if (typeof password !== "string") return "";
-  try {
-    return decodeURIComponent(atob(password));
-  } catch {
-    return "";
-  }
-});
 
 const getJoinErrorMessage = (error: Error) => {
   if (error instanceof RequestError && error.code === RESP_CODE.NO_JOIN_CHANCE) {

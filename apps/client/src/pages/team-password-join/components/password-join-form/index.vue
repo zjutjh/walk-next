@@ -56,8 +56,6 @@ import styles from "./index.module.scss";
 
 const props = defineProps<{
   loading: boolean;
-  initialTeamId?: string;
-  initialPassword?: string;
 }>();
 
 const emit = defineEmits<{
@@ -67,8 +65,8 @@ const emit = defineEmits<{
 const formRef = useTemplateRef<FormInstance>("formRef");
 
 const formValue = reactive({
-  teamId: props.initialTeamId ?? "",
-  password: props.initialPassword ?? ""
+  teamId: "",
+  password: ""
 });
 
 const [isPasswordVisible, handlePasswordVisibleClick] = useToggle();
