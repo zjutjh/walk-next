@@ -5,28 +5,24 @@
   position: relative;
   padding: 32px 20px 64px;
   background: #fff;
-  border-radius: 12px;
   text-align: center;
 
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    top: var(--divider-center);
-    width: var(--notch-size);
-    height: var(--notch-size);
-    background: var(--invite-green);
-    border-radius: 50%;
-    transform: translateY(-50%);
-  }
+  --notch-mask:
+    radial-gradient(
+      circle at 0 var(--divider-center),
+      transparent calc(var(--notch-size) / 2),
+      #000 calc(var(--notch-size) / 2 + 0.5px)
+    ),
+    radial-gradient(
+      circle at 100% var(--divider-center),
+      transparent calc(var(--notch-size) / 2),
+      #000 calc(var(--notch-size) / 2 + 0.5px)
+    );
 
-  &::before {
-    left: calc(var(--notch-size) / -2);
-  }
-
-  &::after {
-    right: calc(var(--notch-size) / -2);
-  }
+  -webkit-mask: var(--notch-mask);
+  -webkit-mask-composite: source-in;
+  mask: var(--notch-mask);
+  mask-composite: intersect;
 }
 
 .teamName {
