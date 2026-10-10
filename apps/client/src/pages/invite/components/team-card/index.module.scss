@@ -1,3 +1,7 @@
+.shadowWrap {
+  filter: drop-shadow(0 10px 24px rgba(115, 74, 35, 0.18));
+}
+
 .card {
   --divider-center: 86.5px;
   --notch-size: 22px;
@@ -39,7 +43,7 @@
 .divider {
   height: 0;
   margin: 18px -20px 0;
-  border-top: 1px dashed #dcdcdc;
+  border-top: 1px dashed #cfcfcf;
 }
 
 .slogan {
@@ -47,7 +51,7 @@
   overflow: hidden;
   font-size: 17px;
   line-height: 1.4;
-  color: #1f2937;
+  color: #4b5563;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -69,9 +73,9 @@
   box-sizing: border-box;
   flex: 1;
   min-width: 0;
-  padding: 8px 6px;
-  border-radius: 8px;
-  background: #e2e2e2;
+  padding: 10px 6px;
+  border-radius: 10px;
+  background: #f3f6ea;
 }
 
 .badgeValue {
@@ -90,5 +94,5 @@
   margin-top: 2px;
   font-size: 13px;
   line-height: 1.3;
-  color: #1f2937;
+  color: #7a8471;
 }
