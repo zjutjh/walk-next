@@ -31,13 +31,22 @@
         autocomplete="off"
         clearable
       />
+      <van-field :label="t('户籍')" name="home">
+        <template #input>
+          <van-radio-group v-model="formValue.home" direction="horizontal">
+            <van-radio v-for="option in HOME_OPTIONS" :key="option.value" :name="option.value">
+              {{ t(option.label) }}
+            </van-radio>
+          </van-radio-group>
+        </template>
+      </van-field>
       <van-field
         v-model="formValue.identity"
         :rules="identityRules"
-        :label="t('身份证号')"
+        :label="t('证件号码')"
         name="identity"
         maxlength="18"
-        :placeholder="t('请输入身份证号码')"
+        :placeholder="t('请输入证件号码')"
         autocomplete="off"
         clearable
       />
@@ -53,9 +62,10 @@
 
 <script setup lang="ts">
 import { watchImmediate } from "@vueuse/core";
-import { reactive } from "vue";
+import { computed, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 
+import { HOME_OPTIONS } from "@/constants/home";
 import { getIdentityRules, getTelRules } from "@/constants/validation";
 
 import type { ProfileEditFormValue } from "../../types";
@@ -73,9 +83,9 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const telRules = getTelRules(t);
-const identityRules = getIdentityRules(t);
 
 const formValue = reactive(buildInitialFormValue());
+const identityRules = computed(() => getIdentityRules(t, formValue.home));
 
 watchImmediate(
   () => props.initialValue,

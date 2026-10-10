@@ -37,6 +37,8 @@ export interface QueryUserInfoResponse {
   create_op: number;
   /** 性别 0未知 1男 2女 */
   gender: UserGender;
+  /** 户籍 */
+  home: UserHome;
   /** ID */
   id: number;
   /** 剩余加入团队次数 */
@@ -98,17 +100,17 @@ export type AckNoticeResponse = null;
 export interface UpdateUserInfoRequest {
   /** 联系方式 */
   contact: UserContact;
+  /** 户籍 */
+  home?: UserHome;
   /** 身份证号 */
   identity?: string;
 }
 
 /** 修改用户信息 响应 */
-export type UpdateUserInfoResponse = null;
+export type UpdateUserInfoResponse = QueryUserInfoResponse;
 
 /** 校友注册 请求 */
 export interface AlumRegisterRequest {
-  /** 户籍 */
-  home: UserHome;
   /** 证件号码 */
   identity: string;
   /** 姓名 */

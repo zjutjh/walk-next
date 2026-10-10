@@ -15,24 +15,11 @@
     </div>
 
     <div :class="styles.fieldGroup">
-      <label :class="styles.fieldLabel">{{ t("户籍") }}</label>
-      <van-field :class="styles.fieldInput" name="home">
-        <template #input>
-          <van-radio-group v-model="formValue.home" direction="horizontal">
-            <van-radio v-for="option in HOME_OPTIONS" :key="option.value" :name="option.value">
-              {{ t(option.label) }}
-            </van-radio>
-          </van-radio-group>
-        </template>
-      </van-field>
-    </div>
-
-    <div :class="styles.fieldGroup">
       <label :class="styles.fieldLabel">{{ t("证件号码") }}</label>
       <van-field
         v-model="formValue.identity"
         :class="styles.fieldInput"
-        :rules="identityRules"
+        :rules="createRequiredRuleWithMessage(t('请输入证件号码'))"
         name="identity"
         maxlength="128"
         :placeholder="t('请输入证件号码')"
@@ -126,8 +113,7 @@ import { computed, reactive, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 import TermsAgreement from "@/components/terms-agreement/index.vue";
-import { HOME_OPTIONS } from "@/constants/home";
-import { getIdentityRules, getTelRules } from "@/constants/validation";
+import { getTelRules } from "@/constants/validation";
 
 import type { AlumniRegisterFormValue } from "../../types";
 import styles from "./index.module.scss";
@@ -149,11 +135,8 @@ const formValue = reactive<AlumniRegisterFormValue>({
   name: "",
   identity: "",
   tel: "",
-  password: "",
-  home: "mainland"
+  password: ""
 });
-
-const identityRules = computed(() => getIdentityRules(t, formValue.home));
 
 const isPasswordVisible = ref(false);
 const isAgreed = ref(false);
@@ -194,8 +177,7 @@ const handleSubmit = async () => {
     name: formValue.name,
     identity: formValue.identity,
     tel: formValue.tel,
-    password: formValue.password,
-    home: formValue.home
+    password: formValue.password
   });
 };
 // #endregion
