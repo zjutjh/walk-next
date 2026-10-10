@@ -16,13 +16,12 @@
     max-width: 380px;
     pointer-events: none;
     user-select: none;
-    opacity: 0.35;
   }
 
   .bgTopRight {
     @extend %bg;
 
-    top: 0;
+    top: calc(46px + env(safe-area-inset-top, 0px));
     right: -45vw;
     transform: rotate(180deg);
   }
