@@ -1,19 +1,19 @@
 import { useTitle } from "@vueuse/core";
 import { compact } from "lodash-es";
-import { computed } from "vue";
+import { computed, type MaybeRef, onScopeDispose, shallowRef, unref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 
-interface UseTitleMetaOptions {
-  /**
-   * 自定义页面标题
-   *
-   * @default pageName
-   */
-  title?: string;
+const overrideTitle = shallowRef<MaybeRef<string | undefined>>();
+
+export function useOverrideTitle(title: MaybeRef<string | undefined>) {
+  overrideTitle.value = title;
+  onScopeDispose(() => {
+    if (overrideTitle.value === title) overrideTitle.value = undefined;
+  });
 }
 
-export function useTitleMeta(options?: UseTitleMetaOptions) {
+export function useTitleMeta() {
   const route = useRoute();
   const { t } = useI18n();
 
@@ -25,5 +25,5 @@ export function useTitleMeta(options?: UseTitleMetaOptions) {
     return proceed.map((pageName) => t(pageName)).join(" | ");
   });
 
-  useTitle(options?.title ?? pageNameTitle);
+  useTitle(computed(() => unref(overrideTitle.value) ?? pageNameTitle.value));
 }

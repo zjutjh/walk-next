@@ -43,8 +43,8 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
-import { useClientUserData } from "@/composables";
-import { CLIENT_QUERY_KEY } from "@/constants";
+import { useClientUserData, useOverrideTitle } from "@/composables";
+import { CLIENT_QUERY_KEY, TEAM_INVITE_CARD_TITLE_KEY } from "@/constants";
 import { walkClientService } from "@/utils";
 
 import TeamCard from "./components/team-card/index.vue";
@@ -90,6 +90,12 @@ const {
     });
   }
 });
+
+useOverrideTitle(
+  computed(() =>
+    teamInfo.value ? t(TEAM_INVITE_CARD_TITLE_KEY, { name: teamInfo.value.name }) : undefined
+  )
+);
 
 const isJoinDisabled = computed(
   () => clientUserInfo.value?.role !== "unbind" || teamInfo.value?.is_full === true
