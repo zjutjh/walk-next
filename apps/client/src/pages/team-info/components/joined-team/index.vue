@@ -364,6 +364,9 @@ const handleTransferCaptainClick = (memberId: number) => {
 const isShareSheetShow = ref(false);
 const isQrPopupShow = ref(false);
 
+const pickRandom = <T,>(l: readonly [T, ...T[]]): T =>
+  l[Math.floor(Math.random() * l.length)] ?? l[0];
+
 const shareData = computed(() => {
   let url = "";
   if (teamDetail.value) {
@@ -384,7 +387,7 @@ const shareData = computed(() => {
     image: new URL("logo.png", baseUrl).toString(),
     title: t(TEAM_INVITE_CARD_TITLE_KEY, { name: teamDetail.value?.name ?? "" }),
     text: TEAM_INVITE_LINK_CARD_SUMMARY,
-    desc: TEAM_INVITE_DESCRIPTION
+    desc: pickRandom(TEAM_INVITE_DESCRIPTION)
   };
 });
 
@@ -469,9 +472,7 @@ const handleShareOperation = async (option: ShareSheetOption) => {
         break;
       case "link-o":
         {
-          const key =
-            Math.random() < 0.5 ? TEAM_INVITE_MESSAGE_KEYS[0] : TEAM_INVITE_MESSAGE_KEYS[1];
-          const message = t(key, { name: teamDetail.value.name });
+          const message = t(pickRandom(TEAM_INVITE_MESSAGE_KEYS), { name: teamDetail.value.name });
           await copy(`${message}\n${shareData.value.url}`);
           showSuccessToast({ message: t("已复制\n快去分享给你的伙伴吧！") });
         }
