@@ -1,0 +1,260 @@
+登录: Sign In
+账号: Account
+注册: Sign Up
+电话号码: Phone number
+密码: Password
+学工号: Student/Staff ID
+姓名: Name
+微信: Weixin
+QQ: QQ
+选填: Optional
+用户协议与隐私政策: Terms of Service and Privacy Policy
+《用户协议与隐私政策》: Terms of Service and Privacy Policy
+语言: Language
+请输入电话号码: Please enter your phone number
+请输入密码: Please enter your password
+尚未加入团队: Not yet part of the team
+提交成功: Submitted successfully
+更新成功: Updated successfully
+团队名称: Team Name
+学生: Student
+队长: Captain
+队员: Team Member
+加入队伍: Join Team
+无需申请: No application required
+退出登录: Log Out
+我已阅读并同意{0}: I have read and agree to {0}
+请阅读并同意《用户协议与隐私政策》: Please read and agree to the Terms of Service and Privacy Policy
+分享队伍: Share Team
+复制链接: Copy Link
+系统分享: System Share
+分享失败，请稍后重试: Sharing failed, please try again later
+解散队伍: Disband Team
+提交: Submit
+提交队伍: Submit Team
+取消: Cancel
+确认: Confirm
+团队编号: Team ID
+团队密码: Team password
+立即加入: Join Now
+"{n}/{m} 人": "{n}/{m} member | {n}/{m} members"
+team:
+  info: Team Info
+  join:
+    hint: Choose a route and team, and set off with like-minded partners!
+profile: Profile
+查看团队详细信息: View Team Details
+signup:
+  guide-link: Don't have an account? Sign up here
+状态: Status
+未开始: Not started
+队员信息: Team member information
+修改信息: Edit Info
+当前位置: Your location
+mgsxq: Dexinfu Square
+hbgy: Slider Park
+zfgy: Zhaofeng Park
+tayg: Deqing Tian'an Cloud Valley
+dtx: Dongtiao Xi
+jls: Jinlian Temple
+ljs: Laojiaoshan
+pfs: Pingfeng Mountain
+pfsy: Pingfeng Temple
+blt: Bailongtan
+cmq: Cimuqiao
+gzsgy: Guzhangshu Park
+refresh:
+  loading: Loading...
+您是否确认退出？: Are you sure you want to log out?
+是: Yes
+否: No
+精弘毅行: Jinghong Trailwalk
+毅行流程: Trailwalk Stages
+注册组队: Register
+抢票提交: Grab Ticket
+调整队伍: Adjust Team
+毅行筹备: Trailwalk Preparation
+正式毅行: Trailwalk
+注册组队说明: Registration is open. You can enter your information and build a team, but submission is not available yet.
+抢票提交说明: Quotas are released at 12:00 noon each day. A successfully submitted team gets a quota.
+调整队伍说明: During the adjustment period, teams may add or remove members within the permitted team size, edit personal information, and transfer team leadership. They may not, however, submit a new team or dissolve the team. After the adjustment period, no further changes to personal or team information are permitted.
+该路线名额已满: The quota for this route is full.
+毅行筹备说明: Quotas and team members are confirmed and can no longer be changed. Member information will be exported for insurance and other preparations.
+正式毅行说明: Have a successful trailwalk!
+暂未开放: Not available
+当前不在毅行活动时期内: The trailwalk is not in an active phase.
+个人通行码: Personal passcode
+团队通行码: Team passcode
+未提交: Unsubmitted
+settings: Settings
+请输入微信: Please enter your Weixin ID
+请输入QQ: Please enter your QQ number
+更新失败: Update failed
+剩余组队次数: Remaining Attempts
+剩余创建团队次数: Remaining team creation attempts
+剩余加入团队次数: Remaining team join attempts
+剩余次数说明: About remaining attempts
+剩余次数说明内容:
+  Team creation attempts are used to create teams, while team join
+  attempts are used to join existing teams.
+无: None
+暂无个人信息: No personal information
+重试: Retry
+是否确认保存修改？: Confirm saving these changes?
+学生注册: Student Sign Up
+教职工注册: Faculty & Staff Sign Up
+校友注册: Alumni Sign Up
+密码加入: Join with Password
+随机加入: Join Randomly
+创建团队: Create Team
+团队详情: Team Details
+再想想: Reconsider
+共找到{n}支队伍: Found {n} team | Found {n} teams
+pfxq: Zhejiang University of Technology
+提交队伍后即可查看二维码: The QR code will be available after the team is submitted
+通知: Notice
+我知道了: Got it
+通知确认失败，请稍后重试: Notice confirmation failed, please try again later
+请输入手机号或学工号: Please enter your phone number or student/staff ID
+戳这解答: Click here for help
+屏峰全程: Pingfeng Full Course
+屏峰半程: Pingfeng Half Course
+莫干山全程: Moganshan Full Course
+反馈: Feedback
+团队邀请: Team Invitation
+确认加入: Confirm Join
+邀请链接无效: Invitation link is invalid
+邀请已失效: Invitation expired
+登录后即可加入队伍: Sign in to join a team
+查看我的团队: View My Team
+你已在该队伍中: You are already in this team.
+你已加入其他队伍，需先退出才能加入新队伍: You have joined another team. Leave it before joining a new one.
+队长{name}邀请您加入: Captain {name} invites you to join
+团队人数: Team Size
+已满: Full
+未满: Not full
+当前阶段: Current stage
+报名路线: Registration Route
+暂无口号: No slogan yet
+加入团队次数已用完: No team join attempts left
+团队人数已满: Team is full
+分享团队: Share Team
+QQ 空间: Qzone
+微博: Weibo
+刷新: Refresh
+取消提交: Cancel Submission
+退出队伍: Leave Team
+暂无团队信息: No team information
+未选择队员: No member selected
+提交失败，请稍后重试: Submission failed, please try again later
+当前团队人数不足: Not enough team members
+未到提交时间: Submission not yet open
+当天名额已满: Daily quota is full
+移出失败，请稍后重试: Remove failed, please try again later
+移出成功: Removed successfully
+移出团队: Remove Member
+移交失败，请稍后重试: Transfer failed, please try again later
+移交成功: Transferred successfully
+移交队长: Transfer Captaincy
+确认将该队员移出团队吗？: Remove this member from the team?
+确认将队长移交给该队员吗？移交后你将变为队员。: Transfer captaincy to this member? You will become a regular member.
+确认解散当前队伍吗？解散后所有队员都需要重新加入队伍。: Disband this team? All members will need to rejoin a team.
+确认退出当前队伍吗？退出后需要重新加入队伍。: Leave this team? You will need to rejoin a team.
+解散失败，请稍后重试: Disband failed, please try again later
+解散成功: Team disbanded
+退出成功: Left team
+退出失败，请稍后重试: Leave failed, please try again later
+团队详细信息加载中: Loading team details
+取消提交失败，请稍后重试: Cancel submission failed, please try again later
+确认取消当前队伍提交状态吗？: Cancel the current team submission?
+取消提交成功: Submission cancelled
+加入或创建队伍: Join or Create Team
+通过团队编号密码加入: Join with Team ID and Password
+随机匹配加入一个团队: Join a randomly matched team
+创建属于自己的团队: Create your own team
+暂无团队状态: No team status
+团队通行码可用于绑定纸质码、点位打卡，团队提交后可见。: The team passcode can be used to bind a paper code and check in at points. It is visible after the team is submitted.
+基本信息: Basic Info
+仅队长可见: Visible only to the captain
+是否提交: Submitted
+已提交: Submitted
+随机成员: Random members
+团队性质: Team Type
+队伍状态: Team Status
+毅行路线: Trailwalk Route
+暂无团队详细信息: No team details
+暂无: None
+暂无队员信息: No member information
+电话: Phone
+未填写: Not filled
+队内身份: Role in team
+人员性质: Member Type
+教职工: Faculty & Staff
+校友: Alumni
+未组队: Not in a team
+待确认: Pending
+已放弃: Abandoned
+进行中: In progress
+已退赛: Withdrawn
+违规: Violation
+已完成: Completed
+团队口号: Team Slogan
+请输入名称: Please enter a name
+请输入团队口号: Please enter the team slogan
+请输入口号: Please enter a slogan
+请输入团队名称: Please enter the team name
+请输入团队密码: Please enter the team password
+请输入团队编号: Please enter the team ID
+是否随机队友: Random teammates
+路线选择: Route Selection
+请选择是否随机队友: Please choose whether to match randomly
+请选择路线: Please select a route
+不随机: No random match
+随机匹配: Random match
+更新信息: Update Info
+更新失败，请稍后重试: Update failed, please try again later
+密码提示: Password hint
+统一身份认证密码是您登录学校统一身份认证系统的密码: The unified authentication password is the one you use to sign in to the school's unified identity authentication system.
+请输入统一身份认证密码: Please enter your unified authentication password
+学号: Student ID
+工号: Staff ID
+请输入学号: Please enter your student ID
+请输入工号: Please enter your staff ID
+确认密码: Confirm password
+请再次输入密码: Please re-enter the password
+请输入姓名: Please enter your name
+两次输入的密码不一致: Passwords do not match
+已有账号？去登录: Already have an account? Sign in
+注册成功: Signed up successfully
+注册失败，请稍后重试: Sign up failed, please try again later
+请选择您的身份: Please select your role
+请选择: Please select
+切换密码显示: Toggle password visibility
+请输入正确的电话号码: Please enter a valid phone number
+登录成功: Signed in successfully
+登录失败，请稍后重试: Sign in failed, please try again later
+登录答疑: Login Help
+知道了: Got it
+加入成功！: Joined successfully
+加入失败，请稍后重试: Join failed, please try again later
+序号: No.
+个人通行码用于团队重组、点位打卡。: The personal passcode is used for team reorganization and point check-in.
+户籍: Residence
+证件号码: ID Number
+请输入证件号码: Please enter your ID number
+请输入正确的证件号码: Please enter a valid ID number
+已退出登录: Logged out
+报名须知与免责协议: Registration Notice and Disclaimer
+编号密码有误，请重新输入！: Wrong team ID or password, please try again!
+创建成功！: Team created
+创建失败，请稍后重试: Team creation failed, please try again later
+二维码: QR Code
+中国大陆: Mainland China
+港澳: Hong Kong & Macao
+台湾: Taiwan
+境外: Overseas
+"已复制\n快去分享给你的伙伴吧！": "Copied\nShare it with your teammates!"
+暂无可加入队伍: No teams available to join
+team.invite.card-title: 'Trailwalk Together! The "{name}" team awaits you | Jinghong Trailwalk'
+team.invite.message-1: '[Jinghong Trailwalk] The "{name}" team is one short of you! Complete the trailwalk together — tap the link to join us 👇'
+team.invite.message-2: '[Jinghong Trailwalk] The "{name}" team welcomes you! Walk the full route together, waiting for you to join 💪'

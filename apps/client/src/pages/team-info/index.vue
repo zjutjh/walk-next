@@ -1,0 +1,43 @@
+<template>
+  <div :class="styles.page">
+    <loading-container
+      :class="styles.loadingPage"
+      :loading="!isUserInfoReady"
+      :text="$t('refresh.loading')"
+    >
+      <template v-if="isUserInfoReady">
+        <team-progress />
+
+        <unjoined-team-home v-if="isUnjoined" />
+        <joined-team v-else-if="isJoined" />
+
+        <div v-else :class="styles.placeholderPage">
+          <van-empty :description="$t('暂无团队状态')" />
+        </div>
+      </template>
+    </loading-container>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { LoadingContainer } from "shared";
+import { computed } from "vue";
+
+import { useClientUserData } from "@/composables";
+import TeamProgress from "@/pages/team-info/components/team-progress/index.vue";
+
+import JoinedTeam from "./components/joined-team/index.vue";
+import UnjoinedTeamHome from "./components/unjoined-team/index.vue";
+import styles from "./index.module.scss";
+
+const { clientUserInfo } = useClientUserData();
+
+const isUserInfoReady = computed(() => Boolean(clientUserInfo.value));
+
+const isUnjoined = computed(() => clientUserInfo.value?.role === "unbind");
+
+const isJoined = computed(() => {
+  const role = clientUserInfo.value?.role;
+  return role === "member" || role === "captain";
+});
+</script>

@@ -1,0 +1,72 @@
+@use "./mixins" as *;
+@use "./van-dialog";
+@use "./mdx";
+
+body {
+  font-size: initial;
+
+  --van-cell-background: transparent;
+  --van-cell-active-color: color-mix(
+    in srgb,
+    var(--van-active-color) 20%,
+    transparent
+  );
+}
+
+// 隐藏Edge/IE自带的密码明文按钮，避免与自定义的显示密码按钮冲突
+input[type="password"] {
+  &::-ms-reveal,
+  &::-ms-clear {
+    display: none;
+  }
+}
+
+html {
+  .van-cell-group--inset {
+    @include card-container;
+
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .van-cell-group__title--inset {
+    padding: 0 12px;
+  }
+
+  .van-card,
+  .loading-container__overlay {
+    @include card-container;
+  }
+
+  .van-button:not(
+    .van-button--small,
+    .van-action-bar-button,
+    .van-dialog__confirm,
+    .van-dialog__cancel
+  ) {
+    @include custom-button;
+  }
+
+  .van-back-top {
+    --van-back-top-background: #734a23;
+  }
+
+  .van-tag--primary {
+    --van-tag-primary-color: #734a23;
+  }
+
+  .van-radio {
+    --van-radio-checked-icon-color: #be8f58;
+    --van-radio-label-color: #333;
+  }
+
+  .van-radio-group--horizontal {
+    --van-padding-sm: 16px;
+  }
+
+  @supports (-webkit-touch-callout: none) {
+    input:focus {
+      font-size: 18px !important;
+    }
+  }
+}

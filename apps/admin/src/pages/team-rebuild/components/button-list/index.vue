@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import type { TeamRebuildMember } from "api/types/admin";
 import type { PromptDialogFieldConfig } from "shared";
-import { PromptDialog } from "shared";
+import { createRequiredRuleWithMessage, PromptDialog } from "shared";
 import { is } from "valibot";
 import { showConfirmDialog, showFailToast } from "vant";
 import { computed, ref } from "vue";
@@ -123,7 +123,7 @@ const MEMBER_ID_DIALOG_CONFIG: Record<
     placeholder: "请输入毅行人员ID",
     type: "digit",
     rules: [
-      { required: true, message: "请输入毅行人员ID" },
+      ...createRequiredRuleWithMessage("请输入毅行人员ID"),
       // 查重验证
       {
         validator: (val) => !memberIdList.value.some((memberId) => memberId === parseInt(val)),

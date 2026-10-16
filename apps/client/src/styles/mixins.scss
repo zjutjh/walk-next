@@ -1,0 +1,247 @@
+// 通用 UI 控件与表单样式 Mixins
+
+@mixin card-container {
+  background: rgba(255, 255, 255, 0.6);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  backdrop-filter: blur(4px);
+}
+
+@mixin page-container($top-base: 16px) {
+  position: relative;
+  box-sizing: border-box;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + $top-base);
+  padding-bottom: var(--bottom-safe-space, 16px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@mixin page-title {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #734a23;
+  letter-spacing: 2px;
+}
+
+@mixin guide-link {
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #734a23;
+  text-align: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+@mixin form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+@mixin field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+@mixin field-label {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #734a23;
+}
+
+/// 圆角描边输入框（校验错误提示置于外侧下方）
+@mixin custom-input {
+  --van-cell-vertical-padding: 0;
+  --van-cell-horizontal-padding: 0;
+  --van-cell-background: transparent;
+  --van-field-input-text-color: #333;
+  --van-field-placeholder-text-color: #9e9589;
+  --van-field-error-message-font-size: 12px;
+
+  &::after {
+    display: none !important;
+  }
+
+  :global(.van-field__value) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.van-field__body) {
+    box-sizing: border-box;
+    min-height: 44px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1.5px solid #be8f58;
+    border-radius: 8px;
+  }
+
+  :global(.van-field__control) {
+    font-size: 15px;
+  }
+
+  :global(.van-field__error-message) {
+    margin-top: 4px;
+    padding-left: 2px;
+    line-height: 1.4;
+  }
+}
+
+@mixin custom-button {
+  --van-button-primary-background: #734a23;
+  --van-button-primary-border-color: #be8f58;
+  --van-button-border-width: 1.5px;
+  --van-button-radius: 12px;
+
+  height: 44px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:not(.van-button--block) {
+    min-width: 150px;
+  }
+
+  &.van-button--block {
+    width: calc(100% - 32px);
+    margin-inline: auto;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &.van-button--primary {
+    box-shadow: 0 4px 12px rgba(190, 143, 88, 0.25);
+
+    &:active {
+      box-shadow: 0 2px 6px rgba(190, 143, 88, 0.2);
+    }
+  }
+}
+
+/// 密码明密文切换按钮
+@mixin eye-button {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font-size: 18px;
+  color: #9e9589;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+/// 当同一 action sheet 中部分选项有图标、部分无图标时，使用此 mixin 对齐文字
+@mixin action-sheet-align {
+  :global(.van-action-sheet__item:has(.van-action-sheet__item-icon))::after {
+    content: "";
+    display: block;
+    width: 1em;
+    margin-left: var(--van-action-sheet-item-icon-margin-right);
+  }
+
+  :global(.van-action-sheet__item--disabled) {
+    opacity: 0.5;
+  }
+}
+
+/// 隐私协议复选框
+@mixin agreement-checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #777;
+
+  --van-checkbox-size: 16px;
+  --van-checkbox-checked-icon-color: #be8f58;
+  --van-checkbox-label-margin: 6px;
+  --van-checkbox-label-color: #666;
+}
+
+@mixin submit-area {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/// fixed 定位锚定视口（与背景图一致），不随页面滚动
+@mixin illustration-image(
+  $top: null,
+  $right: null,
+  $bottom: null,
+  $left: null,
+  $width: 250px,
+  $max-width: 65vw,
+  $opacity: null,
+  $mask: true
+) {
+  position: fixed;
+
+  @if $top != null {
+    top: $top;
+  }
+
+  @if $right != null {
+    right: $right;
+  }
+
+  @if $bottom != null {
+    bottom: $bottom;
+  }
+
+  @if $left != null {
+    left: $left;
+  }
+
+  z-index: 0;
+  width: $width;
+  max-width: $max-width;
+  pointer-events: none;
+  user-select: none;
+
+  @if $opacity != null {
+    opacity: $opacity;
+  }
+
+  @if $mask {
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+      -webkit-mask-image: var(--illustration-mask);
+      mask-image: var(--illustration-mask);
+      -webkit-mask-mode: alpha;
+      mask-mode: alpha;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+    }
+  }
+}

@@ -21,3 +21,10 @@ export interface TeamSummary {
   /** 队伍标语 */
   slogan: string;
 }
+
+export interface TeamQuotaRouteItem {
+  /** 当前是否还有队伍名额 */
+  available: boolean;
+  /** 路线代码 */
+  route_name: string;
+}

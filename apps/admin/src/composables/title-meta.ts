@@ -18,7 +18,7 @@ export function useTitleMeta(options?: UseTitleMetaOptions) {
   const pageNameTitle = computed(() => {
     const slice = route.matched.map((item) => item.meta.pageName);
 
-    const proceed = compact(slice).concat(["毅行管理后台"]);
+    const proceed = compact(slice).reverse().concat(["毅行管理后台"]);
 
     return proceed.join(" | ");
   });

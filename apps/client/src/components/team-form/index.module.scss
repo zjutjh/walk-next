@@ -1,0 +1,22 @@
+@use "@/styles/mixins" as ui;
+
+@include ui.action-sheet-align;
+
+.publicNotice {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
+.submitArea {
+  margin-top: 32px;
+}
+
+.fieldNotice {
+  margin: 0;
+  padding: 6px var(--van-cell-horizontal-padding) 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #4b5563;
+}

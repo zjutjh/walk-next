@@ -1,0 +1,18 @@
+@use "@/styles/mixins" as ui;
+
+.layout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: #fff;
+
+  .navbar {
+    flex-shrink: 0;
+    --van-nav-bar-icon-color: var(--van-text-color-2);
+  }
+}
+
+:where(.content) {
+  @include ui.page-container;
+}

@@ -1,0 +1,42 @@
+.switcher {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 28px;
+  padding: 0 7px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #be8f58;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(190, 143, 88, 0.18);
+  backdrop-filter: blur(4px);
+}
+
+.option {
+  position: relative;
+  padding: 3px 2px;
+  color: #734a23;
+  font-size: 13px;
+  line-height: 20px;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.active {
+  font-weight: 700;
+}
+
+.separator {
+  margin-right: 4px;
+  font-weight: 400;
+  color: #be8f58;
+  pointer-events: none;
+}

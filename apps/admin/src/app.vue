@@ -9,11 +9,11 @@
 <script setup lang="ts">
 import "@vant/touch-emulator";
 
+import { THEME_VAR_RECORD } from "shared";
 import { useRoute } from "vue-router";
 
 import ErrorBoundary from "@/components/error-boundary/index.vue";
 import { useAdminUserData, useTitleMeta } from "@/composables";
-import { THEME_VAR_RECORD } from "@/constants";
 
 const route = useRoute();
 const { setupAdminUserDataQuery } = useAdminUserData();
