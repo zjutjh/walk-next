@@ -1,0 +1,19 @@
+/* 浮层只托住票据本身，票据挖出的缺口直接透出遮罩下的页面 */
+.layer {
+  position: fixed;
+  right: 0;
+  left: 0;
+  padding-bottom: 14px;
+  pointer-events: none;
+  transform-origin: bottom center;
+  transition: opacity 0.24s ease-out;
+}
+
+/* 票据取到才浮现，加载中与失败都留空，靠透明度过渡淡入淡出，不放转圈 */
+.isLayerHidden {
+  opacity: 0;
+}
+
+.ticket {
+  margin: 0 auto;
+}

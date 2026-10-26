@@ -1,0 +1,79 @@
+@use "@/styles/mixins" as ui;
+
+.layout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: #fff;
+}
+
+.bgDecoration {
+  position: fixed;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.top {
+  top: -175px;
+  transition: top 0.3s ease;
+}
+
+.bottom {
+  bottom: 0;
+  transition: opacity 0.3s ease;
+}
+
+.topOnly .top {
+  top: 0;
+}
+
+.topOnly .bottom {
+  opacity: 0;
+}
+
+.topLogo {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 2px);
+  left: 2px;
+  z-index: 3;
+  box-sizing: border-box;
+  width: 124px;
+  height: 67px;
+  padding: 14px;
+  border-radius: 20px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 横屏时显式高度压扁（SVG 内的 preserveAspectRatio="none" 保证满宽拉伸）；
+ top 的 -175px 是按竖屏自然高度调的，横屏压扁后会整片推出屏幕外，改为按比例偏移（约裁掉同样比例的上半部分） */
+@media (orientation: landscape) {
+  .top {
+    top: -18%;
+    height: 40%;
+  }
+
+  .bottom {
+    height: 15%;
+  }
+}
+
+.navbar {
+  flex-shrink: 0;
+  --van-nav-bar-icon-color: var(--van-text-color-2);
+}
+
+:where(.content) {
+  @include ui.page-container;
+}
+
+/* 为随内容滚动的 Logo 预留初始空间 */
+:where(.content.withLogo) {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 75px);
+}

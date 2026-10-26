@@ -22,3 +22,9 @@ dist-ssr
 *.sln
 *.sw?
 .claude
+.agents
+.vercel
+
+**/AGENTS.local.md
+skills-lock.json
+**/public/MP_verify_*.txt
