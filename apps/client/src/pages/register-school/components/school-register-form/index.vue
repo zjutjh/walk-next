@@ -65,7 +65,7 @@
       <label :class="styles.fieldLabel">{{ t("户籍") }}</label>
       <van-field :class="styles.fieldInput" name="home">
         <template #input>
-          <van-radio-group v-model="formValue.home" direction="horizontal">
+          <van-radio-group v-model="formValue.home" :class="styles.radioGroup">
             <van-radio v-for="option in HOME_OPTIONS" :key="option.value" :name="option.value">
               {{ t(option.label) }}
             </van-radio>

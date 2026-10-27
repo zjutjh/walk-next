@@ -42,4 +42,18 @@
   .submitArea {
     @include ui.submit-area;
   }
+
+  // 户籍单选
+  .radioGroup {
+    display: grid;
+
+    :global(.van-radio) {
+      min-height: 44px;
+    }
+
+    :global(.van-radio__icon .van-icon) {
+      border-width: 1.5px;
+      border-color: #b8aea0;
+    }
+  }
 }

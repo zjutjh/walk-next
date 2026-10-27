@@ -60,10 +60,6 @@ html {
     --van-radio-label-color: #333;
   }
 
-  .van-radio-group--horizontal {
-    --van-padding-sm: 16px;
-  }
-
   @supports (-webkit-touch-callout: none) {
     input:focus {
       font-size: 18px !important;
